@@ -1,26 +1,144 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #FBE4E4;
+  --foreground: #3D2B1F;
+  --heading: #4A2C2A;
+  --nav-bg: #C9A882;
+  --nav-text: #FFF5EE;
+  --accent: #C9A882;
+  --card-bg: #FFF0F0;
+  --section-banner: #C9A882;
+  --pink-light: #FDE8E8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-heading: var(--heading);
+  --color-nav-bg: var(--nav-bg);
+  --color-nav-text: var(--nav-text);
+  --color-accent: var(--accent);
+  --color-card-bg: var(--card-bg);
+  --color-section-banner: var(--section-banner);
+  --color-pink-light: var(--pink-light);
+  --font-serif: "Merriweather", Georgia, serif;
+  --font-sans: "Figtree", system-ui, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+/* Subtle dessert pattern background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='10' y='30' font-size='20'%3E%F0%9F%8D%B0%3C/text%3E%3Ctext x='50' y='60' font-size='16'%3E%F0%9F%8D%93%3C/text%3E%3Ctext x='30' y='75' font-size='14'%3E%F0%9F%8D%AB%3C/text%3E%3Ctext x='60' y='20' font-size='18'%3E%F0%9F%A7%81%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* Loading spinner animation */
+@keyframes logo-spin-grow {
+  0% {
+    transform: scale(0.2) rotate(0deg);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes fade-in-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading-screen {
+  animation: fade-out 0.6s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards;
+}
+
+.loading-logo {
+  animation: logo-spin-grow 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+
+/* Modern smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Glass morphism card effect */
+.glass-card {
+  background: rgba(255, 240, 240, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 168, 130, 0.15);
+}
+
+/* Product card hover lift */
+.product-card {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(74, 44, 42, 0.1), 0 8px 16px rgba(74, 44, 42, 0.06);
+}
+
+/* Image zoom on hover */
+.product-card .product-image {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card:hover .product-image {
+  transform: scale(1.08);
+}
+
+/* Smooth button hover */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+.btn-primary:hover {
+  box-shadow: 0 4px 15px rgba(201, 168, 130, 0.4);
+  transform: translateY(-1px);
 }

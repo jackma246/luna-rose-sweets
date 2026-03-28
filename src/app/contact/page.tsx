@@ -1,0 +1,116 @@
+"use client";
+
+import { useState, FormEvent } from "react";
+
+export default function ContactPage() {
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    // TODO: Hook up to an email service or API
+    setSubmitted(true);
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto px-6 py-10">
+      <div className="bg-section-banner text-nav-text text-center py-8 rounded-lg mb-10">
+        <h1 className="font-serif text-4xl font-bold">Contact Us</h1>
+      </div>
+
+      {submitted ? (
+        <div className="bg-card-bg rounded-lg p-8 text-center">
+          <div className="text-5xl mb-4">💌</div>
+          <h2 className="font-serif text-2xl font-bold text-heading mb-3">
+            Message Sent!
+          </h2>
+          <p className="text-foreground/70">
+            Thank you for reaching out! We&apos;ll get back to you as soon as possible.
+          </p>
+        </div>
+      ) : (
+        <div className="bg-card-bg rounded-lg p-8">
+          <p className="text-foreground/70 mb-6">
+            Have a question about our products or want to place a custom order? Fill
+            out the form below and we&apos;ll get back to you shortly!
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-heading mb-1.5"
+              >
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-heading mb-1.5"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="subject"
+                className="block text-sm font-medium text-heading mb-1.5"
+              >
+                Subject
+              </label>
+              <select
+                id="subject"
+                name="subject"
+                className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
+              >
+                <option>General Enquiry</option>
+                <option>Custom Order</option>
+                <option>Pricing Question</option>
+                <option>Feedback</option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-heading mb-1.5"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                required
+                className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 resize-vertical"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-accent text-nav-text font-medium py-3 rounded-full hover:opacity-90 transition-opacity"
+            >
+              Send Message
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+}
