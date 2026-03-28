@@ -85,6 +85,134 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ─── Scroll-reveal animations ─── */
+.reveal-up,
+.reveal-left,
+.reveal-right,
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal-up   { transform: translateY(32px); }
+.reveal-left { transform: translateX(-32px); }
+.reveal-right{ transform: translateX(32px); }
+.reveal-fade { transform: none; }
+
+.reveal-up.revealed,
+.reveal-left.revealed,
+.reveal-right.revealed,
+.reveal-fade.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Hero entrance animations ─── */
+.hero-word {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero-visible .hero-word {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-paragraph {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s,
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s;
+}
+.hero-visible .hero-paragraph {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-cta {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.8s,
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.8s,
+              background-color 0.3s,
+              color 0.3s,
+              box-shadow 0.3s;
+}
+.hero-visible .hero-cta {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-image {
+  transform: scale(1.08);
+  transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+}
+.hero-visible .hero-image {
+  transform: scale(1);
+}
+
+/* ─── Nav link underline animation ─── */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1.5px;
+  background: var(--heading);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* ─── Curved section divider ─── */
+.section-curve {
+  position: relative;
+}
+.section-curve::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: var(--background);
+  clip-path: ellipse(55% 100% at 50% 0%);
+  z-index: 1;
+}
+
+/* ─── Decorative floating dots (subtle) ─── */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-10px) rotate(3deg); }
+}
+.float-decor {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+.float-decor-delayed {
+  animation: float-gentle 7s ease-in-out 1.5s infinite;
+}
+
+/* ─── Instagram grid stagger ─── */
+.insta-item {
+  opacity: 0;
+  transform: translateY(20px) scale(0.97);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.insta-item.revealed {
+  opacity: 1;
+  transform: none;
+}
+
 /* Glass morphism card effect */
 .glass-card {
   background: rgba(255, 240, 240, 0.7);

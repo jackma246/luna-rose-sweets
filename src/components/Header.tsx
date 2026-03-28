@@ -29,7 +29,7 @@ export default function Header() {
               <Link
                 key={link.label}
                 href={link.href}
-                className="text-foreground text-sm tracking-wide hover:text-heading transition-colors"
+                className="nav-link text-foreground text-sm tracking-wide hover:text-heading transition-colors"
               >
                 {link.label}
               </Link>
