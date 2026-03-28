@@ -17,28 +17,31 @@ const featured = products.filter((p) =>
 export default function Home() {
   return (
     <div>
-      {/* Hero — full-width image with simple centered text */}
-      <section className="relative">
-        <div className="relative w-full h-[70vh] min-h-[500px]">
-          <Image
-            src="/images/strawberry-tower.jpg"
-            alt="Luna Rose Sweets"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-heading/30" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-            <h1 className="font-serif text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">
-              Luna Rose Sweets
+      {/* Hero — split layout: image left, text right */}
+      <section className="max-w-6xl mx-auto px-6 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-lg overflow-hidden border border-accent/15">
+          {/* Image */}
+          <div className="relative aspect-square md:aspect-auto md:min-h-[480px]">
+            <Image
+              src="/images/strawberry-tower.jpg"
+              alt="Handcrafted chocolate-covered strawberry tower"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+          {/* Text */}
+          <div className="flex flex-col items-center justify-center text-center px-8 py-14 md:py-20 bg-background">
+            <h1 className="font-serif text-3xl md:text-4xl font-bold text-heading mb-4 tracking-tight">
+              Handcrafted Desserts for Every Celebration
             </h1>
-            <p className="text-white/90 text-lg md:text-xl max-w-lg mb-8">
-              Handcrafted cake pops, chocolate-covered strawberries, and bespoke
-              desserts for every celebration.
+            <p className="text-foreground/70 text-base md:text-lg max-w-sm mb-8 leading-relaxed">
+              Premium cake pops, chocolate-covered strawberries, and bespoke
+              treats made with love.
             </p>
             <Link
               href="/products"
-              className="bg-white text-heading font-semibold px-10 py-3.5 rounded-sm hover:bg-nav-text transition-colors"
+              className="border border-heading text-heading font-semibold px-10 py-3.5 rounded-sm hover:bg-heading hover:text-white transition-colors"
             >
               Shop Now
             </Link>

@@ -18,62 +18,14 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-background border-b border-accent/10">
-      {/* Single clean bar: nav — logo — cart */}
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Left nav (desktop) */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.slice(0, 2).map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="text-foreground text-sm tracking-wide hover:text-heading transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Mobile menu button (left) */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-1 text-foreground"
-          aria-label="Toggle menu"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {mobileOpen ? (
-              <>
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </>
-            ) : (
-              <>
-                <line x1="3" y1="7" x2="21" y2="7" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="17" x2="21" y2="17" />
-              </>
-            )}
-          </svg>
-        </button>
-
-        {/* Centered logo */}
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-          <Logo size={50} />
-        </Link>
-
-        {/* Right nav (desktop) + cart */}
+        {/* Left: logo + nav links */}
         <div className="flex items-center gap-8">
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.slice(2).map((link) => (
+          <Link href="/" className="shrink-0">
+            <Logo size={56} />
+          </Link>
+          <nav className="hidden md:flex items-center gap-6">
+            {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
@@ -83,6 +35,10 @@ export default function Header() {
               </Link>
             ))}
           </nav>
+        </div>
+
+        {/* Right: cart */}
+        <div className="flex items-center gap-4">
           <Link
             href="/cart"
             className="relative text-foreground hover:text-heading transition-colors"
@@ -109,6 +65,38 @@ export default function Header() {
               </span>
             )}
           </Link>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-1 text-foreground"
+            aria-label="Toggle menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {mobileOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="3" y1="7" x2="21" y2="7" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="17" x2="21" y2="17" />
+                </>
+              )}
+            </svg>
+          </button>
         </div>
       </div>
 
