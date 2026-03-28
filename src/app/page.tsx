@@ -17,92 +17,41 @@ const featured = products.filter((p) =>
 export default function Home() {
   return (
     <div>
-      {/* Hero section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-section-banner via-section-banner to-accent/80" />
-        <div className="relative max-w-6xl mx-auto px-6 py-24 md:py-32">
-          <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="text-center md:text-left">
-              <p className="text-nav-text/70 font-medium text-sm uppercase tracking-[0.2em] mb-3">
-                Handcrafted with love
-              </p>
-              <h1 className="font-serif text-5xl md:text-6xl font-bold text-nav-text mb-5 leading-tight">
-                Luna Rose
-                <br />
-                <span className="text-white/90">Sweets</span>
-              </h1>
-              <p className="text-nav-text/85 text-lg max-w-md mx-auto md:mx-0 mb-8 leading-relaxed">
-                Beautiful cake pops, chocolate-covered strawberries, and bespoke
-                desserts for every celebration.
-              </p>
-              <div className="flex gap-4 justify-center md:justify-start">
-                <Link
-                  href="/products"
-                  className="btn-primary bg-white text-heading font-semibold px-8 py-3.5 rounded-full"
-                >
-                  Shop Now
-                </Link>
-                <Link
-                  href="/contact"
-                  className="border-2 border-white/60 text-white font-semibold px-8 py-3.5 rounded-full hover:bg-white/10 transition-colors duration-300"
-                >
-                  Custom Orders
-                </Link>
-              </div>
-            </div>
-            <div className="hidden md:grid grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-square relative">
-                  <Image
-                    src="/images/strawberry-tower.jpg"
-                    alt="Strawberry tower"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3] relative">
-                  <Image
-                    src="/images/treat-box.jpg"
-                    alt="Treat box"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-              <div className="space-y-4 pt-8">
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-[4/3] relative">
-                  <Image
-                    src="/images/birthday-basket.jpg"
-                    alt="Birthday basket"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="rounded-2xl overflow-hidden shadow-lg aspect-square relative">
-                  <Image
-                    src="/images/platter.jpg"
-                    alt="Chocolate platter"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+      {/* Hero — full-width image with simple centered text */}
+      <section className="relative">
+        <div className="relative w-full h-[70vh] min-h-[500px]">
+          <Image
+            src="/images/strawberry-tower.jpg"
+            alt="Luna Rose Sweets"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-heading/30" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+            <h1 className="font-serif text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight">
+              Luna Rose Sweets
+            </h1>
+            <p className="text-white/90 text-lg md:text-xl max-w-lg mb-8">
+              Handcrafted cake pops, chocolate-covered strawberries, and bespoke
+              desserts for every celebration.
+            </p>
+            <Link
+              href="/products"
+              className="bg-white text-heading font-semibold px-10 py-3.5 rounded-sm hover:bg-nav-text transition-colors"
+            >
+              Shop Now
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Featured products */}
+      {/* Best sellers */}
       <section className="max-w-6xl mx-auto px-6 py-20">
-        <div className="text-center mb-12">
-          <p className="text-accent font-medium text-sm uppercase tracking-[0.15em] mb-2">
-            Most Popular
-          </p>
-          <h2 className="font-serif text-4xl font-bold text-heading">
-            Our Best Sellers
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        <h2 className="font-serif text-3xl font-bold text-heading text-center mb-12">
+          Best Sellers
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {featured.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
@@ -110,55 +59,40 @@ export default function Home() {
         <div className="text-center mt-12">
           <Link
             href="/products"
-            className="btn-primary inline-block bg-accent text-nav-text font-semibold px-10 py-3.5 rounded-full"
+            className="inline-block border-2 border-heading text-heading font-semibold px-10 py-3 rounded-sm hover:bg-heading hover:text-white transition-colors"
           >
             View All Products
           </Link>
         </div>
       </section>
 
-      {/* About snippet */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-card-bg" />
-        <div className="relative max-w-4xl mx-auto px-6 py-20 text-center">
-          <p className="text-accent font-medium text-sm uppercase tracking-[0.15em] mb-2">
-            Our Story
-          </p>
-          <h2 className="font-serif text-4xl font-bold text-heading mb-6">
+      {/* Simple about section */}
+      <section className="border-t border-accent/20">
+        <div className="max-w-2xl mx-auto px-6 py-20 text-center">
+          <h2 className="font-serif text-3xl font-bold text-heading mb-5">
             Made with Love
           </h2>
-          <p className="text-foreground/70 leading-relaxed max-w-2xl mx-auto text-lg">
-            At Luna Rose Sweets, every dessert is handcrafted with the finest
-            ingredients and decorated with care. From cake pops to
-            chocolate-covered strawberries, we create beautiful treats perfect
-            for birthdays, weddings, baby showers, and every celebration in
-            between.
+          <p className="text-foreground/70 leading-relaxed text-lg">
+            Every dessert is handcrafted with premium Belgian chocolate and the
+            finest ingredients. Perfect for birthdays, weddings, baby showers,
+            and every celebration in between.
           </p>
           <Link
             href="/about"
-            className="inline-block mt-8 text-heading font-semibold hover:text-accent transition-colors duration-300 group"
+            className="inline-block mt-8 text-heading font-medium underline underline-offset-4 hover:text-accent transition-colors"
           >
-            Learn more about us{" "}
-            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-              &rarr;
-            </span>
+            Learn more about us
           </Link>
         </div>
       </section>
 
-      {/* Instagram banner */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <div className="glass-card rounded-3xl p-10 text-center">
-          <p className="text-accent font-medium text-sm uppercase tracking-[0.15em] mb-2">
-            Follow Us
-          </p>
-          <h2 className="font-serif text-3xl font-bold text-heading mb-3">
+      {/* Instagram row */}
+      <section className="border-t border-accent/20">
+        <div className="max-w-6xl mx-auto px-6 py-16 text-center">
+          <h2 className="font-serif text-2xl font-bold text-heading mb-8">
             @lunarosesweets
           </h2>
-          <p className="text-foreground/60 mb-8">
-            See our latest creations on Instagram
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {[
               "/images/platter.jpg",
               "/images/treat-box.jpg",
@@ -168,15 +102,14 @@ export default function Home() {
             ].map((src, i) => (
               <div
                 key={i}
-                className="aspect-square rounded-xl overflow-hidden relative group"
+                className="aspect-square overflow-hidden relative group"
               >
                 <Image
                   src={src}
                   alt="Instagram post"
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-heading/0 group-hover:bg-heading/20 transition-colors duration-300" />
               </div>
             ))}
           </div>
