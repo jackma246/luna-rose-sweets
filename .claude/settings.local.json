@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:kaisubakehouse.com)",
+      "WebFetch(domain:www.forchocolatesake.co.uk)",
+      "WebFetch(domain:www.instagram.com)",
+      "Bash(npx:*)"
+    ]
+  }
+}
