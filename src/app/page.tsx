@@ -23,8 +23,8 @@ export default function Home() {
           {/* Image */}
           <div className="relative aspect-square md:aspect-auto md:min-h-[480px]">
             <Image
-              src="/images/strawberry-tower.jpg"
-              alt="Handcrafted chocolate-covered strawberry tower"
+              src="/images/cake-pops-hero.png"
+              alt="Handcrafted cake pops and chocolate-covered strawberries"
               fill
               className="object-cover"
               priority
