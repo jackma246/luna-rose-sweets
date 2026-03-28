@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FBE4E4;
+  --background: #FFFFFF;
   --foreground: #3D2B1F;
   --heading: #4A2C2A;
   --nav-bg: #C9A882;
@@ -32,17 +32,6 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Subtle dessert pattern background */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Ctext x='10' y='30' font-size='20'%3E%F0%9F%8D%B0%3C/text%3E%3Ctext x='50' y='60' font-size='16'%3E%F0%9F%8D%93%3C/text%3E%3Ctext x='30' y='75' font-size='14'%3E%F0%9F%8D%AB%3C/text%3E%3Ctext x='60' y='20' font-size='18'%3E%F0%9F%A7%81%3C/text%3E%3C/svg%3E");
-  background-repeat: repeat;
-  pointer-events: none;
-}
 
 /* Loading spinner animation */
 @keyframes logo-spin-grow {

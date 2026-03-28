@@ -19,7 +19,7 @@ export default function Home() {
     <div>
       {/* Hero — split layout: image left, text right */}
       <section className="max-w-6xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-lg overflow-hidden border border-accent/15">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 rounded-lg overflow-hidden">
           {/* Image */}
           <div className="relative aspect-square md:aspect-auto md:min-h-[480px]">
             <Image
@@ -50,7 +50,7 @@ export default function Home() {
       </section>
 
       {/* Best sellers */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
+      <section className="max-w-6xl mx-auto px-6 pt-10 pb-20 border-t border-accent/15">
         <h2 className="font-serif text-3xl font-bold text-heading text-center mb-12">
           Best Sellers
         </h2>
