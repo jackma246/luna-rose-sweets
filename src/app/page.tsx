@@ -4,6 +4,7 @@ import ProductCard from "@/components/ProductCard";
 import AnimatedHero from "@/components/AnimatedHero";
 import ScrollReveal from "@/components/ScrollReveal";
 import InstaGrid from "@/components/InstaGrid";
+import MobileProductGrid from "@/components/MobileProductGrid";
 
 const featured = products.filter((p) =>
   [
@@ -19,11 +20,56 @@ const featured = products.filter((p) =>
 export default function Home() {
   return (
     <div>
-      {/* Hero — split layout with animated entrance */}
-      <AnimatedHero />
+      {/* Hero — hidden on mobile */}
+      <div className="hidden md:block">
+        <AnimatedHero />
+      </div>
 
-      {/* Best sellers */}
-      <section className="section-curve max-w-6xl mx-auto px-6 pt-14 pb-20">
+      {/* Mobile: full product grid with filters (no hero) */}
+      <MobileProductGrid />
+
+      {/* Mobile: social links centered above footer */}
+      <div className="md:hidden flex justify-center gap-6 py-8 border-t border-accent/10">
+        <a
+          href="#"
+          className="text-foreground/70 hover:text-heading transition-colors"
+          aria-label="Instagram"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+          </svg>
+        </a>
+        <a
+          href="#"
+          className="text-foreground/70 hover:text-heading transition-colors"
+          aria-label="TikTok"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.65a8.35 8.35 0 0 0 4.76 1.49v-3.5c-.02 0-1 .05-1 .05z" />
+          </svg>
+        </a>
+      </div>
+
+      {/* Desktop: best sellers */}
+      <section className="hidden md:block section-curve max-w-6xl mx-auto px-6 pt-14 pb-20">
         <ScrollReveal>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-heading text-center mb-3 tracking-tight">
             Best Sellers
@@ -51,8 +97,8 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* About section with floating decoration */}
-      <section className="relative overflow-hidden">
+      {/* About section with floating decoration — desktop only */}
+      <section className="hidden md:block relative overflow-hidden">
         {/* Decorative floating dots */}
         <div className="absolute top-8 left-[10%] w-3 h-3 rounded-full bg-pink-light/60 float-decor" />
         <div className="absolute top-20 right-[15%] w-2 h-2 rounded-full bg-accent/40 float-decor-delayed" />
@@ -81,8 +127,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Instagram row */}
-      <section className="bg-card-bg/50">
+      {/* Instagram row — desktop only */}
+      <section className="hidden md:block bg-card-bg/50">
         <div className="max-w-6xl mx-auto px-6 py-16 text-center">
           <ScrollReveal>
             <h2 className="font-serif text-2xl font-bold text-heading mb-2">
