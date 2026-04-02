@@ -38,7 +38,7 @@ export default function Logo({
         }}
       >
         <Image
-          src="/images/ds-logo.jpg"
+          src="/images/ds-logo.png"
           alt="Dip & Sprinkle"
           width={Math.round(size * 0.7)}
           height={Math.round(size * 0.7)}
