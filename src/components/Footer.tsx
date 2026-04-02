@@ -4,10 +4,10 @@ export default function Footer() {
   return (
     <footer className="mt-12">
       {/* Mobile: centered social links above footer */}
-      <div className="md:hidden flex justify-center gap-6 py-8 border-t border-accent/10 bg-background">
+      <div className="md:hidden flex justify-center gap-6 py-8 border-t border-accent/20 bg-background">
         <a
           href="#"
-          className="text-foreground/70 hover:text-heading transition-colors"
+          className="text-chocolate/70 hover:text-accent transition-colors"
           aria-label="Instagram"
         >
           <svg
@@ -28,7 +28,7 @@ export default function Footer() {
         </a>
         <a
           href="#"
-          className="text-foreground/70 hover:text-heading transition-colors"
+          className="text-chocolate/70 hover:text-accent transition-colors"
           aria-label="TikTok"
         >
           <svg
@@ -43,34 +43,41 @@ export default function Footer() {
         </a>
       </div>
 
+      {/* Chocolate drip divider */}
+      <div className="relative">
+        <svg viewBox="0 0 1440 40" className="w-full block" preserveAspectRatio="none">
+          <path d="M0,0 L1440,0 L1440,20 Q1350,40 1300,20 Q1250,0 1200,15 Q1150,30 1100,20 Q1050,10 1000,20 Q950,35 900,18 Q850,5 800,20 Q750,35 700,15 Q650,0 600,20 Q550,35 500,18 Q450,5 400,22 Q350,38 300,18 Q250,2 200,20 Q150,38 100,18 Q50,2 0,20 Z" fill="#5C3828"/>
+        </svg>
+      </div>
+
       {/* Footer */}
-      <div className="bg-nav-bg text-nav-text">
+      <div className="bg-chocolate text-white">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-serif font-bold text-lg mb-3">Luna Rose Sweets</h3>
-              <p className="text-sm opacity-90">
-                Handcrafted cake pops, chocolate-covered strawberries, and custom
-                desserts made with love.
+              <h3 className="font-serif font-bold text-lg mb-3 text-accent">Dip & Sprinkle</h3>
+              <p className="text-sm text-white/80">
+                Sweet treats dipped & decorated — Madeleines, Cake Pops, Rice Krispies,
+                Pretzels, Butter Cookies & More! Homemade with love.
               </p>
             </div>
             <div>
-              <h3 className="font-bold text-sm uppercase tracking-wider mb-3">
+              <h3 className="font-bold text-sm uppercase tracking-wider mb-3 text-mint">
                 Quick Links
               </h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/products" className="hover:opacity-80 transition-opacity">
+                  <Link href="/products" className="text-white/80 hover:text-accent transition-colors">
                     Products
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:opacity-80 transition-opacity">
+                  <Link href="/about" className="text-white/80 hover:text-accent transition-colors">
                     About
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:opacity-80 transition-opacity">
+                  <Link href="/contact" className="text-white/80 hover:text-accent transition-colors">
                     Contact Us
                   </Link>
                 </li>
@@ -78,13 +85,13 @@ export default function Footer() {
             </div>
             {/* Desktop: social links stay in footer */}
             <div className="hidden md:block">
-              <h3 className="font-bold text-sm uppercase tracking-wider mb-3">
+              <h3 className="font-bold text-sm uppercase tracking-wider mb-3 text-mint">
                 Follow Us
               </h3>
               <div className="flex gap-4">
                 <a
                   href="#"
-                  className="hover:opacity-80 transition-opacity"
+                  className="text-white/80 hover:text-accent transition-colors"
                   aria-label="Instagram"
                 >
                   <svg
@@ -105,7 +112,7 @@ export default function Footer() {
                 </a>
                 <a
                   href="#"
-                  className="hover:opacity-80 transition-opacity"
+                  className="text-white/80 hover:text-accent transition-colors"
                   aria-label="TikTok"
                 >
                   <svg
@@ -121,8 +128,8 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          <div className="border-t border-white/20 mt-8 pt-6 text-center text-sm opacity-75">
-            &copy; {new Date().getFullYear()} Luna Rose Sweets. All rights reserved.
+          <div className="border-t border-white/15 mt-8 pt-6 text-center text-sm text-white/50">
+            &copy; {new Date().getFullYear()} Dip & Sprinkle. All rights reserved.
           </div>
         </div>
       </div>

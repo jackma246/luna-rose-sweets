@@ -81,8 +81,8 @@ export default function ProductsPage() {
             onClick={() => setActiveCategory(cat)}
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
               activeCategory === cat
-                ? "bg-accent text-nav-text"
-                : "bg-card-bg text-foreground hover:bg-accent/20"
+                ? "bg-mint text-white"
+                : "bg-card-bg text-foreground hover:bg-mint/20"
             }`}
           >
             {cat}

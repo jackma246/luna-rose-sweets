@@ -4,7 +4,7 @@ export default function AboutPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <div className="bg-section-banner text-nav-text text-center py-8 rounded-lg mb-10">
-        <h1 className="font-serif text-4xl font-bold">About Luna Rose Sweets</h1>
+        <h1 className="font-serif text-4xl font-bold">About Dip & Sprinkle</h1>
       </div>
 
       <div className="prose prose-lg max-w-none">
@@ -13,10 +13,10 @@ export default function AboutPage() {
             Our Story
           </h2>
           <p className="text-foreground/80 leading-relaxed mb-4">
-            Luna Rose Sweets was born from a passion for creating beautiful,
-            delicious desserts that bring joy to every occasion. What started as a
-            hobby of making treats for friends and family quickly blossomed into a
-            full-fledged dessert business.
+            Dip & Sprinkle was born from a passion for creating beautiful,
+            delicious sweet treats that bring joy to every occasion. What started as a
+            hobby of dipping and decorating treats for friends and family quickly
+            blossomed into a full-fledged dessert business.
           </p>
           <p className="text-foreground/80 leading-relaxed">
             Every product is handmade with love using only the finest ingredients,
@@ -32,38 +32,38 @@ export default function AboutPage() {
           </h2>
           <ul className="space-y-3 text-foreground/80">
             <li className="flex items-start gap-3">
-              <span className="text-accent font-bold mt-0.5">&#x2022;</span>
+              <span className="text-mint font-bold mt-0.5">&#x2022;</span>
               <span>
-                <strong className="text-heading">Cake Pops</strong> — Our signature
-                product, available in Vanilla and Chocolate Fudge flavours
+                <strong className="text-heading">Madeleines</strong> — Delicate French
+                cakes dipped in premium chocolate
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-accent font-bold mt-0.5">&#x2022;</span>
+              <span className="text-mint font-bold mt-0.5">&#x2022;</span>
               <span>
-                <strong className="text-heading">Chocolate Strawberries</strong> —
-                Personalised with colours, toppings, and edible wafer toppers
+                <strong className="text-heading">Cake Pops</strong> — Fun, colourful,
+                and perfect for any celebration
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-accent font-bold mt-0.5">&#x2022;</span>
+              <span className="text-mint font-bold mt-0.5">&#x2022;</span>
               <span>
-                <strong className="text-heading">Cakesicles</strong> — Freshly baked
-                cake coated in Belgian chocolate
+                <strong className="text-heading">Rice Krispies & Pretzels</strong> —
+                Dipped, drizzled, and decorated with sprinkles
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-accent font-bold mt-0.5">&#x2022;</span>
+              <span className="text-mint font-bold mt-0.5">&#x2022;</span>
               <span>
-                <strong className="text-heading">Custom Treat Boxes</strong> — Curated
-                collections for any event or celebration
+                <strong className="text-heading">Butter Cookies & Marshmallows</strong> —
+                Sweet bites coated in chocolate goodness
               </span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-accent font-bold mt-0.5">&#x2022;</span>
+              <span className="text-mint font-bold mt-0.5">&#x2022;</span>
               <span>
-                <strong className="text-heading">Brownies & Cookies</strong> — Gooey,
-                loaded, and available in countless flavours
+                <strong className="text-heading">Oreo Pops & More</strong> — Custom
+                treat boxes curated for any event
               </span>
             </li>
           </ul>
@@ -72,7 +72,7 @@ export default function AboutPage() {
         <div className="text-center">
           <Link
             href="/products"
-            className="inline-block bg-accent text-nav-text font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity"
+            className="inline-block bg-mint text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity"
           >
             View Our Products
           </Link>

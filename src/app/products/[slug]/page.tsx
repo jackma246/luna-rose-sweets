@@ -102,7 +102,7 @@ export default function ProductDetailPage() {
           {currentProduct.enquireOnly ? (
             <Link
               href="/contact"
-              className="btn-primary inline-block bg-accent text-nav-text font-semibold px-10 py-3.5 rounded-full"
+              className="btn-primary inline-block bg-mint text-white font-semibold px-10 py-3.5 rounded-full"
             >
               Enquire Now
             </Link>
@@ -172,7 +172,7 @@ export default function ProductDetailPage() {
                 className={`btn-primary w-full font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 ${
                   added
                     ? "bg-green-600 text-white"
-                    : "bg-accent text-nav-text"
+                    : "bg-mint text-white"
                 }`}
               >
                 {added ? "Added to Cart \u2713" : "Add to Cart"}

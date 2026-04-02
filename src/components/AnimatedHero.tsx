@@ -25,50 +25,65 @@ export default function AnimatedHero() {
     return () => observer.disconnect();
   }, []);
 
-  const words = "Handcrafted Desserts for Every Celebration".split(" ");
+  const words = "Sweet Treats Dipped & Decorated".split(" ");
 
   return (
-    <section className="max-w-6xl mx-auto px-6 py-10">
-      <div
-        ref={sectionRef}
-        className="hero-section grid grid-cols-1 md:grid-cols-2 gap-0 rounded-lg overflow-hidden"
-      >
-        {/* Image with subtle zoom */}
-        <div className="relative aspect-square md:aspect-auto md:min-h-[480px] overflow-hidden">
-          <Image
-            src="/images/cake-pops-hero.png"
-            alt="Handcrafted cake pops and chocolate-covered strawberries"
-            fill
-            className="object-cover hero-image"
-            priority
-          />
-        </div>
+    <section className="relative overflow-hidden">
+      {/* Confetti sprinkles scattered around hero */}
+      <div className="absolute top-6 left-[8%] text-accent text-xl float-decor select-none">&#x2665;</div>
+      <div className="absolute top-16 right-[12%] text-mint text-sm float-decor-delayed select-none">&#x2665;</div>
+      <div className="absolute bottom-20 left-[5%] text-accent/40 text-lg float-decor select-none">&#x2726;</div>
+      <div className="absolute top-32 right-[6%] text-mint/50 text-2xl float-decor select-none">&#x2022;</div>
+      <div className="absolute bottom-16 right-[18%] text-accent/50 text-xs float-decor-delayed select-none">&#x2726;</div>
+      <div className="absolute top-10 left-[35%] w-2 h-2 rounded-full bg-mint/30 float-decor-delayed" />
+      <div className="absolute bottom-24 left-[45%] w-1.5 h-1.5 rounded-full bg-accent/40 float-decor" />
+      <div className="absolute top-24 right-[30%] w-2.5 h-2.5 rounded-full bg-cream float-decor" />
 
-        {/* Text with staggered word animation */}
-        <div className="flex flex-col items-center justify-center text-center px-8 py-14 md:py-20 bg-background">
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-heading mb-4 tracking-tight leading-snug">
-            {words.map((word, i) => (
-              <span
-                key={i}
-                className="hero-word inline-block mr-[0.3em]"
-                style={{ transitionDelay: `${200 + i * 80}ms` }}
-              >
-                {word}
-              </span>
-            ))}
-          </h1>
-          <p
-            className="hero-paragraph text-foreground/70 text-base md:text-lg max-w-sm mb-8 leading-relaxed"
-          >
-            Premium cake pops, chocolate-covered strawberries, and bespoke
-            treats made with love.
-          </p>
-          <Link
-            href="/products"
-            className="hero-cta border border-heading text-heading font-semibold px-10 py-3.5 rounded-sm hover:bg-heading hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-          >
-            Shop Now
-          </Link>
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        <div
+          ref={sectionRef}
+          className="hero-section grid grid-cols-1 md:grid-cols-2 gap-0 rounded-2xl overflow-hidden shadow-lg"
+        >
+          {/* Image with subtle zoom */}
+          <div className="relative aspect-square md:aspect-auto md:min-h-[480px] overflow-hidden">
+            <Image
+              src="/images/cake-pops-hero.png"
+              alt="Handcrafted cake pops and chocolate-covered strawberries"
+              fill
+              className="object-cover hero-image"
+              priority
+            />
+          </div>
+
+          {/* Text with staggered word animation */}
+          <div className="relative flex flex-col items-center justify-center text-center px-8 py-14 md:py-20 bg-pink-light/30">
+            {/* Mini confetti inside text panel */}
+            <div className="absolute top-4 right-6 text-mint/40 text-xs">&#x2665;</div>
+            <div className="absolute bottom-6 left-8 text-accent/30 text-sm">&#x2726;</div>
+            <div className="absolute top-12 left-6 w-1.5 h-1.5 rounded-full bg-mint/30" />
+
+            <h1 className="font-serif text-3xl md:text-4xl font-bold text-chocolate mb-4 tracking-tight leading-snug">
+              {words.map((word, i) => (
+                <span
+                  key={i}
+                  className="hero-word inline-block mr-[0.3em]"
+                  style={{ transitionDelay: `${200 + i * 80}ms` }}
+                >
+                  {word}
+                </span>
+              ))}
+            </h1>
+            <p className="hero-paragraph text-chocolate/60 text-base md:text-lg max-w-sm mb-8 leading-relaxed">
+              Madeleines, Cake Pops, Rice Krispies, Pretzels, Butter Cookies,
+              Marshmallows, Oreo Pops & More! Homemade with love.
+            </p>
+            <Link
+              href="/products"
+              className="hero-cta bg-mint text-white font-bold px-10 py-3.5 rounded-full hover:bg-chocolate hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 text-lg"
+            >
+              Shop Now
+            </Link>
+          </div>
         </div>
       </div>
     </section>

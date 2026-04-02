@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FDF6F1;
-  --foreground: #5C3D2E;
-  --heading: #3C1F14;
-  --nav-bg: #C9956B;
-  --nav-text: #FFF5EE;
-  --accent: #D4A07A;
-  --card-bg: #FFF8F3;
-  --section-banner: #C9956B;
-  --pink-light: #F2D5CD;
+  --background: #FDF8F4;
+  --foreground: #5C3828;
+  --heading: #5C3828;
+  --nav-bg: #A8D8CB;
+  --nav-text: #FFFFFF;
+  --accent: #F2B5C5;
+  --card-bg: #FFF9F5;
+  --section-banner: #A8D8CB;
+  --pink-light: #F9D4DC;
+  --mint: #A8D8CB;
+  --chocolate: #5C3828;
+  --cream: #FBF5D6;
 }
 
 @theme inline {
@@ -22,8 +25,11 @@
   --color-card-bg: var(--card-bg);
   --color-section-banner: var(--section-banner);
   --color-pink-light: var(--pink-light);
-  --font-serif: "Merriweather", Georgia, serif;
-  --font-sans: "Figtree", system-ui, sans-serif;
+  --color-mint: var(--mint);
+  --color-chocolate: var(--chocolate);
+  --color-cream: var(--cream);
+  --font-serif: "Fredoka", "Nunito", system-ui, sans-serif;
+  --font-sans: "Nunito", system-ui, sans-serif;
 }
 
 body {
@@ -164,7 +170,7 @@ html {
   left: 50%;
   width: 0;
   height: 1.5px;
-  background: var(--heading);
+  background: var(--mint);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -215,10 +221,10 @@ html {
 
 /* Glass morphism card effect */
 .glass-card {
-  background: rgba(255, 240, 240, 0.7);
+  background: rgba(253, 248, 244, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(201, 168, 130, 0.15);
+  border: 1px solid rgba(157, 213, 203, 0.2);
 }
 
 /* Product card hover lift */
@@ -227,7 +233,7 @@ html {
 }
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(74, 44, 42, 0.1), 0 8px 16px rgba(74, 44, 42, 0.06);
+  box-shadow: 0 20px 40px rgba(157, 213, 203, 0.15), 0 8px 16px rgba(74, 44, 42, 0.06);
 }
 
 /* Image zoom on hover */
@@ -256,6 +262,6 @@ html {
   transform: translateX(100%);
 }
 .btn-primary:hover {
-  box-shadow: 0 4px 15px rgba(201, 168, 130, 0.4);
+  box-shadow: 0 4px 15px rgba(157, 213, 203, 0.4);
   transform: translateY(-1px);
 }

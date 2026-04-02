@@ -1,27 +1,27 @@
 import type { Metadata } from "next";
-import { Figtree, Merriweather } from "next/font/google";
+import { Nunito, Fredoka } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
 import { CartProvider } from "@/context/CartContext";
 
-const figtree = Figtree({
-  variable: "--font-figtree",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
-const merriweather = Merriweather({
-  variable: "--font-merriweather",
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Luna Rose Sweets",
+  title: "Dip & Sprinkle",
   description:
-    "Handcrafted cake pops, chocolate-covered strawberries, and custom desserts made with love.",
+    "Sweet treats dipped & decorated — Madeleines, Cake Pops, Rice Krispies, Pretzels, Butter Cookies, Marshmallows, Oreo Pops & More!",
 };
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${figtree.variable} ${merriweather.variable} h-full`}
+      className={`${nunito.variable} ${fredoka.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">
         <CartProvider>

@@ -37,19 +37,19 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-background border-b border-accent/10">
+    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-accent/20 shadow-sm">
       {/* Desktop header */}
       <div className="hidden md:flex max-w-6xl mx-auto px-6 py-4 items-center justify-between">
         <div className="flex items-center gap-8">
           <Link href="/" className="shrink-0">
-            <Logo size={56} />
+            <Logo size={80} />
           </Link>
           <nav className="flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="nav-link text-foreground text-sm tracking-wide hover:text-heading transition-colors"
+                className="nav-link text-chocolate font-medium text-sm tracking-wide hover:text-mint transition-colors"
               >
                 {link.label}
               </Link>
@@ -67,7 +67,7 @@ export default function Header() {
             <path d="M16 10a4 4 0 0 1-8 0" />
           </svg>
           {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-heading text-[10px] font-bold text-white">
+            <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-chocolate">
               {totalItems}
             </span>
           )}
@@ -100,7 +100,7 @@ export default function Header() {
 
         {/* Center: bigger logo */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2">
-          <Logo size={72} />
+          <Logo size={90} />
         </Link>
 
         {/* Right: search + cart */}
@@ -148,7 +148,7 @@ export default function Header() {
             />
             <button
               type="submit"
-              className="px-4 py-2.5 rounded-md bg-heading text-white text-sm font-medium"
+              className="px-4 py-2.5 rounded-full bg-mint text-white text-sm font-bold"
             >
               Go
             </button>
