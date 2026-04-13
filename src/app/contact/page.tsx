@@ -29,9 +29,18 @@ export default function ContactPage() {
         </div>
       ) : (
         <div className="bg-card-bg rounded-lg p-8">
-          <p className="text-foreground/70 mb-6">
+          <p className="text-foreground/70 mb-4">
             Have a question about our products or want to place a custom order? Fill
             out the form below and we&apos;ll get back to you shortly!
+          </p>
+          <p className="text-foreground/70 mb-6 text-sm">
+            Or email us directly at{" "}
+            <a
+              href="mailto:support.dipsprinkle@gmail.com"
+              className="text-accent font-medium hover:underline"
+            >
+              support.dipsprinkle@gmail.com
+            </a>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
