@@ -1,6 +1,7 @@
 export interface ProductVariant {
   label: string;
   price: number;
+  image?: string;
 }
 
 export interface Product {
@@ -15,58 +16,246 @@ export interface Product {
 }
 
 export const products: Product[] = [
+  // ── Party Sets ──────────────────────────────────────────
   {
-    slug: "strawberries",
-    name: "Strawberries",
-    category: "Strawberries",
+    slug: "small-party-set",
+    name: "Small Party Set",
+    category: "Party Sets",
     description:
-      "Strawberries can be personalised to your requirements from different colours and toppings. You can order from a wide variety of quantities.",
+      "Our Small Party Set is ideal for intimate gatherings and smaller celebrations. A beautifully curated selection of chocolate dipped treats your guests will love.",
     details:
-      "Please note, Strawberries are best to consume on the day of collection, latest the day after. Strawberries should be kept in the fridge until consumption. If you wish to have personalised edible wafer toppers, this will incur an additional charge.",
+      "The Small Party Set can be customised to your theme and colour scheme. Please allow 3-5 days notice for party set orders.",
+    variants: [{ label: "Small Party Set (2 Dozen)", price: 65, image: "/images/platter.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "medium-party-set",
+    name: "Medium Size Party Set (4 Dozen)",
+    category: "Party Sets",
+    description:
+      "Our Medium Party Set is perfect for celebrations! This set includes 4 dozen beautifully crafted treats — a mix of chocolate dipped favourites to wow your guests.",
+    details:
+      "The Party Set can be customised to your theme and colour scheme. Choose from a selection of our most popular treats including cake pops, cakesicles, strawberries, and more. Please allow 3-5 days notice for party set orders.",
+    variants: [{ label: "4 Dozen Assorted Treats", price: 120, image: "/images/treat-box.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "large-party-set",
+    name: "Large Party Set",
+    category: "Party Sets",
+    description:
+      "Our Large Party Set is the ultimate spread for big celebrations. Packed with a generous assortment of our finest chocolate dipped treats to impress a crowd.",
+    details:
+      "The Large Party Set can be fully customised to your theme and colour scheme. Ideal for weddings, corporate events, and large parties. Please allow 5-7 days notice.",
+    variants: [{ label: "Large Party Set (6 Dozen)", price: 170, image: "/images/birthday-basket.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "party-custom-cake",
+    name: "Custom Cake",
+    category: "Party Sets",
+    description:
+      "Our custom cakes are baked from scratch using the finest ingredients and decorated to bring your vision to life. From simple elegance to show-stopping designs.",
+    details:
+      "All cakes are freshly baked to order. Available in a range of flavours and sizes. Please enquire with your design ideas and we will provide a personalised quote. We recommend placing orders at least 1 week in advance.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "sweet-favours",
+    name: "Sweet Favours",
+    category: "Party Sets",
+    description:
+      "Individually wrapped sweet treats perfect for party favours, wedding favours, or corporate events. Each favour is beautifully presented and ready to gift.",
+    details:
+      "Sweet Favours can be customised to match your event theme and colour scheme. Available in a range of treat options including cake pops, cakesicles, and chocolate dipped biscuits. Minimum order applies.",
+    variants: [{ label: "Per Favour (min 20)", price: 4.5, image: "/images/strawberry-tower.jpg" }],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "party-cupcakes",
+    name: "Cupcakes",
+    category: "Party Sets",
+    description:
+      "Our freshly baked cupcakes are soft, fluffy, and topped with beautifully piped buttercream. Available in a range of flavours and decorated to match any theme.",
+    details:
+      "Cupcakes are baked from scratch using premium ingredients. Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available on request.",
     variants: [
-      { label: "Box of 12", price: 25 },
-      { label: "Box of 15", price: 31 },
-      { label: "Box of 24", price: 44 },
-      { label: "Box of 32", price: 53 },
-      { label: "Platter (approx 45)", price: 69 },
+      { label: "Box of 6", price: 18, image: "/images/strawberry-heart.jpg" },
+      { label: "Box of 12", price: 32, image: "/images/platter.jpg" },
+      { label: "Box of 24", price: 58, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "rectangular-cake",
+    name: "Rectangular Cake",
+    category: "Party Sets",
+    description:
+      "A classic rectangular celebration cake, baked from scratch and finished with smooth icing and custom decorations. Perfect for birthdays, graduations, and events.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet sponge. All cakes can be personalised with a message and themed decorations. Please allow at least 5 days notice for cake orders.",
+    variants: [
+      { label: "Small (serves 10-15)", price: 35, image: "/images/birthday-basket.jpg" },
+      { label: "Large (serves 20-30)", price: 55, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "brownie-cut",
+    name: "Brownie (Cut)",
+    category: "Party Sets",
+    description:
+      "Our signature gooey brownies, freshly baked and cut into generous portions. Perfect for party platters and dessert tables.",
+    details:
+      "Available in all our popular flavours. Brownies can be topped and decorated to match your event theme. Best consumed within 7 days of collection.",
+    variants: [
+      { label: "Tray of 12 pieces", price: 22, image: "/images/strawberry-heart.jpg" },
+      { label: "Tray of 24 pieces", price: 40, image: "/images/platter.jpg" },
     ],
     image: "/images/platter.jpg",
   },
   {
-    slug: "og-strawberries",
-    name: "OG Strawberries",
-    category: "Strawberries",
+    slug: "madeleine-tower",
+    name: "Madeleine Tower",
+    category: "Party Sets",
     description:
-      "Our famous and original milk chocolate strawberries are everyone's favourite! You can order from a wide variety of quantities.",
+      "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
-      "If your OG's are for an event or celebration, we can add a topper to your strawberries such as Happy Birthday, Congratulations, Good Luck etc. This will incur an additional charge. Strawberries are best to consume on the day of collection, latest the day after.",
-    variants: [
-      { label: "Box of 12", price: 20 },
-      { label: "Box of 15", price: 25 },
-      { label: "Box of 24", price: 38 },
-      { label: "Box of 32", price: 50 },
-      { label: "Nutella - Box of 12", price: 23 },
-      { label: "Nutella - Box of 15", price: 28 },
-      { label: "Nutella - Box of 24", price: 43 },
-      { label: "Nutella - Box of 32", price: 55 },
-    ],
-    image: "/images/platter.jpg",
-  },
-  {
-    slug: "strawberry-towers",
-    name: "Strawberry Towers",
-    category: "Strawberries",
-    description:
-      "Our Strawberry Towers hold 27 strawberries. It comes with a personalised topper, fresh fruit, three layers of chocolate strawberries packaged in a luxury clear lid box.",
-    details:
-      "Our toppers can be personalised to your requirements in different colours and shapes! You can choose your variation of fruit such as raspberries, blueberries, figs, strawberries and many more.",
-    variants: [{ label: "Starting from", price: 63 }],
+      "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
+    variants: [{ label: "Madeleine Tower", price: 55, image: "/images/treat-box.jpg" }],
     image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "macaron-tower",
+    name: "Macaron Tower",
+    category: "Party Sets",
+    description:
+      "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
+    details:
+      "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
+    variants: [
+      { label: "Small Tower (30 macarons)", price: 60, image: "/images/birthday-basket.jpg" },
+      { label: "Large Tower (60 macarons)", price: 110, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "croissant-tower",
+    name: "Croissant Tower",
+    category: "Party Sets",
+    description:
+      "A beautiful tower of freshly baked croissants, perfect for brunches, baby showers, and morning events. Golden, flaky, and utterly delicious.",
+    details:
+      "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
+    variants: [
+      { label: "Small Tower (15 croissants)", price: 45, image: "/images/strawberry-heart.jpg" },
+      { label: "Large Tower (30 croissants)", price: 80, image: "/images/platter.jpg" },
+    ],
+    image: "/images/strawberry-tower.jpg",
+  },
+
+  // ── Gift (was Specialty) ────────────────────────────────
+  {
+    slug: "cakepop-bouquet",
+    name: "Cakepop Bouquet",
+    category: "Gift",
+    description:
+      "A stunning bouquet of decorated cake pops — a unique and delicious alternative to flowers! Perfect for birthdays, Mother's Day, or just because.",
+    details:
+      "Each bouquet is hand-arranged with freshly baked cake pops dipped in premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours. Bouquets can be themed and personalised with colours, toppings, and edible toppers.",
+    variants: [
+      { label: "Small Bouquet (8 pops)", price: 35, image: "/images/treat-box.jpg" },
+      { label: "Large Bouquet (16 pops)", price: 60, image: "/images/birthday-basket.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "heart-surprise-box",
+    name: "Heart Surprise Box",
+    category: "Gift",
+    description:
+      "A beautiful chocolate heart box filled with a surprise selection of our handcrafted treats. Smash through the heart to reveal the goodies inside!",
+    details:
+      "The Heart Surprise Box can be themed and personalised to your requirements. Contents can include cakesicles, chocolates, strawberries, and more. Perfect for Valentine's Day, anniversaries, and special occasions.",
+    variants: [{ label: "Heart Surprise Box", price: 45, image: "/images/strawberry-tower.jpg" }],
+    image: "/images/strawberry-heart.jpg",
+  },
+  {
+    slug: "flower-treat-box",
+    name: "Flower and Treat Box",
+    category: "Gift",
+    description:
+      "A gorgeous combination of fresh flowers and our handcrafted chocolate treats, beautifully arranged in a luxury gift box. The perfect gift that looks and tastes amazing.",
+    details:
+      "The Flower and Treat Box includes a selection of seasonal flowers alongside our signature chocolate dipped treats. Can be personalised with a message card. Please allow 3-5 days notice.",
+    variants: [{ label: "Flower and Treat Box", price: 50, image: "/images/strawberry-heart.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "gift-half-dozen-box",
+    name: "Half Dozen Box",
+    category: "Gift",
+    description:
+      "A curated gift box of 6 beautifully decorated treats. A sweet and thoughtful gift for any occasion, perfectly packaged and ready to give.",
+    details:
+      "Choose from a selection of our most popular treats. Each box can be themed and personalised. Gift boxes come with a ribbon and optional message card.",
+    variants: [{ label: "Half Dozen Box", price: 25, image: "/images/platter.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "gift-one-dozen-box",
+    name: "One Dozen Box",
+    category: "Gift",
+    description:
+      "A generous gift box of 12 handcrafted treats, beautifully presented and perfect for sharing. Ideal for birthdays, thank yous, and celebrations.",
+    details:
+      "Choose from a mix of our signature treats. All boxes can be personalised to match your theme or colour scheme. Comes with a ribbon and optional message card.",
+    variants: [{ label: "One Dozen Box", price: 45, image: "/images/treat-box.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "gift-custom-cake",
+    name: "Custom Cake",
+    category: "Gift",
+    description:
+      "A custom celebration cake baked from scratch and beautifully decorated. Perfect as a gift for birthdays, milestones, and special moments.",
+    details:
+      "Available in a range of flavours and sizes. Fully customisable with themed decorations and personalised messages. Please enquire for a personalised quote.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "gift-flower-cupcake",
+    name: "Flower & Cupcake",
+    category: "Gift",
+    description:
+      "A charming gift pairing of fresh flowers with beautifully decorated cupcakes. A delightful surprise that combines elegance with sweetness.",
+    details:
+      "Includes a small bouquet of seasonal flowers alongside a box of decorated cupcakes. Can be personalised with colours, themes, and a message card. Please allow 3-5 days notice.",
+    variants: [{ label: "Flower & Cupcake Set", price: 38, image: "/images/birthday-basket.jpg" }],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "gift-mini-cakes",
+    name: "Mini Cakes",
+    category: "Gift",
+    description:
+      "Adorable individual-sized mini cakes, perfect for gifting. Each one is baked from scratch and beautifully finished with icing and decorations.",
+    details:
+      "Mini cakes are available in Vanilla, Chocolate, and Red Velvet. Each cake can be personalised with colours and themed decorations. Sold individually or as a set.",
+    variants: [
+      { label: "Single Mini Cake", price: 8, image: "/images/strawberry-tower.jpg" },
+      { label: "Set of 4", price: 28, image: "/images/strawberry-heart.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
   },
   {
     slug: "fillable-boxes",
     name: "Fillable Boxes",
-    category: "Specialty",
+    category: "Gift",
     description:
       "Our fillable Letters and Shapes comes in any design you would like and can also feature a personalised message at the bottom of the box.",
     details:
@@ -76,116 +265,534 @@ export const products: Product[] = [
     image: "/images/birthday-basket.jpg",
   },
   {
-    slug: "cakesicles",
-    name: "Cakesicles",
-    category: "Cakesicles",
-    description:
-      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
+    slug: "fondue-box",
+    name: "Fondue Box",
+    category: "Gift",
+    description: "We have two options for our fondue box!",
     details:
-      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
-    variants: [{ label: "Each (from)", price: 4.5 }],
-    image: "/images/treat-box.jpg",
-  },
-  {
-    slug: "large-treat-box",
-    name: "Large Treat Box",
-    category: "Treat Boxes",
-    description:
-      "Our highly favoured Treat Box is a special collection of Cakesicles and Strawberries. It can be made up of 9 Cakesicles (2 different shapes) and 6 Strawberries.",
-    details:
-      "Our Cakesicles can be catered to all events and themes. The flavours are Vanilla and Chocolate Fudge. We can make personalised toppers and messages to suit your theme.",
-    variants: [{ label: "Starting from", price: 44 }],
-    image: "/images/treat-box.jpg",
-  },
-  {
-    slug: "mixed-treat-box",
-    name: "Mixed Treat Box",
-    category: "Treat Boxes",
-    description:
-      "Our highly favoured Mixed Treat Box is a special collection of Cakesicles, Heart Gems, Strawberries, Shortbread Biscuits, and Cookies.",
-    details:
-      "As always, we can make the Mixed Treat Box to your desired requirements with any theme and personalisation!",
-    variants: [{ label: "Mixed Treat Box", price: 48 }],
-    image: "/images/treat-box.jpg",
-  },
-  {
-    slug: "mini-treat-box",
-    name: "Mini Treat Box",
-    category: "Treat Boxes",
-    description:
-      "Our highly favoured Mini Treat Box is a special collection of Cakesicles and Strawberries. It can be made up of 5 Cakesicles (2 different shapes) and 5 Strawberries.",
-    details:
-      "Our Cakesicles can be catered to all events and themes. The flavours are Vanilla and Chocolate Fudge. Cakesicles are best to consume within 2 weeks of collection/delivery and the Strawberries are best to consume within 2 days.",
-    variants: [{ label: "Mini Treat Box", price: 31 }],
-    image: "/images/treat-box.jpg",
-  },
-  {
-    slug: "cake-pops",
-    name: "Cake Pops",
-    category: "Cake Pops",
-    description:
-      "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Cake Pops are also available in the flavours Vanilla and Chocolate Fudge.",
-    details:
-      "They come in a variety of designs and toppings, all of which can be customised to your liking, theme or party. Cake Pops are available in the following shapes: regular, flat, and ice cream cone. There is a minimum order of 6 Cake Pops required. These can also be individually wrapped with an extra charge, starting from $1.25.",
+      "The Classic contains: Halal Marshmallows, Milk and White Chocolate Chunk Brownies, Strawberries ready to be dipped, Vanilla Waffle Bites, and a generous bowl of milk chocolate. The Signature adds: Brownie Bars, OG Milk Chocolate Strawberries, Choc chip cookies, and 2 bowls of milk/white chocolate.",
     variants: [
-      { label: "Cake Pop", price: 4 },
-      { label: "Flat Cake Pop", price: 4 },
-      { label: "Ice Cream Cone Cake Pop", price: 4.5 },
+      { label: "Classic Fondue Box", price: 31, image: "/images/platter.jpg" },
+      { label: "Signature Fondue Box", price: 35, image: "/images/treat-box.jpg" },
     ],
-    image: "/images/strawberry-tower.jpg",
+    image: "/images/treat-box.jpg",
   },
   {
-    slug: "chocolate-box",
-    name: "The Chocolate Box",
-    category: "Chocolate Boxes",
+    slug: "smash-box",
+    name: "The Smash Box",
+    category: "Gift",
     description:
-      "Our special Chocolate Boxes come with a beautifully smooth chocolate box lid filled with our popular chocolate strawberries. The elegant aesthetic makes the Chocolate Box a perfect gift for a special occasion.",
+      "Within 'THE SMASHBOX' the recipient can smash through the Chocolate Heart to find cakesicles, chocolates and a heart gem.",
     details:
-      "The Chocolate Boxes are available in a wide variety of shapes and colours. Strawberries are best to consume on the day of collection, latest the day after. The Chocolate Box is made purely from chocolate therefore can last for weeks as long as it has been kept in the fridge.",
+      "You may opt to provide us with the contents you want inside it. For example money, jewellery box or anything else that can sustain a hammer being whacked against it! The colour theme can be personalised to your requirements.",
     variants: [
-      { label: "Square Box (~26 strawberries)", price: 44 },
-      { label: "Heart Box (~16 strawberries)", price: 44 },
-      { label: "Baby Bear Box (~18 strawberries)", price: 69 },
-      { label: "Minnie Mouse Box", price: 50 },
-      { label: "Present Bow Box (~28 strawberries)", price: 81 },
+      { label: "With Strawberries (full)", price: 56, image: "/images/birthday-basket.jpg" },
+      { label: "With Strawberries (smaller)", price: 44, image: "/images/strawberry-tower.jpg" },
+      { label: "Without Strawberries/Cakesicles", price: 38, image: "/images/strawberry-heart.jpg" },
     ],
     image: "/images/strawberry-heart.jpg",
   },
   {
-    slug: "brownie-box",
-    name: "Personalised / Loaded Brownie Box",
-    category: "Brownies",
+    slug: "number-smash-box",
+    name: "The Number Smash Box",
+    category: "Gift",
     description:
-      "Our freshly baked gooey Brownies and Blondies are available in a large variety of flavours. Our favourite is our best seller - Milk and White Chocolate Chunk!",
+      "This striking number is an enormous 14 inch Smashbox purely made out of our finest chocolate. Each are filled with an assortment of candy and gift cards.",
     details:
-      "Brownie toppings include: Lotus, Snickers, Kinder Bueno, Salted caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Mini Egg, Nutella, Mars Bars, Fresh Strawbs, Kinder, Pistachio Spread. Brownies are best to consume within 7 days of collection.",
+      "This offers a different birthday experience and something unique! This can be made up of one or two colours. Matching sprinkles will be added to your chosen number(s) accordingly. Contents include Skittles, M&M's, assortment of jelly and chocolate sweets.",
     variants: [
-      { label: "16 brownie bites w/ 4 toppings", price: 25 },
-      { label: "16 brownie bites w/ personalised message", price: 31 },
+      { label: "Single number", price: 56, image: "/images/platter.jpg" },
+      { label: "Double digit", price: 100, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/strawberry-heart.jpg",
+  },
+  {
+    slug: "diy-kit",
+    name: "DIY Strawberry & Cakesicle Kit",
+    category: "Gift",
+    description:
+      "We are so excited to release our own child friendly DIY KIT! This is an amazing activity for your children where they are given the opportunity to be creative and decorate our OG Strawberries and Cakesicles.",
+    details:
+      "Our Kits contain: Instructional Steps on how to carefully decorate your Treats, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Flavours are Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
+    variants: [{ label: "DIY Kit", price: 31, image: "/images/birthday-basket.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "luxury-chocolate-dates",
+    name: "Luxury Chocolate Dates",
+    category: "Gift",
+    description:
+      "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
+    details:
+      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/platter.jpg",
+  },
+
+  // ── Treats (was Cakesicles) ─────────────────────────────
+  {
+    slug: "cakepops",
+    name: "Cakepops",
+    category: "Treats",
+    description:
+      "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
+    details:
+      "They come in a variety of designs and toppings, all of which can be customised to your liking, theme or party. Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped for an extra charge.",
+    variants: [
+      { label: "Cake Pop", price: 4, image: "/images/strawberry-tower.jpg" },
+      { label: "Flat Cake Pop", price: 4, image: "/images/strawberry-heart.jpg" },
+      { label: "Ice Cream Cone Cake Pop", price: 4.5, image: "/images/platter.jpg" },
+    ],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "madeleines",
+    name: "Madeleines",
+    category: "Treats",
+    description:
+      "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
+    details:
+      "Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
+    variants: [
+      { label: "Box of 6", price: 15, image: "/images/treat-box.jpg" },
+      { label: "Box of 12", price: 28, image: "/images/birthday-basket.jpg" },
+    ],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "choc-dipped-choco-cookies",
+    name: "Chocolate Dipped Choco Cookies",
+    category: "Treats",
+    description:
+      "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
+    details:
+      "Each cookie is generously sized and hand-dipped. Available with milk, white, or dark chocolate coating. Can be customised with toppings and colours to match your theme.",
+    variants: [
+      { label: "Box of 6", price: 16, image: "/images/strawberry-tower.jpg" },
+      { label: "Box of 12", price: 28, image: "/images/strawberry-heart.jpg" },
     ],
     image: "/images/platter.jpg",
   },
   {
-    slug: "brownie-tray",
-    name: "Brownie Tray",
-    category: "Brownies",
+    slug: "choc-dipped-caramel-pretzel-rods",
+    name: "Chocolate Dipped Caramel Pretzel Rods",
+    category: "Treats",
     description:
-      "Our freshly baked gooey Brownies are available in a large variety of flavours. Brownies are available in two options.",
+      "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
     details:
-      "A tray of 6 thick slices of Brownies. Flavours: Milk & White Chocolate Chunk, Lotus, Snickers, Kinder Bueno, Caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Creme Egg, Nutella, Reese's. Brownies are best to consume within 7 days.",
-    variants: [{ label: "Tray of 6 thick slices", price: 23 }],
+      "Each pretzel rod is hand-dipped and decorated. Available with milk or white chocolate. Can be customised with colours, drizzles, and sprinkles. Best consumed within 2 weeks.",
+    variants: [
+      { label: "Box of 6", price: 14, image: "/images/platter.jpg" },
+      { label: "Box of 12", price: 25, image: "/images/treat-box.jpg" },
+    ],
     image: "/images/platter.jpg",
   },
   {
-    slug: "mixed-strawbs-brownies",
-    name: "Mixed Box of Strawbs & Brownies",
-    category: "Brownies",
+    slug: "choc-dipped-rice-krispies",
+    name: "Chocolate Dipped Rice Krispies",
+    category: "Treats",
     description:
-      "Treat yourself to a delicious box of Brownies and Strawberries! This box contains 8 Brownie Bites and 12 Chocolate Strawberries.",
+      "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
     details:
-      "You can personalise this box to your requirements. Brownie toppings include: Lotus, Snickers, Kinder Bueno, Salted caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Mini Egg, Nutella, Mars Bars, Fresh Strawbs, Kinder, Pistachio Spread.",
-    variants: [{ label: "Mixed Box", price: 40 }],
+      "Each rice krispie treat is hand-shaped and dipped. Available in a variety of shapes and designs. Can be themed to match any event. Best consumed within 1 week.",
+    variants: [
+      { label: "Box of 6", price: 14, image: "/images/birthday-basket.jpg" },
+      { label: "Box of 12", price: 25, image: "/images/strawberry-tower.jpg" },
+    ],
     image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "choc-dipped-pretzel-original",
+    name: "Chocolate Dipped Pretzel Original",
+    category: "Treats",
+    description:
+      "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
+    details:
+      "Hand-dipped in milk or white chocolate and finished with sprinkles, drizzles, or crushed toppings. Perfect for grazing tables and treat bags. Best consumed within 2 weeks.",
+    variants: [
+      { label: "Box of 8", price: 12, image: "/images/strawberry-heart.jpg" },
+      { label: "Box of 16", price: 22, image: "/images/platter.jpg" },
+    ],
+    image: "/images/platter.jpg",
+  },
+  {
+    slug: "butter-cookies",
+    name: "Butter Cookies",
+    category: "Treats",
+    description:
+      "Melt-in-your-mouth butter cookies, baked from scratch and finished with a chocolate dip and decorative toppings. Rich, buttery, and irresistible.",
+    details:
+      "Made with real butter and premium ingredients. Available plain or chocolate dipped. Can be customised with colours and toppings. Best consumed within 1 week.",
+    variants: [
+      { label: "Box of 6", price: 12, image: "/images/treat-box.jpg" },
+      { label: "Box of 12", price: 22, image: "/images/birthday-basket.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "cookie-box",
+    name: "Cookie Box",
+    category: "Treats",
+    description:
+      "A beautifully presented box of our signature cookies — a mix of flavours and styles, perfect for sharing or gifting.",
+    details:
+      "The Cookie Box includes an assortment of our loaded cookies, butter cookies, and chocolate dipped cookies. Can be customised to your preferences. Great for events and gifts.",
+    variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/strawberry-tower.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "treats-half-dozen-box",
+    name: "Half Dozen Box",
+    category: "Treats",
+    description:
+      "A sweet selection of 6 chocolate dipped treats, beautifully boxed. Choose from our range of cakepops, madeleines, pretzels, and more.",
+    details:
+      "Pick your favourite treats or let us curate a selection for you. All items are hand-dipped and decorated. Can be themed to your event.",
+    variants: [{ label: "Half Dozen Box", price: 22, image: "/images/strawberry-heart.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "treats-dozen-box",
+    name: "Dozen Box",
+    category: "Treats",
+    description:
+      "A generous box of 12 chocolate dipped treats — the perfect shareable selection for events, parties, or a well-deserved indulgence.",
+    details:
+      "Choose your mix of treats or let us create a curated selection. All items are hand-dipped and decorated. Can be themed to suit any occasion.",
+    variants: [{ label: "Dozen Box", price: 40, image: "/images/platter.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "treats-mini-cakes",
+    name: "Mini Cakes",
+    category: "Treats",
+    description:
+      "Adorable bite-sized mini cakes, baked from scratch and beautifully decorated. Perfect as individual treats or as part of a dessert spread.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Each mini cake is finished with icing and themed decorations. Sold individually or as a set.",
+    variants: [
+      { label: "Single Mini Cake", price: 8, image: "/images/treat-box.jpg" },
+      { label: "Set of 4", price: 28, image: "/images/birthday-basket.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "treats-cupcakes",
+    name: "Cupcakes",
+    category: "Treats",
+    description:
+      "Freshly baked cupcakes topped with swirls of buttercream and beautiful decorations. Soft, fluffy, and available in a range of flavours.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available on request. Best consumed within 3 days.",
+    variants: [
+      { label: "Box of 6", price: 18, image: "/images/strawberry-tower.jpg" },
+      { label: "Box of 12", price: 32, image: "/images/strawberry-heart.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "treats-brownies",
+    name: "Brownies",
+    category: "Treats",
+    description:
+      "Our freshly baked gooey brownies are available in a large variety of flavours. Rich, fudgy, and utterly indulgent.",
+    details:
+      "Flavours include: Milk & White Chocolate Chunk, Lotus, Snickers, Kinder Bueno, Salted Caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Nutella, and more. Best consumed within 7 days.",
+    variants: [
+      { label: "Box of 6 slices", price: 23, image: "/images/platter.jpg" },
+      { label: "Box of 16 bites", price: 25, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/platter.jpg",
+  },
+  {
+    slug: "macaron-sando",
+    name: "Macaron Sando",
+    category: "Treats",
+    description:
+      "Our signature macaron sandwiches — oversized macarons filled with a generous layer of buttercream, ganache, or your choice of filling. A luxurious twist on a French classic.",
+    details:
+      "Available in a variety of flavours and colours. Each macaron sando is handcrafted and can be customised to match your event theme. Best consumed within 3 days.",
+    variants: [
+      { label: "Single Macaron Sando", price: 5, image: "/images/birthday-basket.jpg" },
+      { label: "Box of 6", price: 28, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "cakesicles",
+    name: "Cakesicles",
+    category: "Treats",
+    description:
+      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
+    details:
+      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
+    variants: [{ label: "Each (from)", price: 4.5, image: "/images/strawberry-heart.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "rubiks-cube-cakes",
+    name: "Rubik's Cube Cakes",
+    category: "Treats",
+    description:
+      "Our unique Rubik's Cube Cakes consist of a freshly baked cake coated in our premium Belgian chocolate. They are available in the flavours Vanilla and Chocolate Fudge.",
+    details:
+      "They are available in a variety of designs and toppings, all of which can be customised to your liking. These are best to consume within 2 weeks of collection/delivery. They are best to be stored in the fridge until consumption.",
+    variants: [
+      { label: "Set of 6", price: 31, image: "/images/platter.jpg" },
+      { label: "Set of 9", price: 44, image: "/images/treat-box.jpg" },
+      { label: "Set of 12", price: 50, image: "/images/birthday-basket.jpg" },
+    ],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "loaded-cookies",
+    name: "Loaded Cookies",
+    category: "Treats",
+    description:
+      "Our Loaded Cookies is a great way to satisfy your sweet tooth cravings. The cookies have a vanilla cookie base filled with white and chocolate chips. The centre is then filled with your choice of filling and chocolate!",
+    details:
+      "Each cookie is approx 5.5 inch diameter. Heat them up to create a warm, gooey centre! A minimum of 4 has to be purchased. Toppings include: Milk or White Chocolate Buttons, Nutella, Kinder, Pistachio, Snickers, Biscoff, Cookies and cream, Cherry Bakewell, Jammie Dodger, Marshmallows, Happy Hippo, Freddo, Freddo Caramel, Choc Orange, Mini Aero, Malteser.",
+    variants: [
+      { label: "Loaded Cookie (min 4)", price: 5, image: "/images/strawberry-tower.jpg" },
+      { label: "Regular Cookie", price: 3, image: "/images/strawberry-heart.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "chocolate-covered-oreos",
+    name: "Chocolate Covered Oreos",
+    category: "Treats",
+    description:
+      "Our delicious Oreo bites are coated with silky chocolate and edible toppings. They can also be customised to your requirements with different colours and toppings.",
+    details:
+      "These can also be individually wrapped. Chocolate Oreos are best to consume within 2 weeks of collection/delivery. Chocolate Oreos are available for Postal Orders.",
+    variants: [
+      { label: "Chocolate Covered Oreo", price: 4, image: "/images/platter.jpg" },
+      { label: "Minnie & Mickey Mouse Oreos", price: 4, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/platter.jpg",
+  },
+  {
+    slug: "strawberries",
+    name: "Strawberries",
+    category: "Treats",
+    description:
+      "Strawberries can be personalised to your requirements from different colours and toppings. You can order from a wide variety of quantities.",
+    details:
+      "Please note, Strawberries are best to consume on the day of collection, latest the day after. Strawberries should be kept in the fridge until consumption. If you wish to have personalised edible wafer toppers, this will incur an additional charge.",
+    variants: [
+      { label: "Box of 12", price: 25, image: "/images/birthday-basket.jpg" },
+      { label: "Box of 15", price: 31, image: "/images/strawberry-tower.jpg" },
+      { label: "Box of 24", price: 44, image: "/images/strawberry-heart.jpg" },
+      { label: "Box of 32", price: 53, image: "/images/platter.jpg" },
+      { label: "Platter (approx 45)", price: 69, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/platter.jpg",
+  },
+  {
+    slug: "og-strawberries",
+    name: "OG Strawberries",
+    category: "Treats",
+    description:
+      "Our famous and original milk chocolate strawberries are everyone's favourite! You can order from a wide variety of quantities.",
+    details:
+      "If your OG's are for an event or celebration, we can add a topper to your strawberries such as Happy Birthday, Congratulations, Good Luck etc. This will incur an additional charge. Strawberries are best to consume on the day of collection, latest the day after.",
+    variants: [
+      { label: "Box of 12", price: 20, image: "/images/birthday-basket.jpg" },
+      { label: "Box of 15", price: 25, image: "/images/strawberry-tower.jpg" },
+      { label: "Box of 24", price: 38, image: "/images/strawberry-heart.jpg" },
+      { label: "Box of 32", price: 50, image: "/images/platter.jpg" },
+      { label: "Nutella - Box of 12", price: 23, image: "/images/treat-box.jpg" },
+      { label: "Nutella - Box of 15", price: 28, image: "/images/birthday-basket.jpg" },
+      { label: "Nutella - Box of 24", price: 43, image: "/images/strawberry-tower.jpg" },
+      { label: "Nutella - Box of 32", price: 55, image: "/images/strawberry-heart.jpg" },
+    ],
+    image: "/images/platter.jpg",
+  },
+  {
+    slug: "strawberry-towers",
+    name: "Strawberry Towers",
+    category: "Treats",
+    description:
+      "Our Strawberry Towers hold 27 strawberries. It comes with a personalised topper, fresh fruit, three layers of chocolate strawberries packaged in a luxury clear lid box.",
+    details:
+      "Our toppers can be personalised to your requirements in different colours and shapes! You can choose your variation of fruit such as raspberries, blueberries, figs, strawberries and many more.",
+    variants: [{ label: "Starting from", price: 63, image: "/images/platter.jpg" }],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "biscuits",
+    name: "Biscuits",
+    category: "Treats",
+    description:
+      "Our Shortbread Biscuits can be created in any shape, colour and design to match your personalised requirements.",
+    details:
+      "They can be purchased on its own or you can add them to your bespoke Treat boxes. These can also be used as wedding favours or party favours. These can also be individually wrapped which incurs no extra charge. Biscuits can be posted nationally too!",
+    variants: [{ label: "Each (from)", price: 4, image: "/images/treat-box.jpg" }],
+    image: "/images/birthday-basket.jpg",
+  },
+
+  // ── Bakes ───────────────────────────────────────────────
+  {
+    slug: "bakes-cake-pops",
+    name: "Cake Pops",
+    category: "Bakes",
+    description:
+      "Freshly baked cake pops in Vanilla or Chocolate Fudge, dipped in premium Belgian chocolate and decorated with your choice of toppings.",
+    details:
+      "Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped. Best consumed within 2 weeks.",
+    variants: [
+      { label: "Cake Pop", price: 4, image: "/images/birthday-basket.jpg" },
+      { label: "Flat Cake Pop", price: 4, image: "/images/strawberry-tower.jpg" },
+      { label: "Ice Cream Cone Cake Pop", price: 4.5, image: "/images/strawberry-heart.jpg" },
+    ],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "bakes-madeleines",
+    name: "Madeleines",
+    category: "Bakes",
+    description:
+      "Classic French madeleines baked fresh from scratch with real butter and vanilla. Light, soft, and perfect on their own or dipped in chocolate.",
+    details:
+      "Our madeleines are baked daily using premium ingredients. Available plain or chocolate dipped. Best consumed within 5 days of collection.",
+    variants: [
+      { label: "Box of 6", price: 12, image: "/images/platter.jpg" },
+      { label: "Box of 12", price: 22, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "bakes-butter-cookies",
+    name: "Butter Cookies",
+    category: "Bakes",
+    description:
+      "Traditional butter cookies baked from scratch with real butter. Melt-in-your-mouth delicious and perfect with a cup of tea.",
+    details:
+      "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
+    variants: [
+      { label: "Box of 6", price: 12, image: "/images/birthday-basket.jpg" },
+      { label: "Box of 12", price: 22, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "bakes-cookie-box",
+    name: "Cookie Box",
+    category: "Bakes",
+    description:
+      "A freshly baked assortment of our signature cookies — butter cookies, loaded cookies, and more. Baked from scratch and ready to enjoy.",
+    details:
+      "Each box includes a variety of cookie styles and flavours. Perfect for sharing at events or as a gift. Best consumed within 1 week.",
+    variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/strawberry-heart.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "bakes-half-dozen-box",
+    name: "Half Dozen Box",
+    category: "Bakes",
+    description:
+      "A box of 6 freshly baked treats — choose from our range of cakes, cookies, brownies, and more. All baked from scratch.",
+    details:
+      "Pick your favourites or let us curate a selection. All items are freshly baked using premium ingredients.",
+    variants: [{ label: "Half Dozen Box", price: 20, image: "/images/platter.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "bakes-dozen-box",
+    name: "Dozen Box",
+    category: "Bakes",
+    description:
+      "A generous box of 12 freshly baked treats — perfect for parties, events, or just because. All baked from scratch with the finest ingredients.",
+    details:
+      "Choose your mix or let us create a curated assortment. All items are baked fresh to order.",
+    variants: [{ label: "Dozen Box", price: 36, image: "/images/treat-box.jpg" }],
+    image: "/images/treat-box.jpg",
+  },
+  {
+    slug: "bakes-mini-cakes",
+    name: "Mini Cakes",
+    category: "Bakes",
+    description:
+      "Individual-sized cakes baked from scratch and beautifully decorated. Perfect as single-serve treats for any celebration.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Each mini cake is hand-finished with icing and decorations.",
+    variants: [
+      { label: "Single Mini Cake", price: 8, image: "/images/birthday-basket.jpg" },
+      { label: "Set of 4", price: 28, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "bakes-cupcakes",
+    name: "Cupcakes",
+    category: "Bakes",
+    description:
+      "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in a range of flavours and decorated to your theme.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available. Baked fresh to order.",
+    variants: [
+      { label: "Box of 6", price: 18, image: "/images/strawberry-heart.jpg" },
+      { label: "Box of 12", price: 32, image: "/images/platter.jpg" },
+      { label: "Box of 24", price: 58, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "bakes-brownies",
+    name: "Brownies",
+    category: "Bakes",
+    description:
+      "Our signature gooey brownies, baked from scratch in a variety of flavours. Rich, fudgy, and utterly indulgent.",
+    details:
+      "Flavours: Milk & White Chocolate Chunk, Lotus, Snickers, Kinder Bueno, Salted Caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Nutella, and more. Best consumed within 7 days.",
+    variants: [
+      { label: "Box of 6 slices", price: 23, image: "/images/birthday-basket.jpg" },
+      { label: "Box of 16 bites", price: 25, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/platter.jpg",
+  },
+  {
+    slug: "bakes-custom-cake",
+    name: "Custom Cake",
+    category: "Bakes",
+    description:
+      "A fully custom cake baked from scratch to your specifications. Available in a range of flavours, sizes, and designs for any celebration.",
+    details:
+      "Please enquire with your design ideas, flavour preferences, and event date. We will provide a personalised quote. Please allow at least 1 week notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "muffins",
+    name: "Muffins",
+    category: "Bakes",
+    description:
+      "Freshly baked muffins in a variety of classic flavours. Soft, moist, and perfect for breakfast, brunch, or a sweet snack.",
+    details:
+      "Available in Blueberry, Chocolate Chip, Banana Walnut, and Lemon Poppy Seed. Baked from scratch using premium ingredients. Best consumed within 3 days.",
+    variants: [
+      { label: "Box of 4", price: 10, image: "/images/strawberry-heart.jpg" },
+      { label: "Box of 6", price: 14, image: "/images/platter.jpg" },
+      { label: "Box of 12", price: 26, image: "/images/treat-box.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "castella",
+    name: "Castella",
+    category: "Bakes",
+    description:
+      "A light and fluffy Japanese-style castella sponge cake, baked from scratch with eggs, sugar, and flour. Delicate, bouncy, and delicious.",
+    details:
+      "Our castella is baked low and slow for the perfect jiggly texture. Available plain or with matcha flavouring. Best consumed within 3 days.",
+    variants: [
+      { label: "Single Castella", price: 15, image: "/images/birthday-basket.jpg" },
+      { label: "Matcha Castella", price: 17, image: "/images/strawberry-tower.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
   },
   {
     slug: "tray-bakes",
@@ -196,158 +803,96 @@ export const products: Product[] = [
     details:
       "Please note that all sponges are vanilla flavoured. Tray Bakes are best to consume within 5 days of collection/delivery. Tray Bakes are not available for postage.",
     variants: [
-      { label: "Old School Vanilla Sponge & Icing Cake", price: 19 },
-      { label: "Old School Raspberry & Coconut", price: 19 },
-      { label: "Old School Caramel & Chocolate", price: 19 },
-      { label: "Mixed box of 2 flavours", price: 21 },
+      { label: "Old School Vanilla Sponge & Icing Cake", price: 19, image: "/images/strawberry-heart.jpg" },
+      { label: "Old School Raspberry & Coconut", price: 19, image: "/images/platter.jpg" },
+      { label: "Old School Caramel & Chocolate", price: 19, image: "/images/treat-box.jpg" },
+      { label: "Mixed box of 2 flavours", price: 21, image: "/images/birthday-basket.jpg" },
+    ],
+    image: "/images/birthday-basket.jpg",
+  },
+
+  // ── Favours ─────────────────────────────────────────────
+  {
+    slug: "favour-flower-cupcake",
+    name: "Flower and Cupcake",
+    category: "Favours",
+    description:
+      "A charming individual favour featuring a mini cupcake paired with a small flower. Beautifully presented and perfect for wedding favours and events.",
+    details:
+      "Each favour is individually packaged. Cupcake flavours and flower colours can be matched to your theme. Minimum order of 10.",
+    variants: [{ label: "Per Favour (min 10)", price: 6, image: "/images/strawberry-tower.jpg" }],
+    image: "/images/birthday-basket.jpg",
+  },
+  {
+    slug: "single-cake-popsicle",
+    name: "Single Cake Popsicle",
+    category: "Favours",
+    description:
+      "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
+    details:
+      "Available in Vanilla and Chocolate Fudge. Each cakesicle can be themed and personalised. Individually wrapped in cellophane with a ribbon.",
+    variants: [
+      { label: "Cakesicle in cellophane & ribbon", price: 4.5, image: "/images/strawberry-heart.jpg" },
+      { label: "Cakesicle in clear lid box", price: 5.5, image: "/images/platter.jpg" },
+    ],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "single-cake-pop",
+    name: "Single Cake Pop",
+    category: "Favours",
+    description:
+      "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
+    details:
+      "Available in Vanilla and Chocolate Fudge. Each cake pop can be themed and customised. Wrapped in cellophane with a twist ribbon.",
+    variants: [{ label: "Cakepop in cellophane & ribbon", price: 4, image: "/images/treat-box.jpg" }],
+    image: "/images/strawberry-tower.jpg",
+  },
+  {
+    slug: "icing-cookies",
+    name: "Icing Cookies",
+    category: "Favours",
+    description:
+      "Beautifully hand-iced sugar cookies in custom shapes and designs. Perfect as favours for weddings, baby showers, and parties.",
+    details:
+      "Each cookie is hand-iced with royal icing and can be customised with any design, colour, or message. Can be individually wrapped. Best consumed within 2 weeks.",
+    variants: [
+      { label: "Per Cookie (min 10)", price: 5, image: "/images/birthday-basket.jpg" },
     ],
     image: "/images/birthday-basket.jpg",
   },
   {
-    slug: "fondue-box",
-    name: "Fondue Box",
-    category: "Specialty",
-    description: "We have two options for our fondue box!",
+    slug: "treat-bag",
+    name: "Treat Bag",
+    category: "Favours",
+    description:
+      "A beautifully filled treat bag with an assortment of mini sweet treats. Perfect as party bags, wedding favours, or thank-you gifts.",
     details:
-      "The Classic contains: Halal Marshmallows, Milk and White Chocolate Chunk Brownies, Strawberries ready to be dipped, Vanilla Waffle Bites, and a generous bowl of milk chocolate. The Signature adds: Brownie Bars, OG Milk Chocolate Strawberries, Choc chip cookies, and 2 bowls of milk/white chocolate.",
-    variants: [
-      { label: "Classic Fondue Box", price: 31 },
-      { label: "Signature Fondue Box", price: 35 },
-    ],
+      "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
+    variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/strawberry-tower.jpg" }],
     image: "/images/treat-box.jpg",
   },
   {
-    slug: "smash-box",
-    name: "The Smash Box",
-    category: "Specialty",
+    slug: "cake-tray",
+    name: "Cake Tray",
+    category: "Favours",
     description:
-      "Within 'THE SMASHBOX' the recipient can smash through the Chocolate Heart to find cakesicles, chocolates and a heart gem.",
+      "A small tray of assorted mini cakes and treats, beautifully wrapped as a favour. A generous and impressive gift for guests.",
     details:
-      "You may opt to provide us with the contents you want inside it. For example money, jewellery box or anything else that can sustain a hammer being whacked against it! The colour theme can be personalised to your requirements.",
-    variants: [
-      { label: "With Strawberries (full)", price: 56 },
-      { label: "With Strawberries (smaller)", price: 44 },
-      { label: "Without Strawberries/Cakesicles", price: 38 },
-    ],
-    image: "/images/strawberry-heart.jpg",
-  },
-  {
-    slug: "number-smash-box",
-    name: "The Number Smash Box",
-    category: "Specialty",
-    description:
-      "This striking number is an enormous 14 inch Smashbox purely made out of our finest chocolate. Each are filled with an assortment of candy and gift cards.",
-    details:
-      "This offers a different birthday experience and something unique! This can be made up of one or two colours. Matching sprinkles will be added to your chosen number(s) accordingly. Contents include Skittles, M&M's, assortment of jelly and chocolate sweets.",
-    variants: [
-      { label: "Single number", price: 56 },
-      { label: "Double digit", price: 100 },
-    ],
-    image: "/images/strawberry-heart.jpg",
-  },
-  {
-    slug: "unicorn-chocolate-box",
-    name: "The Unicorn Chocolate Box",
-    category: "Chocolate Boxes",
-    description:
-      "Our new Unicorn Chocolate Box! This is such a perfect addition for little ones or anyone who wants a little bit of extra sweet magic at a celebration.",
-    details:
-      "The Unicorn Chocolate Box is filled with approximately 16 chocolate covered Strawberries. The message at the side of the box can be changed to your requirements. This Unicorn Chocolate Box is not available for postage.",
-    variants: [{ label: "Unicorn Chocolate Box", price: 44 }],
-    image: "/images/strawberry-tower.jpg",
-  },
-  {
-    slug: "loaded-cookies",
-    name: "Loaded Cookies",
-    category: "Cookies & Biscuits",
-    description:
-      "Our Loaded Cookies is a great way to satisfy your sweet tooth cravings. The cookies have a vanilla cookie base filled with white and chocolate chips. The centre is then filled with your choice of filling and chocolate!",
-    details:
-      "Each cookie is approx 5.5 inch diameter. Heat them up to create a warm, gooey centre! A minimum of 4 has to be purchased. Toppings include: Milk or White Chocolate Buttons, Nutella, Kinder, Pistachio, Snickers, Biscoff, Cookies and cream, Cherry Bakewell, Jammie Dodger, Marshmallows, Happy Hippo, Freddo, Freddo Caramel, Choc Orange, Mini Aero, Malteser.",
-    variants: [
-      { label: "Loaded Cookie (min 4)", price: 5 },
-      { label: "Regular Cookie", price: 3 },
-    ],
-    image: "/images/birthday-basket.jpg",
-  },
-  {
-    slug: "rubiks-cube-cakes",
-    name: "Rubik's Cube Cakes",
-    category: "Cakesicles",
-    description:
-      "Our unique Rubik's Cube Cakes consist of a freshly baked cake coated in our premium Belgian chocolate. They are available in the flavours Vanilla and Chocolate Fudge.",
-    details:
-      "They are available in a variety of designs and toppings, all of which can be customised to your liking. These are best to consume within 2 weeks of collection/delivery. They are best to be stored in the fridge until consumption.",
-    variants: [
-      { label: "Set of 6", price: 31 },
-      { label: "Set of 9", price: 44 },
-      { label: "Set of 12", price: 50 },
-    ],
-    image: "/images/strawberry-tower.jpg",
-  },
-  {
-    slug: "diy-kit",
-    name: "DIY Strawberry & Cakesicle Kit",
-    category: "Specialty",
-    description:
-      "We are so excited to release our own child friendly DIY KIT! This is an amazing activity for your children where they are given the opportunity to be creative and decorate our OG Strawberries and Cakesicles.",
-    details:
-      "Our Kits contain: Instructional Steps on how to carefully decorate your Treats, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Flavours are Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
-    variants: [{ label: "DIY Kit", price: 31 }],
+      "Each tray includes a selection of mini treats. Can be themed and personalised to match your event. Perfect for weddings, corporate events, and celebrations.",
+    variants: [{ label: "Per Cake Tray", price: 8, image: "/images/strawberry-heart.jpg" }],
     image: "/images/treat-box.jpg",
   },
   {
-    slug: "biscuits",
-    name: "Biscuits",
-    category: "Cookies & Biscuits",
+    slug: "mini-cookies-box",
+    name: "Mini Cookies Box",
+    category: "Favours",
     description:
-      "Our Shortbread Biscuits can be created in any shape, colour and design to match your personalised requirements.",
+      "A cute little box filled with mini cookies, perfect as a favour or small gift. Baked from scratch and beautifully packaged.",
     details:
-      "They can be purchased on its own or you can add them to your bespoke Treat boxes. These can also be used as wedding favours or party favours. These can also be individually wrapped which incurs no extra charge. Biscuits can be posted nationally too!",
-    variants: [{ label: "Each (from)", price: 4 }],
+      "Each box contains an assortment of mini cookies. Can be themed with colours and packaging. Minimum order of 10.",
+    variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/platter.jpg" }],
     image: "/images/birthday-basket.jpg",
-  },
-  {
-    slug: "chocolate-covered-oreos",
-    name: "Chocolate Covered Oreos",
-    category: "Cookies & Biscuits",
-    description:
-      "Our delicious Oreo bites are coated with silky chocolate and edible toppings. They can also be customised to your requirements with different colours and toppings.",
-    details:
-      "These can also be individually wrapped. Chocolate Oreos are best to consume within 2 weeks of collection/delivery. Chocolate Oreos are available for Postal Orders.",
-    variants: [
-      { label: "Chocolate Covered Oreo", price: 4 },
-      { label: "Minnie & Mickey Mouse Oreos", price: 4 },
-    ],
-    image: "/images/platter.jpg",
-  },
-  {
-    slug: "cakesicle-cakepop-favours",
-    name: "Cakesicle & Cakepop Favours",
-    category: "Favours",
-    description:
-      "We can cater to making bespoke Favours to suit your requirements to celebrate a special occasion.",
-    details:
-      "Favours are priced individually as they are unique every time to bring your vision to life. Prices can vary higher or lower depending on your requests.",
-    variants: [
-      { label: "Cakesicle in cellophane & twist ribbon", price: 4.5 },
-      { label: "Cakesicle in clear lid box with emblem & initials", price: 5.5 },
-      { label: "Heart Gem in clear lid box with shredded paper", price: 5 },
-      { label: "Cakepop in cellophane & twist ribbon", price: 4 },
-    ],
-    image: "/images/strawberry-tower.jpg",
-  },
-  {
-    slug: "strawberry-favours",
-    name: "Strawberry Favours",
-    category: "Favours",
-    description:
-      "We can cater to making bespoke Favours to suit your requirements to celebrate a special occasion.",
-    details:
-      "Favours are priced individually as they are unique every time to bring your vision to life and we can cater to any personalised request.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/strawberry-heart.jpg",
   },
   {
     slug: "baby-favours",
@@ -358,23 +903,11 @@ export const products: Product[] = [
     details:
       "Please note, you are able to request anything for baby favours. We can cater to your personalised request. Prices can vary higher or lower depending on your requests.",
     variants: [
-      { label: "3 Cakesicles", price: 14 },
-      { label: "5 Cakesicles", price: 23 },
-      { label: "Bento Cake", price: 13 },
+      { label: "3 Cakesicles", price: 14, image: "/images/treat-box.jpg" },
+      { label: "5 Cakesicles", price: 23, image: "/images/birthday-basket.jpg" },
+      { label: "Bento Cake", price: 13, image: "/images/strawberry-tower.jpg" },
     ],
     image: "/images/birthday-basket.jpg",
-  },
-  {
-    slug: "luxury-chocolate-dates",
-    name: "Luxury Chocolate Dates",
-    category: "Specialty",
-    description:
-      "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
-    details:
-      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/platter.jpg",
   },
 ];
 

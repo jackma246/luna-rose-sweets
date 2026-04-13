@@ -25,7 +25,7 @@ export default function AnimatedHero() {
     return () => observer.disconnect();
   }, []);
 
-  const words = "Sweet Treats Dipped & Decorated".split(" ");
+  const words = "Chocolate Dipped Sweet Treats & Baked Goods".split(" ");
 
   return (
     <section className="relative overflow-hidden">

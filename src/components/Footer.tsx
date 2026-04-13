@@ -6,7 +6,9 @@ export default function Footer() {
       {/* Mobile: centered social links above footer */}
       <div className="md:hidden flex justify-center gap-6 py-8 border-t border-accent/20 bg-background">
         <a
-          href="#"
+          href="https://www.instagram.com/dipsprinkle"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-chocolate/70 hover:text-accent transition-colors"
           aria-label="Instagram"
         >
@@ -27,7 +29,9 @@ export default function Footer() {
           </svg>
         </a>
         <a
-          href="#"
+          href="https://www.tiktok.com/@sanjosesweets"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-chocolate/70 hover:text-accent transition-colors"
           aria-label="TikTok"
         >
@@ -39,6 +43,38 @@ export default function Footer() {
             fill="currentColor"
           >
             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.65a8.35 8.35 0 0 0 4.76 1.49v-3.5c-.02 0-1 .05-1 .05z" />
+          </svg>
+        </a>
+        <a
+          href="#"
+          className="text-chocolate/70 hover:text-accent transition-colors"
+          aria-label="Facebook"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
+        </a>
+        <a
+          href="https://www.xiaohongshu.com/user/profile/69da8aa7000000002603b2db"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-chocolate/70 hover:text-accent transition-colors"
+          aria-label="Rednote"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.29 14.3H8.71c-.72 0-1.31-.59-1.31-1.31V9.01c0-.72.59-1.31 1.31-1.31h6.58c.72 0 1.31.59 1.31 1.31v5.98c0 .72-.59 1.31-1.31 1.31zM10.5 10.5v3l2.5-1.5-2.5-1.5z" />
           </svg>
         </a>
       </div>
@@ -90,7 +126,9 @@ export default function Footer() {
               </h3>
               <div className="flex gap-4">
                 <a
-                  href="#"
+                  href="https://www.instagram.com/dipsprinkle"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white/80 hover:text-accent transition-colors"
                   aria-label="Instagram"
                 >
@@ -111,7 +149,9 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.tiktok.com/@sanjosesweets"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white/80 hover:text-accent transition-colors"
                   aria-label="TikTok"
                 >
@@ -123,6 +163,38 @@ export default function Footer() {
                     fill="currentColor"
                   >
                     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.65a8.35 8.35 0 0 0 4.76 1.49v-3.5c-.02 0-1 .05-1 .05z" />
+                  </svg>
+                </a>
+                <a
+                  href="#"
+                  className="text-white/80 hover:text-accent transition-colors"
+                  aria-label="Facebook"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.xiaohongshu.com/user/profile/69da8aa7000000002603b2db"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/80 hover:text-accent transition-colors"
+                  aria-label="Rednote"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.29 14.3H8.71c-.72 0-1.31-.59-1.31-1.31V9.01c0-.72.59-1.31 1.31-1.31h6.58c.72 0 1.31.59 1.31 1.31v5.98c0 .72-.59 1.31-1.31 1.31zM10.5 10.5v3l2.5-1.5-2.5-1.5z" />
                   </svg>
                 </a>
               </div>

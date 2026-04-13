@@ -7,12 +7,12 @@ import InstaGrid from "@/components/InstaGrid";
 
 const featured = products.filter((p) =>
   [
-    "cake-pops",
-    "strawberries",
+    "medium-party-set",
     "cakesicles",
-    "large-treat-box",
-    "chocolate-box",
-    "brownie-box",
+    "cakepops",
+    "gift-half-dozen-box",
+    "cakepop-bouquet",
+    "party-custom-cake",
   ].includes(p.slug)
 );
 
@@ -76,7 +76,7 @@ export default function Home() {
         <div className="max-w-2xl mx-auto px-6 py-24 text-center">
           <ScrollReveal>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-chocolate mb-2 tracking-tight">
-              Homemade with Love
+              Homemade from Scratch
             </h2>
             <div className="flex justify-center gap-1.5 mb-6">
               <span className="text-accent">&#x2726;</span>
@@ -85,10 +85,20 @@ export default function Home() {
             </div>
           </ScrollReveal>
           <ScrollReveal delay={150}>
-            <p className="text-chocolate/60 leading-relaxed text-lg">
+            <p className="text-chocolate/60 leading-relaxed text-lg mb-6">
               Every treat is handcrafted with premium chocolate and the
               finest ingredients. Perfect for birthdays, weddings, baby showers,
               and every celebration in between.
+            </p>
+            <h3 className="font-serif text-xl md:text-2xl font-bold text-chocolate mb-3 tracking-tight">
+              The Finest Ingredients
+            </h3>
+            <p className="text-chocolate/60 leading-relaxed text-lg">
+              We believe great treats start with great ingredients. From rich
+              Belgian chocolate and real vanilla to fresh seasonal fruits and
+              premium butter, every component is carefully sourced for quality
+              and flavour. No shortcuts, no artificial substitutes — just honest,
+              homemade goodness in every bite.
             </p>
             <Link
               href="/about"
