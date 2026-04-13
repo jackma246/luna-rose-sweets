@@ -68,8 +68,9 @@ export default function ProductDetailPage() {
 
       {/* Two-column layout: photo left, info right (stacks on mobile) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-        {/* Left — Photo */}
-        <div className="aspect-square rounded-2xl overflow-hidden relative shadow-lg">
+        {/* Left — Photo (sticky so it stays visible while scrolling to variants) */}
+        <div className="sticky top-14 md:top-24 self-start z-10 bg-background pb-2">
+        <div className="aspect-[16/9] md:aspect-square rounded-2xl overflow-hidden relative shadow-lg">
           {displayImage ? (
             <Image
               key={displayImage}
@@ -84,6 +85,7 @@ export default function ProductDetailPage() {
               🍰
             </div>
           )}
+        </div>
         </div>
 
         {/* Right — Info */}
