@@ -75,7 +75,7 @@ export default function AnimatedHero() {
             </h1>
             <p className="hero-paragraph text-chocolate/60 text-base md:text-lg max-w-sm mb-8 leading-relaxed">
               Madeleines, Cake Pops, Rice Krispies, Pretzels, Butter Cookies,
-              Marshmallows, Oreo Pops & More! Homemade with love.
+              Marshmallows, Oreo Pops & More! Homemade from scratch.
             </p>
             <Link
               href="/products"

@@ -94,7 +94,7 @@ export default function Footer() {
               <h3 className="font-serif font-bold text-lg mb-3 text-accent">Dip & Sprinkle</h3>
               <p className="text-sm text-white/80">
                 Sweet treats dipped & decorated — Madeleines, Cake Pops, Rice Krispies,
-                Pretzels, Butter Cookies & More! Homemade with love.
+                Pretzels, Butter Cookies & More! Homemade from scratch.
               </p>
             </div>
             <div>
