@@ -47,7 +47,7 @@ export default function AnimatedHero() {
           {/* Image with subtle zoom */}
           <div className="relative aspect-square md:aspect-auto md:min-h-[480px] overflow-hidden">
             <Image
-              src="/images/cake-pops-hero.png"
+              src="/images/brand-spread.jpg"
               alt="Handcrafted cake pops and chocolate-covered strawberries"
               fill
               className="object-cover hero-image"

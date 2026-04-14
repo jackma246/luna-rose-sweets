@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 
 const images = [
-  "/images/platter.jpg",
-  "/images/treat-box.jpg",
-  "/images/birthday-basket.jpg",
-  "/images/strawberry-tower.jpg",
-  "/images/strawberry-heart.jpg",
+  "/images/cakesicles/5.png",
+  "/images/cupcakes/1.jpg",
+  "/images/strawberries/basket-1.jpg",
+  "/images/cake-pops/basic.jpg",
+  "/images/treat-boxes/mixed-treats.jpg",
 ];
 
 export default function InstaGrid() {
