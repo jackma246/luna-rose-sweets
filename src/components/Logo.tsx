@@ -31,7 +31,7 @@ export default function Logo({
       <div
         style={{
           position: "absolute",
-          inset: "15%",
+          inset: "5%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -42,8 +42,8 @@ export default function Logo({
         <Image
           src="/images/ds-logo.png"
           alt="Dip & Sprinkle"
-          width={Math.round(size * 0.7)}
-          height={Math.round(size * 0.7)}
+          width={Math.round(size * 0.9)}
+          height={Math.round(size * 0.9)}
           style={{
             objectFit: "contain",
             width: "100%",
