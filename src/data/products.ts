@@ -19,7 +19,7 @@ export const products: Product[] = [
   // ── Party Sets ──────────────────────────────────────────
   {
     slug: "small-party-set",
-    name: "Small Party Set",
+    name: "Small Party Set (4 Dozen)",
     category: "Party Sets",
     description:
       "Our Small Party Set is ideal for intimate gatherings and smaller celebrations. A beautifully curated selection of chocolate dipped treats your guests will love.",
@@ -30,7 +30,7 @@ export const products: Product[] = [
   },
   {
     slug: "medium-party-set",
-    name: "Medium Size Party Set (4 Dozen)",
+    name: "Medium Party Set (8 Dozen)",
     category: "Party Sets",
     description:
       "Our Medium Party Set is perfect for celebrations! This set includes 4 dozen beautifully crafted treats — a mix of chocolate dipped favourites to wow your guests.",
@@ -41,7 +41,7 @@ export const products: Product[] = [
   },
   {
     slug: "large-party-set",
-    name: "Large Party Set",
+    name: "Large Party Set (12 Dozen)",
     category: "Party Sets",
     description:
       "Our Large Party Set is the ultimate spread for big celebrations. Packed with a generous assortment of our finest chocolate dipped treats to impress a crowd.",
