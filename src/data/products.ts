@@ -126,45 +126,6 @@ export const products: Product[] = [
     image: "/images/brand-spread.jpg",
   },
   {
-    slug: "madeleine-tower",
-    name: "Madeleine Tower",
-    category: "Towers",
-    description:
-      "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
-    details:
-      "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Madeleine Tower", price: 55, image: "/images/towers/1.jpg" }],
-    image: "/images/madeleines/1.jpg",
-  },
-  {
-    slug: "macaron-tower",
-    name: "Macaron Tower",
-    category: "Towers",
-    description:
-      "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
-    details:
-      "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
-    variants: [
-      { label: "Small Tower (30 macarons)", price: 60, image: "/images/towers/2.jpg" },
-      { label: "Large Tower (60 macarons)", price: 110, image: "/images/towers/3.jpg" },
-    ],
-    image: "/images/towers/2.jpg",
-  },
-  {
-    slug: "croissant-tower",
-    name: "Croissant Tower",
-    category: "Towers",
-    description:
-      "A beautiful tower of freshly baked croissants, perfect for brunches, baby showers, and morning events. Golden, flaky, and utterly delicious.",
-    details:
-      "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
-    variants: [
-      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/1.jpg" },
-      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/3.jpg" },
-    ],
-    image: "/images/towers/1.jpg",
-  },
-  {
     slug: "party-favour-flower-cupcake",
     name: "Flower & Cupcake (12ea)",
     category: "Party Sets",
@@ -747,6 +708,47 @@ export const products: Product[] = [
     variants: [],
     enquireOnly: true,
     image: "/images/treat-boxes/mixed-treats.jpg",
+  },
+
+  // ── Towers ──────────────────────────────────────────────
+  {
+    slug: "madeleine-tower",
+    name: "Madeleine Tower",
+    category: "Towers",
+    description:
+      "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
+    details:
+      "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
+    variants: [{ label: "Madeleine Tower", price: 55, image: "/images/towers/1.jpg" }],
+    image: "/images/madeleines/1.jpg",
+  },
+  {
+    slug: "macaron-tower",
+    name: "Macaron Tower",
+    category: "Towers",
+    description:
+      "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
+    details:
+      "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
+    variants: [
+      { label: "Small Tower (30 macarons)", price: 60, image: "/images/towers/2.jpg" },
+      { label: "Large Tower (60 macarons)", price: 110, image: "/images/towers/3.jpg" },
+    ],
+    image: "/images/towers/2.jpg",
+  },
+  {
+    slug: "croissant-tower",
+    name: "Croissant Tower",
+    category: "Towers",
+    description:
+      "A beautiful tower of freshly baked croissants, perfect for brunches, baby showers, and morning events. Golden, flaky, and utterly delicious.",
+    details:
+      "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
+    variants: [
+      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/1.jpg" },
+      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/3.jpg" },
+    ],
+    image: "/images/towers/1.jpg",
   },
 ];
 
