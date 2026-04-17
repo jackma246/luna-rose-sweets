@@ -385,10 +385,7 @@ export const products: Product[] = [
       "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
     details:
       "Each pretzel rod is hand-dipped and decorated. Available with milk or white chocolate. Can be customised with colours, drizzles, and sprinkles. Best consumed within 2 weeks.",
-    variants: [
-      { label: "Box of 6", price: 14, image: "/images/pretzel-rods/1.jpg" },
-      { label: "Box of 12", price: 25, image: "/images/pretzel-rods/1.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 35, image: "/images/pretzel-rods/1.jpg" }],
     image: "/images/pretzel-rods/1.jpg",
   },
   {
@@ -421,10 +418,7 @@ export const products: Product[] = [
       "Melt-in-your-mouth butter cookies, baked from scratch and finished with a chocolate dip and decorative toppings. Rich, buttery, and irresistible.",
     details:
       "Made with real butter and premium ingredients. Available plain or chocolate dipped. Can be customised with colours and toppings. Best consumed within 1 week.",
-    variants: [
-      { label: "Box of 6", price: 12, image: "/images/butter-cookies/1.jpg" },
-      { label: "Box of 12", price: 22, image: "/images/butter-cookies/3.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 18, image: "/images/butter-cookies/1.jpg" }],
     image: "/images/butter-cookies/2.jpg",
   },
 
@@ -692,8 +686,7 @@ export const products: Product[] = [
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
-    variants: [],
-    enquireOnly: true,
+    variants: [{ label: "1 Dozen", price: 36, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/treat-boxes/mixed-treats.jpg",
   },
 
