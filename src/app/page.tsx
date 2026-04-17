@@ -10,7 +10,7 @@ const featured = products.filter((p) =>
     "medium-party-set",
     "cakesicles",
     "cakepops",
-    "gift-half-dozen-box",
+    "bakes-cookie-box",
     "cakepop-bouquet",
     "party-custom-cake",
   ].includes(p.slug)

@@ -194,17 +194,6 @@ export const products: Product[] = [
     image: "/images/strawberries/bouquet-1.jpg",
   },
   {
-    slug: "gift-half-dozen-box",
-    name: "Half Dozen Box",
-    category: "Gift",
-    description:
-      "A curated gift box of 6 beautifully decorated treats. A sweet and thoughtful gift for any occasion, perfectly packaged and ready to give.",
-    details:
-      "Choose from a selection of our most popular treats. Each box can be themed and personalised. Gift boxes come with a ribbon and optional message card.",
-    variants: [{ label: "Half Dozen Box", price: 25, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/treat-boxes/mixed-treats.jpg",
-  },
-  {
     slug: "gift-one-dozen-box",
     name: "One Dozen Box",
     category: "Gift",
@@ -442,17 +431,6 @@ export const products: Product[] = [
     image: "/images/cookie-box/1.jpg",
   },
   {
-    slug: "treats-half-dozen-box",
-    name: "Half Dozen Box",
-    category: "Treats",
-    description:
-      "A sweet selection of 6 chocolate dipped treats, beautifully boxed. Choose from our range of cakepops, madeleines, pretzels, and more.",
-    details:
-      "Pick your favourite treats or let us curate a selection for you. All items are hand-dipped and decorated. Can be themed to your event.",
-    variants: [{ label: "Half Dozen Box", price: 22, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/treat-boxes/mixed-treats.jpg",
-  },
-  {
     slug: "treats-dozen-box",
     name: "Dozen Box",
     category: "Treats",
@@ -687,17 +665,6 @@ export const products: Product[] = [
       "Each box includes a variety of cookie styles and flavours. Perfect for sharing at events or as a gift. Best consumed within 1 week.",
     variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/cookie-box/2.jpg" }],
     image: "/images/cookie-box/2.jpg",
-  },
-  {
-    slug: "bakes-half-dozen-box",
-    name: "Half Dozen Box",
-    category: "Bakes",
-    description:
-      "A box of 6 freshly baked treats — choose from our range of cakes, cookies, brownies, and more. All baked from scratch.",
-    details:
-      "Pick your favourites or let us curate a selection. All items are freshly baked using premium ingredients.",
-    variants: [{ label: "Half Dozen Box", price: 20, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/treat-boxes/mixed-treats.jpg",
   },
   {
     slug: "bakes-dozen-box",
