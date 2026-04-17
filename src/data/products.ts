@@ -385,8 +385,8 @@ export const products: Product[] = [
       "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
     details:
       "Each pretzel rod is hand-dipped and decorated. Available with milk or white chocolate. Can be customised with colours, drizzles, and sprinkles. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen", price: 35, image: "/images/pretzel-rods/1.jpg" }],
-    image: "/images/pretzel-rods/1.jpg",
+    variants: [{ label: "1 Dozen", price: 35, image: "/images/caramel-pretzel/1.jpg" }],
+    image: "/images/caramel-pretzel/1.jpg",
   },
   {
     slug: "choc-dipped-rice-krispies",
