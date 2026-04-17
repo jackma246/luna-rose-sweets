@@ -513,17 +513,17 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-madeleines",
-    name: "Madeleines",
+    name: "Madeleines (1 Dozen)",
     category: "Bakes",
     description:
-      "Classic French madeleines baked fresh from scratch with real butter and vanilla. Light, soft, and perfect on their own or dipped in chocolate.",
+      "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
     details:
-      "Our madeleines are baked daily using premium ingredients. Available plain or chocolate dipped. Best consumed within 5 days of collection.",
+      "Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Box of 6", price: 12, image: "/images/madeleines/3.jpg" },
-      { label: "Box of 12", price: 22, image: "/images/madeleines/4.jpg" },
+      { label: "Box of 6", price: 15, image: "/images/madeleines/1.jpg" },
+      { label: "Box of 12", price: 28, image: "/images/madeleines/2.jpg" },
     ],
-    image: "/images/madeleines/3.jpg",
+    image: "/images/madeleines/1.jpg",
   },
   {
     slug: "bakes-butter-cookies",
@@ -552,29 +552,25 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-cakesicles",
-    name: "Cakesicles",
+    name: "Cakesicles (1 Dozen)",
     category: "Bakes",
     description:
-      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. Available in a variety of designs and toppings, all customisable to your liking.",
+      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
     details:
-      "Available in Vanilla and Chocolate Fudge. Regular and heart shapes available. Personalised edible toppers can be made. Best consumed within 2 weeks of collection/delivery.",
-    variants: [{ label: "Each (from)", price: 4.5, image: "/images/cakesicles/1.jpg" }],
+      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
+    variants: [{ label: "1 Dozen", price: 54, image: "/images/cakesicles/1.jpg" }],
     image: "/images/cakesicles/5.png",
   },
   {
     slug: "bakes-cake-pops",
-    name: "Cake Pops",
+    name: "Cake Pops (1 Dozen)",
     category: "Bakes",
     description:
-      "Freshly baked cake pops in Vanilla or Chocolate Fudge, dipped in premium Belgian chocolate and decorated with your choice of toppings.",
+      "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
     details:
-      "Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped. Best consumed within 2 weeks.",
-    variants: [
-      { label: "Cake Pop", price: 4, image: "/images/cake-pops/2.jpg" },
-      { label: "Flat Cake Pop", price: 4, image: "/images/cake-pops/3.jpg" },
-      { label: "Ice Cream Cone Cake Pop", price: 4.5, image: "/images/cake-pops/4.jpg" },
-    ],
-    image: "/images/cake-pops/2.jpg",
+      "They come in a variety of designs and toppings, all of which can be customised to your liking, theme or party. Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped for an extra charge.",
+    variants: [{ label: "1 Dozen", price: 36, image: "/images/cake-pops/basic.jpg" }],
+    image: "/images/cake-pops/basic.jpg",
   },
 
   // ── Favours ─────────────────────────────────────────────
