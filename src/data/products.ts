@@ -410,18 +410,6 @@ export const products: Product[] = [
     variants: [{ label: "1 Dozen", price: 35, image: "/images/twisted-pretzel/1.jpg" }],
     image: "/images/twisted-pretzel/1.jpg",
   },
-  {
-    slug: "butter-cookies",
-    name: "Butter Cookies (1 Dozen)",
-    category: "Chocolate Covered Treats",
-    description:
-      "Melt-in-your-mouth butter cookies, baked from scratch and finished with a chocolate dip and decorative toppings. Rich, buttery, and irresistible.",
-    details:
-      "Made with real butter and premium ingredients. Available plain or chocolate dipped. Can be customised with colours and toppings. Best consumed within 1 week.",
-    variants: [{ label: "1 Dozen", price: 18, image: "/images/butter-cookies/1.jpg" }],
-    image: "/images/butter-cookies/2.jpg",
-  },
-
   // ── Bakes ───────────────────────────────────────────────
   {
     slug: "muffins",
@@ -539,7 +527,7 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-butter-cookies",
-    name: "Butter Cookies",
+    name: "Butter Cookies (1 Dozen)",
     category: "Bakes",
     description:
       "Traditional butter cookies baked from scratch with real butter. Melt-in-your-mouth delicious and perfect with a cup of tea.",
@@ -680,6 +668,20 @@ export const products: Product[] = [
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
     variants: [{ label: "1 Dozen", price: 36, image: "/images/luxury-dates/1.jpg" }],
     image: "/images/luxury-dates/1.jpg",
+  },
+  {
+    slug: "choc-butter-cookies",
+    name: "Butter Cookies (1 Dozen)",
+    category: "Chocolate Covered Treats",
+    description:
+      "Traditional butter cookies baked from scratch with real butter. Melt-in-your-mouth delicious and perfect with a cup of tea.",
+    details:
+      "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
+    variants: [
+      { label: "Box of 6", price: 12, image: "/images/butter-cookies/4.jpg" },
+      { label: "Box of 12", price: 22, image: "/images/butter-cookies/5.jpg" },
+    ],
+    image: "/images/butter-cookies/4.jpg",
   },
 
   // ── Towers ──────────────────────────────────────────────
