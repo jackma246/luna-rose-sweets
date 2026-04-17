@@ -430,59 +430,6 @@ export const products: Product[] = [
     ],
     image: "/images/butter-cookies/2.jpg",
   },
-  {
-    slug: "cookie-box",
-    name: "Cookie Box",
-    category: "Chocolate Covered Treats",
-    description:
-      "A beautifully presented box of our signature cookies — a mix of flavours and styles, perfect for sharing or gifting.",
-    details:
-      "The Cookie Box includes an assortment of our loaded cookies, butter cookies, and chocolate dipped cookies. Can be customised to your preferences. Great for events and gifts.",
-    variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/cookie-box/1.jpg" }],
-    image: "/images/cookie-box/1.jpg",
-  },
-  {
-    slug: "treats-mini-cakes",
-    name: "Mini Cakes",
-    category: "Chocolate Covered Treats",
-    description:
-      "Adorable bite-sized mini cakes, baked from scratch and beautifully decorated. Perfect as individual treats or as part of a dessert spread.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Each mini cake is finished with icing and themed decorations. Sold individually or as a set.",
-    variants: [
-      { label: "Single Mini Cake", price: 8, image: "/images/cake/7.jpg" },
-      { label: "Set of 4", price: 28, image: "/images/cake/8.jpg" },
-    ],
-    image: "/images/cake/7.jpg",
-  },
-  {
-    slug: "treats-cupcakes",
-    name: "Cupcakes",
-    category: "Chocolate Covered Treats",
-    description:
-      "Freshly baked cupcakes topped with swirls of buttercream and beautiful decorations. Soft, fluffy, and available in a range of flavours.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available on request. Best consumed within 3 days.",
-    variants: [
-      { label: "Box of 6", price: 18, image: "/images/cupcakes/5.jpg" },
-      { label: "Box of 12", price: 32, image: "/images/cupcakes/6.jpg" },
-    ],
-    image: "/images/cupcakes/5.jpg",
-  },
-  {
-    slug: "treats-brownies",
-    name: "Brownies",
-    category: "Chocolate Covered Treats",
-    description:
-      "Our freshly baked gooey brownies are available in a large variety of flavours. Rich, fudgy, and utterly indulgent.",
-    details:
-      "Flavours include: Milk & White Chocolate Chunk, Lotus, Snickers, Kinder Bueno, Salted Caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Nutella, and more. Best consumed within 7 days.",
-    variants: [
-      { label: "Box of 6 slices", price: 23, image: "/images/tray-bakes/3.jpg" },
-      { label: "Box of 16 bites", price: 25, image: "/images/tray-bakes/4.jpg" },
-    ],
-    image: "/images/tray-bakes/3.jpg",
-  },
 
   // ── Bakes ───────────────────────────────────────────────
   {
