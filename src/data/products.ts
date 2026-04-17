@@ -99,63 +99,36 @@ export const products: Product[] = [
     image: "/images/cake/1.jpg",
   },
   {
-    slug: "sweet-favours",
-    name: "Sweet Favours",
+    slug: "party-tray-bakes",
+    name: "Tray Bakes",
     category: "Party Sets",
     description:
-      "Individually wrapped sweet treats perfect for party favours, wedding favours, or corporate events. Each favour is beautifully presented and ready to gift.",
+      "Our classic Tray Bakes are freshly baked vanilla sponges which we serve up to 12 large slices.",
     details:
-      "Sweet Favours can be customised to match your event theme and colour scheme. Available in a range of treat options including cake pops, cakesicles, and chocolate dipped biscuits. Minimum order applies.",
-    variants: [{ label: "Per Favour (min 20)", price: 4.5, image: "/images/favours/1.jpg" }],
-    image: "/images/cakesicles/tray-1.jpg",
-  },
-  {
-    slug: "party-cupcakes",
-    name: "Cupcakes",
-    category: "Party Sets",
-    description:
-      "Our freshly baked cupcakes are soft, fluffy, and topped with beautifully piped buttercream. Available in a range of flavours and decorated to match any theme.",
-    details:
-      "Cupcakes are baked from scratch using premium ingredients. Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available on request.",
+      "Please note that all sponges are vanilla flavoured. Tray Bakes are best to consume within 5 days of collection/delivery. Tray Bakes are not available for postage.",
     variants: [
-      { label: "Box of 6", price: 18, image: "/images/cupcakes/1.jpg" },
-      { label: "Box of 12", price: 32, image: "/images/cupcakes/2.jpg" },
-      { label: "Box of 24", price: 58, image: "/images/cupcakes/3.jpg" },
-    ],
-    image: "/images/cupcakes/1.jpg",
-  },
-  {
-    slug: "rectangular-cake",
-    name: "Rectangular Cake",
-    category: "Party Sets",
-    description:
-      "A classic rectangular celebration cake, baked from scratch and finished with smooth icing and custom decorations. Perfect for birthdays, graduations, and events.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet sponge. All cakes can be personalised with a message and themed decorations. Please allow at least 5 days notice for cake orders.",
-    variants: [
-      { label: "Small (serves 10-15)", price: 35, image: "/images/cake/2.jpg" },
-      { label: "Large (serves 20-30)", price: 55, image: "/images/cake/3.jpg" },
-    ],
-    image: "/images/cake/2.jpg",
-  },
-  {
-    slug: "brownie-cut",
-    name: "Brownie (Cut)",
-    category: "Party Sets",
-    description:
-      "Our signature gooey brownies, freshly baked and cut into generous portions. Perfect for party platters and dessert tables.",
-    details:
-      "Available in all our popular flavours. Brownies can be topped and decorated to match your event theme. Best consumed within 7 days of collection.",
-    variants: [
-      { label: "Tray of 12 pieces", price: 22, image: "/images/tray-bakes/1.jpg" },
-      { label: "Tray of 24 pieces", price: 40, image: "/images/tray-bakes/2.jpg" },
+      { label: "Old School Vanilla Sponge & Icing Cake", price: 19, image: "/images/tray-bakes/1.jpg" },
+      { label: "Old School Raspberry & Coconut", price: 19, image: "/images/tray-bakes/2.jpg" },
+      { label: "Old School Caramel & Chocolate", price: 19, image: "/images/tray-bakes/3.jpg" },
+      { label: "Mixed box of 2 flavours", price: 21, image: "/images/tray-bakes/4.jpg" },
     ],
     image: "/images/tray-bakes/1.jpg",
   },
   {
+    slug: "party-one-dozen-box",
+    name: "One Dozen Box",
+    category: "Party Sets",
+    description:
+      "A generous box of 12 handcrafted treats, beautifully presented and perfect for sharing. Ideal for birthdays, thank yous, and celebrations.",
+    details:
+      "Choose from a mix of our signature treats. All boxes can be personalised to match your theme or colour scheme. Comes with a ribbon and optional message card.",
+    variants: [{ label: "One Dozen Box", price: 45, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    image: "/images/brand-spread.jpg",
+  },
+  {
     slug: "madeleine-tower",
     name: "Madeleine Tower",
-    category: "Party Sets",
+    category: "Towers",
     description:
       "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
@@ -166,7 +139,7 @@ export const products: Product[] = [
   {
     slug: "macaron-tower",
     name: "Macaron Tower",
-    category: "Party Sets",
+    category: "Towers",
     description:
       "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
     details:
@@ -180,7 +153,7 @@ export const products: Product[] = [
   {
     slug: "croissant-tower",
     name: "Croissant Tower",
-    category: "Party Sets",
+    category: "Towers",
     description:
       "A beautiful tower of freshly baked croissants, perfect for brunches, baby showers, and morning events. Golden, flaky, and utterly delicious.",
     details:
