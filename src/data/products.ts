@@ -407,8 +407,8 @@ export const products: Product[] = [
       "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
     details:
       "Hand-dipped in milk or white chocolate and finished with sprinkles, drizzles, or crushed toppings. Perfect for grazing tables and treat bags. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen", price: 35, image: "/images/pretzel-rods/1.jpg" }],
-    image: "/images/pretzel-rods/1.jpg",
+    variants: [{ label: "1 Dozen", price: 35, image: "/images/twisted-pretzel/1.jpg" }],
+    image: "/images/twisted-pretzel/1.jpg",
   },
   {
     slug: "butter-cookies",
