@@ -273,6 +273,17 @@ export const products: Product[] = [
     variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/cookie-box/3.jpg" }],
     image: "/images/cookie-box/3.jpg",
   },
+  {
+    slug: "party-diy-decorating-set",
+    name: "DIY Decorating Set",
+    category: "Party Sets",
+    description:
+      "A child-friendly DIY kit where kids get to be creative and decorate their own cakesicles and treats. A fun activity and delicious treat in one!",
+    details:
+      "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
+    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread.jpg" }],
+    image: "/images/brand-spread.jpg",
+  },
 
   // ── Gift (was Specialty) ────────────────────────────────
   {
@@ -291,25 +302,37 @@ export const products: Product[] = [
   },
   {
     slug: "heart-surprise-box",
-    name: "Heart Surprise Box",
+    name: "2-tier Heart Surprise Box",
     category: "Gift",
     description:
-      "A beautiful chocolate heart box filled with a surprise selection of our handcrafted treats. Smash through the heart to reveal the goodies inside!",
+      "A beautiful two-tier chocolate heart box filled with a surprise selection of our handcrafted treats. Smash through the heart to reveal the goodies inside!",
     details:
       "The Heart Surprise Box can be themed and personalised to your requirements. Contents can include cakesicles, chocolates, strawberries, and more. Perfect for Valentine's Day, anniversaries, and special occasions.",
-    variants: [{ label: "Heart Surprise Box", price: 45, image: "/images/treat-boxes/flower-box.png" }],
+    variants: [{ label: "2-tier Heart Surprise Box", price: 45, image: "/images/treat-boxes/flower-box.png" }],
     image: "/images/treat-boxes/flower-box.png",
   },
   {
     slug: "flower-treat-box",
-    name: "Flower and Treat Box",
+    name: "Cakepop & Rose Bouquet",
     category: "Gift",
     description:
-      "A gorgeous combination of fresh flowers and our handcrafted chocolate treats, beautifully arranged in a luxury gift box. The perfect gift that looks and tastes amazing.",
+      "A gorgeous combination of fresh roses and our handcrafted cake pops, beautifully arranged as a luxury bouquet. The perfect gift that looks and tastes amazing.",
     details:
-      "The Flower and Treat Box includes a selection of seasonal flowers alongside our signature chocolate dipped treats. Can be personalised with a message card. Please allow 3-5 days notice.",
-    variants: [{ label: "Flower and Treat Box", price: 50, image: "/images/treat-boxes/flower-box.png" }],
+      "The Cakepop & Rose Bouquet includes a selection of seasonal roses alongside our signature cake pops. Can be personalised with a message card. Please allow 3-5 days notice.",
+    variants: [{ label: "Cakepop & Rose Bouquet", price: 50, image: "/images/treat-boxes/flower-box.png" }],
     image: "/images/strawberries/bouquet-1.jpg",
+  },
+  {
+    slug: "gift-cakepops-flower-box",
+    name: "Cakepops & Flower Box",
+    category: "Gift",
+    description:
+      "A delightful gift box combining our beautifully decorated cake pops with fresh flowers. A unique treat that's as stunning to look at as it is to eat.",
+    details:
+      "Each box is hand-arranged with freshly baked cake pops and seasonal flowers. Can be themed and personalised with colours and a message card. Please allow 3-5 days notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/popsicle-bouquet/1.jpg",
   },
   {
     slug: "gift-one-dozen-box",
@@ -335,17 +358,6 @@ export const products: Product[] = [
     image: "/images/cake/4.jpg",
   },
   {
-    slug: "gift-flower-cupcake",
-    name: "Flower & Cupcake",
-    category: "Gift",
-    description:
-      "A charming gift pairing of fresh flowers with beautifully decorated cupcakes. A delightful surprise that combines elegance with sweetness.",
-    details:
-      "Includes a small bouquet of seasonal flowers alongside a box of decorated cupcakes. Can be personalised with colours, themes, and a message card. Please allow 3-5 days notice.",
-    variants: [{ label: "Flower & Cupcake Set", price: 38, image: "/images/cupcakes/4.jpg" }],
-    image: "/images/cupcakes/4.jpg",
-  },
-  {
     slug: "gift-mini-cakes",
     name: "Mini Cake & Cupcakes",
     category: "Gift",
@@ -360,69 +372,28 @@ export const products: Product[] = [
     image: "/images/cake/5.jpg",
   },
   {
-    slug: "fillable-boxes",
-    name: "Fillable Boxes",
+    slug: "gift-cake-6",
+    name: "Cake (6\")",
     category: "Gift",
     description:
-      "Our fillable Letters and Shapes comes in any design you would like and can also feature a personalised message at the bottom of the box.",
+      "A beautifully baked 6 inch cake, perfect for intimate celebrations. Baked from scratch and finished with smooth icing and decorations of your choice.",
     details:
-      "Each enquiry has an individualised price as it depends on your requirements depending on the shape or amount of letters or numbers. These boxes are of high quality and can be reused for future events/celebrations.",
+      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 6-8 people. Can be personalised with colours, themes, and a message. Please allow at least 5 days notice.",
     variants: [],
     enquireOnly: true,
-    image: "/images/brand-spread.jpg",
+    image: "/images/cake/7.jpg",
   },
   {
-    slug: "fondue-box",
-    name: "Fondue Box",
-    category: "Gift",
-    description: "We have two options for our fondue box!",
-    details:
-      "The Classic contains: Halal Marshmallows, Milk and White Chocolate Chunk Brownies, Strawberries ready to be dipped, Vanilla Waffle Bites, and a generous bowl of milk chocolate. The Signature adds: Brownie Bars, OG Milk Chocolate Strawberries, Choc chip cookies, and 2 bowls of milk/white chocolate.",
-    variants: [
-      { label: "Classic Fondue Box", price: 31, image: "/images/treat-boxes/mixed-treats.jpg" },
-      { label: "Signature Fondue Box", price: 35, image: "/images/brand-spread.jpg" },
-    ],
-    image: "/images/treat-boxes/mixed-treats.jpg",
-  },
-  {
-    slug: "smash-box",
-    name: "The Smash Box",
+    slug: "gift-cake-8",
+    name: "Cake (8\")",
     category: "Gift",
     description:
-      "Within 'THE SMASHBOX' the recipient can smash through the Chocolate Heart to find cakesicles, chocolates and a heart gem.",
+      "A stunning 8 inch cake, ideal for birthdays and celebrations. Baked fresh to order with your choice of flavour and design.",
     details:
-      "You may opt to provide us with the contents you want inside it. For example money, jewellery box or anything else that can sustain a hammer being whacked against it! The colour theme can be personalised to your requirements.",
-    variants: [
-      { label: "With Strawberries (full)", price: 56, image: "/images/strawberries/basket-1.jpg" },
-      { label: "With Strawberries (smaller)", price: 44, image: "/images/strawberries/basket-2.jpg" },
-      { label: "Without Strawberries/Cakesicles", price: 38, image: "/images/cakesicles/1.jpg" },
-    ],
-    image: "/images/strawberries/basket-1.jpg",
-  },
-  {
-    slug: "number-smash-box",
-    name: "The Number Smash Box",
-    category: "Gift",
-    description:
-      "This striking number is an enormous 14 inch Smashbox purely made out of our finest chocolate. Each are filled with an assortment of candy and gift cards.",
-    details:
-      "This offers a different birthday experience and something unique! This can be made up of one or two colours. Matching sprinkles will be added to your chosen number(s) accordingly. Contents include Skittles, M&M's, assortment of jelly and chocolate sweets.",
-    variants: [
-      { label: "Single number", price: 56, image: "/images/cakesicles/5.png" },
-      { label: "Double digit", price: 100, image: "/images/cakesicles/6.png" },
-    ],
-    image: "/images/cakesicles/5.png",
-  },
-  {
-    slug: "diy-kit",
-    name: "DIY Strawberry & Cakesicle Kit",
-    category: "Gift",
-    description:
-      "We are so excited to release our own child friendly DIY KIT! This is an amazing activity for your children where they are given the opportunity to be creative and decorate our OG Strawberries and Cakesicles.",
-    details:
-      "Our Kits contain: Instructional Steps on how to carefully decorate your Treats, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Flavours are Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
-    variants: [{ label: "DIY Kit", price: 31, image: "/images/brand-spread.jpg" }],
-    image: "/images/brand-spread.jpg",
+      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 10-12 people. Fully customisable with themed decorations and a personalised message. Please allow at least 5 days notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/8.jpg",
   },
   {
     slug: "luxury-chocolate-dates",
@@ -806,6 +777,29 @@ export const products: Product[] = [
       "Each box contains an assortment of mini cookies. Can be themed with colours and packaging. Minimum order of 10.",
     variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/cookie-box/3.jpg" }],
     image: "/images/cookie-box/3.jpg",
+  },
+  {
+    slug: "favour-diy-decorating-set",
+    name: "DIY Decorating Set",
+    category: "Favours",
+    description:
+      "A child-friendly DIY kit where kids get to be creative and decorate their own cakesicles and treats. A fun activity and delicious treat in one!",
+    details:
+      "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
+    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread.jpg" }],
+    image: "/images/brand-spread.jpg",
+  },
+  {
+    slug: "choc-treats-luxury-chocolate-dates",
+    name: "Luxury Chocolate Dates",
+    category: "Chocolate Covered Treats",
+    description:
+      "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
+    details:
+      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/treat-boxes/mixed-treats.jpg",
   },
 ];
 
