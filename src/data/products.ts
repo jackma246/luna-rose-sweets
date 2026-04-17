@@ -127,7 +127,7 @@ export const products: Product[] = [
   },
   {
     slug: "party-favour-flower-cupcake",
-    name: "Flower & Cupcake (12ea)",
+    name: "Flower & Cupcake (1 Dozen)",
     category: "Party Sets",
     description:
       "A charming individual favour featuring a mini cupcake paired with a small flower. Beautifully presented and perfect for wedding favours and events.",
@@ -138,7 +138,7 @@ export const products: Product[] = [
   },
   {
     slug: "party-single-packaged-cakesicle",
-    name: "Single Packaged Cakesicles (12ea)",
+    name: "Single Packaged Cakesicles (1 Dozen)",
     category: "Party Sets",
     description:
       "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
@@ -152,7 +152,7 @@ export const products: Product[] = [
   },
   {
     slug: "party-single-packaged-cake-pop",
-    name: "Single Packaged Cakepops (12ea)",
+    name: "Single Packaged Cakepops (1 Dozen)",
     category: "Party Sets",
     description:
       "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
@@ -619,7 +619,7 @@ export const products: Product[] = [
   // ── Favours ─────────────────────────────────────────────
   {
     slug: "favour-flower-cupcake",
-    name: "Flower & Cupcake (12ea)",
+    name: "Flower & Cupcake (1 Dozen)",
     category: "Favours",
     description:
       "A charming individual favour featuring a mini cupcake paired with a small flower. Beautifully presented and perfect for wedding favours and events.",
@@ -630,7 +630,7 @@ export const products: Product[] = [
   },
   {
     slug: "single-cake-popsicle",
-    name: "Single Packaged Cakesicles (12ea)",
+    name: "Single Packaged Cakesicles (1 Dozen)",
     category: "Favours",
     description:
       "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
@@ -644,7 +644,7 @@ export const products: Product[] = [
   },
   {
     slug: "single-cake-pop",
-    name: "Single Packaged Cakepops (12ea)",
+    name: "Single Packaged Cakepops (1 Dozen)",
     category: "Favours",
     description:
       "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
