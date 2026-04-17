@@ -338,7 +338,7 @@ export const products: Product[] = [
       "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
     details:
       "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
-    variants: [{ label: "Each (from)", price: 4.5, image: "/images/cakesicles/1.jpg" }],
+    variants: [{ label: "1 Dozen", price: 54, image: "/images/cakesicles/1.jpg" }],
     image: "/images/cakesicles/5.png",
   },
   {
@@ -349,11 +349,7 @@ export const products: Product[] = [
       "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
     details:
       "They come in a variety of designs and toppings, all of which can be customised to your liking, theme or party. Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped for an extra charge.",
-    variants: [
-      { label: "Cake Pop", price: 4, image: "/images/cake-pops/basic.jpg" },
-      { label: "Flat Cake Pop", price: 4, image: "/images/cake-pops/1.jpg" },
-      { label: "Ice Cream Cone Cake Pop", price: 4.5, image: "/images/cake-pops/smores.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 36, image: "/images/cake-pops/basic.jpg" }],
     image: "/images/cake-pops/basic.jpg",
   },
   {
@@ -378,10 +374,7 @@ export const products: Product[] = [
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
     details:
       "Each cookie is generously sized and hand-dipped. Available with milk, white, or dark chocolate coating. Can be customised with toppings and colours to match your theme.",
-    variants: [
-      { label: "Box of 6", price: 16, image: "/images/butter-cookies/1.jpg" },
-      { label: "Box of 12", price: 28, image: "/images/butter-cookies/2.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 48, image: "/images/butter-cookies/1.jpg" }],
     image: "/images/butter-cookies/1.jpg",
   },
   {
@@ -406,10 +399,7 @@ export const products: Product[] = [
       "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
     details:
       "Each rice krispie treat is hand-shaped and dipped. Available in a variety of shapes and designs. Can be themed to match any event. Best consumed within 1 week.",
-    variants: [
-      { label: "Box of 6", price: 14, image: "/images/brand-spread.jpg" },
-      { label: "Box of 12", price: 25, image: "/images/treat-boxes/mixed-treats.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 45, image: "/images/brand-spread.jpg" }],
     image: "/images/brand-spread.jpg",
   },
   {
@@ -420,10 +410,7 @@ export const products: Product[] = [
       "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
     details:
       "Hand-dipped in milk or white chocolate and finished with sprinkles, drizzles, or crushed toppings. Perfect for grazing tables and treat bags. Best consumed within 2 weeks.",
-    variants: [
-      { label: "Box of 8", price: 12, image: "/images/pretzel-rods/1.jpg" },
-      { label: "Box of 16", price: 22, image: "/images/pretzel-rods/1.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 35, image: "/images/pretzel-rods/1.jpg" }],
     image: "/images/pretzel-rods/1.jpg",
   },
   {
