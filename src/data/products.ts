@@ -191,6 +191,88 @@ export const products: Product[] = [
     ],
     image: "/images/towers/1.jpg",
   },
+  {
+    slug: "party-favour-flower-cupcake",
+    name: "Flower and Cupcake",
+    category: "Party Sets",
+    description:
+      "A charming individual favour featuring a mini cupcake paired with a small flower. Beautifully presented and perfect for wedding favours and events.",
+    details:
+      "Each favour is individually packaged. Cupcake flavours and flower colours can be matched to your theme. Minimum order of 10.",
+    variants: [{ label: "Per Favour (min 10)", price: 6, image: "/images/cupcakes/7.jpg" }],
+    image: "/images/cupcakes/7.jpg",
+  },
+  {
+    slug: "party-single-packaged-cakesicle",
+    name: "Single Packaged Cakesicle",
+    category: "Party Sets",
+    description:
+      "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
+    details:
+      "Available in Vanilla and Chocolate Fudge. Each cakesicle can be themed and personalised. Individually wrapped in cellophane with a ribbon.",
+    variants: [
+      { label: "Cakesicle in cellophane & ribbon", price: 4.5, image: "/images/cakesicles/tray-1.jpg" },
+      { label: "Cakesicle in clear lid box", price: 5.5, image: "/images/cakesicles/tray-2.jpg" },
+    ],
+    image: "/images/cakesicles/1.jpg",
+  },
+  {
+    slug: "party-single-packaged-cake-pop",
+    name: "Single Packaged Cake Pop",
+    category: "Party Sets",
+    description:
+      "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
+    details:
+      "Available in Vanilla and Chocolate Fudge. Each cake pop can be themed and customised. Wrapped in cellophane with a twist ribbon.",
+    variants: [{ label: "Cakepop in cellophane & ribbon", price: 4, image: "/images/cake-pops/basic.jpg" }],
+    image: "/images/cake-pops/smores.jpg",
+  },
+  {
+    slug: "party-icing-cookies",
+    name: "Icing Cookies",
+    category: "Party Sets",
+    description:
+      "Beautifully hand-iced sugar cookies in custom shapes and designs. Perfect as favours for weddings, baby showers, and parties.",
+    details:
+      "Each cookie is hand-iced with royal icing and can be customised with any design, colour, or message. Can be individually wrapped. Best consumed within 2 weeks.",
+    variants: [
+      { label: "Per Cookie (min 10)", price: 5, image: "/images/icing-cookies/2.jpg" },
+    ],
+    image: "/images/icing-cookies/1.jpg",
+  },
+  {
+    slug: "party-drink-snack-set",
+    name: "Party Drink & Snack Set",
+    category: "Party Sets",
+    description:
+      "A beautifully filled treat bag with an assortment of mini sweet treats. Perfect as party bags, wedding favours, or thank-you gifts.",
+    details:
+      "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
+    variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    image: "/images/brand-spread.jpg",
+  },
+  {
+    slug: "party-cake-tray",
+    name: "Cake Tray",
+    category: "Party Sets",
+    description:
+      "A small tray of assorted mini cakes and treats, beautifully wrapped as a favour. A generous and impressive gift for guests.",
+    details:
+      "Each tray includes a selection of mini treats. Can be themed and personalised to match your event. Perfect for weddings, corporate events, and celebrations.",
+    variants: [{ label: "Per Cake Tray", price: 8, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    image: "/images/treat-boxes/mixed-treats.jpg",
+  },
+  {
+    slug: "party-mini-cookies-box",
+    name: "Mini Cookies Box",
+    category: "Party Sets",
+    description:
+      "A cute little box filled with mini cookies, perfect as a favour or small gift. Baked from scratch and beautifully packaged.",
+    details:
+      "Each box contains an assortment of mini cookies. Can be themed with colours and packaging. Minimum order of 10.",
+    variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/cookie-box/3.jpg" }],
+    image: "/images/cookie-box/3.jpg",
+  },
 
   // ── Gift (was Specialty) ────────────────────────────────
   {
@@ -656,7 +738,7 @@ export const products: Product[] = [
   },
   {
     slug: "single-cake-popsicle",
-    name: "Single Cake Popsicle",
+    name: "Single Packaged Cakesicle",
     category: "Favours",
     description:
       "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
@@ -670,7 +752,7 @@ export const products: Product[] = [
   },
   {
     slug: "single-cake-pop",
-    name: "Single Cake Pop",
+    name: "Single Packaged Cake Pop",
     category: "Favours",
     description:
       "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
@@ -694,7 +776,7 @@ export const products: Product[] = [
   },
   {
     slug: "treat-bag",
-    name: "Treat Bag",
+    name: "Party Drink & Snack Set",
     category: "Favours",
     description:
       "A beautifully filled treat bag with an assortment of mini sweet treats. Perfect as party bags, wedding favours, or thank-you gifts.",
@@ -724,21 +806,6 @@ export const products: Product[] = [
       "Each box contains an assortment of mini cookies. Can be themed with colours and packaging. Minimum order of 10.",
     variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/cookie-box/3.jpg" }],
     image: "/images/cookie-box/3.jpg",
-  },
-  {
-    slug: "baby-favours",
-    name: "Baby Favours",
-    category: "Favours",
-    description:
-      "We can cater to making bespoke Favours to suit your requirements to celebrate a special occasion.",
-    details:
-      "Please note, you are able to request anything for baby favours. We can cater to your personalised request. Prices can vary higher or lower depending on your requests.",
-    variants: [
-      { label: "3 Cakesicles", price: 14, image: "/images/cakesicles/6.png" },
-      { label: "5 Cakesicles", price: 23, image: "/images/cakesicles/5.png" },
-      { label: "Bento Cake", price: 13, image: "/images/cake/14.jpg" },
-    ],
-    image: "/images/cakesicles/6.png",
   },
 ];
 
