@@ -374,8 +374,8 @@ export const products: Product[] = [
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
     details:
       "Each cookie is generously sized and hand-dipped. Available with milk, white, or dark chocolate coating. Can be customised with toppings and colours to match your theme.",
-    variants: [{ label: "1 Dozen", price: 48, image: "/images/butter-cookies/1.jpg" }],
-    image: "/images/butter-cookies/1.jpg",
+    variants: [{ label: "1 Dozen", price: 48, image: "/images/choco-cookies/1.jpg" }],
+    image: "/images/choco-cookies/1.jpg",
   },
   {
     slug: "choc-dipped-caramel-pretzel-rods",
