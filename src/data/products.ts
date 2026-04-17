@@ -51,6 +51,42 @@ export const products: Product[] = [
     image: "/images/brand-spread.jpg",
   },
   {
+    slug: "party-cake-6",
+    name: "Cake (6\")",
+    category: "Party Sets",
+    description:
+      "A beautifully baked 6 inch cake, perfect for intimate celebrations. Baked from scratch and finished with smooth icing and decorations of your choice.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 6-8 people. Can be personalised with colours, themes, and a message. Please allow at least 5 days notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/7.jpg",
+  },
+  {
+    slug: "party-cake-8",
+    name: "Cake (8\")",
+    category: "Party Sets",
+    description:
+      "A stunning 8 inch cake, ideal for birthdays and celebrations. Baked fresh to order with your choice of flavour and design.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 10-12 people. Fully customisable with themed decorations and a personalised message. Please allow at least 5 days notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/8.jpg",
+  },
+  {
+    slug: "party-two-tier-cake",
+    name: "Two-Tier Cake (8\"/6\")",
+    category: "Party Sets",
+    description:
+      "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Fully customisable design. Please allow at least 1 week notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/1.jpg",
+  },
+  {
     slug: "party-custom-cake",
     name: "Custom Cake",
     category: "Party Sets",
@@ -528,6 +564,42 @@ export const products: Product[] = [
       { label: "Box of 16 bites", price: 25, image: "/images/tray-bakes/6.jpg" },
     ],
     image: "/images/tray-bakes/5.jpg",
+  },
+  {
+    slug: "bakes-cake-6",
+    name: "Cake (6\")",
+    category: "Bakes",
+    description:
+      "A beautifully baked 6 inch cake, perfect for intimate celebrations. Baked from scratch and finished with smooth icing and decorations of your choice.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 6-8 people. Can be personalised with colours, themes, and a message. Please allow at least 5 days notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/7.jpg",
+  },
+  {
+    slug: "bakes-cake-8",
+    name: "Cake (8\")",
+    category: "Bakes",
+    description:
+      "A stunning 8 inch cake, ideal for birthdays and celebrations. Baked fresh to order with your choice of flavour and design.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 10-12 people. Fully customisable with themed decorations and a personalised message. Please allow at least 5 days notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/8.jpg",
+  },
+  {
+    slug: "bakes-two-tier-cake",
+    name: "Two-Tier Cake (8\"/6\")",
+    category: "Bakes",
+    description:
+      "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Fully customisable design. Please allow at least 1 week notice.",
+    variants: [],
+    enquireOnly: true,
+    image: "/images/cake/1.jpg",
   },
   {
     slug: "bakes-custom-cake",
