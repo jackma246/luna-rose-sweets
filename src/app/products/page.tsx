@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { products, categories } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 
@@ -63,6 +63,19 @@ export default function ProductsPage() {
   }, [activeCategory, sort, stockFilter, priceFilter]);
 
   const hasActiveFilters = stockFilter !== "all" || priceFilter !== "all" || sort !== "default";
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("shop-scroll-y");
+    if (saved) {
+      const y = parseInt(saved, 10);
+      sessionStorage.removeItem("shop-scroll-y");
+      requestAnimationFrame(() => window.scrollTo(0, y));
+    }
+  }, []);
+
+  const saveScroll = useCallback(() => {
+    sessionStorage.setItem("shop-scroll-y", String(window.scrollY));
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
@@ -215,7 +228,9 @@ export default function ProductsPage() {
       {/* Product grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
         {filtered.map((product) => (
-          <ProductCard key={product.slug} product={product} />
+          <div key={product.slug} onClick={saveScroll}>
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
 
