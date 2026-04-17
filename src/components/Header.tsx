@@ -37,7 +37,7 @@ export default function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-accent/20 shadow-sm">
+    <header className="sticky top-0 z-40 bg-sky-100/90 backdrop-blur-md border-b border-accent/20 shadow-sm">
       {/* Desktop header */}
       <div className="hidden md:flex max-w-6xl mx-auto px-6 py-4 items-center justify-between">
         <div className="flex items-center gap-8">
