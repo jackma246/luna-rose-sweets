@@ -332,7 +332,7 @@ export const products: Product[] = [
   // ── Treats (was Cakesicles) ─────────────────────────────
   {
     slug: "cakesicles",
-    name: "Cakesicles",
+    name: "Cakesicles (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
@@ -343,7 +343,7 @@ export const products: Product[] = [
   },
   {
     slug: "cakepops",
-    name: "Cakepops",
+    name: "Cakepops (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
@@ -358,7 +358,7 @@ export const products: Product[] = [
   },
   {
     slug: "madeleines",
-    name: "Madeleines",
+    name: "Madeleines (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
@@ -372,7 +372,7 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-choco-cookies",
-    name: "Choco Cookies",
+    name: "Choco Cookies (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
@@ -386,7 +386,7 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-caramel-pretzel-rods",
-    name: "Caramel Pretzel Rod",
+    name: "Caramel Pretzel Rod (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
@@ -400,7 +400,7 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-rice-krispies",
-    name: "Rice Krispies",
+    name: "Rice Krispies (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
@@ -414,7 +414,7 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-pretzel-original",
-    name: "Twisted Pretzel",
+    name: "Twisted Pretzel (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
@@ -428,7 +428,7 @@ export const products: Product[] = [
   },
   {
     slug: "butter-cookies",
-    name: "Butter Cookies",
+    name: "Butter Cookies (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Melt-in-your-mouth butter cookies, baked from scratch and finished with a chocolate dip and decorative toppings. Rich, buttery, and irresistible.",
@@ -699,7 +699,7 @@ export const products: Product[] = [
   },
   {
     slug: "choc-treats-luxury-chocolate-dates",
-    name: "Luxury Chocolate Dates",
+    name: "Luxury Chocolate Dates (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
