@@ -201,19 +201,6 @@ export const products: Product[] = [
     image: "/images/cake-pops/smores.jpg",
   },
   {
-    slug: "party-icing-cookies",
-    name: "Icing Cookies (12ea)",
-    category: "Party Sets",
-    description:
-      "Beautifully hand-iced sugar cookies in custom shapes and designs. Perfect as favours for weddings, baby showers, and parties.",
-    details:
-      "Each cookie is hand-iced with royal icing and can be customised with any design, colour, or message. Can be individually wrapped. Best consumed within 2 weeks.",
-    variants: [
-      { label: "Per Cookie (min 10)", price: 5, image: "/images/icing-cookies/2.jpg" },
-    ],
-    image: "/images/icing-cookies/1.jpg",
-  },
-  {
     slug: "party-drink-snack-set",
     name: "Party Drink & Snack Set",
     category: "Party Sets",
@@ -704,19 +691,6 @@ export const products: Product[] = [
       "Available in Vanilla and Chocolate Fudge. Each cake pop can be themed and customised. Wrapped in cellophane with a twist ribbon.",
     variants: [{ label: "Cakepop in cellophane & ribbon", price: 4, image: "/images/cake-pops/basic.jpg" }],
     image: "/images/cake-pops/smores.jpg",
-  },
-  {
-    slug: "icing-cookies",
-    name: "Icing Cookies (12ea)",
-    category: "Favours",
-    description:
-      "Beautifully hand-iced sugar cookies in custom shapes and designs. Perfect as favours for weddings, baby showers, and parties.",
-    details:
-      "Each cookie is hand-iced with royal icing and can be customised with any design, colour, or message. Can be individually wrapped. Best consumed within 2 weeks.",
-    variants: [
-      { label: "Per Cookie (min 10)", price: 5, image: "/images/icing-cookies/2.jpg" },
-    ],
-    image: "/images/icing-cookies/1.jpg",
   },
   {
     slug: "treat-bag",
