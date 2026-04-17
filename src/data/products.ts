@@ -84,7 +84,7 @@ export const products: Product[] = [
       "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Fully customisable design. Please allow at least 1 week notice.",
     variants: [],
     enquireOnly: true,
-    image: "/images/cake/1.jpg",
+    image: "/images/cake/two-tier.jpg",
   },
   {
     slug: "party-custom-cake",
@@ -96,7 +96,7 @@ export const products: Product[] = [
       "All cakes are freshly baked to order. Available in a range of flavours and sizes. Please enquire with your design ideas and we will provide a personalised quote. We recommend placing orders at least 1 week in advance.",
     variants: [],
     enquireOnly: true,
-    image: "/images/cake/1.jpg",
+    image: "/images/cake/custom.jpg",
   },
   {
     slug: "party-tray-bakes",
@@ -276,7 +276,7 @@ export const products: Product[] = [
       "Available in a range of flavours and sizes. Fully customisable with themed decorations and personalised messages. Please enquire for a personalised quote.",
     variants: [],
     enquireOnly: true,
-    image: "/images/cake/4.jpg",
+    image: "/images/cake/custom.jpg",
   },
   {
     slug: "gift-mini-cakes",
@@ -497,7 +497,7 @@ export const products: Product[] = [
       "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Fully customisable design. Please allow at least 1 week notice.",
     variants: [],
     enquireOnly: true,
-    image: "/images/cake/1.jpg",
+    image: "/images/cake/two-tier.jpg",
   },
   {
     slug: "bakes-custom-cake",
@@ -509,7 +509,7 @@ export const products: Product[] = [
       "Please enquire with your design ideas, flavour preferences, and event date. We will provide a personalised quote. Please allow at least 1 week notice.",
     variants: [],
     enquireOnly: true,
-    image: "/images/cake/11.jpg",
+    image: "/images/cake/custom.jpg",
   },
   {
     slug: "bakes-madeleines",
