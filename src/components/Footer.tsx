@@ -46,7 +46,9 @@ export default function Footer() {
           </svg>
         </a>
         <a
-          href="#"
+          href="https://www.facebook.com/profile.php?id=61572046772764&mibextid=wwXIfr"
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-chocolate/70 hover:text-accent transition-colors"
           aria-label="Facebook"
         >
@@ -166,7 +168,9 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.facebook.com/profile.php?id=61572046772764&mibextid=wwXIfr"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white/80 hover:text-accent transition-colors"
                   aria-label="Facebook"
                 >

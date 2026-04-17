@@ -425,32 +425,24 @@ export const products: Product[] = [
   // ── Bakes ───────────────────────────────────────────────
   {
     slug: "muffins",
-    name: "Muffins",
+    name: "Muffins (1 Dozen)",
     category: "Bakes",
     description:
       "Freshly baked muffins in a variety of classic flavours. Soft, moist, and perfect for breakfast, brunch, or a sweet snack.",
     details:
       "Available in Blueberry, Chocolate Chip, Banana Walnut, and Lemon Poppy Seed. Baked from scratch using premium ingredients. Best consumed within 3 days.",
-    variants: [
-      { label: "Box of 4", price: 10, image: "/images/tray-bakes/7.jpg" },
-      { label: "Box of 6", price: 14, image: "/images/tray-bakes/8.jpg" },
-      { label: "Box of 12", price: 26, image: "/images/tray-bakes/7.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 26, image: "/images/tray-bakes/7.jpg" }],
     image: "/images/tray-bakes/7.jpg",
   },
   {
     slug: "bakes-cupcakes",
-    name: "Cupcakes",
+    name: "Cupcakes (1 Dozen)",
     category: "Bakes",
     description:
       "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in a range of flavours and decorated to your theme.",
     details:
       "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available. Baked fresh to order.",
-    variants: [
-      { label: "Box of 6", price: 18, image: "/images/cupcakes/2.jpg" },
-      { label: "Box of 12", price: 32, image: "/images/cupcakes/3.jpg" },
-      { label: "Box of 24", price: 58, image: "/images/cupcakes/7.jpg" },
-    ],
+    variants: [{ label: "1 Dozen", price: 38, image: "/images/cupcakes/2.jpg" }],
     image: "/images/cupcakes/2.jpg",
   },
   {
