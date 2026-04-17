@@ -93,12 +93,17 @@ export default function Home() {
             <h3 className="font-serif text-xl md:text-2xl font-bold text-chocolate mb-3 tracking-tight">
               The Finest Ingredients
             </h3>
+            <p className="text-chocolate/60 leading-relaxed text-lg mb-4">
+              Layered vanilla and rich European butter create a soft, flavorful
+              center, finished with a smooth chocolate coating for a clean,
+              balanced bite.
+            </p>
             <p className="text-chocolate/60 leading-relaxed text-lg">
-              We believe great treats start with great ingredients. From rich
-              Belgian chocolate and real vanilla to fresh seasonal fruits and
-              premium butter, every component is carefully sourced for quality
-              and flavour. No shortcuts, no artificial substitutes — just honest,
-              homemade goodness in every bite.
+              Crafted with a curated blend of Madagascar and Mexican vanilla,
+              finished with real vanilla bean — for a richer, more elevated
+              taste. We use grass-fed European-style butter, known for its
+              naturally richer and creamier flavor, to create a softer, more
+              indulgent crumb in every bite.
             </p>
             <Link
               href="/about"
