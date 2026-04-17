@@ -321,9 +321,20 @@ export const products: Product[] = [
 
   // ── Treats (was Cakesicles) ─────────────────────────────
   {
+    slug: "cakesicles",
+    name: "Cakesicles",
+    category: "Chocolate Covered Treats",
+    description:
+      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
+    details:
+      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
+    variants: [{ label: "Each (from)", price: 4.5, image: "/images/cakesicles/1.jpg" }],
+    image: "/images/cakesicles/5.png",
+  },
+  {
     slug: "cakepops",
     name: "Cakepops",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
     details:
@@ -338,7 +349,7 @@ export const products: Product[] = [
   {
     slug: "madeleines",
     name: "Madeleines",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
     details:
@@ -351,8 +362,8 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-choco-cookies",
-    name: "Chocolate Dipped Choco Cookies",
-    category: "Treats",
+    name: "Choco Cookies",
+    category: "Chocolate Covered Treats",
     description:
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
     details:
@@ -365,8 +376,8 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-caramel-pretzel-rods",
-    name: "Chocolate Dipped Caramel Pretzel Rods",
-    category: "Treats",
+    name: "Caramel Pretzel Rod",
+    category: "Chocolate Covered Treats",
     description:
       "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
     details:
@@ -379,8 +390,8 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-rice-krispies",
-    name: "Chocolate Dipped Rice Krispies",
-    category: "Treats",
+    name: "Rice Krispies",
+    category: "Chocolate Covered Treats",
     description:
       "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
     details:
@@ -393,8 +404,8 @@ export const products: Product[] = [
   },
   {
     slug: "choc-dipped-pretzel-original",
-    name: "Chocolate Dipped Pretzel Original",
-    category: "Treats",
+    name: "Twisted Pretzel",
+    category: "Chocolate Covered Treats",
     description:
       "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
     details:
@@ -408,7 +419,7 @@ export const products: Product[] = [
   {
     slug: "butter-cookies",
     name: "Butter Cookies",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "Melt-in-your-mouth butter cookies, baked from scratch and finished with a chocolate dip and decorative toppings. Rich, buttery, and irresistible.",
     details:
@@ -422,7 +433,7 @@ export const products: Product[] = [
   {
     slug: "cookie-box",
     name: "Cookie Box",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "A beautifully presented box of our signature cookies — a mix of flavours and styles, perfect for sharing or gifting.",
     details:
@@ -431,20 +442,9 @@ export const products: Product[] = [
     image: "/images/cookie-box/1.jpg",
   },
   {
-    slug: "treats-dozen-box",
-    name: "Dozen Box",
-    category: "Treats",
-    description:
-      "A generous box of 12 chocolate dipped treats — the perfect shareable selection for events, parties, or a well-deserved indulgence.",
-    details:
-      "Choose your mix of treats or let us create a curated selection. All items are hand-dipped and decorated. Can be themed to suit any occasion.",
-    variants: [{ label: "Dozen Box", price: 40, image: "/images/brand-spread.jpg" }],
-    image: "/images/brand-spread.jpg",
-  },
-  {
     slug: "treats-mini-cakes",
     name: "Mini Cakes",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "Adorable bite-sized mini cakes, baked from scratch and beautifully decorated. Perfect as individual treats or as part of a dessert spread.",
     details:
@@ -458,7 +458,7 @@ export const products: Product[] = [
   {
     slug: "treats-cupcakes",
     name: "Cupcakes",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "Freshly baked cupcakes topped with swirls of buttercream and beautiful decorations. Soft, fluffy, and available in a range of flavours.",
     details:
@@ -472,7 +472,7 @@ export const products: Product[] = [
   {
     slug: "treats-brownies",
     name: "Brownies",
-    category: "Treats",
+    category: "Chocolate Covered Treats",
     description:
       "Our freshly baked gooey brownies are available in a large variety of flavours. Rich, fudgy, and utterly indulgent.",
     details:
@@ -482,133 +482,6 @@ export const products: Product[] = [
       { label: "Box of 16 bites", price: 25, image: "/images/tray-bakes/4.jpg" },
     ],
     image: "/images/tray-bakes/3.jpg",
-  },
-  {
-    slug: "macaron-sando",
-    name: "Macaron Sando",
-    category: "Treats",
-    description:
-      "Our signature macaron sandwiches — oversized macarons filled with a generous layer of buttercream, ganache, or your choice of filling. A luxurious twist on a French classic.",
-    details:
-      "Available in a variety of flavours and colours. Each macaron sando is handcrafted and can be customised to match your event theme. Best consumed within 3 days.",
-    variants: [
-      { label: "Single Macaron Sando", price: 5, image: "/images/butter-cookies/4.jpg" },
-      { label: "Box of 6", price: 28, image: "/images/butter-cookies/5.jpg" },
-    ],
-    image: "/images/butter-cookies/4.jpg",
-  },
-  {
-    slug: "cakesicles",
-    name: "Cakesicles",
-    category: "Treats",
-    description:
-      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
-    details:
-      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
-    variants: [{ label: "Each (from)", price: 4.5, image: "/images/cakesicles/1.jpg" }],
-    image: "/images/cakesicles/5.png",
-  },
-  {
-    slug: "rubiks-cube-cakes",
-    name: "Rubik's Cube Cakes",
-    category: "Treats",
-    description:
-      "Our unique Rubik's Cube Cakes consist of a freshly baked cake coated in our premium Belgian chocolate. They are available in the flavours Vanilla and Chocolate Fudge.",
-    details:
-      "They are available in a variety of designs and toppings, all of which can be customised to your liking. These are best to consume within 2 weeks of collection/delivery. They are best to be stored in the fridge until consumption.",
-    variants: [
-      { label: "Set of 6", price: 31, image: "/images/cakesicles/2.jpg" },
-      { label: "Set of 9", price: 44, image: "/images/cakesicles/3.jpg" },
-      { label: "Set of 12", price: 50, image: "/images/cakesicles/4.jpg" },
-    ],
-    image: "/images/cakesicles/2.jpg",
-  },
-  {
-    slug: "loaded-cookies",
-    name: "Loaded Cookies",
-    category: "Treats",
-    description:
-      "Our Loaded Cookies is a great way to satisfy your sweet tooth cravings. The cookies have a vanilla cookie base filled with white and chocolate chips. The centre is then filled with your choice of filling and chocolate!",
-    details:
-      "Each cookie is approx 5.5 inch diameter. Heat them up to create a warm, gooey centre! A minimum of 4 has to be purchased. Toppings include: Milk or White Chocolate Buttons, Nutella, Kinder, Pistachio, Snickers, Biscoff, Cookies and cream, Cherry Bakewell, Jammie Dodger, Marshmallows, Happy Hippo, Freddo, Freddo Caramel, Choc Orange, Mini Aero, Malteser.",
-    variants: [
-      { label: "Loaded Cookie (min 4)", price: 5, image: "/images/cookie-box/2.jpg" },
-      { label: "Regular Cookie", price: 3, image: "/images/cookie-box/3.jpg" },
-    ],
-    image: "/images/cookie-box/2.jpg",
-  },
-  {
-    slug: "chocolate-covered-oreos",
-    name: "Chocolate Covered Oreos",
-    category: "Treats",
-    description:
-      "Our delicious Oreo bites are coated with silky chocolate and edible toppings. They can also be customised to your requirements with different colours and toppings.",
-    details:
-      "These can also be individually wrapped. Chocolate Oreos are best to consume within 2 weeks of collection/delivery. Chocolate Oreos are available for Postal Orders.",
-    variants: [
-      { label: "Chocolate Covered Oreo", price: 4, image: "/images/butter-cookies/3.jpg" },
-      { label: "Minnie & Mickey Mouse Oreos", price: 4, image: "/images/butter-cookies/1.jpg" },
-    ],
-    image: "/images/butter-cookies/3.jpg",
-  },
-  {
-    slug: "strawberries",
-    name: "Strawberries",
-    category: "Treats",
-    description:
-      "Strawberries can be personalised to your requirements from different colours and toppings. You can order from a wide variety of quantities.",
-    details:
-      "Please note, Strawberries are best to consume on the day of collection, latest the day after. Strawberries should be kept in the fridge until consumption. If you wish to have personalised edible wafer toppers, this will incur an additional charge.",
-    variants: [
-      { label: "Box of 12", price: 25, image: "/images/strawberries/basket-1.jpg" },
-      { label: "Box of 15", price: 31, image: "/images/strawberries/basket-2.jpg" },
-      { label: "Box of 24", price: 44, image: "/images/strawberries/bouquet-1.jpg" },
-      { label: "Box of 32", price: 53, image: "/images/strawberries/basket-1.jpg" },
-      { label: "Platter (approx 45)", price: 69, image: "/images/strawberries/basket-2.jpg" },
-    ],
-    image: "/images/strawberries/basket-1.jpg",
-  },
-  {
-    slug: "og-strawberries",
-    name: "OG Strawberries",
-    category: "Treats",
-    description:
-      "Our famous and original milk chocolate strawberries are everyone's favourite! You can order from a wide variety of quantities.",
-    details:
-      "If your OG's are for an event or celebration, we can add a topper to your strawberries such as Happy Birthday, Congratulations, Good Luck etc. This will incur an additional charge. Strawberries are best to consume on the day of collection, latest the day after.",
-    variants: [
-      { label: "Box of 12", price: 20, image: "/images/strawberries/basket-2.jpg" },
-      { label: "Box of 15", price: 25, image: "/images/strawberries/basket-1.jpg" },
-      { label: "Box of 24", price: 38, image: "/images/strawberries/bouquet-1.jpg" },
-      { label: "Box of 32", price: 50, image: "/images/strawberries/basket-2.jpg" },
-      { label: "Nutella - Box of 12", price: 23, image: "/images/strawberries/basket-1.jpg" },
-      { label: "Nutella - Box of 15", price: 28, image: "/images/strawberries/bouquet-1.jpg" },
-      { label: "Nutella - Box of 24", price: 43, image: "/images/strawberries/basket-2.jpg" },
-      { label: "Nutella - Box of 32", price: 55, image: "/images/strawberries/basket-1.jpg" },
-    ],
-    image: "/images/strawberries/basket-1.jpg",
-  },
-  {
-    slug: "strawberry-towers",
-    name: "Strawberry Towers",
-    category: "Treats",
-    description:
-      "Our Strawberry Towers hold 27 strawberries. It comes with a personalised topper, fresh fruit, three layers of chocolate strawberries packaged in a luxury clear lid box.",
-    details:
-      "Our toppers can be personalised to your requirements in different colours and shapes! You can choose your variation of fruit such as raspberries, blueberries, figs, strawberries and many more.",
-    variants: [{ label: "Starting from", price: 63, image: "/images/towers/1.jpg" }],
-    image: "/images/towers/1.jpg",
-  },
-  {
-    slug: "biscuits",
-    name: "Biscuits",
-    category: "Treats",
-    description:
-      "Our Shortbread Biscuits can be created in any shape, colour and design to match your personalised requirements.",
-    details:
-      "They can be purchased on its own or you can add them to your bespoke Treat boxes. These can also be used as wedding favours or party favours. These can also be individually wrapped which incurs no extra charge. Biscuits can be posted nationally too!",
-    variants: [{ label: "Each (from)", price: 4, image: "/images/icing-cookies/1.jpg" }],
-    image: "/images/icing-cookies/1.jpg",
   },
 
   // ── Bakes ───────────────────────────────────────────────
@@ -665,17 +538,6 @@ export const products: Product[] = [
       "Each box includes a variety of cookie styles and flavours. Perfect for sharing at events or as a gift. Best consumed within 1 week.",
     variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/cookie-box/2.jpg" }],
     image: "/images/cookie-box/2.jpg",
-  },
-  {
-    slug: "bakes-dozen-box",
-    name: "Dozen Box",
-    category: "Bakes",
-    description:
-      "A generous box of 12 freshly baked treats — perfect for parties, events, or just because. All baked from scratch with the finest ingredients.",
-    details:
-      "Choose your mix or let us create a curated assortment. All items are baked fresh to order.",
-    variants: [{ label: "Dozen Box", price: 36, image: "/images/brand-spread.jpg" }],
-    image: "/images/brand-spread.jpg",
   },
   {
     slug: "bakes-mini-cakes",
