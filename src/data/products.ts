@@ -326,7 +326,7 @@ export const products: Product[] = [
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
     variants: [],
     enquireOnly: true,
-    image: "/images/treat-boxes/mixed-treats.jpg",
+    image: "/images/luxury-dates/1.jpg",
   },
 
   // ── Treats (was Cakesicles) ─────────────────────────────
@@ -678,8 +678,8 @@ export const products: Product[] = [
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed oreo/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
-    variants: [{ label: "1 Dozen", price: 36, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/treat-boxes/mixed-treats.jpg",
+    variants: [{ label: "1 Dozen", price: 36, image: "/images/luxury-dates/1.jpg" }],
+    image: "/images/luxury-dates/1.jpg",
   },
 
   // ── Towers ──────────────────────────────────────────────
