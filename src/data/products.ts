@@ -396,8 +396,8 @@ export const products: Product[] = [
       "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
     details:
       "Each rice krispie treat is hand-shaped and dipped. Available in a variety of shapes and designs. Can be themed to match any event. Best consumed within 1 week.",
-    variants: [{ label: "1 Dozen", price: 45, image: "/images/brand-spread.jpg" }],
-    image: "/images/brand-spread.jpg",
+    variants: [{ label: "1 Dozen", price: 45, image: "/images/rice-krispies/1.jpg" }],
+    image: "/images/rice-krispies/1.jpg",
   },
   {
     slug: "choc-dipped-pretzel-original",
