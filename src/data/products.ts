@@ -265,7 +265,7 @@ export const products: Product[] = [
   },
   {
     slug: "gift-mini-cakes",
-    name: "Mini Cakes",
+    name: "Mini Cake & Cupcakes",
     category: "Gift",
     description:
       "Adorable individual-sized mini cakes, perfect for gifting. Each one is baked from scratch and beautifully finished with icing and decorations.",
@@ -469,72 +469,19 @@ export const products: Product[] = [
 
   // ── Bakes ───────────────────────────────────────────────
   {
-    slug: "bakes-cake-pops",
-    name: "Cake Pops",
+    slug: "muffins",
+    name: "Muffins",
     category: "Bakes",
     description:
-      "Freshly baked cake pops in Vanilla or Chocolate Fudge, dipped in premium Belgian chocolate and decorated with your choice of toppings.",
+      "Freshly baked muffins in a variety of classic flavours. Soft, moist, and perfect for breakfast, brunch, or a sweet snack.",
     details:
-      "Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped. Best consumed within 2 weeks.",
+      "Available in Blueberry, Chocolate Chip, Banana Walnut, and Lemon Poppy Seed. Baked from scratch using premium ingredients. Best consumed within 3 days.",
     variants: [
-      { label: "Cake Pop", price: 4, image: "/images/cake-pops/2.jpg" },
-      { label: "Flat Cake Pop", price: 4, image: "/images/cake-pops/3.jpg" },
-      { label: "Ice Cream Cone Cake Pop", price: 4.5, image: "/images/cake-pops/4.jpg" },
+      { label: "Box of 4", price: 10, image: "/images/tray-bakes/7.jpg" },
+      { label: "Box of 6", price: 14, image: "/images/tray-bakes/8.jpg" },
+      { label: "Box of 12", price: 26, image: "/images/tray-bakes/7.jpg" },
     ],
-    image: "/images/cake-pops/2.jpg",
-  },
-  {
-    slug: "bakes-madeleines",
-    name: "Madeleines",
-    category: "Bakes",
-    description:
-      "Classic French madeleines baked fresh from scratch with real butter and vanilla. Light, soft, and perfect on their own or dipped in chocolate.",
-    details:
-      "Our madeleines are baked daily using premium ingredients. Available plain or chocolate dipped. Best consumed within 5 days of collection.",
-    variants: [
-      { label: "Box of 6", price: 12, image: "/images/madeleines/3.jpg" },
-      { label: "Box of 12", price: 22, image: "/images/madeleines/4.jpg" },
-    ],
-    image: "/images/madeleines/3.jpg",
-  },
-  {
-    slug: "bakes-butter-cookies",
-    name: "Butter Cookies",
-    category: "Bakes",
-    description:
-      "Traditional butter cookies baked from scratch with real butter. Melt-in-your-mouth delicious and perfect with a cup of tea.",
-    details:
-      "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
-    variants: [
-      { label: "Box of 6", price: 12, image: "/images/butter-cookies/4.jpg" },
-      { label: "Box of 12", price: 22, image: "/images/butter-cookies/5.jpg" },
-    ],
-    image: "/images/butter-cookies/4.jpg",
-  },
-  {
-    slug: "bakes-cookie-box",
-    name: "Cookie Box",
-    category: "Bakes",
-    description:
-      "A freshly baked assortment of our signature cookies — butter cookies, loaded cookies, and more. Baked from scratch and ready to enjoy.",
-    details:
-      "Each box includes a variety of cookie styles and flavours. Perfect for sharing at events or as a gift. Best consumed within 1 week.",
-    variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/cookie-box/2.jpg" }],
-    image: "/images/cookie-box/2.jpg",
-  },
-  {
-    slug: "bakes-mini-cakes",
-    name: "Mini Cakes",
-    category: "Bakes",
-    description:
-      "Individual-sized cakes baked from scratch and beautifully decorated. Perfect as single-serve treats for any celebration.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Each mini cake is hand-finished with icing and decorations.",
-    variants: [
-      { label: "Single Mini Cake", price: 8, image: "/images/cake/9.jpg" },
-      { label: "Set of 4", price: 28, image: "/images/cake/10.jpg" },
-    ],
-    image: "/images/cake/9.jpg",
+    image: "/images/tray-bakes/7.jpg",
   },
   {
     slug: "bakes-cupcakes",
@@ -552,18 +499,34 @@ export const products: Product[] = [
     image: "/images/cupcakes/2.jpg",
   },
   {
-    slug: "bakes-brownies",
-    name: "Brownies",
+    slug: "tray-bakes",
+    name: "Tray Bakes",
     category: "Bakes",
     description:
-      "Our signature gooey brownies, baked from scratch in a variety of flavours. Rich, fudgy, and utterly indulgent.",
+      "Our classic Tray Bakes are freshly baked vanilla sponges which we serve up to 12 large slices.",
     details:
-      "Flavours: Milk & White Chocolate Chunk, Lotus, Snickers, Kinder Bueno, Salted Caramel, Aero Mint, Terry's Orange, Oreo, Maltesers, Crunchie, Nutella, and more. Best consumed within 7 days.",
+      "Please note that all sponges are vanilla flavoured. Tray Bakes are best to consume within 5 days of collection/delivery. Tray Bakes are not available for postage.",
     variants: [
-      { label: "Box of 6 slices", price: 23, image: "/images/tray-bakes/5.jpg" },
-      { label: "Box of 16 bites", price: 25, image: "/images/tray-bakes/6.jpg" },
+      { label: "Old School Vanilla Sponge & Icing Cake", price: 19, image: "/images/tray-bakes/1.jpg" },
+      { label: "Old School Raspberry & Coconut", price: 19, image: "/images/tray-bakes/2.jpg" },
+      { label: "Old School Caramel & Chocolate", price: 19, image: "/images/tray-bakes/3.jpg" },
+      { label: "Mixed box of 2 flavours", price: 21, image: "/images/tray-bakes/4.jpg" },
     ],
-    image: "/images/tray-bakes/5.jpg",
+    image: "/images/tray-bakes/1.jpg",
+  },
+  {
+    slug: "bakes-mini-cakes",
+    name: "Mini Cake & Cupcakes",
+    category: "Bakes",
+    description:
+      "Individual-sized cakes baked from scratch and beautifully decorated. Perfect as single-serve treats for any celebration.",
+    details:
+      "Available in Vanilla, Chocolate, and Red Velvet. Each mini cake is hand-finished with icing and decorations.",
+    variants: [
+      { label: "Single Mini Cake", price: 8, image: "/images/cake/9.jpg" },
+      { label: "Set of 4", price: 28, image: "/images/cake/10.jpg" },
+    ],
+    image: "/images/cake/9.jpg",
   },
   {
     slug: "bakes-cake-6",
@@ -614,49 +577,69 @@ export const products: Product[] = [
     image: "/images/cake/11.jpg",
   },
   {
-    slug: "muffins",
-    name: "Muffins",
+    slug: "bakes-madeleines",
+    name: "Madeleines",
     category: "Bakes",
     description:
-      "Freshly baked muffins in a variety of classic flavours. Soft, moist, and perfect for breakfast, brunch, or a sweet snack.",
+      "Classic French madeleines baked fresh from scratch with real butter and vanilla. Light, soft, and perfect on their own or dipped in chocolate.",
     details:
-      "Available in Blueberry, Chocolate Chip, Banana Walnut, and Lemon Poppy Seed. Baked from scratch using premium ingredients. Best consumed within 3 days.",
+      "Our madeleines are baked daily using premium ingredients. Available plain or chocolate dipped. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Box of 4", price: 10, image: "/images/tray-bakes/7.jpg" },
-      { label: "Box of 6", price: 14, image: "/images/tray-bakes/8.jpg" },
-      { label: "Box of 12", price: 26, image: "/images/tray-bakes/7.jpg" },
+      { label: "Box of 6", price: 12, image: "/images/madeleines/3.jpg" },
+      { label: "Box of 12", price: 22, image: "/images/madeleines/4.jpg" },
     ],
-    image: "/images/tray-bakes/7.jpg",
+    image: "/images/madeleines/3.jpg",
   },
   {
-    slug: "castella",
-    name: "Castella",
+    slug: "bakes-butter-cookies",
+    name: "Butter Cookies",
     category: "Bakes",
     description:
-      "A light and fluffy Japanese-style castella sponge cake, baked from scratch with eggs, sugar, and flour. Delicate, bouncy, and delicious.",
+      "Traditional butter cookies baked from scratch with real butter. Melt-in-your-mouth delicious and perfect with a cup of tea.",
     details:
-      "Our castella is baked low and slow for the perfect jiggly texture. Available plain or with matcha flavouring. Best consumed within 3 days.",
+      "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
     variants: [
-      { label: "Single Castella", price: 15, image: "/images/cake/12.jpg" },
-      { label: "Matcha Castella", price: 17, image: "/images/cake/13.jpg" },
+      { label: "Box of 6", price: 12, image: "/images/butter-cookies/4.jpg" },
+      { label: "Box of 12", price: 22, image: "/images/butter-cookies/5.jpg" },
     ],
-    image: "/images/cake/12.jpg",
+    image: "/images/butter-cookies/4.jpg",
   },
   {
-    slug: "tray-bakes",
-    name: "Tray Bakes",
+    slug: "bakes-cookie-box",
+    name: "Cookie Box",
     category: "Bakes",
     description:
-      "Our classic Tray Bakes are freshly baked vanilla sponges which we serve up to 12 large slices.",
+      "A freshly baked assortment of our signature cookies — butter cookies, loaded cookies, and more. Baked from scratch and ready to enjoy.",
     details:
-      "Please note that all sponges are vanilla flavoured. Tray Bakes are best to consume within 5 days of collection/delivery. Tray Bakes are not available for postage.",
+      "Each box includes a variety of cookie styles and flavours. Perfect for sharing at events or as a gift. Best consumed within 1 week.",
+    variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/cookie-box/2.jpg" }],
+    image: "/images/cookie-box/2.jpg",
+  },
+  {
+    slug: "bakes-cakesicles",
+    name: "Cakesicles",
+    category: "Bakes",
+    description:
+      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. Available in a variety of designs and toppings, all customisable to your liking.",
+    details:
+      "Available in Vanilla and Chocolate Fudge. Regular and heart shapes available. Personalised edible toppers can be made. Best consumed within 2 weeks of collection/delivery.",
+    variants: [{ label: "Each (from)", price: 4.5, image: "/images/cakesicles/1.jpg" }],
+    image: "/images/cakesicles/5.png",
+  },
+  {
+    slug: "bakes-cake-pops",
+    name: "Cake Pops",
+    category: "Bakes",
+    description:
+      "Freshly baked cake pops in Vanilla or Chocolate Fudge, dipped in premium Belgian chocolate and decorated with your choice of toppings.",
+    details:
+      "Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped. Best consumed within 2 weeks.",
     variants: [
-      { label: "Old School Vanilla Sponge & Icing Cake", price: 19, image: "/images/tray-bakes/1.jpg" },
-      { label: "Old School Raspberry & Coconut", price: 19, image: "/images/tray-bakes/2.jpg" },
-      { label: "Old School Caramel & Chocolate", price: 19, image: "/images/tray-bakes/3.jpg" },
-      { label: "Mixed box of 2 flavours", price: 21, image: "/images/tray-bakes/4.jpg" },
+      { label: "Cake Pop", price: 4, image: "/images/cake-pops/2.jpg" },
+      { label: "Flat Cake Pop", price: 4, image: "/images/cake-pops/3.jpg" },
+      { label: "Ice Cream Cone Cake Pop", price: 4.5, image: "/images/cake-pops/4.jpg" },
     ],
-    image: "/images/tray-bakes/1.jpg",
+    image: "/images/cake-pops/2.jpg",
   },
 
   // ── Favours ─────────────────────────────────────────────
