@@ -689,8 +689,8 @@ export const products: Product[] = [
       "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
       "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Madeleine Tower", price: 55, image: "/images/towers/1.jpg" }],
-    image: "/images/towers/1.jpg",
+    variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mtower.webp" }],
+    image: "/images/towers/mtower.webp",
   },
   {
     slug: "macaron-tower",
@@ -700,11 +700,19 @@ export const products: Product[] = [
       "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
     details:
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
-    variants: [
-      { label: "Small Tower (30 macarons)", price: 60, image: "/images/towers/2.jpg" },
-      { label: "Large Tower (60 macarons)", price: 110, image: "/images/towers/3.jpg" },
-    ],
-    image: "/images/towers/2.jpg",
+    variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/macaron.webp" }],
+    image: "/images/towers/macaron.webp",
+  },
+  {
+    slug: "chocolate-tower",
+    name: "Chocolate Tower",
+    category: "Towers",
+    description:
+      "A decadent tower of handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
+    details:
+      "The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
+    variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/ptower.webp" }],
+    image: "/images/towers/ptower.webp",
   },
   {
     slug: "croissant-tower",
