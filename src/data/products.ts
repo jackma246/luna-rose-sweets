@@ -690,7 +690,7 @@ export const products: Product[] = [
     details:
       "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Madeleine Tower", price: 55, image: "/images/towers/1.jpg" }],
-    image: "/images/madeleines/1.jpg",
+    image: "/images/towers/1.jpg",
   },
   {
     slug: "macaron-tower",
