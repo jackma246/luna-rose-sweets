@@ -1629,24 +1629,39 @@
   }
 
   @media (max-width: 560px) {
+    /* single-column testimonials on mobile so they stay readable */
+    .quote-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
+    .quote { padding: 24px 22px; }
+    .quote p { font-size: 16px; margin-bottom: 18px; }
+    .quote .q-mark { font-size: 60px; top: 16px; right: 18px; }
+
     .ribbon { font-size: 9.5px; letter-spacing: 0.14em; padding: 9px 16px; }
     .logo-placeholder { font-size: 20px; }
     .logo-placeholder .amp { font-size: 26px; }
 
-    .hero { padding: 28px 18px 52px; }
-    .hero .eyebrow { font-size: 10px; letter-spacing: 0.25em; margin-bottom: 14px; }
-    .hero .eyebrow::before { width: 20px; }
-    .hero h1 { font-size: 40px; line-height: 0.95; margin-bottom: 22px; }
-    .hero h1 .amp { font-size: 46px; }
-    .hero .lede { font-size: 17px; margin-bottom: 26px; }
-    .hero .ctas { flex-direction: column; align-items: stretch; gap: 10px; }
-    .hero .ctas .btn { justify-content: center; padding: 16px 20px; }
-    .hero-visual { max-width: 320px; margin: 0 auto; }
-    .hero-visual .badge {
-      width: 88px; height: 88px;
-      font-size: 10.5px;
-      top: -4px; right: -4px;
+    /* Mobile hero: image sits FIRST (hero visual), text + CTAs below.
+       Image tight so it plus headline fit within ~1 screen height. */
+    .hero { padding: 16px 18px 40px; }
+    .hero-inner { display: flex; flex-direction: column; gap: 24px; }
+    .hero-visual {
+      order: -1; /* photo above text */
+      max-width: 300px;
+      margin: 0 auto;
+      aspect-ratio: 1 / 1;
     }
+    .hero-visual .badge {
+      width: 78px; height: 78px;
+      font-size: 10px;
+      top: -6px; right: -6px;
+    }
+    .hero .eyebrow { font-size: 10px; letter-spacing: 0.25em; margin-bottom: 10px; justify-content: center; text-align: center; }
+    .hero .eyebrow::before { width: 20px; }
+    .hero > .hero-inner > div:not(.hero-visual) { text-align: center; }
+    .hero h1 { font-size: 40px; line-height: 0.95; margin-bottom: 16px; text-wrap: balance; }
+    .hero h1 .amp { font-size: 46px; }
+    .hero .lede { font-size: 16px; margin: 0 auto 22px; line-height: 1.4; }
+    .hero .ctas { flex-direction: column; align-items: stretch; gap: 10px; }
+    .hero .ctas .btn { justify-content: center; padding: 15px 20px; }
 
     .marquee { padding: 14px 0; }
     .marquee span { font-size: 22px; gap: 40px; }
@@ -1659,7 +1674,6 @@
     .section-head p { font-size: 16px; }
 
     .products,
-    .quote-grid,
     .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 12px; }
     .product .info { padding-top: 14px; gap: 4px; }
     .product .info h3 { font-size: 16px; line-height: 1.15; }

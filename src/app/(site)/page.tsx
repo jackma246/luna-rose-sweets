@@ -66,7 +66,6 @@ function priceLabel(slug: string): string {
 function captionFor(slug: string): string {
   const p = products.find((x) => x.slug === slug);
   if (!p) return "";
-  if (p.variants[0]?.label) return p.variants[0].label;
   return p.category;
 }
 
