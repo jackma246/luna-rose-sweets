@@ -124,31 +124,6 @@ export const products: Product[] = [
     image: "/images/cupcakes/7.jpg",
   },
   {
-    slug: "party-single-packaged-cakesicle",
-    name: "Single Packaged Cakesicles (1 Dozen)",
-    category: "Party Sets",
-    description:
-      "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
-    details:
-      "Available in Vanilla and Chocolate Fudge. Each cakesicle can be themed and personalised. Individually wrapped in cellophane with a ribbon.",
-    variants: [
-      { label: "Cakesicle in cellophane & ribbon", price: 4.5, image: "/images/cakesicles/tray-1.jpg" },
-      { label: "Cakesicle in clear lid box", price: 5.5, image: "/images/cakesicles/tray-2.jpg" },
-    ],
-    image: "/images/cakesicles/1.jpg",
-  },
-  {
-    slug: "party-single-packaged-cake-pop",
-    name: "Single Packaged Cakepops (1 Dozen)",
-    category: "Party Sets",
-    description:
-      "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
-    details:
-      "Available in Vanilla and Chocolate Fudge. Each cake pop can be themed and customised. Wrapped in cellophane with a twist ribbon.",
-    variants: [{ label: "Cakepop in cellophane & ribbon", price: 4, image: "/images/cake-pops/basic.jpg" }],
-    image: "/images/cake-pops/smores.jpg",
-  },
-  {
     slug: "party-drink-snack-set",
     name: "Party Drink & Snack Set",
     category: "Party Sets",
@@ -556,31 +531,6 @@ export const products: Product[] = [
       "Each favour is individually packaged. Cupcake flavours and flower colours can be matched to your theme. Minimum order of 10.",
     variants: [{ label: "Per Favour (min 10)", price: 6, image: "/images/cupcakes/7.jpg" }],
     image: "/images/cupcakes/7.jpg",
-  },
-  {
-    slug: "single-cake-popsicle",
-    name: "Single Packaged Cakesicles (1 Dozen)",
-    category: "Favours",
-    description:
-      "A single beautifully decorated cakesicle, individually wrapped and ready to gift. Perfect as a party favour or small treat.",
-    details:
-      "Available in Vanilla and Chocolate Fudge. Each cakesicle can be themed and personalised. Individually wrapped in cellophane with a ribbon.",
-    variants: [
-      { label: "Cakesicle in cellophane & ribbon", price: 4.5, image: "/images/cakesicles/tray-1.jpg" },
-      { label: "Cakesicle in clear lid box", price: 5.5, image: "/images/cakesicles/tray-2.jpg" },
-    ],
-    image: "/images/cakesicles/1.jpg",
-  },
-  {
-    slug: "single-cake-pop",
-    name: "Single Packaged Cakepops (1 Dozen)",
-    category: "Favours",
-    description:
-      "A single decorated cake pop, individually wrapped as a favour. A sweet little gift for any celebration.",
-    details:
-      "Available in Vanilla and Chocolate Fudge. Each cake pop can be themed and customised. Wrapped in cellophane with a twist ribbon.",
-    variants: [{ label: "Cakepop in cellophane & ribbon", price: 4, image: "/images/cake-pops/basic.jpg" }],
-    image: "/images/cake-pops/smores.jpg",
   },
   {
     slug: "treat-bag",
