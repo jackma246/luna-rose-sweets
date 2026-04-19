@@ -436,16 +436,13 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-cupcakes",
-    name: "Cupcakes (1 Dozen)",
+    name: "Cupcakes (1/2 Dozen)",
     category: "Bakes",
     description:
       "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in a range of flavours and decorated to your theme.",
     details:
       "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available. Baked fresh to order.",
-    variants: [
-      { label: "6 Pack", price: 28, image: "/images/cupcakes/2.jpg" },
-      { label: "12 Pack", price: 36, image: "/images/cupcakes/2.jpg" },
-    ],
+    variants: [{ label: "1/2 Dozen (6 pcs)", price: 28, image: "/images/cupcakes/2.jpg" }],
     image: "/images/cupcakes/2.jpg",
   },
   {
