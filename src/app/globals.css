@@ -244,6 +244,42 @@ html {
   transform: scale(1.08);
 }
 
+/* ─── Version-switch floating pill (appears on both classic and /v2) ─── */
+.version-switch {
+  position: fixed;
+  z-index: 200;
+  background: #3A1F18;
+  color: #FBF6EE;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s, transform 0.2s;
+  /* desktop: top-right */
+  top: 14px;
+  right: 14px;
+}
+.version-switch:hover {
+  background: #B94A64;
+  transform: translateY(-1px);
+}
+@media (max-width: 960px) {
+  /* mobile: bottom-right, out of the way of the sticky header + cart */
+  .version-switch {
+    top: auto;
+    bottom: 14px;
+    right: 14px;
+    font-size: 10px;
+    padding: 7px 12px;
+    letter-spacing: 0.14em;
+  }
+}
+
 /* Smooth button hover */
 .btn-primary {
   position: relative;

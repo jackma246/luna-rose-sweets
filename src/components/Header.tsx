@@ -15,10 +15,10 @@ export default function Header() {
   const router = useRouter();
 
   const navLinks = [
-    { href: "/products", label: "Shop" },
-    { href: "/contact", label: "Custom Orders" },
-    { href: "/contact", label: "Contact Us" },
-    { href: "/about", label: "About" },
+    { href: "/classic/products", label: "Shop" },
+    { href: "/classic/contact", label: "Custom Orders" },
+    { href: "/classic/contact", label: "Contact Us" },
+    { href: "/classic/about", label: "About" },
   ];
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function Header() {
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (searchQuery.trim()) {
-      router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
+      router.push(`/classic/products?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
     }
@@ -41,7 +41,7 @@ export default function Header() {
       {/* Desktop header */}
       <div className="hidden md:flex max-w-6xl mx-auto px-6 py-4 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link href="/" className="shrink-0">
+          <Link href="/classic" className="shrink-0">
             <Logo size={80} />
           </Link>
           <nav className="flex items-center gap-6">
@@ -57,7 +57,7 @@ export default function Header() {
           </nav>
         </div>
         <Link
-          href="/cart"
+          href="/classic/cart"
           className="relative text-foreground hover:text-heading transition-colors"
           aria-label="Shopping cart"
         >
@@ -99,7 +99,7 @@ export default function Header() {
         </button>
 
         {/* Center: bigger logo */}
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+        <Link href="/classic" className="absolute left-1/2 -translate-x-1/2">
           <Logo size={90} />
         </Link>
 
@@ -116,7 +116,7 @@ export default function Header() {
             </svg>
           </button>
           <Link
-            href="/cart"
+            href="/classic/cart"
             className="relative p-1.5 text-foreground hover:text-heading transition-colors"
             aria-label="Shopping cart"
           >

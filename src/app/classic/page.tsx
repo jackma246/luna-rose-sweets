@@ -54,7 +54,7 @@ export default function Home() {
           <ScrollReveal delay={400}>
             <div className="text-center mt-12">
               <Link
-                href="/products"
+                href="/classic/products"
                 className="inline-block bg-mint text-white font-bold px-10 py-3 rounded-full hover:bg-chocolate transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
               >
                 View All Products
@@ -106,7 +106,7 @@ export default function Home() {
               indulgent crumb in every bite.
             </p>
             <Link
-              href="/about"
+              href="/classic/about"
               className="inline-block mt-8 bg-accent text-chocolate font-bold px-8 py-3 rounded-full hover:bg-chocolate hover:text-white transition-all duration-300"
             >
               Learn more about us

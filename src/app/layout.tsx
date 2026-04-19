@@ -1,27 +1,12 @@
 import type { Metadata } from "next";
-import { Nunito, Fredoka } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import LoadingScreen from "@/components/LoadingScreen";
 import { CartProvider } from "@/context/CartContext";
-
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import VersionSwitcher from "@/components/VersionSwitcher";
 
 export const metadata: Metadata = {
   title: "Dip & Sprinkle",
   description:
-    "Sweet treats dipped & decorated — Madeleines, Cake Pops, Rice Krispies, Pretzels, Butter Cookies, Marshmallows, Oreo Pops & More!",
+    "Handmade cake pops, cakesicles & little bakes — crafted in small batches for birthdays, weddings, and every celebration in between.",
 };
 
 export default function RootLayout({
@@ -30,16 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${nunito.variable} ${fredoka.variable} h-full`}
-    >
-      <body className="min-h-full flex flex-col antialiased">
+    <html lang="en" className="h-full">
+      <body className="min-h-full antialiased">
         <CartProvider>
-          <LoadingScreen />
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          {children}
+          <VersionSwitcher />
         </CartProvider>
       </body>
     </html>

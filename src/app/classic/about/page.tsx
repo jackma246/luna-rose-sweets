@@ -71,7 +71,7 @@ export default function AboutPage() {
 
         <div className="text-center">
           <Link
-            href="/products"
+            href="/classic/products"
             className="inline-block bg-mint text-white font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity"
           >
             View Our Products

@@ -17,7 +17,7 @@ export default function CartPage() {
           Looks like you haven&apos;t added any sweet treats yet!
         </p>
         <Link
-          href="/products"
+          href="/classic/products"
           className="inline-block bg-accent text-nav-text font-medium px-8 py-3 rounded-full hover:opacity-90 transition-opacity"
         >
           Browse Products
@@ -141,7 +141,7 @@ export default function CartPage() {
           Proceed to Checkout
         </button>
         <Link
-          href="/products"
+          href="/classic/products"
           className="block text-center text-accent hover:underline mt-4 text-sm"
         >
           Continue Shopping

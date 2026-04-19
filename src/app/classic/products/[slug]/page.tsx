@@ -23,7 +23,7 @@ export default function ProductDetailPage() {
         <h1 className="font-serif text-3xl font-bold text-heading mb-4">
           Product Not Found
         </h1>
-        <Link href="/products" className="text-accent hover:underline">
+        <Link href="/classic/products" className="text-accent hover:underline">
           Back to Products
         </Link>
       </div>
@@ -54,7 +54,7 @@ export default function ProductDetailPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
       <Link
-        href="/products"
+        href="/classic/products"
         className="inline-flex items-center gap-2 text-foreground/60 hover:text-heading text-sm transition-colors duration-200 group"
       >
         <span className="transition-transform duration-200 group-hover:-translate-x-1">
@@ -173,7 +173,7 @@ export default function ProductDetailPage() {
           {/* Options / Variants */}
           {p.enquireOnly ? (
             <Link
-              href="/contact"
+              href="/classic/contact"
               className="btn-primary inline-block bg-mint text-white font-semibold px-10 py-3.5 rounded-full"
             >
               Enquire Now
