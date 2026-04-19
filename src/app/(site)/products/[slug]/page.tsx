@@ -18,6 +18,7 @@ export default function V2ProductDetail() {
   const [variantIdx, setVariantIdx] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [selectedFlavour, setSelectedFlavour] = useState<string>("");
 
   // derive gallery images from product.image + unique variant images
   const images = useMemo(() => {
@@ -59,6 +60,10 @@ export default function V2ProductDetail() {
 
   function handleAddToCart() {
     if (!variant || product?.enquireOnly) return;
+    if (product!.flavours && product!.flavours.length > 0 && !selectedFlavour) {
+      alert("Please select a flavour before adding to cart.");
+      return;
+    }
     addItem(
       {
         productSlug: product!.slug,
@@ -66,6 +71,7 @@ export default function V2ProductDetail() {
         name: product!.name,
         price: variant.price,
         image: variant.image ?? product!.image,
+        flavour: selectedFlavour || undefined,
       },
       quantity
     );
@@ -138,6 +144,25 @@ export default function V2ProductDetail() {
             ) : (
               product.variants.length > 0 && (
                 <>
+                  {product.flavours && product.flavours.length > 0 && (
+                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                      <h4>Choose your flavour</h4>
+                      <div className="option-grid" style={{ gap: "0.5rem" }}>
+                        {product.flavours.map((f) => (
+                          <button
+                            key={f.name}
+                            className={`option${selectedFlavour === f.name ? " active" : ""}`}
+                            onClick={() => setSelectedFlavour(f.name)}
+                            style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.2rem" }}
+                          >
+                            <span style={{ fontWeight: 600 }}>{f.name}</span>
+                            <small style={{ fontWeight: 400, opacity: 0.7, whiteSpace: "normal", lineHeight: 1.4, fontSize: "0.78rem" }}>{f.description}</small>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {product.variants.length > 1 && (
                     <div className="options">
                       <h4>Size / Option</h4>

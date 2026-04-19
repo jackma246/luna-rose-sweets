@@ -85,6 +85,9 @@ export default function V2CartPage() {
                 <div className="info">
                   <h4>{item.name}</h4>
                   <div className="opt">{item.variantLabel}</div>
+                  {item.flavour && (
+                    <div className="opt" style={{ opacity: 0.75 }}>Flavour: {item.flavour}</div>
+                  )}
                   <div className="row">
                     <div className="qty">
                       <button

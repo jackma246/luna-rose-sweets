@@ -37,14 +37,20 @@ export default async function ShopPage({
 }) {
   const { category = "All", sort = "featured", q = "" } = await searchParams;
 
+  const uniqueProducts = products.filter(
+    (p, i, arr) => arr.findIndex((q) => q.name === p.name) === i
+  );
+
   const categoryCounts = new Map<string, number>();
   for (const cat of categories) {
-    if (cat === "All") categoryCounts.set(cat, products.length);
+    if (cat === "All") categoryCounts.set(cat, uniqueProducts.length);
     else categoryCounts.set(cat, products.filter((p) => p.category === cat).length);
   }
 
   let filtered =
-    category === "All" ? [...products] : products.filter((p) => p.category === category);
+    category === "All"
+      ? [...uniqueProducts]
+      : products.filter((p) => p.category === category);
 
   if (q.trim()) filtered = filtered.filter((p) => matchesQuery(p, q.trim()));
 

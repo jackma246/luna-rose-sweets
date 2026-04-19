@@ -9,6 +9,11 @@ export interface ProductAddon {
   price: string;
 }
 
+export interface ProductFlavour {
+  name: string;
+  description: string;
+}
+
 export interface Product {
   slug: string;
   name: string;
@@ -18,9 +23,37 @@ export interface Product {
   details?: string;
   variants: ProductVariant[];
   addons?: ProductAddon[];
+  flavours?: ProductFlavour[];
   enquireOnly?: boolean;
   image?: string;
 }
+
+const CAKE_FLAVOURS: ProductFlavour[] = [
+  {
+    name: "Classic Vanilla",
+    description: "Made with real vanilla beans — we blend our own ratio of the finest Madagascar and Mexican vanilla for a clean, true vanilla flavour.",
+  },
+  {
+    name: "Funfetti",
+    description: "Extra butter flavour, incredibly moist, and just a touch sweeter.",
+  },
+  {
+    name: "Chocolate",
+    description: "Contains premium Belgian dark chocolate with 30%+ cocoa butter, a hint of espresso to deepen the flavour, and a sprinkle of Maldon sea salt to finish.",
+  },
+  {
+    name: "Strawberry",
+    description: "Made with 100% freeze-dried strawberry powder — never artificial flavouring. Inspired by strawberry milk, with extra toasted milk powder for an authentic, non-artificial taste.",
+  },
+  {
+    name: "Coffee",
+    description: "Made with freshly brewed espresso.",
+  },
+  {
+    name: "Lemon",
+    description: "Contains fresh lemon juice and lemon zest for a perfectly balanced sweet-and-sour flavour that tastes completely natural.",
+  },
+];
 
 export const products: Product[] = [
   // ── Party Sets ──────────────────────────────────────────
@@ -61,11 +94,11 @@ export const products: Product[] = [
     slug: "party-layer-cake",
     name: "3-Layer Custom Cake (6\"/8\")",
     category: "Party Sets",
-    subtitle: "100% Real Buttercream",
+    subtitle: "100% Real Buttercream · 6 Flavours",
     description:
       "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
+      "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
     variants: [
       { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
       { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
@@ -75,32 +108,35 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
       { label: "Lettering", price: "+$5–$10" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cake/7.jpg",
   },
   {
     slug: "party-two-tier-cake",
     name: "Two-Tier Cake (8\"/6\")",
     category: "Party Sets",
+    subtitle: "6 Flavours",
     description:
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+      "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier.jpg" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cake/two-tier.jpg",
   },
   {
     slug: "party-tray-bakes",
-    name: "Tray Bakes",
+    name: "Tray Cake",
     category: "Party Sets",
-    subtitle: "100% Real Buttercream · 2 Sizes",
+    subtitle: "100% Real Buttercream · 2 Sizes · 6 Flavours",
     description:
-      "Made with 100% real European buttercream, our Tray Bakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design and colour.",
+      "Made with 100% real European buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
     details:
-      "Made with 100% real European buttercream — rich, smooth, and never artificial. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
+      "Made with 100% real European buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
       { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/1.jpg" },
       { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/1.jpg" },
@@ -110,6 +146,7 @@ export const products: Product[] = [
       { label: "Lettering", price: "+$10" },
       { label: "Color Customization", price: "+$10" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/tray-bakes/1.jpg",
   },
   {
@@ -196,24 +233,19 @@ export const products: Product[] = [
     image: "/images/popsicle-bouquet/1.jpg",
   },
   {
-    slug: "gift-layer-cake",
-    name: "3-Layer Custom Cake (6\"/8\")",
+    slug: "gift-cupcakes",
+    name: "Cupcakes (1 Dozen)",
     category: "Gift",
-    subtitle: "100% Real Buttercream",
+    subtitle: "6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
+      "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in 6 flavours and decorated to your theme.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
+      "Choose from 6 flavours. Custom toppers and themed decorations available. Baked fresh to order. Best consumed within 3 days.",
     variants: [
-      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
-      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
+      { label: "1 Dozen (12 pcs)", price: 48, image: "/images/cupcakes/2.jpg" },
     ],
-    addons: [
-      { label: "Extra Cream Decoration", price: "+$10–$25" },
-      { label: "Color Customization", price: "+$10" },
-      { label: "Lettering", price: "+$5–$10" },
-    ],
-    image: "/images/cake/7.jpg",
+    flavours: CAKE_FLAVOURS,
+    image: "/images/cupcakes/2.jpg",
   },
   {
     slug: "luxury-chocolate-dates",
@@ -258,14 +290,16 @@ export const products: Product[] = [
     slug: "madeleines",
     name: "Madeleines (1 Dozen)",
     category: "Chocolate Covered Treats",
+    subtitle: "6 Flavours",
     description:
       "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
     details:
-      "Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
+      "Choose from 6 flavours. Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
     variants: [
       { label: "Box of 6", price: 15, image: "/images/madeleines/1.jpg" },
       { label: "Box of 12", price: 28, image: "/images/madeleines/2.jpg" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/1.jpg",
   },
   {
@@ -343,25 +377,27 @@ export const products: Product[] = [
     slug: "bakes-cupcakes",
     name: "Cupcakes (1/2 Dozen)",
     category: "Bakes",
+    subtitle: "6 Flavours",
     description:
-      "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in a range of flavours and decorated to your theme.",
+      "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in 6 flavours and decorated to your theme.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available. Baked fresh to order.",
+      "Choose from 6 flavours. Custom toppers and themed decorations available. Baked fresh to order. Best consumed within 3 days.",
     variants: [
       { label: "1/2 Dozen (6 pcs)", price: 28, image: "/images/cupcakes/2.jpg" },
       { label: "1 Dozen (12 pcs)", price: 48, image: "/images/cupcakes/2.jpg" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cupcakes/2.jpg",
   },
   {
     slug: "tray-bakes",
-    name: "Tray Bakes",
+    name: "Tray Cake",
     category: "Bakes",
-    subtitle: "100% Real Buttercream · 2 Sizes",
+    subtitle: "100% Real Buttercream · 2 Sizes · 6 Flavours",
     description:
-      "Made with 100% real European buttercream, our Tray Bakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design and colour.",
+      "Made with 100% real European buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
     details:
-      "Made with 100% real European buttercream — rich, smooth, and never artificial. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
+      "Made with 100% real European buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
       { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/1.jpg" },
       { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/1.jpg" },
@@ -371,17 +407,18 @@ export const products: Product[] = [
       { label: "Lettering", price: "+$10" },
       { label: "Color Customization", price: "+$10" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/tray-bakes/1.jpg",
   },
   {
     slug: "bakes-layer-cake",
     name: "3-Layer Custom Cake (6\"/8\")",
     category: "Bakes",
-    subtitle: "100% Real Buttercream",
+    subtitle: "100% Real Buttercream · 6 Flavours",
     description:
       "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
+      "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
     variants: [
       { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
       { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
@@ -391,35 +428,40 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
       { label: "Lettering", price: "+$5–$10" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cake/7.jpg",
   },
   {
     slug: "bakes-two-tier-cake",
     name: "Two-Tier Cake (8\"/6\")",
     category: "Bakes",
+    subtitle: "6 Flavours",
     description:
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+      "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier.jpg" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cake/two-tier.jpg",
   },
   {
     slug: "bakes-madeleines",
     name: "Madeleines (1 Dozen)",
     category: "Bakes",
+    subtitle: "6 Flavours",
     description:
       "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
     details:
-      "Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
+      "Choose from 6 flavours. Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
     variants: [
       { label: "Box of 6", price: 15, image: "/images/madeleines/1.jpg" },
       { label: "Box of 12", price: 28, image: "/images/madeleines/2.jpg" },
     ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/1.jpg",
   },
   {

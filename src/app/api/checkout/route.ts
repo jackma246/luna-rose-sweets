@@ -28,12 +28,15 @@ export async function POST(req: NextRequest) {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: items.map(
-        (item: { name: string; variantLabel: string; price: number; quantity: number; note?: string }) => ({
+        (item: { name: string; variantLabel: string; price: number; quantity: number; flavour?: string; note?: string }) => ({
           price_data: {
             currency: "usd",
             product_data: {
               name: `${item.name} — ${item.variantLabel}`,
-              description: item.note ? `Design Note: ${item.note}` : undefined,
+              description: [
+                item.flavour ? `Flavour: ${item.flavour}` : null,
+                item.note ? `Design Note: ${item.note}` : null,
+              ].filter(Boolean).join(" | ") || undefined,
             },
             unit_amount: Math.round(item.price * 100),
           },
