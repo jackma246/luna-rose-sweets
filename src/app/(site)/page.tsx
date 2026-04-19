@@ -95,7 +95,7 @@ export default function V2Home() {
         </div>
         <div className="hero-inner">
           <div>
-            <div className="eyebrow">A sweet little studio · Est. 2021</div>
+            <div className="eyebrow">A sweet little studio</div>
             <h1>
               Dipped, sprinkled, <em>&amp;</em>
               <br />
@@ -129,9 +129,9 @@ export default function V2Home() {
               />
             </div>
             <div className="badge">
-              Small batch
+              Small
               <br />
-              since 2021
+              batch
             </div>
           </div>
         </div>
