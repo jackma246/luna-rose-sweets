@@ -14,8 +14,9 @@ export default function V2Footer() {
               care in a small studio kitchen.
             </p>
           </div>
-          <div>
-            <h5>Shop</h5>
+
+          <details className="footer-col">
+            <summary><h5>Shop</h5></summary>
             <ul>
               <li>
                 <Link href="/products?category=Treats">Cake Pops</Link>
@@ -33,9 +34,10 @@ export default function V2Footer() {
                 <Link href="/products">All Treats</Link>
               </li>
             </ul>
-          </div>
-          <div>
-            <h5>Orders</h5>
+          </details>
+
+          <details className="footer-col">
+            <summary><h5>Orders</h5></summary>
             <ul>
               <li>
                 <Link href="/contact">Custom orders</Link>
@@ -50,9 +52,10 @@ export default function V2Footer() {
                 <Link href="/contact">Shipping</Link>
               </li>
             </ul>
-          </div>
-          <div>
-            <h5>Studio</h5>
+          </details>
+
+          <details className="footer-col">
+            <summary><h5>Studio</h5></summary>
             <ul>
               <li>
                 <Link href="/about">Our story</Link>
@@ -70,7 +73,7 @@ export default function V2Footer() {
                 <Link href="/contact">Contact</Link>
               </li>
             </ul>
-          </div>
+          </details>
         </div>
         <div className="footer-bot">
           <div>© {new Date().getFullYear()} Dip &amp; Sprinkle · Made with sugar</div>

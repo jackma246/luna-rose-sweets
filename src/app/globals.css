@@ -278,6 +278,10 @@ html {
     padding: 7px 12px;
     letter-spacing: 0.14em;
   }
+  /* lift the switcher above any sticky bottom CTA so they don't overlap */
+  body:has(.pd-sticky-cta) .version-switch {
+    bottom: calc(110px + env(safe-area-inset-bottom));
+  }
 }
 
 /* Smooth button hover */

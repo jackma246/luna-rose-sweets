@@ -219,6 +219,44 @@ export default function V2ProductDetail() {
         </div>
       </section>
 
+      {/* Mobile-only sticky add-to-cart bar */}
+      {!product.enquireOnly && variant && (
+        <div className="pd-sticky-cta" aria-hidden="false">
+          <div className="pd-sticky-cta-inner">
+            <div className="pd-sticky-summary">
+              <span className="pd-sticky-name">{product.name}</span>
+              <span className="pd-sticky-price">
+                ${(variant.price * quantity).toFixed(2)}
+              </span>
+            </div>
+            <div className="pd-sticky-row">
+              <div className="qty">
+                <button
+                  aria-label="Decrease quantity"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                >
+                  −
+                </button>
+                <span>{quantity}</span>
+                <button
+                  aria-label="Increase quantity"
+                  onClick={() => setQuantity((q) => q + 1)}
+                >
+                  +
+                </button>
+              </div>
+              <button
+                className="btn btn-primary"
+                style={{ flex: 1, justifyContent: "center" }}
+                onClick={handleAddToCart}
+              >
+                {added ? "Added ✓" : "Add to cart"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <V2Footer />
     </>
   );
