@@ -309,10 +309,31 @@ export const products: Product[] = [
     description:
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
     details:
-      "Standard designs start at $30/dozen. Custom designs (themed colours, toppings, drizzles) from $36–$45/dozen. Available with milk, white, or dark chocolate coating.",
+      "Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, themed styling) available for an additional fee. Full Custom (names, initials, logo-inspired details, multiple mixed designs) available for an additional fee.",
     variants: [
       { label: "Standard (1 Dozen)", price: 30, image: "/images/choco-cookies/1.jpg" },
       { label: "Custom (1 Dozen)", price: 36, image: "/images/choco-cookies/1.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "Additional fee" },
+      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "Additional fee" },
+    ],
+    image: "/images/choco-cookies/1.jpg",
+  },
+  {
+    slug: "choc-covered-oreos",
+    name: "Chocolate Covered Oreos (1 Dozen)",
+    category: "Chocolate Covered Treats",
+    description:
+      "Classic chocolate covered Oreos finished with elegant decorative details. Perfect for dessert tables, party favors, gift boxes, and themed events.",
+    details:
+      "Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5/dozen. Full Custom (names, initials, logo-inspired details, multiple mixed designs) available for +$10–$15/dozen. Photos are for style reference only — slight variation in colour and decorative placement is normal and part of the handmade process.",
+    variants: [
+      { label: "1 Dozen (Base Design)", price: 30, image: "/images/choco-cookies/1.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5/dozen" },
+      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$15/dozen" },
     ],
     image: "/images/choco-cookies/1.jpg",
   },
@@ -321,12 +342,15 @@ export const products: Product[] = [
     name: "Caramel Pretzel Rod (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
-      "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
+      "Crunchy pretzel rods dipped in chocolate and decorated by hand. A sweet and salty favourite for dessert tables, gift boxes, and party favors.",
     details:
-      "Standard designs start at $36/dozen. Custom designs (themed colours, drizzles, sprinkles) from $42–$54/dozen. Available with milk or white chocolate. Best consumed within 2 weeks.",
+      "Base price includes chocolate dipped finish with simple drizzle or sprinkles. Semi Custom (extra colors, themed color palettes, marbling, decorative topping combinations) available for +$6–$8/dozen. Full Custom (detailed decorative styling, textured finishes, caramel wrapping, premium topping combinations, multiple design styles) available for +$10–$18/dozen. Note: Pretzel rods may have higher custom fees due to shape, coating difficulty, and hand-detail work.",
     variants: [
-      { label: "Standard (1 Dozen)", price: 36, image: "/images/caramel-pretzel/1.jpg" },
-      { label: "Custom (1 Dozen)", price: 42, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "1 Dozen (Base Design)", price: 36, image: "/images/caramel-pretzel/1.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (extra colors, marbling, themed palettes)", price: "+$6–$8/dozen" },
+      { label: "Full Custom Design (detailed styling, mixed designs, premium toppings)", price: "+$10–$18/dozen" },
     ],
     image: "/images/caramel-pretzel/1.jpg",
   },
@@ -335,12 +359,15 @@ export const products: Product[] = [
     name: "Rice Krispies (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
-      "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
+      "Soft and chewy rice krispy treats dipped in chocolate and decorated by hand for dessert tables, party favors, and themed events.",
     details:
-      "Standard designs start at $30/dozen. Custom designs (themed shapes, colours, toppings) from $36–$48/dozen. Hand-shaped and dipped. Best consumed within 1 week.",
+      "Base price includes chocolate dipped finish with simple drizzle or sprinkles. Semi Custom (additional colors, marbling, two-tone finishes, simple theme-based styling) available for +$5–$7/dozen. Full Custom (detailed decorative styling, layered elements, decorative toppers, multiple mixed designs) available for +$10–$15/dozen. Complex themes and mixed design assortments may require Full Custom pricing.",
     variants: [
-      { label: "Standard (1 Dozen)", price: 30, image: "/images/rice-krispies/1.jpg" },
-      { label: "Custom (1 Dozen)", price: 36, image: "/images/rice-krispies/1.jpg" },
+      { label: "1 Dozen (Base Design)", price: 30, image: "/images/rice-krispies/1.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (extra colors, marbling, themed styling)", price: "+$5–$7/dozen" },
+      { label: "Full Custom Design (detailed styling, layered elements, mixed designs)", price: "+$10–$15/dozen" },
     ],
     image: "/images/rice-krispies/1.jpg",
   },
@@ -561,11 +588,15 @@ export const products: Product[] = [
     name: "Butter Cookies (1 Dozen)",
     category: "Chocolate Covered Treats",
     description:
-      "Traditional butter cookies baked from scratch with real butter. Melt-in-your-mouth delicious and perfect with a cup of tea.",
+      "Scratch-made butter cookies with a smooth chocolate dip and elegant finishing details. A simple but elevated treat for gifting, dessert boxes, and celebrations.",
     details:
-      "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
+      "Base price includes a half chocolate dipped finish with simple sprinkles or drizzle. Semi Custom (color variations, marbling, two-tone chocolate work, themed finishing touches) available for +$4–$6/dozen. Full Custom (detailed decorative styling, seasonal themes, mixed design sets, refined custom finishing) available for +$8–$12/dozen. Best consumed within 1 week.",
     variants: [
       { label: "1 Dozen", price: 24, image: "/images/butter-cookies/4.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (color variations, marbling, two-tone chocolate)", price: "+$4–$6/dozen" },
+      { label: "Full Custom Design (detailed styling, seasonal themes, mixed designs)", price: "+$8–$12/dozen" },
     ],
     image: "/images/butter-cookies/4.jpg",
   },
