@@ -17,6 +17,28 @@ export default function ContactPage() {
         <h1 className="font-serif text-4xl font-bold">Contact Us</h1>
       </div>
 
+      {/* Delivery Info */}
+      <div className="bg-card-bg rounded-lg p-6 mb-8 border border-accent/15">
+        <h2 className="font-serif text-xl font-bold text-heading mb-4">Delivery Information</h2>
+        <div className="space-y-3 text-sm text-foreground/70">
+          <div className="flex items-start gap-3">
+            <span className="text-accent font-bold mt-0.5">📍</span>
+            <div>
+              <p className="font-semibold text-heading">San Jose</p>
+              <p>Free delivery or $5 depending on location</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="text-accent font-bold mt-0.5">🚗</span>
+            <div>
+              <p className="font-semibold text-heading">Nearby Cities</p>
+              <p>$10–$20 depending on distance</p>
+            </div>
+          </div>
+          <p className="text-xs text-foreground/50 pt-1">For delivery outside these areas, please contact us for a custom quote.</p>
+        </div>
+      </div>
+
       {submitted ? (
         <div className="bg-card-bg rounded-lg p-8 text-center">
           <div className="text-5xl mb-4">💌</div>

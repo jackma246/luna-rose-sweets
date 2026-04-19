@@ -19,35 +19,35 @@ export const products: Product[] = [
   // ── Party Sets ──────────────────────────────────────────
   {
     slug: "small-party-set",
-    name: "Small Party Set (4 Dozen)",
+    name: "Small Party Set (3 Dozen)",
     category: "Party Sets",
     description:
-      "Our Small Party Set is ideal for intimate gatherings and smaller celebrations. A beautifully curated selection of chocolate dipped treats your guests will love.",
+      "Our Small Party Set is ideal for intimate gatherings and smaller celebrations. Includes 1 Dozen Cake Pops, 1 Dozen Choco Cookies, and 1 Dozen Caramel Pretzel Rods.",
     details:
       "The Small Party Set can be customised to your theme and colour scheme. Please allow 3-5 days notice for party set orders.",
-    variants: [{ label: "Small Party Set (2 Dozen)", price: 65, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    variants: [{ label: "Small Party Set (3 Dozen)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/brand-spread.jpg",
   },
   {
     slug: "medium-party-set",
-    name: "Medium Party Set (8 Dozen)",
+    name: "Medium Party Set (4 Dozen)",
     category: "Party Sets",
     description:
-      "Our Medium Party Set is perfect for celebrations! This set includes 4 dozen beautifully crafted treats — a mix of chocolate dipped favourites to wow your guests.",
+      "Our Medium Party Set is perfect for celebrations! Includes 1 Dozen Cake Pops, 1 Dozen Choco Cookies, 1 Dozen Caramel Pretzel Rods, and 1 Dozen Rice Krispies.",
     details:
-      "The Party Set can be customised to your theme and colour scheme. Choose from a selection of our most popular treats including cake pops, cakesicles, strawberries, and more. Please allow 3-5 days notice for party set orders.",
-    variants: [{ label: "4 Dozen Assorted Treats", price: 120, image: "/images/brand-spread.jpg" }],
+      "The Party Set can be customised to your theme and colour scheme. Please allow 3-5 days notice for party set orders.",
+    variants: [{ label: "Medium Party Set (4 Dozen)", price: 185, image: "/images/brand-spread.jpg" }],
     image: "/images/treat-boxes/mixed-treats.jpg",
   },
   {
     slug: "large-party-set",
-    name: "Large Party Set (12 Dozen)",
+    name: "Large Party Set (8 Dozen)",
     category: "Party Sets",
     description:
-      "Our Large Party Set is the ultimate spread for big celebrations. Packed with a generous assortment of our finest chocolate dipped treats to impress a crowd.",
+      "Our Large Party Set is the ultimate spread for big celebrations. Includes 2 Dozen Cake Pops, 2 Dozen Choco Cookies, 2 Dozen Caramel Pretzel Rods, and 2 Dozen Rice Krispies.",
     details:
       "The Large Party Set can be fully customised to your theme and colour scheme. Ideal for weddings, corporate events, and large parties. Please allow 5-7 days notice.",
-    variants: [{ label: "Large Party Set (6 Dozen)", price: 170, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    variants: [{ label: "Large Party Set (8 Dozen)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/brand-spread.jpg",
   },
   {
@@ -348,8 +348,11 @@ export const products: Product[] = [
     description:
       "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
     details:
-      "They come in a variety of designs and toppings, all of which can be customised to your liking, theme or party. Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped for an extra charge.",
-    variants: [{ label: "1 Dozen", price: 36, image: "/images/cake-pops/basic.jpg" }],
+      "Standard designs start at $42/dozen. Custom designs (themed colours, toppers, shapes) from $45–$54/dozen. Available in regular, flat, and ice cream cone shapes. Can be individually wrapped for an extra charge.",
+    variants: [
+      { label: "Standard (1 Dozen)", price: 42, image: "/images/cake-pops/basic.jpg" },
+      { label: "Custom (1 Dozen)", price: 45, image: "/images/cake-pops/basic.jpg" },
+    ],
     image: "/images/cake-pops/basic.jpg",
   },
   {
@@ -373,8 +376,11 @@ export const products: Product[] = [
     description:
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
     details:
-      "Each cookie is generously sized and hand-dipped. Available with milk, white, or dark chocolate coating. Can be customised with toppings and colours to match your theme.",
-    variants: [{ label: "1 Dozen", price: 48, image: "/images/choco-cookies/1.jpg" }],
+      "Standard designs start at $30/dozen. Custom designs (themed colours, toppings, drizzles) from $36–$45/dozen. Available with milk, white, or dark chocolate coating.",
+    variants: [
+      { label: "Standard (1 Dozen)", price: 30, image: "/images/choco-cookies/1.jpg" },
+      { label: "Custom (1 Dozen)", price: 36, image: "/images/choco-cookies/1.jpg" },
+    ],
     image: "/images/choco-cookies/1.jpg",
   },
   {
@@ -384,8 +390,11 @@ export const products: Product[] = [
     description:
       "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
     details:
-      "Each pretzel rod is hand-dipped and decorated. Available with milk or white chocolate. Can be customised with colours, drizzles, and sprinkles. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen", price: 35, image: "/images/caramel-pretzel/1.jpg" }],
+      "Standard designs start at $24/dozen. Custom designs (themed colours, drizzles, sprinkles) from $30–$36/dozen. Available with milk or white chocolate. Best consumed within 2 weeks.",
+    variants: [
+      { label: "Standard (1 Dozen)", price: 24, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "Custom (1 Dozen)", price: 30, image: "/images/caramel-pretzel/1.jpg" },
+    ],
     image: "/images/caramel-pretzel/1.jpg",
   },
   {
@@ -395,8 +404,11 @@ export const products: Product[] = [
     description:
       "Our crispy rice treats dipped in smooth Belgian chocolate and decorated with colourful toppings. A fun and delicious treat for all ages.",
     details:
-      "Each rice krispie treat is hand-shaped and dipped. Available in a variety of shapes and designs. Can be themed to match any event. Best consumed within 1 week.",
-    variants: [{ label: "1 Dozen", price: 45, image: "/images/rice-krispies/1.jpg" }],
+      "Standard designs start at $30/dozen. Custom designs (themed shapes, colours, toppings) from $36–$48/dozen. Hand-shaped and dipped. Best consumed within 1 week.",
+    variants: [
+      { label: "Standard (1 Dozen)", price: 30, image: "/images/rice-krispies/1.jpg" },
+      { label: "Custom (1 Dozen)", price: 36, image: "/images/rice-krispies/1.jpg" },
+    ],
     image: "/images/rice-krispies/1.jpg",
   },
   {
