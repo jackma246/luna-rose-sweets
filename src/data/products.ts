@@ -473,8 +473,7 @@ export const products: Product[] = [
     details:
       "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
     variants: [
-      { label: "Box of 6", price: 12, image: "/images/butter-cookies/4.jpg" },
-      { label: "Box of 12", price: 22, image: "/images/butter-cookies/5.jpg" },
+      { label: "1 Dozen", price: 24, image: "/images/butter-cookies/4.jpg" },
     ],
     image: "/images/butter-cookies/4.jpg",
   },
@@ -566,8 +565,7 @@ export const products: Product[] = [
     details:
       "Made with premium butter and vanilla. Available plain, dipped, or decorated. Can be customised with shapes and colours. Best consumed within 1 week.",
     variants: [
-      { label: "Box of 6", price: 12, image: "/images/butter-cookies/4.jpg" },
-      { label: "Box of 12", price: 22, image: "/images/butter-cookies/5.jpg" },
+      { label: "1 Dozen", price: 24, image: "/images/butter-cookies/4.jpg" },
     ],
     image: "/images/butter-cookies/4.jpg",
   },
