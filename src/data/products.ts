@@ -67,8 +67,8 @@ export const products: Product[] = [
     details:
       "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
     variants: [
-      { label: "Basic Design 6\"", price: 85, image: "/images/cake/7.jpg" },
-      { label: "Basic Design 8\"", price: 125, image: "/images/cake/8.jpg" },
+      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
+      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
     ],
     addons: [
       { label: "Extra Cream Decoration", price: "+$10–$25" },
@@ -312,8 +312,8 @@ export const products: Product[] = [
     details:
       "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
     variants: [
-      { label: "Basic Design 6\"", price: 85, image: "/images/cake/7.jpg" },
-      { label: "Basic Design 8\"", price: 125, image: "/images/cake/8.jpg" },
+      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
+      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
     ],
     addons: [
       { label: "Extra Cream Decoration", price: "+$10–$25" },
@@ -504,8 +504,8 @@ export const products: Product[] = [
     details:
       "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
     variants: [
-      { label: "Basic Design 6\"", price: 85, image: "/images/cake/7.jpg" },
-      { label: "Basic Design 8\"", price: 125, image: "/images/cake/8.jpg" },
+      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
+      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
     ],
     addons: [
       { label: "Extra Cream Decoration", price: "+$10–$25" },
