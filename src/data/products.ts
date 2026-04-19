@@ -294,10 +294,10 @@ export const products: Product[] = [
     description:
       "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
     details:
-      "Choose from 6 flavours. Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
+      "Choose from 6 flavours. Standard designs from $34/dozen. Custom designs (themed colours, toppings, drizzles) from $38–$42/dozen. Each madeleine is hand-dipped and decorated. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Box of 6", price: 15, image: "/images/madeleines/1.jpg" },
-      { label: "Box of 12", price: 28, image: "/images/madeleines/2.jpg" },
+      { label: "Standard (1 Dozen)", price: 34, image: "/images/madeleines/1.jpg" },
+      { label: "Custom (1 Dozen)", price: 38, image: "/images/madeleines/2.jpg" },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/1.jpg",
@@ -323,10 +323,10 @@ export const products: Product[] = [
     description:
       "Crunchy pretzel rods coated in buttery caramel, then dipped in premium chocolate and finished with decorative toppings. The perfect sweet and salty treat.",
     details:
-      "Standard designs start at $24/dozen. Custom designs (themed colours, drizzles, sprinkles) from $30–$36/dozen. Available with milk or white chocolate. Best consumed within 2 weeks.",
+      "Standard designs start at $36/dozen. Custom designs (themed colours, drizzles, sprinkles) from $42–$54/dozen. Available with milk or white chocolate. Best consumed within 2 weeks.",
     variants: [
-      { label: "Standard (1 Dozen)", price: 24, image: "/images/caramel-pretzel/1.jpg" },
-      { label: "Custom (1 Dozen)", price: 30, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "Standard (1 Dozen)", price: 36, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "Custom (1 Dozen)", price: 42, image: "/images/caramel-pretzel/1.jpg" },
     ],
     image: "/images/caramel-pretzel/1.jpg",
   },
@@ -456,10 +456,10 @@ export const products: Product[] = [
     description:
       "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
     details:
-      "Choose from 6 flavours. Each madeleine is hand-dipped and decorated. Available in a variety of colours and toppings to suit any theme. Best consumed within 5 days of collection.",
+      "Choose from 6 flavours. Standard designs from $34/dozen. Custom designs (themed colours, toppings, drizzles) from $38–$42/dozen. Each madeleine is hand-dipped and decorated. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Box of 6", price: 15, image: "/images/madeleines/1.jpg" },
-      { label: "Box of 12", price: 28, image: "/images/madeleines/2.jpg" },
+      { label: "Standard (1 Dozen)", price: 34, image: "/images/madeleines/1.jpg" },
+      { label: "Custom (1 Dozen)", price: 38, image: "/images/madeleines/2.jpg" },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/1.jpg",
