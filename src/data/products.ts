@@ -135,17 +135,6 @@ export const products: Product[] = [
     image: "/images/brand-spread.jpg",
   },
   {
-    slug: "party-cake-tray",
-    name: "Cake Tray",
-    category: "Party Sets",
-    description:
-      "A small tray of assorted mini cakes and treats, beautifully wrapped as a favour. A generous and impressive gift for guests.",
-    details:
-      "Each tray includes a selection of mini treats. Can be themed and personalised to match your event. Perfect for weddings, corporate events, and celebrations.",
-    variants: [{ label: "Per Cake Tray", price: 8, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/treat-boxes/mixed-treats.jpg",
-  },
-  {
     slug: "party-mini-cookies-box",
     name: "Mini Cookies Box",
     category: "Party Sets",
@@ -542,17 +531,6 @@ export const products: Product[] = [
       "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
     variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/brand-spread.jpg",
-  },
-  {
-    slug: "cake-tray",
-    name: "Cake Tray",
-    category: "Favours",
-    description:
-      "A small tray of assorted mini cakes and treats, beautifully wrapped as a favour. A generous and impressive gift for guests.",
-    details:
-      "Each tray includes a selection of mini treats. Can be themed and personalised to match your event. Perfect for weddings, corporate events, and celebrations.",
-    variants: [{ label: "Per Cake Tray", price: 8, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/treat-boxes/mixed-treats.jpg",
   },
   {
     slug: "mini-cookies-box",
