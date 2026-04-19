@@ -1692,9 +1692,28 @@
   }
 
   @media (max-width: 560px) {
-    /* single-column testimonials on mobile so they stay readable */
-    .quote-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
-    .quote { padding: 24px 22px; }
+    /* testimonials: swipeable scroll-snap carousel — one quote at a time */
+    .testimonials { padding: 48px 0; }
+    .testimonials-inner > .section-head { padding: 0 18px; }
+    .quote-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 82%;
+      grid-template-columns: none;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-left: 18px;
+      padding: 4px 18px;
+      margin: 32px 0 0;
+      scrollbar-width: none;
+    }
+    .quote-grid::-webkit-scrollbar { display: none; }
+    .quote {
+      scroll-snap-align: start;
+      padding: 26px 24px;
+    }
     .quote p { font-size: 16px; margin-bottom: 18px; }
     .quote .q-mark { font-size: 60px; top: 16px; right: 18px; }
 
@@ -1767,12 +1786,36 @@
     .shop-all-wrap { margin-top: 36px; }
     .btn { padding: 15px 24px; font-size: 11.5px; letter-spacing: 0.18em; }
 
-    .feature { padding: 48px 18px; }
-    .feature h2 { font-size: 32px; }
-    .feature p { font-size: 16px; }
-    .feature-inner { gap: 24px; }
-
-    .testimonials { padding: 48px 18px; }
+    /* Our Story feature — full-bleed photo above, text below (like a magazine spread) */
+    .feature { padding: 0 0 48px; }
+    .feature-inner { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .feature-inner > div:first-child {
+      order: 2;
+      padding: 32px 18px 0;
+    }
+    .feature .visual {
+      order: 1;
+      aspect-ratio: 4 / 3;
+      border-radius: 0;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      position: relative;
+    }
+    .feature .visual::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 72px;
+      background: linear-gradient(180deg, transparent, var(--cocoa-deep));
+      pointer-events: none;
+    }
+    .feature .kicker { margin-bottom: 12px; }
+    .feature h2 { font-size: 32px; line-height: 1.02; margin-bottom: 18px; }
+    .feature p { font-size: 16px; margin-bottom: 14px; }
+    .feature .btn { margin-top: 12px; }
 
     .insta { padding: 48px 0; }
     .insta-inner > .section-head { padding: 0 18px; }
@@ -1794,12 +1837,22 @@
     .insta-grid::-webkit-scrollbar { display: none; }
     .insta-tile { scroll-snap-align: start; }
 
-    .newsletter { padding: 52px 18px; }
+    .newsletter { padding: 52px 18px 56px; }
     .newsletter h2 { font-size: 28px; }
-    .newsletter p { font-size: 15px; }
+    .newsletter p { font-size: 15px; margin-bottom: 24px; }
     .newsletter .form { flex-direction: column; padding: 10px; border-radius: 16px; }
     .newsletter .form input { text-align: center; padding: 10px; }
     .newsletter .btn-primary { width: 100%; justify-content: center; }
+    /* handwritten kiss-off below the form */
+    .newsletter-inner::after {
+      content: "~ xo, the studio";
+      display: block;
+      margin-top: 22px;
+      font-family: var(--font-caveat), "Caveat", cursive;
+      font-size: 22px;
+      color: var(--cherry);
+      transform: rotate(-3deg);
+    }
 
     .footer { padding: 32px 18px 24px; }
     .footer-top {
