@@ -238,11 +238,15 @@ export const products: Product[] = [
     category: "Gift",
     subtitle: "6 Flavours",
     description:
-      "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in 6 flavours and decorated to your theme.",
+      "Scratch-made cupcakes finished with buttercream and decorative details, designed for celebrations, dessert tables, gifting, and themed events.",
     details:
-      "Choose from 6 flavours. Custom toppers and themed decorations available. Baked fresh to order. Best consumed within 3 days.",
+      "Choose from 6 flavours. Base price includes up to 2 colors with a simple buttercream finish and minimal decorative accents. Semi Custom (3-4 colors, themed color palettes, textured piping, floral-inspired styling) available for +$6–$10/dozen. Full Custom (hand-piped floral work, detailed buttercream textures, mixed decorative styles) available for +$12–$24/dozen. Baked fresh to order. Best consumed within 3 days.",
     variants: [
       { label: "1 Dozen (12 pcs)", price: 48, image: "/images/cupcakes/2.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, textured piping, floral-inspired styling)", price: "+$6–$10/dozen" },
+      { label: "Full Custom Design (hand-piped florals, detailed buttercream, mixed designs)", price: "+$12–$24/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cupcakes/2.jpg",
@@ -265,25 +269,36 @@ export const products: Product[] = [
     slug: "cakesicles",
     name: "Cakesicles (1 Dozen)",
     category: "Chocolate Covered Treats",
+    subtitle: "6 Flavours",
     description:
-      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
+      "Scratch-made cakesicles with a smooth chocolate shell and elegant decorative details. Perfect for dessert tables, gift boxes, party favors, and themed events.",
     details:
-      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
-    variants: [{ label: "1 Dozen", price: 54, image: "/images/cakesicles/1.jpg" }],
+      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$6–$10/dozen. Full Custom (names, initials, logo-inspired details, hand-piped details, multiple mixed designs) available for +$12–$20/dozen. Best consumed within 2 weeks.",
+    variants: [{ label: "1 Dozen (Base Design)", price: 54, image: "/images/cakesicles/1.jpg" }],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$6–$10/dozen" },
+      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$12–$20/dozen" },
+    ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cakesicles/5.png",
   },
   {
     slug: "cakepops",
     name: "Cakepops (1 Dozen)",
     category: "Chocolate Covered Treats",
+    subtitle: "6 Flavours",
     description:
-      "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
+      "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
     details:
-      "Standard designs start at $42/dozen. Custom designs (themed colours, toppers, shapes) from $45–$54/dozen. Available in regular, flat, and ice cream cone shapes. Can be individually wrapped for an extra charge.",
+      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
     variants: [
-      { label: "Standard (1 Dozen)", price: 42, image: "/images/cake-pops/basic.jpg" },
-      { label: "Custom (1 Dozen)", price: 45, image: "/images/cake-pops/basic.jpg" },
+      { label: "1 Dozen (Base Design)", price: 42, image: "/images/cake-pops/basic.jpg" },
     ],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
+      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
+    ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cake-pops/basic.jpg",
   },
   {
@@ -292,12 +307,15 @@ export const products: Product[] = [
     category: "Chocolate Covered Treats",
     subtitle: "6 Flavours",
     description:
-      "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
+      "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
-      "Choose from 6 flavours. Standard designs from $34/dozen. Custom designs (themed colours, toppings, drizzles) from $38–$42/dozen. Each madeleine is hand-dipped and decorated. Best consumed within 5 days of collection.",
+      "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
-      { label: "Standard (1 Dozen)", price: 34, image: "/images/madeleines/1.jpg" },
-      { label: "Custom (1 Dozen)", price: 38, image: "/images/madeleines/2.jpg" },
+      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/1.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
+      { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/1.jpg",
@@ -406,12 +424,16 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "6 Flavours",
     description:
-      "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in 6 flavours and decorated to your theme.",
+      "Scratch-made cupcakes finished with buttercream and decorative details, designed for celebrations, dessert tables, gifting, and themed events.",
     details:
-      "Choose from 6 flavours. Custom toppers and themed decorations available. Baked fresh to order. Best consumed within 3 days.",
+      "Choose from 6 flavours. Base price includes up to 2 colors with a simple buttercream finish and minimal decorative accents. Semi Custom (3-4 colors, themed color palettes, textured piping, floral-inspired styling) available for +$6–$10/dozen. Full Custom (hand-piped floral work, detailed buttercream textures, mixed decorative styles) available for +$12–$24/dozen. Baked fresh to order. Best consumed within 3 days.",
     variants: [
       { label: "1/2 Dozen (6 pcs)", price: 28, image: "/images/cupcakes/2.jpg" },
       { label: "1 Dozen (12 pcs)", price: 48, image: "/images/cupcakes/2.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, textured piping, floral-inspired styling)", price: "+$6–$10/dozen" },
+      { label: "Full Custom Design (hand-piped florals, detailed buttercream, mixed designs)", price: "+$12–$24/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cupcakes/2.jpg",
@@ -481,12 +503,15 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "6 Flavours",
     description:
-      "Freshly baked madeleines dipped in our premium Belgian chocolate and finished with beautiful toppings. A classic French treat with our signature twist.",
+      "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
-      "Choose from 6 flavours. Standard designs from $34/dozen. Custom designs (themed colours, toppings, drizzles) from $38–$42/dozen. Each madeleine is hand-dipped and decorated. Best consumed within 5 days of collection.",
+      "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
-      { label: "Standard (1 Dozen)", price: 34, image: "/images/madeleines/1.jpg" },
-      { label: "Custom (1 Dozen)", price: 38, image: "/images/madeleines/2.jpg" },
+      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/1.jpg" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
+      { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/1.jpg",
@@ -519,22 +544,34 @@ export const products: Product[] = [
     slug: "bakes-cakesicles",
     name: "Cakesicles (1 Dozen)",
     category: "Bakes",
+    subtitle: "6 Flavours",
     description:
-      "Our best-selling Cakesicles consist of a freshly baked cake coated in our premium Belgian chocolate. These are also available in a variety of designs and toppings, all of which can be customised to your liking, theme or party.",
+      "Scratch-made cakesicles with a smooth chocolate shell and elegant decorative details. Perfect for dessert tables, gift boxes, party favors, and themed events.",
     details:
-      "They are available in the flavours Vanilla and Chocolate Fudge. Cakesicles are available in regular and heart shape. We can make personalised edible toppers for your cakesicles. Cakesicles are best to consume within 2 weeks of collection/delivery.",
-    variants: [{ label: "1 Dozen", price: 54, image: "/images/cakesicles/1.jpg" }],
+      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$6–$10/dozen. Full Custom (names, initials, logo-inspired details, hand-piped details, multiple mixed designs) available for +$12–$20/dozen. Best consumed within 2 weeks.",
+    variants: [{ label: "1 Dozen (Base Design)", price: 54, image: "/images/cakesicles/1.jpg" }],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$6–$10/dozen" },
+      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$12–$20/dozen" },
+    ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cakesicles/5.png",
   },
   {
     slug: "bakes-cake-pops",
     name: "Cake Pops (1 Dozen)",
     category: "Bakes",
+    subtitle: "6 Flavours",
     description:
-      "Our cute Cake Pops are composed of a deliciously fresh baked cake dipped in our premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours.",
+      "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
     details:
-      "They come in a variety of designs and toppings, all of which can be customised to your liking, theme or party. Available in regular, flat, and ice cream cone shapes. Minimum order of 6. Can be individually wrapped for an extra charge.",
-    variants: [{ label: "1 Dozen", price: 36, image: "/images/cake-pops/basic.jpg" }],
+      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
+    variants: [{ label: "1 Dozen (Base Design)", price: 42, image: "/images/cake-pops/basic.jpg" }],
+    addons: [
+      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
+      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
+    ],
+    flavours: CAKE_FLAVOURS,
     image: "/images/cake-pops/basic.jpg",
   },
 
