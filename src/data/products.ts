@@ -4,6 +4,11 @@ export interface ProductVariant {
   image?: string;
 }
 
+export interface ProductAddon {
+  label: string;
+  price: string;
+}
+
 export interface Product {
   slug: string;
   name: string;
@@ -12,6 +17,7 @@ export interface Product {
   description: string;
   details?: string;
   variants: ProductVariant[];
+  addons?: ProductAddon[];
   enquireOnly?: boolean;
   image?: string;
 }
@@ -52,28 +58,24 @@ export const products: Product[] = [
     image: "/images/brand-spread.jpg",
   },
   {
-    slug: "party-cake-6",
-    name: "Cake (6\")",
+    slug: "party-layer-cake",
+    name: "3-Layer Custom Cake (6\"/8\")",
     category: "Party Sets",
+    subtitle: "100% Real Buttercream",
     description:
-      "A beautifully baked 6 inch cake, perfect for intimate celebrations. Baked from scratch and finished with smooth icing and decorations of your choice.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 6-8 people. Can be personalised with colours, themes, and a message. Please allow at least 5 days notice.",
-    variants: [],
-    enquireOnly: true,
+      "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
+    variants: [
+      { label: "Basic Design 6\"", price: 85, image: "/images/cake/7.jpg" },
+      { label: "Basic Design 8\"", price: 125, image: "/images/cake/8.jpg" },
+    ],
+    addons: [
+      { label: "Extra Cream Decoration", price: "+$10–$25" },
+      { label: "Color Customization", price: "+$10" },
+      { label: "Lettering", price: "+$5–$10" },
+    ],
     image: "/images/cake/7.jpg",
-  },
-  {
-    slug: "party-cake-8",
-    name: "Cake (8\")",
-    category: "Party Sets",
-    description:
-      "A stunning 8 inch cake, ideal for birthdays and celebrations. Baked fresh to order with your choice of flavour and design.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 10-12 people. Fully customisable with themed decorations and a personalised message. Please allow at least 5 days notice.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/cake/8.jpg",
   },
   {
     slug: "party-two-tier-cake",
@@ -294,28 +296,24 @@ export const products: Product[] = [
     image: "/images/cake/5.jpg",
   },
   {
-    slug: "gift-cake-6",
-    name: "Cake (6\")",
+    slug: "gift-layer-cake",
+    name: "3-Layer Custom Cake (6\"/8\")",
     category: "Gift",
+    subtitle: "100% Real Buttercream",
     description:
-      "A beautifully baked 6 inch cake, perfect for intimate celebrations. Baked from scratch and finished with smooth icing and decorations of your choice.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 6-8 people. Can be personalised with colours, themes, and a message. Please allow at least 5 days notice.",
-    variants: [],
-    enquireOnly: true,
+      "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
+    variants: [
+      { label: "Basic Design 6\"", price: 85, image: "/images/cake/7.jpg" },
+      { label: "Basic Design 8\"", price: 125, image: "/images/cake/8.jpg" },
+    ],
+    addons: [
+      { label: "Extra Cream Decoration", price: "+$10–$25" },
+      { label: "Color Customization", price: "+$10" },
+      { label: "Lettering", price: "+$5–$10" },
+    ],
     image: "/images/cake/7.jpg",
-  },
-  {
-    slug: "gift-cake-8",
-    name: "Cake (8\")",
-    category: "Gift",
-    description:
-      "A stunning 8 inch cake, ideal for birthdays and celebrations. Baked fresh to order with your choice of flavour and design.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 10-12 people. Fully customisable with themed decorations and a personalised message. Please allow at least 5 days notice.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/cake/8.jpg",
   },
   {
     slug: "luxury-chocolate-dates",
@@ -486,28 +484,24 @@ export const products: Product[] = [
     image: "/images/cake/9.jpg",
   },
   {
-    slug: "bakes-cake-6",
-    name: "Cake (6\")",
+    slug: "bakes-layer-cake",
+    name: "3-Layer Custom Cake (6\"/8\")",
     category: "Bakes",
+    subtitle: "100% Real Buttercream",
     description:
-      "A beautifully baked 6 inch cake, perfect for intimate celebrations. Baked from scratch and finished with smooth icing and decorations of your choice.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 6-8 people. Can be personalised with colours, themes, and a message. Please allow at least 5 days notice.",
-    variants: [],
-    enquireOnly: true,
+      "Available in Vanilla, Chocolate, and Red Velvet. 6\" serves approx. 6-8 people, 8\" serves approx. 10-12 people. Please allow at least 5 days notice.",
+    variants: [
+      { label: "Basic Design 6\"", price: 85, image: "/images/cake/7.jpg" },
+      { label: "Basic Design 8\"", price: 125, image: "/images/cake/8.jpg" },
+    ],
+    addons: [
+      { label: "Extra Cream Decoration", price: "+$10–$25" },
+      { label: "Color Customization", price: "+$10" },
+      { label: "Lettering", price: "+$5–$10" },
+    ],
     image: "/images/cake/7.jpg",
-  },
-  {
-    slug: "bakes-cake-8",
-    name: "Cake (8\")",
-    category: "Bakes",
-    description:
-      "A stunning 8 inch cake, ideal for birthdays and celebrations. Baked fresh to order with your choice of flavour and design.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Serves approximately 10-12 people. Fully customisable with themed decorations and a personalised message. Please allow at least 5 days notice.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/cake/8.jpg",
   },
   {
     slug: "bakes-two-tier-cake",

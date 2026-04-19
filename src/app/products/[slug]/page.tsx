@@ -135,6 +135,22 @@ export default function ProductDetailPage() {
             </div>
           )}
 
+          {/* Pricing Add-ons */}
+          {p.addons && p.addons.length > 0 && (
+            <div className="mb-6 p-4 rounded-xl bg-accent/8 border border-accent/20">
+              <p className="text-xs font-semibold text-heading uppercase tracking-wider mb-3">Customization Add-ons</p>
+              <ul className="space-y-1.5">
+                {p.addons.map((addon, i) => (
+                  <li key={i} className="flex justify-between text-sm">
+                    <span className="text-foreground/70">{addon.label}</span>
+                    <span className="font-medium text-heading">{addon.price}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-xs text-foreground/45 mt-3">Add-on pricing applied at checkout. Contact us to discuss your design.</p>
+            </div>
+          )}
+
           {/* Options / Variants */}
           {p.enquireOnly ? (
             <Link
