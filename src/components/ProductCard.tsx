@@ -33,6 +33,9 @@ export default function ProductCard({ product }: { product: Product }) {
           <h3 className="font-serif text-chocolate text-base font-bold">
             {product.name}
           </h3>
+          {product.subtitle && (
+            <p className="text-chocolate/40 text-xs mt-0.5">{product.subtitle}</p>
+          )}
           {startingPrice !== null ? (
             <p className="text-chocolate/50 mt-1 text-sm">
               {product.variants.length > 1 ? "From " : ""}${startingPrice.toFixed(2)}

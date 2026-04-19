@@ -8,6 +8,7 @@ export interface Product {
   slug: string;
   name: string;
   category: string;
+  subtitle?: string;
   description: string;
   details?: string;
   variants: ProductVariant[];
@@ -425,14 +426,20 @@ export const products: Product[] = [
   // ── Bakes ───────────────────────────────────────────────
   {
     slug: "muffins",
-    name: "Muffins (1 Dozen)",
+    name: "Bakery-Style Tall Muffins (1 Dozen)",
     category: "Bakes",
+    subtitle: "Blueberry · Chocolate Chip · Banana",
     description:
-      "Freshly baked muffins in a variety of classic flavours. Soft, moist, and perfect for breakfast, brunch, or a sweet snack.",
+      "Bakery-style tall muffins baked from scratch with a generous crumb topping. Available in Blueberry, Chocolate Chip, and Banana. Soft, moist, and perfectly domed.",
     details:
-      "Available in Blueberry, Chocolate Chip, Banana Walnut, and Lemon Poppy Seed. Baked from scratch using premium ingredients. Best consumed within 3 days.",
-    variants: [{ label: "1 Dozen", price: 26, image: "/images/tray-bakes/7.jpg" }],
-    image: "/images/tray-bakes/7.jpg",
+      "Crumb topping included. Available in Blueberry, Chocolate Chip, and Banana. Baked fresh to order. Best consumed within 3 days. Optional: Chocolate Hazelnut (Nutella®) filling for an extra indulgent treat.",
+    variants: [
+      { label: "Blueberry (1 Dozen)", price: 45, image: "/images/muffins/1.jpg" },
+      { label: "Chocolate Chip (1 Dozen)", price: 45, image: "/images/muffins/1.jpg" },
+      { label: "Banana (1 Dozen)", price: 45, image: "/images/muffins/1.jpg" },
+      { label: "Chocolate Hazelnut (Nutella®) Filling (1 Dozen)", price: 50, image: "/images/muffins/1.jpg" },
+    ],
+    image: "/images/muffins/1.jpg",
   },
   {
     slug: "bakes-cupcakes",
