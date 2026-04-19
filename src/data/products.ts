@@ -108,15 +108,19 @@ export const products: Product[] = [
     slug: "party-tray-bakes",
     name: "Tray Bakes",
     category: "Party Sets",
+    subtitle: "100% Real Buttercream · 2 Sizes",
     description:
-      "Our classic Tray Bakes are freshly baked vanilla sponges which we serve up to 12 large slices.",
+      "Made with 100% real European buttercream, our Tray Bakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design and colour.",
     details:
-      "Please note that all sponges are vanilla flavoured. Tray Bakes are best to consume within 5 days of collection/delivery. Tray Bakes are not available for postage.",
+      "Made with 100% real European buttercream — rich, smooth, and never artificial. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Old School Vanilla Sponge & Icing Cake", price: 19, image: "/images/tray-bakes/1.jpg" },
-      { label: "Old School Raspberry & Coconut", price: 19, image: "/images/tray-bakes/2.jpg" },
-      { label: "Old School Caramel & Chocolate", price: 19, image: "/images/tray-bakes/3.jpg" },
-      { label: "Mixed box of 2 flavours", price: 21, image: "/images/tray-bakes/4.jpg" },
+      { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/1.jpg" },
+      { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/1.jpg" },
+    ],
+    addons: [
+      { label: "Extra Buttercream Decoration", price: "+$10–$25" },
+      { label: "Lettering", price: "+$10" },
+      { label: "Color Customization", price: "+$10" },
     ],
     image: "/images/tray-bakes/1.jpg",
   },
@@ -460,15 +464,19 @@ export const products: Product[] = [
     slug: "tray-bakes",
     name: "Tray Bakes",
     category: "Bakes",
+    subtitle: "100% Real Buttercream · 2 Sizes",
     description:
-      "Our classic Tray Bakes are freshly baked vanilla sponges which we serve up to 12 large slices.",
+      "Made with 100% real European buttercream, our Tray Bakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design and colour.",
     details:
-      "Please note that all sponges are vanilla flavoured. Tray Bakes are best to consume within 5 days of collection/delivery. Tray Bakes are not available for postage.",
+      "Made with 100% real European buttercream — rich, smooth, and never artificial. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Old School Vanilla Sponge & Icing Cake", price: 19, image: "/images/tray-bakes/1.jpg" },
-      { label: "Old School Raspberry & Coconut", price: 19, image: "/images/tray-bakes/2.jpg" },
-      { label: "Old School Caramel & Chocolate", price: 19, image: "/images/tray-bakes/3.jpg" },
-      { label: "Mixed box of 2 flavours", price: 21, image: "/images/tray-bakes/4.jpg" },
+      { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/1.jpg" },
+      { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/1.jpg" },
+    ],
+    addons: [
+      { label: "Extra Buttercream Decoration", price: "+$10–$25" },
+      { label: "Lettering", price: "+$10" },
+      { label: "Color Customization", price: "+$10" },
     ],
     image: "/images/tray-bakes/1.jpg",
   },
