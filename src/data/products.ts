@@ -93,18 +93,6 @@ export const products: Product[] = [
     image: "/images/cake/two-tier.jpg",
   },
   {
-    slug: "party-custom-cake",
-    name: "Custom Cake",
-    category: "Party Sets",
-    description:
-      "Our custom cakes are baked from scratch using the finest ingredients and decorated to bring your vision to life. From simple elegance to show-stopping designs.",
-    details:
-      "All cakes are freshly baked to order. Available in a range of flavours and sizes. Please enquire with your design ideas and we will provide a personalised quote. We recommend placing orders at least 1 week in advance.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/cake/custom.jpg",
-  },
-  {
     slug: "party-tray-bakes",
     name: "Tray Bakes",
     category: "Party Sets",
@@ -123,17 +111,6 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
     ],
     image: "/images/tray-bakes/1.jpg",
-  },
-  {
-    slug: "party-one-dozen-box",
-    name: "One Dozen Box",
-    category: "Party Sets",
-    description:
-      "A generous box of 12 handcrafted treats, beautifully presented and perfect for sharing. Ideal for birthdays, thank yous, and celebrations.",
-    details:
-      "Choose from a mix of our signature treats. All boxes can be personalised to match your theme or colour scheme. Comes with a ribbon and optional message card.",
-    variants: [{ label: "One Dozen Box", price: 45, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/brand-spread.jpg",
   },
   {
     slug: "party-favour-flower-cupcake",
@@ -264,29 +241,6 @@ export const products: Product[] = [
     variants: [],
     enquireOnly: true,
     image: "/images/popsicle-bouquet/1.jpg",
-  },
-  {
-    slug: "gift-one-dozen-box",
-    name: "One Dozen Box",
-    category: "Gift",
-    description:
-      "A generous gift box of 12 handcrafted treats, beautifully presented and perfect for sharing. Ideal for birthdays, thank yous, and celebrations.",
-    details:
-      "Choose from a mix of our signature treats. All boxes can be personalised to match your theme or colour scheme. Comes with a ribbon and optional message card.",
-    variants: [{ label: "One Dozen Box", price: 45, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/brand-spread.jpg",
-  },
-  {
-    slug: "gift-custom-cake",
-    name: "Custom Cake",
-    category: "Gift",
-    description:
-      "A custom celebration cake baked from scratch and beautifully decorated. Perfect as a gift for birthdays, milestones, and special moments.",
-    details:
-      "Available in a range of flavours and sizes. Fully customisable with themed decorations and personalised messages. Please enquire for a personalised quote.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/cake/custom.jpg",
   },
   {
     slug: "gift-mini-cakes",
@@ -528,18 +482,6 @@ export const products: Product[] = [
       { label: "Custom Design Details", price: "Additional cost" },
     ],
     image: "/images/cake/two-tier.jpg",
-  },
-  {
-    slug: "bakes-custom-cake",
-    name: "Custom Cake",
-    category: "Bakes",
-    description:
-      "A fully custom cake baked from scratch to your specifications. Available in a range of flavours, sizes, and designs for any celebration.",
-    details:
-      "Please enquire with your design ideas, flavour preferences, and event date. We will provide a personalised quote. Please allow at least 1 week notice.",
-    variants: [],
-    enquireOnly: true,
-    image: "/images/cake/custom.jpg",
   },
   {
     slug: "bakes-madeleines",
