@@ -15,6 +15,7 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [designNote, setDesignNote] = useState("");
 
   if (!product) {
     return (
@@ -42,6 +43,7 @@ export default function ProductDetailPage() {
         name: p.name,
         price: variant.price,
         image: p.image,
+        note: designNote.trim() || undefined,
       },
       quantity
     );
@@ -137,17 +139,34 @@ export default function ProductDetailPage() {
 
           {/* Pricing Add-ons */}
           {p.addons && p.addons.length > 0 && (
-            <div className="mb-6 p-4 rounded-xl bg-accent/8 border border-accent/20">
-              <p className="text-xs font-semibold text-heading uppercase tracking-wider mb-3">Customization Add-ons</p>
-              <ul className="space-y-1.5">
-                {p.addons.map((addon, i) => (
-                  <li key={i} className="flex justify-between text-sm">
-                    <span className="text-foreground/70">{addon.label}</span>
-                    <span className="font-medium text-heading">{addon.price}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-xs text-foreground/45 mt-3">Add-on pricing applied at checkout. Contact us to discuss your design.</p>
+            <div className="mb-6 space-y-4">
+              <div className="p-4 rounded-xl bg-accent/8 border border-accent/20">
+                <p className="text-xs font-semibold text-heading uppercase tracking-wider mb-3">Customization Add-ons</p>
+                <ul className="space-y-1.5">
+                  {p.addons.map((addon, i) => (
+                    <li key={i} className="flex justify-between text-sm">
+                      <span className="text-foreground/70">{addon.label}</span>
+                      <span className="font-medium text-heading">{addon.price}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-foreground/50 mt-3 italic">
+                  Please consult with us for custom design details and final pricing.
+                </p>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
+                  Design Ideas / Notes
+                </label>
+                <textarea
+                  value={designNote}
+                  onChange={(e) => setDesignNote(e.target.value)}
+                  placeholder="Share your design ideas, colour palette, theme, or any special requests..."
+                  rows={4}
+                  className="w-full border border-accent/30 rounded-xl px-4 py-3 bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 resize-none"
+                />
+                <p className="text-xs text-foreground/45 mt-1">Your note will be included with your order.</p>
+              </div>
             </div>
           )}
 

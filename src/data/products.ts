@@ -84,9 +84,12 @@ export const products: Product[] = [
     description:
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Fully customisable design. Please allow at least 1 week notice.",
-    variants: [],
-    enquireOnly: true,
+      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier.jpg" }],
+    addons: [
+      { label: "Floral Decoration", price: "Additional cost" },
+      { label: "Custom Design Details", price: "Additional cost" },
+    ],
     image: "/images/cake/two-tier.jpg",
   },
   {
@@ -510,9 +513,12 @@ export const products: Product[] = [
     description:
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Fully customisable design. Please allow at least 1 week notice.",
-    variants: [],
-    enquireOnly: true,
+      "Available in Vanilla, Chocolate, and Red Velvet — mix and match flavours per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier.jpg" }],
+    addons: [
+      { label: "Floral Decoration", price: "Additional cost" },
+      { label: "Custom Design Details", price: "Additional cost" },
+    ],
     image: "/images/cake/two-tier.jpg",
   },
   {

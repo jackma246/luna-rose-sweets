@@ -68,6 +68,12 @@ export default function CartPage() {
               <p className="font-medium text-heading mt-1">
                 ${item.price.toFixed(2)}
               </p>
+              {item.note && (
+                <div className="mt-2 text-xs text-foreground/60 bg-accent/10 rounded-lg px-3 py-2 border border-accent/20">
+                  <span className="font-semibold text-heading">Design Note: </span>
+                  {item.note}
+                </div>
+              )}
             </div>
 
             <div className="flex items-center border border-accent/30 rounded-lg overflow-hidden">
