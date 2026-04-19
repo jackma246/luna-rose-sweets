@@ -430,7 +430,10 @@ export const products: Product[] = [
       "Soft, fluffy cupcakes baked from scratch and topped with swirls of buttercream. Available in a range of flavours and decorated to your theme.",
     details:
       "Available in Vanilla, Chocolate, and Red Velvet. Custom toppers and themed decorations available. Baked fresh to order.",
-    variants: [{ label: "1 Dozen", price: 38, image: "/images/cupcakes/2.jpg" }],
+    variants: [
+      { label: "6 Pack", price: 28, image: "/images/cupcakes/2.jpg" },
+      { label: "12 Pack", price: 36, image: "/images/cupcakes/2.jpg" },
+    ],
     image: "/images/cupcakes/2.jpg",
   },
   {
