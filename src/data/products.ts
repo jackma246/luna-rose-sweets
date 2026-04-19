@@ -573,10 +573,10 @@ export const products: Product[] = [
     details:
       "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
     variants: [
-      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/1.jpg" },
-      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/3.jpg" },
+      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/cro.jpeg" },
+      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/cro.jpeg" },
     ],
-    image: "/images/towers/1.jpg",
+    image: "/images/towers/cro.jpeg",
   },
 ];
 
