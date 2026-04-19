@@ -17,7 +17,7 @@ export default function ProductsPage() {
 
   const filtered = useMemo(() => {
     let result = activeCategory === "All"
-      ? [...products]
+      ? products.filter((p, i, arr) => arr.findIndex((q) => q.name === p.name) === i)
       : products.filter((p) => p.category === activeCategory);
 
     // Availability filter

@@ -135,17 +135,6 @@ export const products: Product[] = [
     image: "/images/brand-spread.jpg",
   },
   {
-    slug: "party-mini-cookies-box",
-    name: "Mini Cookies Box",
-    category: "Party Sets",
-    description:
-      "A cute little box filled with mini cookies, perfect as a favour or small gift. Baked from scratch and beautifully packaged.",
-    details:
-      "Each box contains an assortment of mini cookies. Can be themed with colours and packaging. Minimum order of 10.",
-    variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/cookie-box/3.jpg" }],
-    image: "/images/cookie-box/3.jpg",
-  },
-  {
     slug: "party-diy-decorating-set",
     name: "DIY Decorating Set",
     category: "Party Sets",
@@ -205,20 +194,6 @@ export const products: Product[] = [
     variants: [],
     enquireOnly: true,
     image: "/images/popsicle-bouquet/1.jpg",
-  },
-  {
-    slug: "gift-mini-cakes",
-    name: "Mini Cake & Cupcakes",
-    category: "Gift",
-    description:
-      "Adorable individual-sized mini cakes, perfect for gifting. Each one is baked from scratch and beautifully finished with icing and decorations.",
-    details:
-      "Mini cakes are available in Vanilla, Chocolate, and Red Velvet. Each cake can be personalised with colours and themed decorations. Sold individually or as a set.",
-    variants: [
-      { label: "Single Mini Cake", price: 8, image: "/images/cake/5.jpg" },
-      { label: "Set of 4", price: 28, image: "/images/cake/6.jpg" },
-    ],
-    image: "/images/cake/5.jpg",
   },
   {
     slug: "gift-layer-cake",
@@ -399,20 +374,6 @@ export const products: Product[] = [
     image: "/images/tray-bakes/1.jpg",
   },
   {
-    slug: "bakes-mini-cakes",
-    name: "Mini Cake & Cupcakes",
-    category: "Bakes",
-    description:
-      "Individual-sized cakes baked from scratch and beautifully decorated. Perfect as single-serve treats for any celebration.",
-    details:
-      "Available in Vanilla, Chocolate, and Red Velvet. Each mini cake is hand-finished with icing and decorations.",
-    variants: [
-      { label: "Single Mini Cake", price: 8, image: "/images/cake/9.jpg" },
-      { label: "Set of 4", price: 28, image: "/images/cake/10.jpg" },
-    ],
-    image: "/images/cake/9.jpg",
-  },
-  {
     slug: "bakes-layer-cake",
     name: "3-Layer Custom Cake (6\"/8\")",
     category: "Bakes",
@@ -531,17 +492,6 @@ export const products: Product[] = [
       "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
     variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/brand-spread.jpg",
-  },
-  {
-    slug: "mini-cookies-box",
-    name: "Mini Cookies Box",
-    category: "Favours",
-    description:
-      "A cute little box filled with mini cookies, perfect as a favour or small gift. Baked from scratch and beautifully packaged.",
-    details:
-      "Each box contains an assortment of mini cookies. Can be themed with colours and packaging. Minimum order of 10.",
-    variants: [{ label: "Per Mini Box (min 10)", price: 5, image: "/images/cookie-box/3.jpg" }],
-    image: "/images/cookie-box/3.jpg",
   },
   {
     slug: "favour-diy-decorating-set",
