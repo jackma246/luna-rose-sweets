@@ -66,11 +66,20 @@ export default function ProductsPage() {
 
   useEffect(() => {
     const saved = sessionStorage.getItem("shop-scroll-y");
-    if (saved) {
-      const y = parseInt(saved, 10);
-      sessionStorage.removeItem("shop-scroll-y");
-      requestAnimationFrame(() => window.scrollTo(0, y));
-    }
+    if (!saved) return;
+    const y = parseInt(saved, 10);
+    sessionStorage.removeItem("shop-scroll-y");
+    // Retry scrolling until the page is tall enough (images may not be loaded yet)
+    let attempts = 0;
+    const tryScroll = () => {
+      if (document.body.scrollHeight >= y || attempts >= 20) {
+        window.scrollTo(0, y);
+      } else {
+        attempts++;
+        setTimeout(tryScroll, 50);
+      }
+    };
+    setTimeout(tryScroll, 50);
   }, []);
 
   const saveScroll = useCallback(() => {
