@@ -76,6 +76,20 @@ export const CAKE_FLAVOURS: ProductFlavour[] = [
 export const products: Product[] = [
   // ── Party Sets ──────────────────────────────────────────
   {
+    slug: "party-set",
+    name: "Party Set",
+    category: "Party Sets",
+    subtitle: "36 · 48 · 96 pieces",
+    description: "Each set includes a coordinated selection of chocolate-covered treats with a polished, party-ready finish.",
+    details: "Choose your set size, treat types, design finish, and flavor. Handcrafted in small batches with premium Belgian chocolate. Please allow 3–7 days notice.",
+    variants: [
+      { label: "Small Set (36 pcs)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" },
+      { label: "Medium Set (48 pcs)", price: 185, image: "/images/brand-spread.jpg" },
+      { label: "Large Set (96 pcs)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" },
+    ],
+    image: "/images/brand-spread.jpg",
+  },
+  {
     slug: "small-party-set",
     name: "Small Party Set (3 Dozen)",
     category: "Party Sets",

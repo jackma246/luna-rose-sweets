@@ -5,7 +5,7 @@ import V2Header from "./components/V2Header";
 import V2Footer from "./components/V2Footer";
 
 const featuredSlugs = [
-  "medium-party-set",
+  "party-set",
   "cakesicles",
   "cakepops",
   "gift-half-dozen-box",
@@ -14,7 +14,7 @@ const featuredSlugs = [
 ];
 
 const tagOverrides: Record<string, { label: string; variant?: "butter" | "cocoa" }> = {
-  "medium-party-set": { label: "Best seller" },
+  "party-set": { label: "Best seller" },
   cakesicles: { label: "New", variant: "butter" },
   "cakepop-bouquet": { label: "Limited", variant: "cocoa" },
   "party-custom-cake": { label: "Made to order", variant: "cocoa" },
