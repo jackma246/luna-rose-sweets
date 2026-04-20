@@ -260,6 +260,7 @@ export const products: Product[] = [
       "A stunning bouquet of 8 decorated cake pops — a unique and delicious alternative to flowers! Perfect for birthdays, Mother's Day, or just because.",
     details:
       "Each bouquet is hand-arranged with 8 freshly baked cake pops dipped in premium Belgian chocolate. Bouquets can be themed and personalised with colours, toppings, and edible toppers.",
+    fixedFlavour: "Classic Vanilla — we use our own custom blend of premium Madagascar and Mexican vanilla, with real vanilla beans included. The result is a clean, true vanilla flavour that is rich, warm, and anything but ordinary.",
     variants: [
       { label: "Bouquet (8 pops)", price: 35, image: "/images/popsicle-bouquet/1.jpg" },
     ],
