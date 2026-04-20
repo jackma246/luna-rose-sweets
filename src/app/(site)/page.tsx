@@ -121,8 +121,8 @@ export default function V2Home() {
             <div className="plate" aria-hidden="true" />
             <div className="photo">
               <Image
-                src="/images/cakesicles-hero.jpg"
-                alt="Handcrafted cakesicles beautifully decorated"
+                src="/images/main-hero.jpg"
+                alt="Handcrafted treats beautifully decorated"
                 width={800}
                 height={800}
                 priority
