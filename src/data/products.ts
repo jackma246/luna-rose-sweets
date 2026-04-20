@@ -255,13 +255,13 @@ export const products: Product[] = [
     slug: "cakepop-bouquet",
     name: "Cakepop Bouquet",
     category: "Gift",
+    subtitle: "8 Cake Pops",
     description:
-      "A stunning bouquet of decorated cake pops — a unique and delicious alternative to flowers! Perfect for birthdays, Mother's Day, or just because.",
+      "A stunning bouquet of 8 decorated cake pops — a unique and delicious alternative to flowers! Perfect for birthdays, Mother's Day, or just because.",
     details:
-      "Each bouquet is hand-arranged with freshly baked cake pops dipped in premium Belgian chocolate. Available in Vanilla and Chocolate Fudge flavours. Bouquets can be themed and personalised with colours, toppings, and edible toppers.",
+      "Each bouquet is hand-arranged with 8 freshly baked cake pops dipped in premium Belgian chocolate. Bouquets can be themed and personalised with colours, toppings, and edible toppers.",
     variants: [
-      { label: "Small Bouquet (8 pops)", price: 35, image: "/images/popsicle-bouquet/1.jpg" },
-      { label: "Large Bouquet (16 pops)", price: 60, image: "/images/cake-pops/basic.jpg" },
+      { label: "Bouquet (8 pops)", price: 35, image: "/images/popsicle-bouquet/1.jpg" },
     ],
     image: "/images/popsicle-bouquet/1.jpg",
   },
