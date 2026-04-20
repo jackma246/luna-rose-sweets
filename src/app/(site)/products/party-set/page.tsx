@@ -410,16 +410,10 @@ export default function PartySetPage() {
                               </span>
                             )}
                           </span>
-                          {t.exclusiveWith && count === 0 && (
-                            <small style={{ fontWeight: 400, opacity: 0.5, fontSize: "0.74rem" }}>
-                              Cannot combine with {t.exclusiveWith.join(" or ")}
-                            </small>
-                          )}
-                          {maxCount > 1 && (
-                            <small style={{ fontWeight: 400, opacity: 0.5, fontSize: "0.74rem" }}>
-                              Up to {maxCount} dozen
-                            </small>
-                          )}
+                          <small style={{ fontWeight: 400, opacity: 0.5, fontSize: "0.74rem" }}>
+                            Up to {maxCount} dozen
+                            {t.exclusiveWith && count === 0 && ` · Cannot combine with ${t.exclusiveWith.join(" or ")}`}
+                          </small>
                         </button>
                         {count > 0 && count < maxCount && canAdd && (
                           <button
