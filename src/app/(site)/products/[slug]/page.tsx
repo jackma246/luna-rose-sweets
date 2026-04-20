@@ -19,7 +19,7 @@ export default function V2ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [selectedFlavour, setSelectedFlavour] = useState<string>("");
-  const [selectedTreats, setSelectedTreats] = useState<string[]>([]);
+  const [treatCounts, setTreatCounts] = useState<Record<string, number>>({});
   const [selectedDesignTier, setSelectedDesignTier] = useState<string>("");
 
   const images = useMemo(() => {
@@ -54,30 +54,56 @@ export default function V2ProductDetail() {
   const mainImage = images[mainImgIdx] ?? product.image;
   const maxTreats = product.maxTreats ?? 3;
 
-  const designPriceAdd =
-    product.designTiers?.find((t) => t.name === selectedDesignTier)?.priceAdd ?? 0;
+  const totalTreatsSelected = Object.values(treatCounts).reduce((s, c) => s + c, 0);
+  const designPriceAdd = product.designTiers?.find((t) => t.name === selectedDesignTier)?.priceAdd ?? 0;
   const effectivePrice = variant ? variant.price + designPriceAdd : 0;
 
-  function toggleTreat(treatName: string) {
-    setSelectedTreats((prev) => {
-      if (prev.includes(treatName)) return prev.filter((t) => t !== treatName);
-      if (prev.length >= maxTreats) return prev;
-      const treatDef = product!.treats!.find((t) => t.name === treatName);
-      if (treatDef?.exclusiveWith?.some((ex) => prev.includes(ex))) return prev;
-      return [...prev, treatName];
-    });
+  function getTreatCount(name: string) {
+    return treatCounts[name] ?? 0;
   }
 
-  function isTreatDisabled(treatName: string): boolean {
-    if (selectedTreats.includes(treatName)) return false;
-    if (selectedTreats.length >= maxTreats) return true;
-    const treatDef = product!.treats!.find((t) => t.name === treatName);
-    return !!treatDef?.exclusiveWith?.some((ex) => selectedTreats.includes(ex));
+  function addTreat(treatName: string) {
+    if (!product!.treats) return;
+    const treatDef = product!.treats.find((t) => t.name === treatName)!;
+    const currentCount = getTreatCount(treatName);
+    const maxCount = treatDef.maxCount ?? 1;
+    if (currentCount >= maxCount) return;
+    if (totalTreatsSelected >= maxTreats) return;
+    if (treatDef.exclusiveWith?.some((ex) => (treatCounts[ex] ?? 0) > 0)) return;
+    setTreatCounts((prev) => ({ ...prev, [treatName]: currentCount + 1 }));
+  }
+
+  function removeTreat(treatName: string) {
+    const currentCount = getTreatCount(treatName);
+    if (currentCount <= 0) return;
+    setTreatCounts((prev) => ({ ...prev, [treatName]: currentCount - 1 }));
+  }
+
+  function isTreatAddDisabled(treatName: string): boolean {
+    if (!product!.treats) return true;
+    const treatDef = product!.treats.find((t) => t.name === treatName)!;
+    const currentCount = getTreatCount(treatName);
+    if (currentCount >= (treatDef.maxCount ?? 1)) return true;
+    if (totalTreatsSelected >= maxTreats) return true;
+    if (treatDef.exclusiveWith?.some((ex) => (treatCounts[ex] ?? 0) > 0)) return true;
+    return false;
+  }
+
+  function buildTreatsLabel(): string {
+    if (!product!.treats) return "";
+    return product!.treats
+      .filter((t) => (treatCounts[t.name] ?? 0) > 0)
+      .map((t) => {
+        const count = treatCounts[t.name] ?? 0;
+        return count > 1 ? `${t.name} ×${count}` : t.name;
+      })
+      .join(", ");
   }
 
   function buildCartNote(): string {
     const parts: string[] = [];
-    if (selectedTreats.length > 0) parts.push(`Treats: ${selectedTreats.join(", ")}`);
+    const treatsLabel = buildTreatsLabel();
+    if (treatsLabel) parts.push(`Treats: ${treatsLabel}`);
     if (selectedDesignTier) {
       const tier = product!.designTiers!.find((t) => t.name === selectedDesignTier)!;
       parts.push(`Design: ${tier.name}${tier.priceAdd > 0 ? ` (${tier.priceLabel})` : ""}`);
@@ -91,8 +117,8 @@ export default function V2ProductDetail() {
       alert("Please select a flavour before adding to cart.");
       return;
     }
-    if (product!.treats && selectedTreats.length < maxTreats) {
-      alert(`Please select ${maxTreats} treats before adding to cart.`);
+    if (product!.treats && totalTreatsSelected < maxTreats) {
+      alert(`Please select ${maxTreats} treat dozen(s) before adding to cart.`);
       return;
     }
     if (product!.designTiers && !selectedDesignTier) {
@@ -199,43 +225,70 @@ export default function V2ProductDetail() {
                   {product.treats && product.treats.length > 0 && (
                     <div className="options" style={{ marginBottom: "1.5rem" }}>
                       <h4>
-                        Choose {maxTreats} treats
+                        Choose {maxTreats} dozen
                         <span style={{ fontWeight: 400, fontSize: "0.82rem", opacity: 0.6, marginLeft: "0.5rem" }}>
-                          ({selectedTreats.length}/{maxTreats} selected)
+                          ({totalTreatsSelected}/{maxTreats} selected)
                         </span>
                       </h4>
-                      <div className="option-grid" style={{ gap: "0.5rem" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                         {product.treats.map((t) => {
-                          const disabled = isTreatDisabled(t.name);
-                          const selected = selectedTreats.includes(t.name);
+                          const count = getTreatCount(t.name);
+                          const canAdd = !isTreatAddDisabled(t.name);
+                          const maxCount = t.maxCount ?? 1;
                           return (
-                            <button
+                            <div
                               key={t.name}
-                              className={`option${selected ? " active" : ""}`}
-                              onClick={() => !disabled && toggleTreat(t.name)}
-                              style={{
-                                opacity: disabled ? 0.35 : 1,
-                                cursor: disabled ? "not-allowed" : "pointer",
-                                textAlign: "left",
-                                flexDirection: "column",
-                                alignItems: "flex-start",
-                                gap: "0.15rem",
-                              }}
-                              aria-disabled={disabled}
+                              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                             >
-                              <span style={{ fontWeight: 600 }}>{t.name}</span>
-                              {t.exclusiveWith && (
-                                <small style={{ fontWeight: 400, opacity: 0.6, fontSize: "0.75rem" }}>
-                                  Cannot be combined with {t.exclusiveWith.join(" or ")}
-                                </small>
+                              <button
+                                className={`option${count > 0 ? " active" : ""}`}
+                                onClick={() => count > 0 ? removeTreat(t.name) : addTreat(t.name)}
+                                style={{
+                                  flex: 1,
+                                  textAlign: "left",
+                                  flexDirection: "column",
+                                  alignItems: "flex-start",
+                                  gap: "0.15rem",
+                                  opacity: (!canAdd && count === 0) ? 0.35 : 1,
+                                  cursor: (!canAdd && count === 0) ? "not-allowed" : "pointer",
+                                }}
+                              >
+                                <span style={{ fontWeight: 600, display: "flex", justifyContent: "space-between", width: "100%" }}>
+                                  {t.name}
+                                  {count > 0 && (
+                                    <span style={{ background: "var(--cherry, #c05)", color: "#fff", borderRadius: "999px", padding: "0 0.45rem", fontSize: "0.75rem", fontWeight: 700 }}>
+                                      ×{count}
+                                    </span>
+                                  )}
+                                </span>
+                                {t.exclusiveWith && count === 0 && (
+                                  <small style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.74rem" }}>
+                                    Cannot combine with {t.exclusiveWith.join(" or ")}
+                                  </small>
+                                )}
+                                {maxCount > 1 && (
+                                  <small style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.74rem" }}>
+                                    Up to {maxCount} dozen
+                                  </small>
+                                )}
+                              </button>
+                              {/* Extra "+1 dozen" button for treats with maxCount > 1 */}
+                              {count > 0 && count < maxCount && canAdd && (
+                                <button
+                                  className="option"
+                                  onClick={() => addTreat(t.name)}
+                                  style={{ padding: "0.4rem 0.75rem", fontSize: "0.8rem", whiteSpace: "nowrap" }}
+                                >
+                                  +1 dozen
+                                </button>
                               )}
-                            </button>
+                            </div>
                           );
                         })}
                       </div>
-                      {selectedTreats.length > 0 && (
-                        <p style={{ marginTop: "0.5rem", fontSize: "0.82rem", opacity: 0.7 }}>
-                          Selected: {selectedTreats.join(", ")}
+                      {totalTreatsSelected > 0 && (
+                        <p style={{ marginTop: "0.6rem", fontSize: "0.82rem", opacity: 0.65 }}>
+                          Selected: {buildTreatsLabel()}
                         </p>
                       )}
                     </div>
@@ -255,9 +308,7 @@ export default function V2ProductDetail() {
                           >
                             <span style={{ fontWeight: 600, display: "flex", justifyContent: "space-between", width: "100%" }}>
                               {tier.name}
-                              <span style={{ color: tier.priceAdd === 0 ? "var(--cherry, #c05)" : undefined }}>
-                                {tier.priceLabel}
-                              </span>
+                              <span>{tier.priceLabel}</span>
                             </span>
                             <small style={{ fontWeight: 400, opacity: 0.65, whiteSpace: "normal", lineHeight: 1.4, fontSize: "0.78rem" }}>{tier.description}</small>
                           </button>
@@ -267,15 +318,15 @@ export default function V2ProductDetail() {
                   )}
 
                   {/* ── Order summary preview ── */}
-                  {product.treats && (selectedFlavour || selectedTreats.length > 0 || selectedDesignTier) && (
+                  {product.treats && (selectedFlavour || totalTreatsSelected > 0 || selectedDesignTier) && (
                     <div style={{ marginBottom: "1rem", padding: "0.75rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)", fontSize: "0.85rem", lineHeight: 1.6 }}>
-                      <p style={{ margin: 0, fontWeight: 600, marginBottom: "0.25rem", opacity: 0.6, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Your selection</p>
+                      <p style={{ margin: 0, fontWeight: 600, marginBottom: "0.25rem", opacity: 0.55, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Your selection</p>
                       {selectedFlavour && <p style={{ margin: 0 }}><strong>Flavour:</strong> {selectedFlavour}</p>}
-                      {selectedTreats.length > 0 && <p style={{ margin: 0 }}><strong>Treats:</strong> {selectedTreats.join(", ")}</p>}
+                      {totalTreatsSelected > 0 && <p style={{ margin: 0 }}><strong>Treats:</strong> {buildTreatsLabel()}</p>}
                       {selectedDesignTier && (
                         <p style={{ margin: 0 }}>
                           <strong>Design:</strong> {selectedDesignTier}
-                          {designPriceAdd > 0 && <span style={{ opacity: 0.7 }}> (+${designPriceAdd})</span>}
+                          {designPriceAdd > 0 && <span style={{ opacity: 0.65 }}> (+${designPriceAdd})</span>}
                         </p>
                       )}
                     </div>

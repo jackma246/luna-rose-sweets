@@ -17,6 +17,7 @@ export interface ProductFlavour {
 export interface TreatOption {
   name: string;
   exclusiveWith?: string[];
+  maxCount?: number;
 }
 
 export interface DesignTier {
@@ -103,11 +104,28 @@ export const products: Product[] = [
     slug: "medium-party-set",
     name: "Medium Party Set (4 Dozen)",
     category: "Party Sets",
+    subtitle: "Choose Your Treats · Flavour · Design",
     description:
-      "Our Medium Party Set is perfect for celebrations! Includes 1 Dozen Cake Pops, 1 Dozen Choco Cookies, 1 Dozen Caramel Pretzel Rods, and 1 Dozen Rice Krispies.",
+      "A generous set of 4 dozen handcrafted treats — pick your 4 treat types, flavour, and design style for a fully personalised party spread.",
     details:
-      "The Party Set can be customised to your theme and colour scheme. Please allow 3-5 days notice for party set orders.",
+      "Choose 4 treat types (1 dozen each). Cake Pops can fill up to 2 dozen slots. Cakesicles can only be selected once. Please allow 3-5 days notice.",
     variants: [{ label: "Medium Party Set (4 Dozen)", price: 185, image: "/images/brand-spread.jpg" }],
+    flavours: CAKE_FLAVOURS,
+    treats: [
+      { name: "Cake Pop", maxCount: 2 },
+      { name: "Cakesicle", maxCount: 1 },
+      { name: "Caramel Pretzel Rod" },
+      { name: "Oreo" },
+      { name: "Rice Krispies" },
+    ],
+    maxTreats: 4,
+    designTiers: [
+      { name: "Basic Design", description: "3 colors · drizzle + pattern mix · sprinkle / pearl / glitter · simple theme feel (color-focused)", priceLabel: "Included", priceAdd: 0 },
+      { name: "+4th Color", description: "Everything in Basic plus one additional color", priceLabel: "+$10", priceAdd: 10 },
+      { name: "Basic Custom", description: "Pattern add-on for a more personalized look", priceLabel: "+$20", priceAdd: 20 },
+      { name: "Medium Custom", description: "Stronger themed styling — cohesive event aesthetics", priceLabel: "+$30", priceAdd: 30 },
+      { name: "Full Custom", description: "Characters, intricate details, and elaborate custom work", priceLabel: "+$45", priceAdd: 45 },
+    ],
     image: "/images/treat-boxes/mixed-treats.jpg",
   },
   {
