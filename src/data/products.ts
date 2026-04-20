@@ -132,11 +132,28 @@ export const products: Product[] = [
     slug: "large-party-set",
     name: "Large Party Set (8 Dozen)",
     category: "Party Sets",
+    subtitle: "Choose Your Treats · Flavour · Design",
     description:
-      "Our Large Party Set is the ultimate spread for big celebrations. Includes 2 Dozen Cake Pops, 2 Dozen Choco Cookies, 2 Dozen Caramel Pretzel Rods, and 2 Dozen Rice Krispies.",
+      "The ultimate party spread — 8 dozen handcrafted treats, fully personalised with your choice of treats, flavour, and design. Ideal for weddings, corporate events, and large celebrations.",
     details:
-      "The Large Party Set can be fully customised to your theme and colour scheme. Ideal for weddings, corporate events, and large parties. Please allow 5-7 days notice.",
+      "Choose 8 treat dozen slots. Cake Pops can fill up to 4 dozen slots. Cakesicles can only be selected once. Please allow 5-7 days notice.",
     variants: [{ label: "Large Party Set (8 Dozen)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    flavours: CAKE_FLAVOURS,
+    treats: [
+      { name: "Cake Pop", maxCount: 4 },
+      { name: "Cakesicle", maxCount: 1 },
+      { name: "Caramel Pretzel Rod" },
+      { name: "Oreo" },
+      { name: "Rice Krispies" },
+    ],
+    maxTreats: 8,
+    designTiers: [
+      { name: "Basic Design", description: "3-4 colors · varied drizzle + pattern mix · sprinkle / pearl / glitter · theme feel (color + atmosphere) · 1-2 simple repeatable custom points (e.g. number, initials, simple topper)", priceLabel: "Included", priceAdd: 0 },
+      { name: "+5th Color", description: "Everything in Basic plus one additional color", priceLabel: "+$10", priceAdd: 10 },
+      { name: "Basic Custom", description: "Pattern add-on for a more personalized look", priceLabel: "+$25", priceAdd: 25 },
+      { name: "Medium Custom", description: "Stronger themed styling — cohesive event aesthetics with elevated details", priceLabel: "+$40", priceAdd: 40 },
+      { name: "Full Custom", description: "Characters, intricate details, and elaborate custom work throughout", priceLabel: "+$60", priceAdd: 60 },
+    ],
     image: "/images/brand-spread.jpg",
   },
   {
