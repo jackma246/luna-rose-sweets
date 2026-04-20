@@ -38,6 +38,7 @@ export interface Product {
   addons?: ProductAddon[];
   flavours?: ProductFlavour[];
   fixedFlavour?: string;
+  flavourAddonPrice?: number;
   treats?: TreatOption[];
   maxTreats?: number;
   designTiers?: DesignTier[];
@@ -45,7 +46,7 @@ export interface Product {
   image?: string;
 }
 
-const CAKE_FLAVOURS: ProductFlavour[] = [
+export const CAKE_FLAVOURS: ProductFlavour[] = [
   {
     name: "Classic Vanilla",
     description: "Made with real vanilla beans — we blend our own ratio of the finest Madagascar and Mexican vanilla for a clean, true vanilla flavour.",
@@ -85,6 +86,7 @@ export const products: Product[] = [
       "Choose 3 treat types (1 dozen each). Cake Pops and Cakesicles cannot be selected together. Please allow 3-5 days notice.",
     variants: [{ label: "Small Party Set (3 Dozen)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" }],
     fixedFlavour: "Classic Vanilla — made with premium Madagascar and Mexican vanilla in our own custom blend, with real vanilla beans included.",
+    flavourAddonPrice: 12,
     treats: [
       { name: "Cake Pop", exclusiveWith: ["Cakesicle"] },
       { name: "Cakesicle", exclusiveWith: ["Cake Pop"] },
@@ -112,6 +114,7 @@ export const products: Product[] = [
       "Choose 4 treat types (1 dozen each). Cake Pops can fill up to 2 dozen slots. Cakesicles can only be selected once. Please allow 3-5 days notice.",
     variants: [{ label: "Medium Party Set (4 Dozen)", price: 185, image: "/images/brand-spread.jpg" }],
     fixedFlavour: "Classic Vanilla — made with premium Madagascar and Mexican vanilla in our own custom blend, with real vanilla beans included.",
+    flavourAddonPrice: 12,
     treats: [
       { name: "Cake Pop", maxCount: 2 },
       { name: "Cakesicle", maxCount: 1 },
@@ -140,6 +143,7 @@ export const products: Product[] = [
       "Choose 8 treat dozen slots. Cake Pops can fill up to 4 dozen slots. Cakesicles can only be selected once. Please allow 5-7 days notice.",
     variants: [{ label: "Large Party Set (8 Dozen)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" }],
     flavours: CAKE_FLAVOURS,
+    flavourAddonPrice: 12,
     treats: [
       { name: "Cake Pop", maxCount: 4 },
       { name: "Cakesicle", maxCount: 1 },

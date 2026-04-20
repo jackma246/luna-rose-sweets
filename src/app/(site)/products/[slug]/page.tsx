@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
-import { getProductBySlug } from "@/data/products";
+import { getProductBySlug, CAKE_FLAVOURS } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../../components/V2Header";
 import V2Footer from "../../components/V2Footer";
@@ -19,6 +19,7 @@ export default function V2ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [selectedFlavour, setSelectedFlavour] = useState<string>("");
+  const [secondFlavour, setSecondFlavour] = useState<string>("");
   const [treatCounts, setTreatCounts] = useState<Record<string, number>>({});
   const [selectedDesignTier, setSelectedDesignTier] = useState<string>("");
 
@@ -56,7 +57,8 @@ export default function V2ProductDetail() {
 
   const totalTreatsSelected = Object.values(treatCounts).reduce((s, c) => s + c, 0);
   const designPriceAdd = product.designTiers?.find((t) => t.name === selectedDesignTier)?.priceAdd ?? 0;
-  const effectivePrice = variant ? variant.price + designPriceAdd : 0;
+  const flavourAddonAdd = secondFlavour ? (product.flavourAddonPrice ?? 0) : 0;
+  const effectivePrice = variant ? variant.price + designPriceAdd + flavourAddonAdd : 0;
 
   function getTreatCount(name: string) {
     return treatCounts[name] ?? 0;
@@ -104,6 +106,7 @@ export default function V2ProductDetail() {
     const parts: string[] = [];
     const treatsLabel = buildTreatsLabel();
     if (treatsLabel) parts.push(`Treats: ${treatsLabel}`);
+    if (secondFlavour) parts.push(`2nd Flavour: ${secondFlavour} (50/50 split, +$${product!.flavourAddonPrice})`);
     if (selectedDesignTier) {
       const tier = product!.designTiers!.find((t) => t.name === selectedDesignTier)!;
       parts.push(`Design: ${tier.name}${tier.priceAdd > 0 ? ` (${tier.priceLabel})` : ""}`);
@@ -203,7 +206,7 @@ export default function V2ProductDetail() {
                 <>
                   {/* ── Fixed flavour note ── */}
                   {product.fixedFlavour && (
-                    <div style={{ marginBottom: "1.5rem", padding: "0.85rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)" }}>
+                    <div style={{ marginBottom: product.flavourAddonPrice ? "0.75rem" : "1.5rem", padding: "0.85rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)" }}>
                       <p style={{ margin: 0, fontWeight: 700, fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.05em", opacity: 0.55, marginBottom: "0.3rem" }}>Flavour</p>
                       <p style={{ margin: 0, fontWeight: 600, fontSize: "0.95rem" }}>Classic Vanilla</p>
                       <p style={{ margin: "0.25rem 0 0", fontSize: "0.8rem", opacity: 0.65, lineHeight: 1.5 }}>{product.fixedFlavour}</p>
@@ -211,16 +214,64 @@ export default function V2ProductDetail() {
                     </div>
                   )}
 
+                  {/* ── 2nd flavour add-on (for fixedFlavour sets) ── */}
+                  {product.fixedFlavour && product.flavourAddonPrice && (
+                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                      <h4>Flavour variety</h4>
+                      <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.7, lineHeight: 1.5 }}>
+                        More variety means more people happy — great for mixed crowds and parties.
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        <button
+                          className={`option${!secondFlavour ? " active" : ""}`}
+                          onClick={() => setSecondFlavour("")}
+                          style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.15rem" }}
+                        >
+                          <span style={{ fontWeight: 600 }}>1 flavour <span style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.8rem" }}>(기본)</span></span>
+                          <small style={{ fontWeight: 400, opacity: 0.65, fontSize: "0.78rem" }}>Classic Vanilla only</small>
+                        </button>
+                        <div style={{ borderRadius: "0.5rem", border: secondFlavour ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)", overflow: "hidden" }}>
+                          <div style={{ padding: "0.65rem 1rem 0.5rem", background: secondFlavour ? "var(--cherry-soft, #fff5f5)" : "var(--surface, #faf9f7)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
+                            <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavours <span style={{ fontWeight: 500, color: "var(--cherry, #c05)", fontSize: "0.8rem" }}>(추천 ⭐)</span></span>
+                            <span style={{ marginLeft: "0.5rem", fontSize: "0.78rem", opacity: 0.55 }}>+${product.flavourAddonPrice} · 50/50 split</span>
+                            <div style={{ fontSize: "0.78rem", opacity: 0.7, marginTop: "0.1rem" }}>More variety &amp; crowd-friendly</div>
+                          </div>
+                          <div style={{ padding: "0.5rem", display: "flex", flexDirection: "column", gap: "0.4rem", background: "#fff" }}>
+                            {CAKE_FLAVOURS.filter((f) => f.name !== "Classic Vanilla").map((f) => (
+                              <button
+                                key={f.name}
+                                className={`option${secondFlavour === f.name ? " active" : ""}`}
+                                onClick={() => setSecondFlavour(secondFlavour === f.name ? "" : f.name)}
+                                style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.15rem" }}
+                              >
+                                <span style={{ fontWeight: 600 }}>{f.name}</span>
+                                <small style={{ fontWeight: 400, opacity: 0.65, whiteSpace: "normal", lineHeight: 1.4, fontSize: "0.78rem" }}>{f.description}</small>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      {secondFlavour && (
+                        <p style={{ marginTop: "0.5rem", fontSize: "0.8rem", opacity: 0.65 }}>
+                          Classic Vanilla + {secondFlavour} — 50/50 split
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   {/* ── Flavour selector ── */}
                   {product.flavours && product.flavours.length > 0 && (
-                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                    <div className="options" style={{ marginBottom: product.flavourAddonPrice ? "0.75rem" : "1.5rem" }}>
                       <h4>Choose your flavour</h4>
                       <div className="option-grid" style={{ gap: "0.5rem" }}>
                         {product.flavours.map((f) => (
                           <button
                             key={f.name}
                             className={`option${selectedFlavour === f.name ? " active" : ""}`}
-                            onClick={() => setSelectedFlavour(f.name)}
+                            onClick={() => {
+                              setSelectedFlavour(f.name);
+                              if (secondFlavour === f.name) setSecondFlavour("");
+                            }}
                             style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.2rem" }}
                           >
                             <span style={{ fontWeight: 600 }}>{f.name}</span>
@@ -228,6 +279,51 @@ export default function V2ProductDetail() {
                           </button>
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {/* ── 2nd flavour add-on (for free flavour selector sets like Large Party Set) ── */}
+                  {!product.fixedFlavour && product.flavours && product.flavourAddonPrice && selectedFlavour && (
+                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                      <h4>Flavour variety</h4>
+                      <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.7, lineHeight: 1.5 }}>
+                        More variety means more people happy — great for mixed crowds and parties.
+                      </p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        <button
+                          className={`option${!secondFlavour ? " active" : ""}`}
+                          onClick={() => setSecondFlavour("")}
+                          style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.15rem" }}
+                        >
+                          <span style={{ fontWeight: 600 }}>1 flavour <span style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.8rem" }}>(기본)</span></span>
+                          <small style={{ fontWeight: 400, opacity: 0.65, fontSize: "0.78rem" }}>{selectedFlavour} only</small>
+                        </button>
+                        <div style={{ borderRadius: "0.5rem", border: secondFlavour ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)", overflow: "hidden" }}>
+                          <div style={{ padding: "0.65rem 1rem 0.5rem", background: secondFlavour ? "var(--cherry-soft, #fff5f5)" : "var(--surface, #faf9f7)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
+                            <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavours <span style={{ fontWeight: 500, color: "var(--cherry, #c05)", fontSize: "0.8rem" }}>(추천 ⭐)</span></span>
+                            <span style={{ marginLeft: "0.5rem", fontSize: "0.78rem", opacity: 0.55 }}>+${product.flavourAddonPrice} · 50/50 split</span>
+                            <div style={{ fontSize: "0.78rem", opacity: 0.7, marginTop: "0.1rem" }}>More variety &amp; crowd-friendly</div>
+                          </div>
+                          <div style={{ padding: "0.5rem", display: "flex", flexDirection: "column", gap: "0.4rem", background: "#fff" }}>
+                            {product.flavours.filter((f) => f.name !== selectedFlavour).map((f) => (
+                              <button
+                                key={f.name}
+                                className={`option${secondFlavour === f.name ? " active" : ""}`}
+                                onClick={() => setSecondFlavour(secondFlavour === f.name ? "" : f.name)}
+                                style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.15rem" }}
+                              >
+                                <span style={{ fontWeight: 600 }}>{f.name}</span>
+                                <small style={{ fontWeight: 400, opacity: 0.65, whiteSpace: "normal", lineHeight: 1.4, fontSize: "0.78rem" }}>{f.description}</small>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      {secondFlavour && (
+                        <p style={{ marginTop: "0.5rem", fontSize: "0.8rem", opacity: 0.65 }}>
+                          {selectedFlavour} + {secondFlavour} — 50/50 split
+                        </p>
+                      )}
                     </div>
                   )}
 
@@ -328,10 +424,16 @@ export default function V2ProductDetail() {
                   )}
 
                   {/* ── Order summary preview ── */}
-                  {product.treats && (selectedFlavour || totalTreatsSelected > 0 || selectedDesignTier) && (
+                  {product.treats && (selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier) && (
                     <div style={{ marginBottom: "1rem", padding: "0.75rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)", fontSize: "0.85rem", lineHeight: 1.6 }}>
                       <p style={{ margin: 0, fontWeight: 600, marginBottom: "0.25rem", opacity: 0.55, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Your selection</p>
-                      {selectedFlavour && <p style={{ margin: 0 }}><strong>Flavour:</strong> {selectedFlavour}</p>}
+                      {(selectedFlavour || product.fixedFlavour) && (
+                        <p style={{ margin: 0 }}>
+                          <strong>Flavour:</strong>{" "}
+                          {product.fixedFlavour ? "Classic Vanilla" : selectedFlavour}
+                          {secondFlavour && ` + ${secondFlavour} (50/50 split)`}
+                        </p>
+                      )}
                       {totalTreatsSelected > 0 && <p style={{ margin: 0 }}><strong>Treats:</strong> {buildTreatsLabel()}</p>}
                       {selectedDesignTier && (
                         <p style={{ margin: 0 }}>
