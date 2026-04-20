@@ -143,9 +143,9 @@ export const products: Product[] = [
     treats: [
       { name: "Cake Pop", maxCount: 4 },
       { name: "Cakesicle", maxCount: 1 },
-      { name: "Caramel Pretzel Rod" },
-      { name: "Oreo" },
-      { name: "Rice Krispies" },
+      { name: "Caramel Pretzel Rod", maxCount: 8 },
+      { name: "Oreo", maxCount: 8 },
+      { name: "Rice Krispies", maxCount: 8 },
     ],
     maxTreats: 8,
     designTiers: [
