@@ -14,6 +14,18 @@ export interface ProductFlavour {
   description: string;
 }
 
+export interface TreatOption {
+  name: string;
+  exclusiveWith?: string[];
+}
+
+export interface DesignTier {
+  name: string;
+  description: string;
+  priceLabel: string;
+  priceAdd: number;
+}
+
 export interface Product {
   slug: string;
   name: string;
@@ -24,6 +36,9 @@ export interface Product {
   variants: ProductVariant[];
   addons?: ProductAddon[];
   flavours?: ProductFlavour[];
+  treats?: TreatOption[];
+  maxTreats?: number;
+  designTiers?: DesignTier[];
   enquireOnly?: boolean;
   image?: string;
 }
@@ -61,11 +76,27 @@ export const products: Product[] = [
     slug: "small-party-set",
     name: "Small Party Set (3 Dozen)",
     category: "Party Sets",
+    subtitle: "Choose Your Treats · Flavour · Design",
     description:
-      "Our Small Party Set is ideal for intimate gatherings and smaller celebrations. Includes 1 Dozen Cake Pops, 1 Dozen Choco Cookies, and 1 Dozen Caramel Pretzel Rods.",
+      "A beautifully curated set of 3 dozen handcrafted treats — pick your 3 treat types, flavour, and design style for a fully personalised party spread.",
     details:
-      "The Small Party Set can be customised to your theme and colour scheme. Please allow 3-5 days notice for party set orders.",
+      "Choose 3 treat types (1 dozen each). Cake Pops and Cakesicles cannot be selected together. Please allow 3-5 days notice.",
     variants: [{ label: "Small Party Set (3 Dozen)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" }],
+    flavours: CAKE_FLAVOURS,
+    treats: [
+      { name: "Cake Pop", exclusiveWith: ["Cakesicle"] },
+      { name: "Cakesicle", exclusiveWith: ["Cake Pop"] },
+      { name: "Twisted Pretzel" },
+      { name: "Oreo" },
+    ],
+    maxTreats: 3,
+    designTiers: [
+      { name: "Basic Design", description: "2 colors · basic coating · drizzle (1-2 styles) · sprinkle / pearl / glitter · simple pattern", priceLabel: "Included", priceAdd: 0 },
+      { name: "+3rd Color", description: "Everything in Basic plus one additional color", priceLabel: "+$10", priceAdd: 10 },
+      { name: "Basic Custom", description: "Pattern add-on for a more personalized look", priceLabel: "+$15", priceAdd: 15 },
+      { name: "Medium Custom", description: "Themed styling — baby shower, birthday, seasonal palettes", priceLabel: "+$25", priceAdd: 25 },
+      { name: "Full Custom", description: "Characters, intricate details, and elaborate custom work", priceLabel: "+$40", priceAdd: 40 },
+    ],
     image: "/images/brand-spread.jpg",
   },
   {
