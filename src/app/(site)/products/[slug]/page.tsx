@@ -201,6 +201,16 @@ export default function V2ProductDetail() {
             ) : (
               product.variants.length > 0 && (
                 <>
+                  {/* ── Fixed flavour note ── */}
+                  {product.fixedFlavour && (
+                    <div style={{ marginBottom: "1.5rem", padding: "0.85rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)" }}>
+                      <p style={{ margin: 0, fontWeight: 700, fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.05em", opacity: 0.55, marginBottom: "0.3rem" }}>Flavour</p>
+                      <p style={{ margin: 0, fontWeight: 600, fontSize: "0.95rem" }}>Classic Vanilla</p>
+                      <p style={{ margin: "0.25rem 0 0", fontSize: "0.8rem", opacity: 0.65, lineHeight: 1.5 }}>{product.fixedFlavour}</p>
+                      <p style={{ margin: "0.5rem 0 0", fontSize: "0.75rem", opacity: 0.5, fontStyle: "italic" }}>Flavour is fixed for this set and cannot be changed.</p>
+                    </div>
+                  )}
+
                   {/* ── Flavour selector ── */}
                   {product.flavours && product.flavours.length > 0 && (
                     <div className="options" style={{ marginBottom: "1.5rem" }}>

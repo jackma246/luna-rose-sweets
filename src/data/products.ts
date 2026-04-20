@@ -37,6 +37,7 @@ export interface Product {
   variants: ProductVariant[];
   addons?: ProductAddon[];
   flavours?: ProductFlavour[];
+  fixedFlavour?: string;
   treats?: TreatOption[];
   maxTreats?: number;
   designTiers?: DesignTier[];
@@ -77,13 +78,13 @@ export const products: Product[] = [
     slug: "small-party-set",
     name: "Small Party Set (3 Dozen)",
     category: "Party Sets",
-    subtitle: "Choose Your Treats · Flavour · Design",
+    subtitle: "Choose Your Treats · Design",
     description:
-      "A beautifully curated set of 3 dozen handcrafted treats — pick your 3 treat types, flavour, and design style for a fully personalised party spread.",
+      "A beautifully curated set of 3 dozen handcrafted treats — pick your 3 treat types and design style for a fully personalised party spread.",
     details:
       "Choose 3 treat types (1 dozen each). Cake Pops and Cakesicles cannot be selected together. Please allow 3-5 days notice.",
     variants: [{ label: "Small Party Set (3 Dozen)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    flavours: CAKE_FLAVOURS,
+    fixedFlavour: "Classic Vanilla — made with premium Madagascar and Mexican vanilla in our own custom blend, with real vanilla beans included.",
     treats: [
       { name: "Cake Pop", exclusiveWith: ["Cakesicle"] },
       { name: "Cakesicle", exclusiveWith: ["Cake Pop"] },
@@ -104,13 +105,13 @@ export const products: Product[] = [
     slug: "medium-party-set",
     name: "Medium Party Set (4 Dozen)",
     category: "Party Sets",
-    subtitle: "Choose Your Treats · Flavour · Design",
+    subtitle: "Choose Your Treats · Design",
     description:
-      "A generous set of 4 dozen handcrafted treats — pick your 4 treat types, flavour, and design style for a fully personalised party spread.",
+      "A generous set of 4 dozen handcrafted treats — pick your 4 treat types and design style for a fully personalised party spread.",
     details:
       "Choose 4 treat types (1 dozen each). Cake Pops can fill up to 2 dozen slots. Cakesicles can only be selected once. Please allow 3-5 days notice.",
     variants: [{ label: "Medium Party Set (4 Dozen)", price: 185, image: "/images/brand-spread.jpg" }],
-    flavours: CAKE_FLAVOURS,
+    fixedFlavour: "Classic Vanilla — made with premium Madagascar and Mexican vanilla in our own custom blend, with real vanilla beans included.",
     treats: [
       { name: "Cake Pop", maxCount: 2 },
       { name: "Cakesicle", maxCount: 1 },
