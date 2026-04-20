@@ -4,7 +4,13 @@
       "WebFetch(domain:kaisubakehouse.com)",
       "WebFetch(domain:www.forchocolatesake.co.uk)",
       "WebFetch(domain:www.instagram.com)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "Bash(npm run *)",
+      "Bash(npm -v)",
+      "Bash(npm install *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
