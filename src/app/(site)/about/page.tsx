@@ -32,14 +32,13 @@ export default function V2About() {
           Made <em>by hand,</em> the day they ship.
         </h2>
         <p>
-          Every treat starts in our studio kitchen with premium Belgian
-          chocolate, grass-fed butter, and real Madagascar vanilla. We dip each
-          piece by hand and finish every box with the kind of care we&rsquo;d
-          want for our own table.
+          Every treat starts in our studio kitchen with premium chocolate,
+          grass-fed European butter, real Madagascar vanilla, and real fruits.
+          We dip each piece by hand and finish every box with the kind of care
+          we&rsquo;d want for our own table.
         </p>
         <p>
-          Nothing is frozen. Nothing is factory-made. Just small batches,
-          baked the week of your event.
+          Nothing is factory-made. Just small batches, baked the week of your event.
         </p>
 
         <h2>
