@@ -4,6 +4,28 @@ import V2Header from "./components/V2Header";
 import V2Footer from "./components/V2Footer";
 import StickyPartyBtn from "./components/StickyPartyBtn";
 
+const confetti = [
+  { top: "12%", left: "5%", color: "var(--cherry)", rotate: "30deg" },
+  { top: "22%", left: "52%", color: "var(--butter)", rotate: "-20deg" },
+  { top: "70%", left: "8%", color: "var(--mint)", rotate: "45deg" },
+  { top: "82%", left: "44%", color: "var(--cherry)", rotate: "-10deg" },
+  { top: "18%", left: "92%", color: "var(--butter)", rotate: "60deg" },
+  { top: "88%", left: "62%", color: "var(--cocoa)", rotate: "-35deg" },
+  { top: "48%", left: "3%", color: "var(--cherry)", rotate: "15deg" },
+  { top: "8%", left: "38%", color: "var(--mint)", rotate: "-50deg" },
+];
+
+const marqueeWords = [
+  "cake pops",
+  "cakesicles",
+  "chocolate bouquets",
+  "madeleines",
+  "custom orders",
+  "oreo pops",
+  "cookie boxes",
+  "party sets",
+];
+
 const SETS = [
   {
     label: "Small Set",
@@ -43,49 +65,76 @@ export default function HomePage() {
     <>
       <V2Header current="shop" />
 
-      {/* ── SECTION 1: HERO ── */}
-      <section style={{ position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "relative", maxHeight: "70vh", minHeight: 320, overflow: "hidden" }}>
-          <Image
-            src="/images/brand-spread.jpg"
-            alt="Beautiful dessert sets with cake pops, cakesicles, and pretzels"
-            width={1400}
-            height={900}
-            priority
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", minHeight: 320, maxHeight: "70vh" }}
-          />
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.55) 100%)",
-          }} />
-          <div style={{
-            position: "absolute",
-            bottom: 0, left: 0, right: 0,
-            padding: "2rem 1.5rem 2.5rem",
-            color: "#fff",
-          }}>
-            <p style={{ margin: "0 0 0.4rem", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.85 }}>
-              Handcrafted in small batches
-            </p>
-            <h1 style={{ margin: "0 0 0.75rem", fontSize: "clamp(1.7rem, 6vw, 2.5rem)", fontWeight: 800, lineHeight: 1.15, color: "#fff" }}>
-              Beautiful dessert sets<br />
-              <em style={{ fontStyle: "italic", fontWeight: 700 }}>for your special moments.</em>
+      {/* ── SECTION 1: HERO (original design) ── */}
+      <section className="hero">
+        <div className="confetti-bg" aria-hidden="true">
+          {confetti.map((c, i) => (
+            <i
+              key={i}
+              style={{
+                top: c.top,
+                left: c.left,
+                background: c.color,
+                transform: `rotate(${c.rotate})`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="hero-inner">
+          <div>
+            <div className="eyebrow">A sweet little studio</div>
+            <h1>
+              Dipped, sprinkled, <em>&amp;</em>
+              <br />
+              <em>dressed up</em> for the
+              <br />
+              whole party.
             </h1>
-            <p style={{ margin: "0 0 1.5rem", fontSize: "0.95rem", opacity: 0.9, lineHeight: 1.55 }}>
-              Chocolate-covered treats designed<br />in your color palette.
+            <p className="lede">
+              Handmade cake pops, cakesicles &amp; little bakes — crafted in
+              small batches for birthdays, weddings, and every celebration in
+              between.
             </p>
-            <Link
-              href="/products/party-set"
-              className="btn btn-primary"
-              style={{ fontSize: "1rem", padding: "0.9rem 2rem", display: "inline-flex" }}
-            >
-              Shop Party Sets →
-            </Link>
+            <div className="ctas">
+              <Link href="/products/party-set" className="btn btn-primary">
+                Shop Party Sets →
+              </Link>
+              <Link href="/products" className="btn btn-ghost">
+                Browse all treats
+              </Link>
+            </div>
+          </div>
+          <div className="hero-visual">
+            <div className="plate" aria-hidden="true" />
+            <div className="photo">
+              <Image
+                src="/images/main-hero.jpg"
+                alt="Handcrafted treats beautifully decorated"
+                width={800}
+                height={800}
+                priority
+              />
+            </div>
+            <div className="badge">
+              Small
+              <br />
+              batch
+            </div>
           </div>
         </div>
+        <div className="script-tag">~ welcome in</div>
       </section>
 
-      {/* ── SECTION 2: TRUST BAR ── */}
+      {/* ── MARQUEE (original design) ── */}
+      <div className="marquee">
+        <div className="marquee-track">
+          {[...marqueeWords, ...marqueeWords].map((w, i) => (
+            <span key={i}>{w}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── TRUST BAR ── */}
       <div style={{
         background: "var(--surface, #faf9f7)",
         borderBottom: "1px solid var(--border, #e8e4de)",
@@ -112,7 +161,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── SECTION 3: BESTSELLER SETS ── */}
+      {/* ── SECTION 2: BESTSELLER SETS ── */}
       <section style={{ padding: "3rem 1.25rem 2.5rem" }}>
         <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
           <div className="kicker">Our Sets</div>
@@ -174,7 +223,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SECTION 4: VISUAL ── */}
+      {/* ── SECTION 3: VISUAL ── */}
       <section style={{ position: "relative", overflow: "hidden" }}>
         <Image
           src="/images/treat-boxes/mixed-treats.jpg"
@@ -196,7 +245,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SECTION 5: WHY SETS ── */}
+      {/* ── SECTION 4: WHY SETS ── */}
       <section style={{ padding: "3rem 1.25rem", background: "var(--surface, #faf9f7)", borderTop: "1px solid var(--border, #e8e4de)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
         <div style={{ maxWidth: 520, margin: "0 auto", textAlign: "center" }}>
           <div className="kicker">Why a set?</div>
@@ -224,7 +273,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SECTION 6: MID CTA ── */}
+      {/* ── SECTION 5: MID CTA ── */}
       <section style={{ padding: "2.5rem 1.25rem", textAlign: "center" }}>
         <Link
           href="/products/party-set"
@@ -235,7 +284,7 @@ export default function HomePage() {
         </Link>
       </section>
 
-      {/* ── SECTION 7: INDIVIDUAL TREATS ── */}
+      {/* ── SECTION 6: INDIVIDUAL TREATS ── */}
       <section style={{ padding: "0 1.25rem 3rem", borderTop: "1px solid var(--border, #e8e4de)", paddingTop: "2.5rem" }}>
         <div style={{ maxWidth: 520, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
@@ -283,7 +332,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SECTION 8: FINAL CTA ── */}
+      {/* ── SECTION 7: FINAL CTA ── */}
       <section style={{
         padding: "3.5rem 1.5rem 4rem",
         background: "linear-gradient(135deg, #fff5f5 0%, #fff9f2 100%)",
