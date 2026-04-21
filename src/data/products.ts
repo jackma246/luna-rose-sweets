@@ -329,14 +329,14 @@ export const products: Product[] = [
     details:
       "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/1.jpg" },
+      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new.png" },
     ],
     addons: [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/madeleines/1.jpg",
+    image: "/images/madeleines/new.png",
   },
   {
     slug: "choc-dipped-choco-cookies",
@@ -530,14 +530,14 @@ export const products: Product[] = [
     details:
       "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/1.jpg" },
+      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new.png" },
     ],
     addons: [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/madeleines/1.jpg",
+    image: "/images/madeleines/new.png",
   },
   {
     slug: "bakes-butter-cookies",
