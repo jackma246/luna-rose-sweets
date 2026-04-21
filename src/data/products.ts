@@ -268,7 +268,7 @@ export const products: Product[] = [
   {
     slug: "cakesicles",
     name: "Cakesicles (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     subtitle: "6 Flavours",
     description:
       "Scratch-made cakesicles with a smooth chocolate shell and elegant decorative details. Perfect for dessert tables, gift boxes, party favors, and themed events.",
@@ -285,7 +285,7 @@ export const products: Product[] = [
   {
     slug: "cakepops",
     name: "Cakepops (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     subtitle: "6 Flavours",
     description:
       "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
@@ -304,7 +304,7 @@ export const products: Product[] = [
   {
     slug: "madeleines",
     name: "Madeleines (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     subtitle: "6 Flavours",
     description:
       "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
@@ -323,7 +323,7 @@ export const products: Product[] = [
   {
     slug: "choc-dipped-choco-cookies",
     name: "Choco Cookies (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Rich chocolate cookies dipped in our smooth Belgian chocolate and topped with drizzles and sprinkles. A chocolate lover's dream!",
     details:
@@ -341,7 +341,7 @@ export const products: Product[] = [
   {
     slug: "choc-covered-oreos",
     name: "Chocolate Covered Oreos (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Classic chocolate covered Oreos finished with elegant decorative details. Perfect for dessert tables, party favors, gift boxes, and themed events.",
     details:
@@ -358,7 +358,7 @@ export const products: Product[] = [
   {
     slug: "choc-dipped-caramel-pretzel-rods",
     name: "Caramel Pretzel Rod (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Crunchy pretzel rods dipped in chocolate and decorated by hand. A sweet and salty favourite for dessert tables, gift boxes, and party favors.",
     details:
@@ -375,7 +375,7 @@ export const products: Product[] = [
   {
     slug: "choc-dipped-rice-krispies",
     name: "Rice Krispies (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Soft and chewy rice krispy treats dipped in chocolate and decorated by hand for dessert tables, party favors, and themed events.",
     details:
@@ -392,7 +392,7 @@ export const products: Product[] = [
   {
     slug: "choc-dipped-pretzel-original",
     name: "Twisted Pretzel (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
     details:
@@ -612,7 +612,7 @@ export const products: Product[] = [
   {
     slug: "choc-treats-luxury-chocolate-dates",
     name: "Luxury Chocolate Dates (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
@@ -623,7 +623,7 @@ export const products: Product[] = [
   {
     slug: "choc-butter-cookies",
     name: "Butter Cookies (1 Dozen)",
-    category: "Chocolate Covered Treats",
+    category: "Chocolate Dipped Treats",
     description:
       "Scratch-made butter cookies with a smooth chocolate dip and elegant finishing details. A simple but elevated treat for gifting, dessert boxes, and celebrations.",
     details:
@@ -636,6 +636,24 @@ export const products: Product[] = [
       { label: "Full Custom Design (detailed styling, seasonal themes, mixed designs)", price: "+$8–$12/dozen" },
     ],
     image: "/images/butter-cookies/4.jpg",
+  },
+
+  {
+    slug: "jumbo-marshmallow",
+    name: "Jumbo Marshmallow (1 Dozen)",
+    category: "Chocolate Dipped Treats",
+    description:
+      "Fluffy jumbo marshmallows hand-dipped in premium chocolate with your choice of toppings and decorative finish. A crowd-pleasing treat that's as fun to look at as it is to eat.",
+    details:
+      "Each marshmallow is dipped in premium Belgian chocolate and finished with sprinkles, drizzle, or custom toppings. Base price includes a simple decorated finish. Semi Custom and Full Custom upgrades available for more elaborate designs.",
+    variants: [
+      { label: "1 Dozen", price: 28, image: "/images/marshmallow.png" },
+    ],
+    addons: [
+      { label: "Semi Custom Design (color variations, themed finishing touches)", price: "+$4–$6/dozen" },
+      { label: "Full Custom Design (detailed styling, custom themes)", price: "+$8–$12/dozen" },
+    ],
+    image: "/images/marshmallow.png",
   },
 
   // ── Towers ──────────────────────────────────────────────
