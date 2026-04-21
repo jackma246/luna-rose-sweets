@@ -404,17 +404,30 @@ export default function V2ProductDetail() {
                   {product.designTiers && product.designTiers.length > 0 && (
                     <div className="options" style={{ marginBottom: "1.5rem" }}>
                       <h4>Choose your design</h4>
-                      <div className="option-grid" style={{ gap: "0.5rem" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                         {product.designTiers.map((tier) => (
                           <button
                             key={tier.name}
                             className={`option${selectedDesignTier === tier.name ? " active" : ""}`}
                             onClick={() => setSelectedDesignTier(tier.name)}
-                            style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.2rem" }}
+                            style={{
+                              textAlign: "left",
+                              flexDirection: "column",
+                              alignItems: "flex-start",
+                              gap: "0.2rem",
+                              padding: "0.75rem 1rem",
+                            }}
                           >
-                            <span style={{ fontWeight: 600, display: "flex", justifyContent: "space-between", width: "100%" }}>
-                              {tier.name}
-                              <span>{tier.priceLabel}</span>
+                            <span style={{ fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "0.4rem", flexWrap: "wrap" }}>
+                              <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                                {tier.name}
+                                {tier.popular && (
+                                  <span style={{ fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.04em", padding: "0.15rem 0.55rem", borderRadius: "999px", background: "var(--cherry, #c05)", color: "#fff" }}>
+                                    Most Popular
+                                  </span>
+                                )}
+                              </span>
+                              <span style={{ color: tier.priceAdd > 0 ? "var(--cherry, #c05)" : "inherit" }}>{tier.priceLabel}</span>
                             </span>
                             <small style={{ fontWeight: 400, opacity: 0.65, whiteSpace: "normal", lineHeight: 1.4, fontSize: "0.78rem" }}>{tier.description}</small>
                           </button>

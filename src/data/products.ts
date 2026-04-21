@@ -25,6 +25,7 @@ export interface DesignTier {
   description: string;
   priceLabel: string;
   priceAdd: number;
+  popular?: boolean;
 }
 
 export interface Product {
@@ -267,38 +268,55 @@ export const products: Product[] = [
   // ── Treats (was Cakesicles) ─────────────────────────────
   {
     slug: "cakesicles",
-    name: "Cakesicles (1 Dozen)",
+    name: "Cakesicles",
     category: "Chocolate Dipped Treats",
     subtitle: "6 Flavours",
     description:
-      "Scratch-made cakesicles with a smooth chocolate shell and elegant decorative details. Perfect for dessert tables, gift boxes, party favors, and themed events.",
+      "Our cakesicles combine a smooth chocolate shell with a soft cake interior, creating a rich and satisfying bite.\n\nDesigned with clean finishes and elegant details, they serve as a standout centerpiece on any dessert table.\n\nPerfect for adding a premium touch to your event.",
     details:
-      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$6–$10/dozen. Full Custom (names, initials, logo-inspired details, hand-piped details, multiple mixed designs) available for +$12–$20/dozen. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen (Base Design)", price: 54, image: "/images/cakesicles/1.jpg" }],
+      "Slightly more detailed than cake pops — designs may vary based on mold shape. Best consumed within 2 weeks.",
+    variants: [
+      { label: "1 Dozen", price: 48, image: "/images/cakesicles/1.jpg" },
+      { label: "2 Dozen", price: 92, image: "/images/cakesicles/1.jpg" },
+      { label: "3 Dozen", price: 135, image: "/images/cakesicles/1.jpg" },
+    ],
     addons: [
-      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$6–$10/dozen" },
-      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$12–$20/dozen" },
+      { label: "3rd Color", price: "+$5" },
     ],
     flavours: CAKE_FLAVOURS,
+    flavourAddonPrice: 12,
+    designTiers: [
+      { name: "Classic", description: "Simple coating, drizzle, and light accents · 2 colors included", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$15", priceAdd: 15, popular: true },
+      { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$30+", priceAdd: 30 },
+    ],
     image: "/images/cakesicles/5.png",
   },
   {
     slug: "cakepops",
-    name: "Cakepops (1 Dozen)",
+    name: "Cake Pops",
     category: "Chocolate Dipped Treats",
     subtitle: "6 Flavours",
     description:
-      "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
+      "Our cake pops are made from scratch using our signature vanilla cake base, creating a soft and rich interior with a smooth chocolate coating.\n\nEach piece is carefully hand-dipped and decorated to match your selected color palette, making them perfect for dessert tables, parties, and special events.\n\nA classic and versatile option that pairs beautifully with any theme.",
     details:
-      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
+      "Designs are semi-custom. Custom characters and logos require a Signature Custom upgrade. Flavor splits are evenly divided. Pairs perfectly with cakesicles and pretzels for a full dessert table.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 42, image: "/images/cake-pops/basic.jpg" },
+      { label: "1 Dozen (12 pcs)", price: 36, image: "/images/cake-pops/basic.jpg" },
+      { label: "2 Dozen (24 pcs)", price: 68, image: "/images/cake-pops/basic.jpg" },
+      { label: "3 Dozen (36 pcs)", price: 100, image: "/images/cake-pops/basic.jpg" },
     ],
     addons: [
-      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
-      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
+      { label: "3rd Color", price: "+$5" },
+      { label: "4+ Colors", price: "Signature Custom required" },
     ],
     flavours: CAKE_FLAVOURS,
+    flavourAddonPrice: 12,
+    designTiers: [
+      { name: "Classic", description: "Simple coating, drizzle, and light accents · 2 colors included", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$12", priceAdd: 12, popular: true },
+      { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$24+", priceAdd: 24 },
+    ],
     image: "/images/cake-pops/basic.jpg",
   },
   {
@@ -343,61 +361,66 @@ export const products: Product[] = [
     name: "Chocolate Covered Oreos (1 Dozen)",
     category: "Chocolate Dipped Treats",
     description:
-      "Classic chocolate covered Oreos finished with elegant decorative details. Perfect for dessert tables, party favors, gift boxes, and themed events.",
+      "Our chocolate covered Oreos combine a familiar favorite with a refined look.\n\nEach cookie is coated and decorated to match your event style, making them a perfect addition to any dessert table.",
     details:
-      "Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5/dozen. Full Custom (names, initials, logo-inspired details, multiple mixed designs) available for +$10–$15/dozen. Photos are for style reference only — slight variation in colour and decorative placement is normal and part of the handmade process.",
+      "Pairs well with cake pops and pretzels for a balanced mix. Photos are for style reference only — slight variation in colour and decorative placement is normal and part of the handmade process.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 30, image: "/images/choco-cookies/1.jpg" },
+      { label: "1 Dozen", price: 30, image: "/images/choco-cookies/1.jpg" },
     ],
-    addons: [
-      { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5/dozen" },
-      { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$15/dozen" },
+    designTiers: [
+      { name: "Classic", description: "Simple chocolate coating with clean drizzle and finishing details", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium decorative accents", priceLabel: "+$10", priceAdd: 10, popular: true },
     ],
     image: "/images/choco-cookies/1.jpg",
   },
   {
     slug: "choc-dipped-caramel-pretzel-rods",
-    name: "Caramel Pretzel Rod (1 Dozen)",
+    name: "Chocolate Covered Pretzel Rods",
     category: "Chocolate Dipped Treats",
     description:
-      "Crunchy pretzel rods dipped in chocolate and decorated by hand. A sweet and salty favourite for dessert tables, gift boxes, and party favors.",
+      "Our chocolate covered pretzel rods offer the perfect balance of sweet and salty.\n\nEach rod is dipped in chocolate and finished with a clean drizzle and decorative accents.\n\nCaramel option adds an extra layer of richness, making them a customer favorite.",
     details:
-      "Base price includes chocolate dipped finish with simple drizzle or sprinkles. Semi Custom (extra colors, themed color palettes, marbling, decorative topping combinations) available for +$6–$8/dozen. Full Custom (detailed decorative styling, textured finishes, caramel wrapping, premium topping combinations, multiple design styles) available for +$10–$18/dozen. Note: Pretzel rods may have higher custom fees due to shape, coating difficulty, and hand-detail work.",
+      "Ideal for adding height and dimension to dessert tables. Caramel version is softer and richer. Adds variety and texture when paired with cake-based treats.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 36, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "Classic Pretzel Rods (1 Dozen)", price: 36, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "Caramel Pretzel Rods (1 Dozen)", price: 42, image: "/images/caramel-pretzel/1.jpg" },
     ],
-    addons: [
-      { label: "Semi Custom Design (extra colors, marbling, themed palettes)", price: "+$6–$8/dozen" },
-      { label: "Full Custom Design (detailed styling, mixed designs, premium toppings)", price: "+$10–$18/dozen" },
+    designTiers: [
+      { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium decorative finish", priceLabel: "+$10", priceAdd: 10, popular: true },
     ],
     image: "/images/caramel-pretzel/1.jpg",
   },
   {
     slug: "choc-dipped-rice-krispies",
-    name: "Rice Krispies (1 Dozen)",
+    name: "Rice Krispies Treats (1 Dozen)",
     category: "Chocolate Dipped Treats",
     description:
-      "Soft and chewy rice krispy treats dipped in chocolate and decorated by hand for dessert tables, party favors, and themed events.",
+      "These chocolate covered Rice Krispies treats are soft, chewy, and lightly crispy.\n\nFinished with a smooth coating and simple decorative accents, they add a fun texture to your dessert selection.",
     details:
-      "Base price includes chocolate dipped finish with simple drizzle or sprinkles. Semi Custom (additional colors, marbling, two-tone finishes, simple theme-based styling) available for +$5–$7/dozen. Full Custom (detailed decorative styling, layered elements, decorative toppers, multiple mixed designs) available for +$10–$15/dozen. Complex themes and mixed design assortments may require Full Custom pricing.",
+      "Adds variety in texture to dessert sets.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 30, image: "/images/rice-krispies/1.jpg" },
+      { label: "1 Dozen", price: 30, image: "/images/rice-krispies/1.jpg" },
     ],
-    addons: [
-      { label: "Semi Custom Design (extra colors, marbling, themed styling)", price: "+$5–$7/dozen" },
-      { label: "Full Custom Design (detailed styling, layered elements, mixed designs)", price: "+$10–$15/dozen" },
+    designTiers: [
+      { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$10", priceAdd: 10 },
     ],
     image: "/images/rice-krispies/1.jpg",
   },
   {
     slug: "choc-dipped-pretzel-original",
-    name: "Twisted Pretzel (1 Dozen)",
+    name: "Twisted Pretzels (1 Dozen)",
     category: "Chocolate Dipped Treats",
     description:
-      "Classic pretzel twists dipped in our premium Belgian chocolate with decorative toppings. Simple, satisfying, and utterly moreish.",
+      "These chocolate covered twisted pretzels are a simple yet satisfying addition to any dessert spread.\n\nLight, crunchy, and easy to eat, they bring balance to richer treats.",
     details:
-      "Hand-dipped in milk or white chocolate and finished with sprinkles, drizzles, or crushed toppings. Perfect for grazing tables and treat bags. Best consumed within 2 weeks.",
+      "Great filler item for party trays and dessert tables. Best consumed within 2 weeks.",
     variants: [{ label: "1 Dozen", price: 35, image: "/images/twisted-pretzel/1.jpg" }],
+    designTiers: [
+      { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$8", priceAdd: 8 },
+    ],
     image: "/images/twisted-pretzel/1.jpg",
   },
   // ── Bakes ───────────────────────────────────────────────
@@ -640,18 +663,18 @@ export const products: Product[] = [
 
   {
     slug: "jumbo-marshmallow",
-    name: "Jumbo Marshmallow (1 Dozen)",
+    name: "Chocolate Covered Marshmallows (1 Dozen)",
     category: "Chocolate Dipped Treats",
     description:
-      "Fluffy jumbo marshmallows hand-dipped in premium chocolate with your choice of toppings and decorative finish. A crowd-pleasing treat that's as fun to look at as it is to eat.",
+      "Our chocolate covered marshmallows are soft, fluffy, and coated in smooth chocolate.\n\nA simple and fun addition that balances heavier desserts.",
     details:
-      "Each marshmallow is dipped in premium Belgian chocolate and finished with sprinkles, drizzle, or custom toppings. Base price includes a simple decorated finish. Semi Custom and Full Custom upgrades available for more elaborate designs.",
+      "Perfect as a lighter option alongside richer treats.",
     variants: [
-      { label: "1 Dozen", price: 28, image: "/images/marshmallow.png" },
+      { label: "1 Dozen", price: 30, image: "/images/marshmallow.png" },
     ],
-    addons: [
-      { label: "Semi Custom Design (color variations, themed finishing touches)", price: "+$4–$6/dozen" },
-      { label: "Full Custom Design (detailed styling, custom themes)", price: "+$8–$12/dozen" },
+    designTiers: [
+      { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$8", priceAdd: 8 },
     ],
     image: "/images/marshmallow.png",
   },
