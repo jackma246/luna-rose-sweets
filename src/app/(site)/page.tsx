@@ -91,9 +91,10 @@ export default function HomePage() {
               whole party.
             </h1>
             <p className="lede">
-              Handmade cake pops, cakesicles &amp; little bakes — crafted in
-              small batches for birthdays, weddings, and every celebration in
-              between.
+              Beautiful dessert sets for your special moments.
+            </p>
+            <p style={{ margin: "0 0 1.25rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--cherry, #c05)" }}>
+              Party sets starting at $135
             </p>
             <div className="ctas">
               <Link href="/products/party-set" className="btn btn-primary">
