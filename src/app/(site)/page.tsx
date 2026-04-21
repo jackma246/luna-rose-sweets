@@ -21,7 +21,7 @@ const marqueeWords = [
   "chocolate bouquets",
   "madeleines",
   "custom orders",
-  "oreo pops",
+  "초코쿠키(오레오®️) pops",
   "cookie boxes",
   "party sets",
 ];
@@ -57,7 +57,7 @@ const TREATS = [
   { name: "Cake Pops", slug: "cakepops", img: "/images/cake-pops/basic.jpg" },
   { name: "Cakesicles", slug: "cakesicles", img: "/images/cakesicles/5.png" },
   { name: "Pretzel Rods", slug: "choc-dipped-caramel-pretzel-rods", img: "/images/caramel-pretzel/1.jpg" },
-  { name: "Oreos & more", slug: "choc-covered-oreos", img: "/images/choco-cookies/1.jpg" },
+  { name: "초코쿠키(오레오®️) & more", slug: "choc-covered-oreos", img: "/images/choco-cookies/1.jpg" },
 ];
 
 export default function HomePage() {

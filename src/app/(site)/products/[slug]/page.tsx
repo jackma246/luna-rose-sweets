@@ -227,12 +227,12 @@ export default function V2ProductDetail() {
                           onClick={() => setSecondFlavour("")}
                           style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.15rem" }}
                         >
-                          <span style={{ fontWeight: 600 }}>1 flavour <span style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.8rem" }}>(기본)</span></span>
+                          <span style={{ fontWeight: 600 }}>1 flavour <span style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.8rem" }}>(Default)</span></span>
                           <small style={{ fontWeight: 400, opacity: 0.65, fontSize: "0.78rem" }}>Classic Vanilla only</small>
                         </button>
                         <div style={{ borderRadius: "0.5rem", border: secondFlavour ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)", overflow: "hidden" }}>
                           <div style={{ padding: "0.65rem 1rem 0.5rem", background: secondFlavour ? "var(--cherry-soft, #fff5f5)" : "var(--surface, #faf9f7)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
-                            <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavours <span style={{ fontWeight: 500, color: "var(--cherry, #c05)", fontSize: "0.8rem" }}>(추천 ⭐)</span></span>
+                            <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavours <span style={{ fontWeight: 500, color: "var(--cherry, #c05)", fontSize: "0.8rem" }}>(Recommended ⭐)</span></span>
                             <span style={{ marginLeft: "0.5rem", fontSize: "0.78rem", opacity: 0.55 }}>+${product.flavourAddonPrice} · 50/50 split</span>
                             <div style={{ fontSize: "0.78rem", opacity: 0.7, marginTop: "0.1rem" }}>More variety &amp; crowd-friendly</div>
                           </div>
@@ -295,12 +295,12 @@ export default function V2ProductDetail() {
                           onClick={() => setSecondFlavour("")}
                           style={{ textAlign: "left", flexDirection: "column", alignItems: "flex-start", gap: "0.15rem" }}
                         >
-                          <span style={{ fontWeight: 600 }}>1 flavour <span style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.8rem" }}>(기본)</span></span>
+                          <span style={{ fontWeight: 600 }}>1 flavour <span style={{ fontWeight: 400, opacity: 0.55, fontSize: "0.8rem" }}>(Default)</span></span>
                           <small style={{ fontWeight: 400, opacity: 0.65, fontSize: "0.78rem" }}>{selectedFlavour} only</small>
                         </button>
                         <div style={{ borderRadius: "0.5rem", border: secondFlavour ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)", overflow: "hidden" }}>
                           <div style={{ padding: "0.65rem 1rem 0.5rem", background: secondFlavour ? "var(--cherry-soft, #fff5f5)" : "var(--surface, #faf9f7)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
-                            <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavours <span style={{ fontWeight: 500, color: "var(--cherry, #c05)", fontSize: "0.8rem" }}>(추천 ⭐)</span></span>
+                            <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavours <span style={{ fontWeight: 500, color: "var(--cherry, #c05)", fontSize: "0.8rem" }}>(Recommended ⭐)</span></span>
                             <span style={{ marginLeft: "0.5rem", fontSize: "0.78rem", opacity: 0.55 }}>+${product.flavourAddonPrice} · 50/50 split</span>
                             <div style={{ fontSize: "0.78rem", opacity: 0.7, marginTop: "0.1rem" }}>More variety &amp; crowd-friendly</div>
                           </div>
