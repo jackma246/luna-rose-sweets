@@ -259,7 +259,7 @@ export const products: Product[] = [
     description:
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
-      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed 초코쿠키(오레오®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
+      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed Chocolate sandwich cookies (Oreos®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
     variants: [],
     enquireOnly: true,
     image: "/images/luxury-dates/1.jpg",
@@ -340,10 +340,10 @@ export const products: Product[] = [
   },
   {
     slug: "choc-covered-oreos",
-    name: "초콜렛 커버드 초코쿠키(오레오®️) (1 Dozen)",
+    name: "Chocolate Covered Chocolate Sandwich Cookies (Oreos®️) (1 Dozen)",
     category: "Chocolate Dipped Treats",
     description:
-      "Our chocolate covered 초코쿠키(오레오®️) combine a familiar favorite with a refined look.\n\nEach cookie is coated and decorated to match your event style, making them a perfect addition to any dessert table.",
+      "Our chocolate covered Chocolate sandwich cookies (Oreos®️) combine a familiar favorite with a refined look.\n\nEach cookie is coated and decorated to match your event style, making them a perfect addition to any dessert table.",
     details:
       "Pairs well with cake pops and pretzels for a balanced mix. Photos are for style reference only — slight variation in colour and decorative placement is normal and part of the handmade process.",
     variants: [
@@ -621,7 +621,7 @@ export const products: Product[] = [
     description:
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
-      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed 초코쿠키(오레오®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
+      "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed Chocolate sandwich cookies (Oreos®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
     variants: [{ label: "1 Dozen", price: 36, image: "/images/luxury-dates/1.jpg" }],
     image: "/images/luxury-dates/1.jpg",
   },

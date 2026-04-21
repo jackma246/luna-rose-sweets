@@ -62,7 +62,7 @@ export default function AboutPage() {
             <li className="flex items-start gap-3">
               <span className="text-mint font-bold mt-0.5">&#x2022;</span>
               <span>
-                <strong className="text-heading">초코쿠키(오레오®️) Pops & More</strong> — Custom
+                <strong className="text-heading">Chocolate sandwich cookies (Oreos®️) Pops & More</strong> — Custom
                 treat boxes curated for any event
               </span>
             </li>
