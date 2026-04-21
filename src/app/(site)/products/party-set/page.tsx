@@ -804,7 +804,7 @@ export default function PartySetPage() {
               <details open>
                 <summary>The details</summary>
                 <p>
-                  All treats are handcrafted in small batches using premium Belgian chocolate and real vanilla beans.
+                  All cake are handcrafted in small batches using premium Belgian chocolate and real vanilla beans, real fruits.
                   Each set is boxed and ribbon-tied for a polished, party-ready presentation.
                 </p>
               </details>
