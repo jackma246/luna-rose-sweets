@@ -55,6 +55,7 @@ const PARTY_SIZES: PartySize[] = [
       { name: "Cakesicle", exclusiveWith: ["Cake Pop"] },
       { name: "Twisted Pretzel" },
       { name: "Oreo" },
+      { name: "Marshmallow", maxCount: 3 },
     ],
     fixedFlavour: true,
     designTiers: [
@@ -80,6 +81,7 @@ const PARTY_SIZES: PartySize[] = [
       { name: "Caramel Pretzel Rod" },
       { name: "Oreo" },
       { name: "Rice Krispies" },
+      { name: "Marshmallow", maxCount: 4 },
     ],
     fixedFlavour: true,
     designTiers: [
@@ -105,6 +107,7 @@ const PARTY_SIZES: PartySize[] = [
       { name: "Caramel Pretzel Rod", maxCount: 8 },
       { name: "Oreo", maxCount: 8 },
       { name: "Rice Krispies", maxCount: 8 },
+      { name: "Marshmallow", maxCount: 8 },
     ],
     fixedFlavour: false,
     designTiers: [
