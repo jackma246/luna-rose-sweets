@@ -53,8 +53,8 @@ const PARTY_SIZES: PartySize[] = [
     treats: [
       { name: "Cake Pop", exclusiveWith: ["Cakesicle"] },
       { name: "Cakesicle", exclusiveWith: ["Cake Pop"] },
-      { name: "Twisted Pretzel" },
-      { name: "Oreo" },
+      { name: "Twisted Pretzel", maxCount: 3 },
+      { name: "Oreo", maxCount: 3 },
       { name: "Marshmallow", maxCount: 3 },
     ],
     fixedFlavour: true,
@@ -78,9 +78,9 @@ const PARTY_SIZES: PartySize[] = [
     treats: [
       { name: "Cake Pop", maxCount: 2 },
       { name: "Cakesicle", maxCount: 1 },
-      { name: "Caramel Pretzel Rod" },
-      { name: "Oreo" },
-      { name: "Rice Krispies" },
+      { name: "Caramel Pretzel Rod", maxCount: 4 },
+      { name: "Oreo", maxCount: 4 },
+      { name: "Rice Krispies", maxCount: 4 },
       { name: "Marshmallow", maxCount: 4 },
     ],
     fixedFlavour: true,
