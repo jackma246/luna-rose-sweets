@@ -46,7 +46,7 @@ export default function V2About() {
         </h2>
         <p>
           Cake pops &amp; cakesicles, chocolate-dipped madeleines, tray-baked
-          brownies, cupcakes, cookie boxes, custom cakes, and seasonal
+          cake, cupcakes, cookie boxes, custom cakes, and seasonal
           treats. If you have a party, a wedding, a shower, or just a
           Tuesday that needs sprinkles — we can dress it up.
         </p>
