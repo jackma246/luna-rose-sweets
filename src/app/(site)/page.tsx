@@ -16,14 +16,10 @@ const confetti = [
 ];
 
 const marqueeWords = [
-  "cake pops",
-  "cakesicles",
-  "chocolate bouquets",
-  "madeleines",
-  "custom orders",
-  "Chocolate sandwich cookies (Oreos®️) pops",
-  "cookie boxes",
-  "party sets",
+  "Order by Thursday for weekend pickup",
+  "San Jose & Bay Area pick up",
+  "Made from scratch",
+  "Custom color palettes available",
 ];
 
 const SETS = [
@@ -131,33 +127,6 @@ export default function HomePage() {
         <div className="marquee-track">
           {[...marqueeWords, ...marqueeWords].map((w, i) => (
             <span key={i}>{w}</span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── TRUST BAR ── */}
-      <div style={{
-        background: "var(--surface, #faf9f7)",
-        borderBottom: "1px solid var(--border, #e8e4de)",
-        padding: "0.9rem 1.25rem",
-        overflowX: "auto",
-      }}>
-        <div style={{
-          display: "flex",
-          gap: "1.25rem 2rem",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          fontSize: "0.78rem",
-          fontWeight: 600,
-          whiteSpace: "nowrap",
-        }}>
-          {[
-            "Made from scratch",
-            "Custom color palettes",
-            "Perfect for dessert tables",
-            "San Jose / Bay Area pickup",
-          ].map((t) => (
-            <span key={t} style={{ opacity: 0.7 }}>✔ {t}</span>
           ))}
         </div>
       </div>
