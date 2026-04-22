@@ -118,6 +118,9 @@ export const products: Product[] = [
       "/images/cake/cake2.jpeg",
       "/images/cake/cake1.jpeg",
       "/images/cake/cake3.jpeg",
+      "/images/cake/narae1.jpeg",
+      "/images/cake/narae2.jpeg",
+      "/images/cake/narae3.jpeg",
     ],
   },
   {
