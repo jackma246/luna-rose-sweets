@@ -167,7 +167,7 @@ export default function V2ProductDetail() {
 
         <div className="pd-grid">
           <div className="pd-gallery">
-            {images.length > 1 ? (
+            {(images.length > 1 || product.video) ? (
               <div style={{ gridColumn: "1 / -1" }}>
                 {/* Swipeable scroll gallery */}
                 <div style={{
@@ -180,6 +180,27 @@ export default function V2ProductDetail() {
                   WebkitOverflowScrolling: "touch",
                   marginBottom: "0.75rem",
                 }}>
+                  {/* Video slide first if present */}
+                  {product.video && (
+                    <div style={{
+                      flexShrink: 0,
+                      width: "100%",
+                      scrollSnapAlign: "start",
+                      borderRadius: "0.75rem",
+                      overflow: "hidden",
+                      aspectRatio: "4/5",
+                      background: "#000",
+                    }}>
+                      <video
+                        src={product.video}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      />
+                    </div>
+                  )}
                   {images.map((src, i) => (
                     <div key={src} style={{
                       flexShrink: 0,
@@ -203,6 +224,17 @@ export default function V2ProductDetail() {
                 </div>
                 {/* Dot indicators */}
                 <div style={{ display: "flex", justifyContent: "center", gap: "0.4rem" }}>
+                  {product.video && (
+                    <button
+                      key="video"
+                      onClick={() => setMainImgIdx(-1)}
+                      style={{
+                        width: 7, height: 7, borderRadius: "50%", border: "none", padding: 0,
+                        background: "var(--cherry, #c05)",
+                        cursor: "pointer",
+                      }}
+                    />
+                  )}
                   {images.map((_, i) => (
                     <button
                       key={i}

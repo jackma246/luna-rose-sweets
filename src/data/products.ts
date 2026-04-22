@@ -45,6 +45,7 @@ export interface Product {
   designTiers?: DesignTier[];
   enquireOnly?: boolean;
   badge?: string;
+  video?: string;
   image?: string;
   images?: string[];
   hidden?: boolean;
@@ -371,6 +372,7 @@ export const products: Product[] = [
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$24+", priceAdd: 24 },
     ],
     badge: "Baked from scratch",
+    video: "/videos/cakepops.mov",
     image: "/images/cake-pops/new.jpeg",
   },
   {
