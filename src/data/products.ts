@@ -45,6 +45,7 @@ export interface Product {
   designTiers?: DesignTier[];
   enquireOnly?: boolean;
   image?: string;
+  images?: string[];
   hidden?: boolean;
 }
 
@@ -86,10 +87,10 @@ export const products: Product[] = [
     details: "Choose your set size, treat types, design finish, and flavor. Handcrafted in small batches with premium Belgian chocolate. Please allow 3–7 days notice.",
     variants: [
       { label: "Small Set (36 pcs)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" },
-      { label: "Medium Set (48 pcs)", price: 185, image: "/images/brand-spread.jpg" },
+      { label: "Medium Set (48 pcs)", price: 185, image: "/images/brand-spread-new.png" },
       { label: "Large Set (96 pcs)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" },
     ],
-    image: "/images/brand-spread.jpg",
+    image: "/images/brand-spread-new.png",
   },
   {
     slug: "party-layer-cake",
@@ -101,8 +102,8 @@ export const products: Product[] = [
     details:
       "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
     variants: [
-      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
-      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
+      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/cake00.jpeg" },
+      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/cake00.jpeg" },
     ],
     addons: [
       { label: "Extra Cream Decoration", price: "+$10–$25" },
@@ -110,7 +111,14 @@ export const products: Product[] = [
       { label: "Lettering", price: "+$5–$10" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/cake/7.jpg",
+    image: "/images/cake/cake00.jpeg",
+    images: [
+      "/images/cake/cake00.jpeg",
+      "/images/cake/cake0.jpeg",
+      "/images/cake/cake2.jpeg",
+      "/images/cake/cake1.jpeg",
+      "/images/cake/cake3.jpeg",
+    ],
   },
   {
     slug: "party-two-tier-cake",
@@ -121,14 +129,14 @@ export const products: Product[] = [
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 200, image: "/images/cake/two-tier.jpg" }],
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 200, image: "/images/cake/two-tier-new.jpeg" }],
     flavours: CAKE_FLAVOURS,
     designTiers: [
       { name: "Classic", description: "Simple finish · 2 colors · minimal decoration", priceLabel: "Included", priceAdd: 0 },
       { name: "Enhanced", description: "Color mix · basic decor · simple lettering", priceLabel: "+$30", priceAdd: 30, popular: true },
       { name: "Full Custom", description: "Full custom design · edible image · elaborate decoration", priceLabel: "+$60", priceAdd: 60 },
     ],
-    image: "/images/cake/two-tier.jpg",
+    image: "/images/cake/two-tier-new.jpeg",
   },
   {
     slug: "party-tray-bakes",
@@ -172,7 +180,7 @@ export const products: Product[] = [
     details:
       "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
     variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/brand-spread.jpg",
+    image: "/images/brand-spread-new.png",
     hidden: true,
   },
   {
@@ -183,8 +191,8 @@ export const products: Product[] = [
       "A child-friendly DIY kit where kids get to be creative and decorate their own cakesicles and treats. A fun activity and delicious treat in one!",
     details:
       "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
-    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread.jpg" }],
-    image: "/images/brand-spread.jpg",
+    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread-new.png" }],
+    image: "/images/brand-spread-new.png",
     hidden: true,
   },
 
@@ -308,9 +316,9 @@ export const products: Product[] = [
     details:
       "Designs are semi-custom. Custom characters and logos require a Signature Custom upgrade. Flavor splits are evenly divided. Pairs perfectly with cakesicles and pretzels for a full dessert table.",
     variants: [
-      { label: "1 Dozen (12 pcs)", price: 36, image: "/images/cake-pops/basic.jpg" },
-      { label: "2 Dozen (24 pcs)", price: 68, image: "/images/cake-pops/basic.jpg" },
-      { label: "3 Dozen (36 pcs)", price: 100, image: "/images/cake-pops/basic.jpg" },
+      { label: "1 Dozen (12 pcs)", price: 36, image: "/images/cake-pops/new.jpeg" },
+      { label: "2 Dozen (24 pcs)", price: 68, image: "/images/cake-pops/new.jpeg" },
+      { label: "3 Dozen (36 pcs)", price: 100, image: "/images/cake-pops/new.jpeg" },
     ],
     addons: [
       { label: "3rd Color", price: "+$5" },
@@ -323,7 +331,7 @@ export const products: Product[] = [
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$12", priceAdd: 12, popular: true },
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$24+", priceAdd: 24 },
     ],
-    image: "/images/cake-pops/basic.jpg",
+    image: "/images/cake-pops/new.jpeg",
   },
   {
     slug: "madeleines",
@@ -335,14 +343,14 @@ export const products: Product[] = [
     details:
       "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new.png" },
+      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new2.png" },
     ],
     addons: [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/madeleines/new.png",
+    image: "/images/madeleines/new2.png",
   },
   {
     slug: "choc-covered-oreos",
@@ -504,13 +512,13 @@ export const products: Product[] = [
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier.jpg" }],
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier-new.jpeg" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/cake/two-tier.jpg",
+    image: "/images/cake/two-tier-new.jpeg",
     hidden: true,
   },
   {
@@ -523,14 +531,14 @@ export const products: Product[] = [
     details:
       "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
-      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new.png" },
+      { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new2.png" },
     ],
     addons: [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/madeleines/new.png",
+    image: "/images/madeleines/new2.png",
     hidden: true,
   },
   {
@@ -586,13 +594,13 @@ export const products: Product[] = [
       "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
     details:
       "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
-    variants: [{ label: "1 Dozen (Base Design)", price: 42, image: "/images/cake-pops/basic.jpg" }],
+    variants: [{ label: "1 Dozen (Base Design)", price: 42, image: "/images/cake-pops/new.jpeg" }],
     addons: [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
       { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/cake-pops/basic.jpg",
+    image: "/images/cake-pops/new.jpeg",
     hidden: true,
   },
 
@@ -618,7 +626,7 @@ export const products: Product[] = [
     details:
       "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
     variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
-    image: "/images/brand-spread.jpg",
+    image: "/images/brand-spread-new.png",
     hidden: true,
   },
   {
@@ -629,8 +637,8 @@ export const products: Product[] = [
       "A child-friendly DIY kit where kids get to be creative and decorate their own cakesicles and treats. A fun activity and delicious treat in one!",
     details:
       "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
-    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread.jpg" }],
-    image: "/images/brand-spread.jpg",
+    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread-new.png" }],
+    image: "/images/brand-spread-new.png",
     hidden: true,
   },
   {
@@ -690,8 +698,8 @@ export const products: Product[] = [
       "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
       "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.jpeg" }],
-    image: "/images/towers/mt.jpeg",
+    variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.png" }],
+    image: "/images/towers/mt.png",
   },
   {
     slug: "macaron-tower",
@@ -701,8 +709,8 @@ export const products: Product[] = [
       "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
     details:
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
-    variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.jpeg" }],
-    image: "/images/towers/mat.jpeg",
+    variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.png" }],
+    image: "/images/towers/mat.png",
   },
   {
     slug: "chocolate-tower",
@@ -712,8 +720,8 @@ export const products: Product[] = [
       "A decadent tower of handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
     details:
       "The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/cht.jpeg" }],
-    image: "/images/towers/cht.jpeg",
+    variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/cht.png" }],
+    image: "/images/towers/cht.png",
   },
   {
     slug: "croissant-tower",
@@ -724,10 +732,10 @@ export const products: Product[] = [
     details:
       "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
     variants: [
-      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/ct.jpeg" },
-      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/ct.jpeg" },
+      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/ct.png" },
+      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/ct.png" },
     ],
-    image: "/images/towers/ct.jpeg",
+    image: "/images/towers/ct.png",
   },
 ];
 

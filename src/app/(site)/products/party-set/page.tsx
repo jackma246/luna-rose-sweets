@@ -29,7 +29,7 @@ const SIZES = [
     badgeColor: "var(--cherry, #c05)",
     desc: "Balanced, polished, and perfect for most events.",
     subDesc: "Most customers choose this for the best balance of variety and presentation ✨",
-    previewImg: "/images/brand-spread.jpg",
+    previewImg: "/images/brand-spread-new.png",
     previewLabel: "Medium Set",
   },
   {
@@ -50,7 +50,8 @@ const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
   { id: "madeleines", label: "Madeleines" },
-  { id: "pretzels", label: "Pretzels" },
+  { id: "caramel-pretzel-rods", label: "Caramel Pretzel Rods" },
+  { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "rice-krispies", label: "Rice Krispies" },
   { id: "marshmallows", label: "Marshmallows" },
@@ -183,7 +184,7 @@ export default function PartySetPage() {
       variantLabel: size.label,
       name: `Party Set — ${size.label}`,
       price: effectivePrice,
-      image: "/images/brand-spread.jpg",
+      image: "/images/brand-spread-new.png",
       note: buildCartNote(),
     }, quantity);
     setAdded(true);

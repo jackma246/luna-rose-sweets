@@ -25,6 +25,7 @@ export default function V2ProductDetail() {
 
   const images = useMemo(() => {
     if (!product) return [];
+    if (product.images && product.images.length > 0) return product.images;
     const list: string[] = [];
     if (product.image) list.push(product.image);
     for (const v of product.variants) {
@@ -166,24 +167,76 @@ export default function V2ProductDetail() {
 
         <div className="pd-grid">
           <div className="pd-gallery">
-            <div className="pd-thumbs">
-              {images.map((src, i) => (
-                <button
-                  key={src}
-                  className={`pd-thumb${i === mainImgIdx ? " active" : ""}`}
-                  onClick={() => setMainImgIdx(i)}
-                  aria-label={`View image ${i + 1}`}
-                >
-                  <Image src={src} alt="" width={120} height={120} />
-                </button>
-              ))}
-            </div>
-            <div className="pd-main">
-              {product.enquireOnly && <div className="tag">Made to order</div>}
-              {mainImage && (
-                <Image src={mainImage} alt={product.name} width={800} height={1000} priority />
-              )}
-            </div>
+            {images.length > 1 ? (
+              <div>
+                {/* Swipeable scroll gallery */}
+                <div style={{
+                  display: "flex",
+                  overflowX: "auto",
+                  scrollSnapType: "x mandatory",
+                  gap: "0.5rem",
+                  borderRadius: "0.75rem",
+                  scrollbarWidth: "none",
+                  WebkitOverflowScrolling: "touch",
+                  marginBottom: "0.65rem",
+                }}>
+                  {images.map((src, i) => (
+                    <div key={src} style={{
+                      flexShrink: 0,
+                      width: "100%",
+                      scrollSnapAlign: "start",
+                      borderRadius: "0.75rem",
+                      overflow: "hidden",
+                      aspectRatio: "4/3",
+                      position: "relative",
+                    }}>
+                      <Image
+                        src={src}
+                        alt={`${product.name} ${i + 1}`}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        priority={i === 0}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {/* Dot indicators */}
+                <div style={{ display: "flex", justifyContent: "center", gap: "0.35rem" }}>
+                  {images.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setMainImgIdx(i)}
+                      style={{
+                        width: 7, height: 7, borderRadius: "50%", border: "none", padding: 0,
+                        background: i === mainImgIdx ? "var(--cherry, #c05)" : "#ccc",
+                        cursor: "pointer", transition: "background 0.15s",
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="pd-thumbs">
+                  {images.map((src, i) => (
+                    <button
+                      key={src}
+                      className={`pd-thumb${i === mainImgIdx ? " active" : ""}`}
+                      onClick={() => setMainImgIdx(i)}
+                      aria-label={`View image ${i + 1}`}
+                    >
+                      <Image src={src} alt="" width={120} height={120} />
+                    </button>
+                  ))}
+                </div>
+                <div className="pd-main">
+                  {product.enquireOnly && <div className="tag">Made to order</div>}
+                  {mainImage && (
+                    <Image src={mainImage} alt={product.name} width={800} height={1000} priority />
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           <div className="pd-details">
