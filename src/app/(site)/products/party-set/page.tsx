@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { CAKE_FLAVOURS } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../../components/V2Header";
@@ -16,6 +17,8 @@ const SIZES = [
     badgeColor: "",
     desc: "A sweet and simple option for small gatherings.",
     subDesc: null as string | null,
+    previewImg: "/images/treat-boxes/mixed-treats.jpg",
+    previewLabel: "Small Set",
   },
   {
     id: "medium",
@@ -26,6 +29,8 @@ const SIZES = [
     badgeColor: "var(--cherry, #c05)",
     desc: "Balanced, polished, and perfect for most events.",
     subDesc: "Most customers choose this for the best balance of variety and presentation ✨",
+    previewImg: "/images/brand-spread.jpg",
+    previewLabel: "Medium Set",
   },
   {
     id: "large",
@@ -36,6 +41,8 @@ const SIZES = [
     badgeColor: "#2a7a5e",
     desc: "More variety and visual impact for larger celebrations.",
     subDesc: null,
+    previewImg: "/images/treat-boxes/mixed-treats.jpg",
+    previewLabel: "Large Set",
   },
 ];
 
@@ -43,7 +50,9 @@ const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
   { id: "pretzels", label: "Pretzels" },
-  { id: "others", label: "Oreos / Rice Krispies / Marshmallows" },
+  { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
+  { id: "rice-krispies", label: "Rice Krispies" },
+  { id: "marshmallows", label: "Marshmallows" },
 ];
 
 const MAX_TREATS = 4;
@@ -206,6 +215,25 @@ export default function PartySetPage() {
 
         {/* STEP 1: Set Size */}
         <div style={sectionStyle}>
+          {/* Preview image */}
+          <div style={{ position: "relative", borderRadius: "0.75rem", overflow: "hidden", marginBottom: "1rem", aspectRatio: "16/9" }}>
+            <Image
+              src={SIZES.find((s) => s.id === sizeId)!.previewImg}
+              alt={SIZES.find((s) => s.id === sizeId)!.previewLabel}
+              fill
+              style={{ objectFit: "cover" }}
+            />
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)",
+              display: "flex", alignItems: "flex-end", padding: "1rem 1.15rem",
+            }}>
+              <span style={{ color: "#fff", fontWeight: 700, fontSize: "1.05rem", letterSpacing: "0.01em" }}>
+                {SIZES.find((s) => s.id === sizeId)!.previewLabel}
+              </span>
+            </div>
+          </div>
+
           <div style={stepHead}>
             <span style={stepLabel}>Step 1</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your set size</span>

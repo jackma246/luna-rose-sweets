@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { products, categories, type Product } from "@/data/products";
+import { visibleProducts as products, categories, type Product } from "@/data/products";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
 import SortSelect from "./SortSelect";

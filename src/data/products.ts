@@ -45,6 +45,7 @@ export interface Product {
   designTiers?: DesignTier[];
   enquireOnly?: boolean;
   image?: string;
+  hidden?: boolean;
 }
 
 export const CAKE_FLAVOURS: ProductFlavour[] = [
@@ -159,6 +160,7 @@ export const products: Product[] = [
       "Each favour is individually packaged. Cupcake flavours and flower colours can be matched to your theme. Minimum order of 10.",
     variants: [{ label: "Per Favour (min 10)", price: 6, image: "/images/cupcakes/7.jpg" }],
     image: "/images/cupcakes/7.jpg",
+    hidden: true,
   },
   {
     slug: "party-drink-snack-set",
@@ -170,6 +172,7 @@ export const products: Product[] = [
       "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
     variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/brand-spread.jpg",
+    hidden: true,
   },
   {
     slug: "party-diy-decorating-set",
@@ -181,6 +184,7 @@ export const products: Product[] = [
       "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
     variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread.jpg" }],
     image: "/images/brand-spread.jpg",
+    hidden: true,
   },
 
   // ── Gift (was Specialty) ────────────────────────────────
@@ -251,6 +255,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cupcakes/2.jpg",
+    hidden: true,
   },
   {
     slug: "luxury-chocolate-dates",
@@ -442,6 +447,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cupcakes/2.jpg",
+    hidden: true,
   },
   {
     slug: "tray-bakes",
@@ -463,6 +469,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/tray-bakes/1.jpg",
+    hidden: true,
   },
   {
     slug: "bakes-layer-cake",
@@ -484,6 +491,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cake/7.jpg",
+    hidden: true,
   },
   {
     slug: "bakes-two-tier-cake",
@@ -501,6 +509,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cake/two-tier.jpg",
+    hidden: true,
   },
   {
     slug: "bakes-madeleines",
@@ -520,6 +529,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/new.png",
+    hidden: true,
   },
   {
     slug: "bakes-butter-cookies",
@@ -533,6 +543,7 @@ export const products: Product[] = [
       { label: "1 Dozen", price: 24, image: "/images/butter-cookies/4.jpg" },
     ],
     image: "/images/butter-cookies/4.jpg",
+    hidden: true,
   },
   {
     slug: "bakes-cookie-box",
@@ -544,6 +555,7 @@ export const products: Product[] = [
       "Each box includes a variety of cookie styles and flavours. Perfect for sharing at events or as a gift. Best consumed within 1 week.",
     variants: [{ label: "Cookie Box (12 assorted)", price: 30, image: "/images/cookie-box/2.jpg" }],
     image: "/images/cookie-box/2.jpg",
+    hidden: true,
   },
   {
     slug: "bakes-cakesicles",
@@ -561,6 +573,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cakesicles/5.png",
+    hidden: true,
   },
   {
     slug: "bakes-cake-pops",
@@ -578,6 +591,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cake-pops/basic.jpg",
+    hidden: true,
   },
 
   // ── Favours ─────────────────────────────────────────────
@@ -591,6 +605,7 @@ export const products: Product[] = [
       "Each favour is individually packaged. Cupcake flavours and flower colours can be matched to your theme. Minimum order of 10.",
     variants: [{ label: "Per Favour (min 10)", price: 6, image: "/images/cupcakes/7.jpg" }],
     image: "/images/cupcakes/7.jpg",
+    hidden: true,
   },
   {
     slug: "treat-bag",
@@ -602,6 +617,7 @@ export const products: Product[] = [
       "Each treat bag includes a curated mix of mini treats. Contents and packaging can be customised to your theme. Minimum order of 10.",
     variants: [{ label: "Per Treat Bag (min 10)", price: 5, image: "/images/treat-boxes/mixed-treats.jpg" }],
     image: "/images/brand-spread.jpg",
+    hidden: true,
   },
   {
     slug: "favour-diy-decorating-set",
@@ -613,6 +629,7 @@ export const products: Product[] = [
       "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
     variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread.jpg" }],
     image: "/images/brand-spread.jpg",
+    hidden: true,
   },
   {
     slug: "choc-treats-luxury-chocolate-dates",
@@ -641,6 +658,7 @@ export const products: Product[] = [
       { label: "Full Custom Design (detailed styling, seasonal themes, mixed designs)", price: "+$8–$12/dozen" },
     ],
     image: "/images/butter-cookies/4.jpg",
+    hidden: true,
   },
 
   {
@@ -711,9 +729,11 @@ export const products: Product[] = [
   },
 ];
 
+export const visibleProducts = products.filter((p) => !p.hidden);
+
 export const categories = [
   "All",
-  ...Array.from(new Set(products.map((p) => p.category))),
+  ...Array.from(new Set(visibleProducts.map((p) => p.category))),
 ];
 
 export function getProductBySlug(slug: string): Product | undefined {
