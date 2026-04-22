@@ -246,9 +246,15 @@ export const products: Product[] = [
       "A gorgeous combination of fresh roses and our handcrafted cake pops, beautifully arranged as a luxury bouquet. The perfect gift that looks and tastes amazing.",
     details:
       "The Cakepop & Rose Bouquet includes a selection of seasonal roses alongside our signature cake pops. Can be personalised with a message card. Please allow 3-5 days notice.",
-    variants: [{ label: "Cakepop & Rose Bouquet", price: 50, image: "/images/treat-boxes/flower-box.png" }],
+    variants: [{ label: "Cakepop & Rose Bouquet", price: 50, image: "/images/rose-bouquet/1.jpeg" }],
     badge: "Baked from scratch",
-    image: "/images/strawberries/bouquet-1.jpg",
+    image: "/images/rose-bouquet/1.jpeg",
+    images: [
+      "/images/rose-bouquet/1.jpeg",
+      "/images/rose-bouquet/2.jpeg",
+      "/images/rose-bouquet/3.jpeg",
+      "/images/rose-bouquet/4.jpeg",
+    ],
   },
   {
     slug: "gift-cakepops-flower-box",
