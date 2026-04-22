@@ -144,7 +144,11 @@ export default async function ShopPage({
                   className="product"
                 >
                   {product.badge && (
-                    <div className="ribbon-tag cocoa">{product.badge}</div>
+                    <div className="ribbon-tag cocoa">
+                      {product.badge.split(" ").slice(0, 1).join(" ")}
+                      <br />
+                      {product.badge.split(" ").slice(1).join(" ")}
+                    </div>
                   )}
                   <div className="thumb">
                     {img && (

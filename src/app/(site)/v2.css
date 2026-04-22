@@ -478,20 +478,22 @@
   .product:hover .thumb img { transform: translateY(-6px) scale(1.04); }
   .product .ribbon-tag {
     position: absolute;
-    top: 18px;
-    left: -32px;
-    width: 130px;
+    top: 22px;
+    left: -36px;
+    width: 150px;
     text-align: center;
     background: var(--cherry);
     color: #fff;
     font-size: 9px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 6px 0;
+    padding: 9px 0;
     font-weight: 700;
     z-index: 3;
     transform: rotate(-45deg);
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    line-height: 1.5;
+    white-space: normal;
   }
   .product .ribbon-tag.butter { background: var(--butter); color: var(--ink); }
   .product .ribbon-tag.cocoa { background: var(--cherry); color: #fff; }
@@ -1783,7 +1785,7 @@
     .product .info .caption { font-size: 9.5px; letter-spacing: 0.18em; }
     .product .info .price { font-size: 15px; }
     .product .ribbon-tag {
-      font-size: 8px; top: 16px; left: -30px; width: 118px; padding: 5px 0;
+      font-size: 8px; top: 20px; left: -34px; width: 138px; padding: 8px 0;
     }
 
     .shop-all-wrap { margin-top: 36px; }
