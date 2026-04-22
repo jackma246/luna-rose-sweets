@@ -168,17 +168,17 @@ export default function V2ProductDetail() {
         <div className="pd-grid">
           <div className="pd-gallery">
             {images.length > 1 ? (
-              <div>
+              <div style={{ gridColumn: "1 / -1" }}>
                 {/* Swipeable scroll gallery */}
                 <div style={{
                   display: "flex",
                   overflowX: "auto",
                   scrollSnapType: "x mandatory",
-                  gap: "0.5rem",
+                  gap: "0.75rem",
                   borderRadius: "0.75rem",
                   scrollbarWidth: "none",
                   WebkitOverflowScrolling: "touch",
-                  marginBottom: "0.65rem",
+                  marginBottom: "0.75rem",
                 }}>
                   {images.map((src, i) => (
                     <div key={src} style={{
@@ -187,8 +187,9 @@ export default function V2ProductDetail() {
                       scrollSnapAlign: "start",
                       borderRadius: "0.75rem",
                       overflow: "hidden",
-                      aspectRatio: "4/3",
+                      aspectRatio: "4/5",
                       position: "relative",
+                      background: "var(--blush-soft, #faf5f0)",
                     }}>
                       <Image
                         src={src}
@@ -201,7 +202,7 @@ export default function V2ProductDetail() {
                   ))}
                 </div>
                 {/* Dot indicators */}
-                <div style={{ display: "flex", justifyContent: "center", gap: "0.35rem" }}>
+                <div style={{ display: "flex", justifyContent: "center", gap: "0.4rem" }}>
                   {images.map((_, i) => (
                     <button
                       key={i}
