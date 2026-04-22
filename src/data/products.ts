@@ -745,12 +745,11 @@ export const products: Product[] = [
     category: "Towers",
     subtitle: "100% Real Butter",
     description:
-      "A beautiful tower of freshly baked croissants made with 100% real butter — golden, flaky, and utterly delicious. Perfect for brunches, baby showers, and morning events.",
+      "A beautiful tower of 30 freshly baked croissants made with 100% real butter — golden, flaky, and utterly delicious. Perfect for brunches, baby showers, and morning events.",
     details:
       "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
     variants: [
-      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/ct.png" },
-      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/ct.png" },
+      { label: "Croissant Tower (30 croissants)", price: 140, image: "/images/towers/ct.png" },
     ],
     badge: "Freshly baked",
     image: "/images/towers/ct.png",
