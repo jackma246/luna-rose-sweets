@@ -9,29 +9,33 @@ import V2Footer from "../components/V2Footer";
 
 export default function V2CartPage() {
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCart();
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  async function handleCheckout() {
-    setSubmitting(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setError(data.error ?? "Checkout isn't available right now.");
-        setSubmitting(false);
-      }
-    } catch {
-      setError("Something went wrong. Please try again.");
-      setSubmitting(false);
+  function buildOrderText(): string {
+    const lines: string[] = ["Hi! I'd like to place an order 🎀\n"];
+    for (const item of items) {
+      lines.push(`• ${item.name} (${item.variantLabel}) ×${item.quantity} — $${(item.price * item.quantity).toFixed(2)}`);
+      if (item.flavour) lines.push(`  Flavour: ${item.flavour}`);
+      if (item.note) lines.push(`  Details: ${item.note}`);
     }
+    lines.push(`\nTotal: $${totalPrice.toFixed(2)}`);
+    return lines.join("\n");
+  }
+
+  async function handleRequestOrder() {
+    const text = buildOrderText();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+    setShowModal(true);
+  }
+
+  function openInstagram() {
+    window.open("https://ig.me/m/dipsprinkle", "_blank");
   }
 
   if (items.length === 0) {
@@ -159,30 +163,89 @@ export default function V2CartPage() {
               <span>${totalPrice.toFixed(2)}</span>
             </div>
             <button
-              onClick={handleCheckout}
-              disabled={submitting}
+              onClick={handleRequestOrder}
               className="btn btn-primary"
             >
-              {submitting ? "Redirecting…" : "Checkout →"}
+              Request Order →
             </button>
-            {error && (
-              <p
-                style={{
-                  marginTop: 14,
-                  fontSize: 13,
-                  color: "var(--cherry)",
-                  textAlign: "center",
-                }}
-              >
-                {error}
-              </p>
-            )}
+            <p style={{ marginTop: 10, fontSize: 12, opacity: 0.55, textAlign: "center", lineHeight: 1.5 }}>
+              Once we review your request, we&rsquo;ll follow up within 1 hour with availability and next steps for payment.
+            </p>
             <Link href="/products" className="keep-shopping">
               ← Keep shopping
             </Link>
           </aside>
         </div>
       </section>
+
+      {/* Order Request Modal */}
+      {showModal && (
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 600,
+            background: "rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "flex-end", justifyContent: "center",
+          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false); }}
+        >
+          <div style={{
+            background: "#fff",
+            borderRadius: "1.25rem 1.25rem 0 0",
+            padding: "1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))",
+            width: "100%", maxWidth: 520, boxSizing: "border-box",
+          }}>
+            <div style={{ width: 40, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 1.5rem" }} />
+            <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.1rem" }}>
+              {copied ? "✅ Order details copied!" : "Ready to request?"}
+            </h3>
+            <p style={{ margin: "0 0 1rem", fontSize: "0.83rem", opacity: 0.6, lineHeight: 1.55 }}>
+              {copied
+                ? "Paste the order details into the Instagram DM and we'll get back to you within 1 hour."
+                : "Open Instagram and send us a DM with your order details."}
+            </p>
+            <div style={{
+              background: "var(--surface, #faf9f7)", borderRadius: "0.65rem",
+              border: "1px solid var(--border, #e8e4de)",
+              padding: "0.85rem 1rem", fontSize: "0.8rem", lineHeight: 1.7,
+              whiteSpace: "pre-wrap", marginBottom: "1.25rem",
+              fontFamily: "monospace", maxHeight: 180, overflowY: "auto",
+            }}>
+              {buildOrderText()}
+            </div>
+            <div style={{ display: "flex", gap: "0.65rem", marginBottom: "0.65rem" }}>
+              <button
+                onClick={async () => {
+                  try { await navigator.clipboard.writeText(buildOrderText()); setCopied(true); } catch {}
+                }}
+                style={{
+                  flex: 1, padding: "0.85rem", fontWeight: 600, fontSize: "0.9rem",
+                  borderRadius: "999px", border: "1.5px solid var(--border, #e8e4de)",
+                  background: "#fff", cursor: "pointer", color: "inherit",
+                }}
+              >
+                {copied ? "Copied ✓" : "Copy details"}
+              </button>
+              <button
+                onClick={openInstagram}
+                style={{
+                  flex: 2, padding: "0.85rem", fontWeight: 700, fontSize: "0.9rem",
+                  borderRadius: "999px", border: "none",
+                  background: "linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)",
+                  color: "#fff", cursor: "pointer",
+                }}
+              >
+                Open Instagram DM →
+              </button>
+            </div>
+            <button
+              onClick={() => setShowModal(false)}
+              style={{ width: "100%", background: "none", border: "none", fontSize: "0.82rem", opacity: 0.45, cursor: "pointer" }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       <V2Footer />
     </>
