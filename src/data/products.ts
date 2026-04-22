@@ -228,9 +228,15 @@ export const products: Product[] = [
       "A beautiful two-tier chocolate heart box filled with a surprise selection of our handcrafted treats. Smash through the heart to reveal the goodies inside!",
     details:
       "The Heart Surprise Box can be themed and personalised to your requirements. Contents can include cakesicles, chocolates, strawberries, and more. Perfect for Valentine's Day, anniversaries, and special occasions.",
-    variants: [{ label: "2-tier Heart Surprise Box", price: 45, image: "/images/treat-boxes/flower-box.png" }],
+    variants: [{ label: "2-tier Heart Surprise Box", price: 45, image: "/images/heart-box/1.jpeg" }],
     badge: "Baked from scratch",
-    image: "/images/treat-boxes/flower-box.png",
+    image: "/images/heart-box/1.jpeg",
+    images: [
+      "/images/heart-box/1.jpeg",
+      "/images/heart-box/4.jpeg",
+      "/images/heart-box/2.jpeg",
+      "/images/heart-box/3.jpeg",
+    ],
   },
   {
     slug: "flower-treat-box",
