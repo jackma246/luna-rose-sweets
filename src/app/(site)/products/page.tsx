@@ -143,8 +143,8 @@ export default async function ShopPage({
                   href={`/products/${product.slug}`}
                   className="product"
                 >
-                  {product.enquireOnly && (
-                    <div className="ribbon-tag cocoa">Made to order</div>
+                  {product.badge && (
+                    <div className="ribbon-tag cocoa">{product.badge}</div>
                   )}
                   <div className="thumb">
                     {img && (
@@ -158,6 +158,9 @@ export default async function ShopPage({
                   </div>
                   <div className="info">
                     <h3>{product.name}</h3>
+                    {product.subtitle && (
+                      <div className="caption" style={{ color: "var(--cherry, #c05)", fontWeight: 600, opacity: 1 }}>{product.subtitle}</div>
+                    )}
                     <div className="caption">{product.category}</div>
                     <div className="price">{priceLabel(product)}</div>
                   </div>

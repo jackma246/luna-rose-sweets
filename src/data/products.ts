@@ -44,6 +44,7 @@ export interface Product {
   maxTreats?: number;
   designTiers?: DesignTier[];
   enquireOnly?: boolean;
+  badge?: string;
   image?: string;
   images?: string[];
   hidden?: boolean;
@@ -111,6 +112,7 @@ export const products: Product[] = [
       { label: "Lettering", price: "+$5–$10" },
     ],
     flavours: CAKE_FLAVOURS,
+    badge: "Baked from scratch",
     image: "/images/cake/cake00.jpeg",
     images: [
       "/images/cake/cake00.jpeg",
@@ -139,6 +141,7 @@ export const products: Product[] = [
       { name: "Enhanced", description: "Color mix · basic decor · simple lettering", priceLabel: "+$30", priceAdd: 30, popular: true },
       { name: "Full Custom", description: "Full custom design · edible image · elaborate decoration", priceLabel: "+$60", priceAdd: 60 },
     ],
+    badge: "Baked from scratch",
     image: "/images/cake/two-tier-new.jpeg",
   },
   {
@@ -160,6 +163,7 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
     ],
     flavours: CAKE_FLAVOURS,
+    badge: "Baked from scratch",
     image: "/images/tray-bakes/tray.png",
   },
   {
@@ -213,6 +217,7 @@ export const products: Product[] = [
     variants: [
       { label: "Bouquet (8 pops)", price: 35, image: "/images/popsicle-bouquet/1.jpg" },
     ],
+    badge: "Baked from scratch",
     image: "/images/popsicle-bouquet/1.jpg",
   },
   {
@@ -224,6 +229,7 @@ export const products: Product[] = [
     details:
       "The Heart Surprise Box can be themed and personalised to your requirements. Contents can include cakesicles, chocolates, strawberries, and more. Perfect for Valentine's Day, anniversaries, and special occasions.",
     variants: [{ label: "2-tier Heart Surprise Box", price: 45, image: "/images/treat-boxes/flower-box.png" }],
+    badge: "Baked from scratch",
     image: "/images/treat-boxes/flower-box.png",
   },
   {
@@ -235,6 +241,7 @@ export const products: Product[] = [
     details:
       "The Cakepop & Rose Bouquet includes a selection of seasonal roses alongside our signature cake pops. Can be personalised with a message card. Please allow 3-5 days notice.",
     variants: [{ label: "Cakepop & Rose Bouquet", price: 50, image: "/images/treat-boxes/flower-box.png" }],
+    badge: "Baked from scratch",
     image: "/images/strawberries/bouquet-1.jpg",
   },
   {
@@ -247,6 +254,7 @@ export const products: Product[] = [
       "Each box is hand-arranged with freshly baked cake pops and seasonal flowers. Can be themed and personalised with colours and a message card. Please allow 3-5 days notice.",
     variants: [],
     enquireOnly: true,
+    badge: "Baked from scratch",
     image: "/images/popsicle-bouquet/1.jpg",
   },
   {
@@ -307,6 +315,7 @@ export const products: Product[] = [
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$15", priceAdd: 15, popular: true },
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$30+", priceAdd: 30 },
     ],
+    badge: "Baked from scratch",
     image: "/images/cakesicles/5.png",
   },
   {
@@ -334,6 +343,7 @@ export const products: Product[] = [
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$12", priceAdd: 12, popular: true },
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$24+", priceAdd: 24 },
     ],
+    badge: "Baked from scratch",
     image: "/images/cake-pops/new.jpeg",
   },
   {
@@ -353,6 +363,7 @@ export const products: Product[] = [
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
     flavours: CAKE_FLAVOURS,
+    badge: "Baked from scratch",
     image: "/images/madeleines/new2.png",
   },
   {
@@ -702,6 +713,7 @@ export const products: Product[] = [
     details:
       "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.png" }],
+    badge: "Baked from scratch",
     image: "/images/towers/mt.png",
   },
   {
@@ -713,6 +725,7 @@ export const products: Product[] = [
     details:
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
     variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.png" }],
+    badge: "Baked from scratch",
     image: "/images/towers/mat.png",
   },
   {
@@ -730,14 +743,16 @@ export const products: Product[] = [
     slug: "croissant-tower",
     name: "Croissant Tower",
     category: "Towers",
+    subtitle: "100% Real Butter",
     description:
-      "A beautiful tower of freshly baked croissants, perfect for brunches, baby showers, and morning events. Golden, flaky, and utterly delicious.",
+      "A beautiful tower of freshly baked croissants made with 100% real butter — golden, flaky, and utterly delicious. Perfect for brunches, baby showers, and morning events.",
     details:
       "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
     variants: [
       { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/ct.png" },
       { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/ct.png" },
     ],
+    badge: "Freshly baked",
     image: "/images/towers/ct.png",
   },
 ];

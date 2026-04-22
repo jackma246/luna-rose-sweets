@@ -231,7 +231,7 @@ export default function V2ProductDetail() {
                   ))}
                 </div>
                 <div className="pd-main">
-                  {product.enquireOnly && <div className="tag">Made to order</div>}
+                  {product.badge && <div className="tag">{product.badge}</div>}
                   {mainImage && (
                     <Image src={mainImage} alt={product.name} width={800} height={1000} priority />
                   )}
@@ -242,6 +242,9 @@ export default function V2ProductDetail() {
 
           <div className="pd-details">
             <div className="cat">{product.category}</div>
+            {product.subtitle && (
+              <div style={{ fontSize: "0.82rem", fontWeight: 700, color: "var(--cherry, #c05)", marginBottom: "0.25rem", letterSpacing: "0.02em" }}>{product.subtitle}</div>
+            )}
             <h1>{product.name}</h1>
             <div className="price">{priceLabel}</div>
             <p className="lede">{product.description}</p>
