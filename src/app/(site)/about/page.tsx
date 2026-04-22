@@ -11,12 +11,10 @@ export default function V2About() {
       <section className="editorial">
         <div className="kicker">Our Story</div>
         <h1>
-          A small kitchen, <em>one steady hand,</em> and a lot of sprinkles.
+          Before crossing the ocean, <em>I spent years</em> doing what I loved most.
         </h1>
         <p className="lede">
-          Dip &amp; Sprinkle began as a weekend habit — dipping little cakes
-          for friends, showing up at birthdays with a tray and a ribbon —
-          and quietly grew into something bigger.
+          Before crossing the ocean to call America home, I spent years in South Korea doing what I loved most — decorating cakes.
         </p>
 
         <div className="hero-img">
@@ -28,36 +26,28 @@ export default function V2About() {
           />
         </div>
 
-        <h2>
-          Made <em>by hand,</em> the day they ship.
-        </h2>
         <p>
-          Every treat starts in our studio kitchen with premium chocolate,
-          grass-fed European butter, real Madagascar vanilla, and real fruits.
-          We dip each piece by hand and finish every box with the kind of care
-          we&rsquo;d want for our own table.
+          What started as a quiet passion grew into a craft I dedicated myself to fully. In Korea, I worked as a professional cake decorator, pouring care and creativity into every design, every layer, every detail. It was there that I learned that baking is never just about the dessert — it&rsquo;s about the moment it&rsquo;s made for, and the people it&rsquo;s made with.
         </p>
         <p>
-          Nothing is factory-made. Just small batches, baked the week of your event.
+          When I moved to the United States, I brought that love with me. New country, same heart.
         </p>
 
         <h2>
-          What we <em>make.</em>
+          Crafted with <em>care and technique.</em>
         </h2>
         <p>
-          Cake pops &amp; cakesicles, chocolate-dipped madeleines, tray-baked
-          cake, cupcakes, cookie boxes, custom cakes, and seasonal
-          treats. If you have a party, a wedding, a shower, or just a
-          Tuesday that needs sprinkles — we can dress it up.
+          Over the years, I&rsquo;ve developed a wide range of creams — each with its own unique texture and flavor — so that every cake feels just as special on the inside as it looks on the outside. I also specialize in delicate custom color matching, carefully crafting each shade to bring your vision to life exactly as you imagined it.
+        </p>
+        <p>
+          And because we&rsquo;re in California, I know the heat is real. That&rsquo;s why I&rsquo;ve perfected creams that hold up beautifully in warm weather, so your cake stays picture-perfect even at outdoor events — no melting, no stress, just a beautiful celebration.
         </p>
 
         <h2>
-          The <em>finest</em> ingredients.
+          Made with <em>devotion.</em>
         </h2>
         <p>
-          We source premium Belgian chocolate, European butter, real vanilla,
-          and fresh seasonal fruit. No shortcuts, no artificial substitutes.
-          Just honest, homemade goodness in every bite.
+          Today, every creation from our kitchen carries that same devotion — handcrafted with the techniques I refined in Korea and the warmth I&rsquo;ve always put into this work. Whether it&rsquo;s a birthday, a wedding, or just a reason to celebrate, I&rsquo;m so glad you&rsquo;re here to share it with me.
         </p>
 
         <div className="cta-row">
