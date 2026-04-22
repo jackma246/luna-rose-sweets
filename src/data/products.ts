@@ -721,7 +721,7 @@ export const products: Product[] = [
     name: "Macaron Tower",
     category: "Towers",
     description:
-      "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
+      "An elegant tower of 70 delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
     details:
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
     variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.png" }],
