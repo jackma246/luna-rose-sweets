@@ -713,7 +713,6 @@ export const products: Product[] = [
     details:
       "Each madeleine is hand-dipped and decorated. Tower height: 11.9 inches. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.png" }],
-    badge: "Baked from scratch",
     image: "/images/towers/mt.png",
   },
   {
@@ -725,7 +724,6 @@ export const products: Product[] = [
     details:
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Tower height: 11.9 inches. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
     variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.png" }],
-    badge: "Baked from scratch",
     image: "/images/towers/mat.png",
   },
   {
