@@ -196,7 +196,7 @@ export default function HomePage() {
       {/* ── SECTION 3: VISUAL ── */}
       <section style={{ position: "relative", overflow: "hidden" }}>
         <Image
-          src="/images/treat-boxes/mixed-treats.jpg"
+          src="/images/brand-spread-new.png"
           alt="Coordinated dessert table"
           width={1200}
           height={700}
