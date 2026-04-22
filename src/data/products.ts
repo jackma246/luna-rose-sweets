@@ -122,11 +122,12 @@ export const products: Product[] = [
     details:
       "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 200, image: "/images/cake/two-tier.jpg" }],
-    addons: [
-      { label: "Floral Decoration", price: "Additional cost" },
-      { label: "Custom Design Details", price: "Additional cost" },
-    ],
     flavours: CAKE_FLAVOURS,
+    designTiers: [
+      { name: "Classic", description: "Simple finish · 2 colors · minimal decoration", priceLabel: "Included", priceAdd: 0 },
+      { name: "Enhanced", description: "Color mix · basic decor · simple lettering", priceLabel: "+$30", priceAdd: 30, popular: true },
+      { name: "Full Custom", description: "Full custom design · edible image · elaborate decoration", priceLabel: "+$60", priceAdd: 60 },
+    ],
     image: "/images/cake/two-tier.jpg",
   },
   {
