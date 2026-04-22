@@ -378,14 +378,14 @@ export const products: Product[] = [
     details:
       "Ideal for adding height and dimension to dessert tables. Caramel version is softer and richer. Adds variety and texture when paired with cake-based treats.",
     variants: [
-      { label: "Classic Pretzel Rods (1 Dozen)", price: 36, image: "/images/caramel-pretzel/1.jpg" },
-      { label: "Caramel Pretzel Rods (1 Dozen)", price: 42, image: "/images/caramel-pretzel/1.jpg" },
+      { label: "Classic Pretzel Rods (1 Dozen)", price: 36, image: "/images/caramel-pretzel/rods.jpeg" },
+      { label: "Caramel Pretzel Rods (1 Dozen)", price: 42, image: "/images/caramel-pretzel/rods.jpeg" },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium decorative finish", priceLabel: "+$10", priceAdd: 10, popular: true },
     ],
-    image: "/images/caramel-pretzel/1.jpg",
+    image: "/images/caramel-pretzel/rods.jpeg",
   },
   {
     slug: "choc-dipped-rice-krispies",
@@ -396,13 +396,13 @@ export const products: Product[] = [
     details:
       "Adds variety in texture to dessert sets.",
     variants: [
-      { label: "1 Dozen", price: 30, image: "/images/rice-krispies/1.jpg" },
+      { label: "1 Dozen", price: 30, image: "/images/rice-krispies/rice.jpeg" },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$10", priceAdd: 10 },
     ],
-    image: "/images/rice-krispies/1.jpg",
+    image: "/images/rice-krispies/rice.jpeg",
   },
   {
     slug: "choc-dipped-pretzel-original",
@@ -412,12 +412,12 @@ export const products: Product[] = [
       "These chocolate covered twisted pretzels are a simple yet satisfying addition to any dessert spread.\n\nLight, crunchy, and easy to eat, they bring balance to richer treats.",
     details:
       "Great filler item for party trays and dessert tables. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen", price: 35, image: "/images/twisted-pretzel/1.jpg" }],
+    variants: [{ label: "1 Dozen", price: 35, image: "/images/twisted-pretzel/twis.jpeg" }],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$8", priceAdd: 8 },
     ],
-    image: "/images/twisted-pretzel/1.jpg",
+    image: "/images/twisted-pretzel/twis.jpeg",
   },
   // ── Bakes ───────────────────────────────────────────────
   {
