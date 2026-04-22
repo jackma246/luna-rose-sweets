@@ -751,7 +751,6 @@ export const products: Product[] = [
     variants: [
       { label: "Croissant Tower (30 croissants)", price: 140, image: "/images/towers/ct.png" },
     ],
-    badge: "Freshly baked",
     image: "/images/towers/ct.png",
   },
 ];
