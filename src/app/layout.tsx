@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
-import VersionSwitcher from "@/components/VersionSwitcher";
 
 export const metadata: Metadata = {
   title: "Dip & Sprinkle",
@@ -19,7 +18,6 @@ export default function RootLayout({
       <body className="min-h-full antialiased">
         <CartProvider>
           {children}
-          <VersionSwitcher />
         </CartProvider>
       </body>
     </html>
