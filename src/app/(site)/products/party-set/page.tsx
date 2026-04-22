@@ -128,6 +128,18 @@ function Check({ active }: { active: boolean }) {
   );
 }
 
+function getMinDate(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + 3);
+  return d.toISOString().split("T")[0];
+}
+
+function formatPickupDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+}
+
 export default function PartySetPage() {
   const [sizeId, setSizeId] = useState("medium");
   const [treats, setTreats] = useState<string[]>([]);
@@ -137,6 +149,9 @@ export default function PartySetPage() {
   const [secondFlavour, setSecondFlavour] = useState("");
   const [useTwoFlavours, setUseTwoFlavours] = useState(false);
   const [themeNote, setThemeNote] = useState("");
+  const [pickupDate, setPickupDate] = useState("");
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [tempDate, setTempDate] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const themeRef = useRef<HTMLTextAreaElement>(null);
@@ -152,7 +167,8 @@ export default function PartySetPage() {
     treats.length > 0 &&
     colorNote.trim().length > 0 &&
     designTier !== "" &&
-    flavour !== "";
+    flavour !== "" &&
+    pickupDate !== "";
 
   function toggleTreat(id: string) {
     setTreats((prev) => {
@@ -174,6 +190,7 @@ export default function PartySetPage() {
       parts.push(`Flavor: ${flavour}`);
     }
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
+    if (pickupDate) parts.push(`Pickup Date: ${formatPickupDate(pickupDate)}`);
     return parts.join(" | ");
   }
 
@@ -475,15 +492,23 @@ export default function PartySetPage() {
         <div style={{ ...sectionStyle, textAlign: "center", padding: "1.5rem 0 2rem" }}>
           <p style={{ margin: "0 0 1rem", fontWeight: 700, fontSize: "1rem" }}>Ready to lock in your order?</p>
           <button
-            onClick={() => themeRef.current?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => { setTempDate(pickupDate); setShowDatePicker(true); }}
             style={{
               padding: "0.85rem 2rem", fontSize: "1rem", fontWeight: 700,
               borderRadius: "999px", border: "none", cursor: "pointer",
               background: "var(--cherry, #c05)", color: "#fff",
             }}
           >
-            Reserve Your Date ✨
+            {pickupDate ? `📅 ${formatPickupDate(pickupDate)}` : "Reserve Your Date ✨"}
           </button>
+          {pickupDate && (
+            <button
+              onClick={() => { setTempDate(pickupDate); setShowDatePicker(true); }}
+              style={{ display: "block", margin: "0.5rem auto 0", fontSize: "0.78rem", opacity: 0.5, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
+            >
+              Change date
+            </button>
+          )}
         </div>
 
         {/* STEP 7: Theme Notes */}
@@ -548,6 +573,7 @@ export default function PartySetPage() {
                   : flavour}
               </div>
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
+              {pickupDate && <div><strong>Pickup Date:</strong> {formatPickupDate(pickupDate)}</div>}
             </div>
             <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid var(--border, #e8e4de)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ fontWeight: 700, fontSize: "1rem" }}>Total</span>
@@ -557,6 +583,90 @@ export default function PartySetPage() {
         )}
       </div>
 
+      {/* DATE PICKER MODAL */}
+      {showDatePicker && (
+        <div
+          style={{
+            position: "fixed", inset: 0, zIndex: 500,
+            background: "rgba(0,0,0,0.45)",
+            display: "flex", alignItems: "flex-end", justifyContent: "center",
+          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setShowDatePicker(false); }}
+        >
+          <div style={{
+            background: "#fff",
+            borderRadius: "1.25rem 1.25rem 0 0",
+            padding: "1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))",
+            width: "100%", maxWidth: 520,
+            boxSizing: "border-box",
+          }}>
+            {/* Handle */}
+            <div style={{ width: 40, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 1.5rem" }} />
+
+            <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.1rem" }}>Pick your date</h3>
+            <p style={{ margin: "0 0 1.25rem", fontSize: "0.83rem", opacity: 0.55 }}>
+              Please allow at least 3 days notice. Weekend spots fill quickly!
+            </p>
+
+            <input
+              type="date"
+              value={tempDate}
+              min={getMinDate()}
+              onChange={(e) => setTempDate(e.target.value)}
+              style={{
+                width: "100%", boxSizing: "border-box",
+                padding: "0.85rem 1rem", fontSize: "1rem",
+                border: "1.5px solid var(--border, #e8e4de)", borderRadius: "0.65rem",
+                background: "#fafafa", outline: "none",
+                marginBottom: "1.25rem",
+                colorScheme: "light",
+              }}
+            />
+
+            {tempDate && (
+              <div style={{
+                padding: "0.75rem 1rem", borderRadius: "0.5rem",
+                background: "#fff8f8", border: "1px solid #fdd",
+                fontSize: "0.88rem", fontWeight: 600, marginBottom: "1rem",
+                color: "var(--cherry, #c05)",
+              }}>
+                📅 {formatPickupDate(tempDate)}
+              </div>
+            )}
+
+            <div style={{ display: "flex", gap: "0.65rem" }}>
+              <button
+                onClick={() => setShowDatePicker(false)}
+                style={{
+                  flex: 1, padding: "0.85rem", fontWeight: 600, fontSize: "0.95rem",
+                  borderRadius: "999px", border: "1.5px solid var(--border, #e8e4de)",
+                  background: "#fff", cursor: "pointer", color: "inherit",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (!tempDate) return;
+                  setPickupDate(tempDate);
+                  setShowDatePicker(false);
+                  setTimeout(() => themeRef.current?.scrollIntoView({ behavior: "smooth" }), 150);
+                }}
+                disabled={!tempDate}
+                style={{
+                  flex: 2, padding: "0.85rem", fontWeight: 700, fontSize: "0.95rem",
+                  borderRadius: "999px", border: "none",
+                  background: tempDate ? "var(--cherry, #c05)" : "#ccc",
+                  color: "#fff", cursor: tempDate ? "pointer" : "not-allowed",
+                }}
+              >
+                Confirm Date ✨
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* STICKY BUTTON */}
       <div style={{
         position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 200,
@@ -565,20 +675,35 @@ export default function PartySetPage() {
         backdropFilter: "blur(8px)",
         borderTop: "1px solid var(--border, #e8e4de)",
       }}>
-        <button
-          onClick={handleAddToCart}
-          disabled={!isComplete}
-          style={{
-            width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
-            padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
-            borderRadius: "999px", border: "none", cursor: isComplete ? "pointer" : "not-allowed",
-            background: isComplete ? "var(--cherry, #c05)" : "#ccc",
-            color: "#fff",
-            transition: "background 0.2s",
-          }}
-        >
-          {added ? "Added to cart ✓" : isComplete ? "Add to Cart — Reserve Your Date ✨" : "Complete your selections above"}
-        </button>
+        {!pickupDate ? (
+          <button
+            onClick={() => { setTempDate(""); setShowDatePicker(true); }}
+            style={{
+              width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
+              padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
+              borderRadius: "999px", border: "none", cursor: "pointer",
+              background: "var(--cherry, #c05)", color: "#fff",
+              transition: "background 0.2s",
+            }}
+          >
+            Reserve Your Date ✨
+          </button>
+        ) : (
+          <button
+            onClick={handleAddToCart}
+            disabled={!isComplete}
+            style={{
+              width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
+              padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
+              borderRadius: "999px", border: "none", cursor: isComplete ? "pointer" : "not-allowed",
+              background: isComplete ? "var(--cherry, #c05)" : "#ccc",
+              color: "#fff",
+              transition: "background 0.2s",
+            }}
+          >
+            {added ? "Added to cart ✓" : isComplete ? "Add to Cart ✨" : "Complete your selections above"}
+          </button>
+        )}
       </div>
 
       <V2Footer />
