@@ -261,6 +261,7 @@ export const products: Product[] = [
     slug: "gift-cakepops-flower-box",
     name: "Cakepops & Flower Box",
     category: "Gift",
+    subtitle: "1/2 Dozen Cake Pops",
     description:
       "A delightful gift box combining our beautifully decorated cake pops with fresh flowers. A unique treat that's as stunning to look at as it is to eat.",
     details:
