@@ -169,13 +169,13 @@ export default function PartySetPage() {
   function handleAddToCart() {
     if (!isComplete) return;
     addItem({
-      id: `party-set-${sizeId}-${Date.now()}`,
+      productSlug: "party-set",
+      variantLabel: size.label,
       name: `Party Set — ${size.label}`,
       price: effectivePrice,
-      quantity,
       image: "/images/brand-spread.jpg",
-      cartNote: buildCartNote(),
-    });
+      note: buildCartNote(),
+    }, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
   }
