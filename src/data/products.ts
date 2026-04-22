@@ -428,6 +428,7 @@ export const products: Product[] = [
       { label: "Chocolate Hazelnut (Nutella®) Filling (1 Dozen)", price: 50, image: "/images/muffins/1.jpg" },
     ],
     image: "/images/muffins/1.jpg",
+    hidden: true,
   },
   {
     slug: "bakes-cupcakes",
