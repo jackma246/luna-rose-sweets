@@ -733,7 +733,7 @@ export const products: Product[] = [
     name: "Chocolate Tower",
     category: "Towers",
     description:
-      "A decadent tower of handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
+      "A decadent tower of 70 handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
     details:
       "The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/cht.png" }],
