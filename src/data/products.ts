@@ -688,8 +688,8 @@ export const products: Product[] = [
       "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
       "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mtower.webp" }],
-    image: "/images/towers/mtower.webp",
+    variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.jpeg" }],
+    image: "/images/towers/mt.jpeg",
   },
   {
     slug: "macaron-tower",
@@ -699,8 +699,8 @@ export const products: Product[] = [
       "An elegant tower of delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
     details:
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
-    variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/macaron.webp" }],
-    image: "/images/towers/macaron.webp",
+    variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.jpeg" }],
+    image: "/images/towers/mat.jpeg",
   },
   {
     slug: "chocolate-tower",
@@ -710,8 +710,8 @@ export const products: Product[] = [
       "A decadent tower of handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
     details:
       "The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/ptower.webp" }],
-    image: "/images/towers/ptower.webp",
+    variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/cht.jpeg" }],
+    image: "/images/towers/cht.jpeg",
   },
   {
     slug: "croissant-tower",
@@ -722,10 +722,10 @@ export const products: Product[] = [
     details:
       "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
     variants: [
-      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/cro.jpeg" },
-      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/cro.jpeg" },
+      { label: "Small Tower (15 croissants)", price: 45, image: "/images/towers/ct.jpeg" },
+      { label: "Large Tower (30 croissants)", price: 80, image: "/images/towers/ct.jpeg" },
     ],
-    image: "/images/towers/cro.jpeg",
+    image: "/images/towers/ct.jpeg",
   },
 ];
 
