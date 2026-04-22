@@ -711,7 +711,7 @@ export const products: Product[] = [
     description:
       "A stunning tower of 35 freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
-      "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
+      "Each madeleine is hand-dipped and decorated. Tower height: 11.9 inches. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.png" }],
     badge: "Baked from scratch",
     image: "/images/towers/mt.png",
@@ -723,7 +723,7 @@ export const products: Product[] = [
     description:
       "An elegant tower of 70 delicate macarons in your choice of colours and flavours. A showstopping addition to weddings, baby showers, and special events.",
     details:
-      "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
+      "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Tower height: 11.9 inches. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
     variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.png" }],
     badge: "Baked from scratch",
     image: "/images/towers/mat.png",
@@ -735,7 +735,7 @@ export const products: Product[] = [
     description:
       "A decadent tower of 70 handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
     details:
-      "The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
+      "Tower height: 11.9 inches. The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/cht.png" }],
     image: "/images/towers/cht.png",
   },
@@ -747,7 +747,7 @@ export const products: Product[] = [
     description:
       "A beautiful tower of 30 freshly baked croissants made with 100% real butter — golden, flaky, and utterly delicious. Perfect for brunches, baby showers, and morning events.",
     details:
-      "Croissants can be filled with chocolate, almond, or left plain. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
+      "Croissants can be filled with chocolate, almond, or left plain. Tower height: 11.9 inches. The tower is decorated with fresh flowers or themed decorations on request. Please allow 3-5 days notice.",
     variants: [
       { label: "Croissant Tower (30 croissants)", price: 140, image: "/images/towers/ct.png" },
     ],
