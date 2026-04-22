@@ -31,6 +31,12 @@ export default function V2CartPage() {
     } catch {
       setCopied(false);
     }
+    // Send email notification in background
+    fetch("/api/request-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items, totalPrice }),
+    }).catch(() => {});
     setShowModal(true);
   }
 
