@@ -456,6 +456,7 @@
     text-decoration: none;
     color: inherit;
     display: block;
+    overflow: hidden;
   }
   .product:hover { transform: translateY(-6px); }
   .product .thumb {
@@ -477,21 +478,23 @@
   .product:hover .thumb img { transform: translateY(-6px) scale(1.04); }
   .product .ribbon-tag {
     position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 18px;
+    left: -32px;
+    width: 130px;
+    text-align: center;
     background: var(--cherry);
-    color: var(--paper);
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    color: #fff;
+    font-size: 9px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-weight: 600;
-    z-index: 2;
+    padding: 6px 0;
+    font-weight: 700;
+    z-index: 3;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   }
   .product .ribbon-tag.butter { background: var(--butter); color: var(--ink); }
-  .product .ribbon-tag.cocoa { background: var(--cocoa-deep); color: var(--paper); }
+  .product .ribbon-tag.cocoa { background: var(--cherry); color: #fff; }
   .product .info {
     padding: 22px 8px 0;
     display: flex;
@@ -1780,7 +1783,7 @@
     .product .info .caption { font-size: 9.5px; letter-spacing: 0.18em; }
     .product .info .price { font-size: 15px; }
     .product .ribbon-tag {
-      font-size: 9px; padding: 4px 10px; letter-spacing: 0.16em;
+      font-size: 8px; top: 16px; left: -30px; width: 118px; padding: 5px 0;
     }
 
     .shop-all-wrap { margin-top: 36px; }
