@@ -304,8 +304,7 @@ export const products: Product[] = [
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed Chocolate sandwich cookies (Oreos®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
-    variants: [],
-    enquireOnly: true,
+    variants: [{ label: "1 Dozen", price: 45, image: "/images/luxury-dates/1.jpg" }],
     image: "/images/luxury-dates/1.jpg",
   },
 
