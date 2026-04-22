@@ -267,7 +267,12 @@ export const products: Product[] = [
     variants: [],
     enquireOnly: true,
     badge: "Baked from scratch",
-    image: "/images/popsicle-bouquet/1.jpg",
+    image: "/images/gift-box/2.png",
+    images: [
+      "/images/gift-box/2.png",
+      "/images/gift-box/1.jpeg",
+      "/images/gift-box/3.jpeg",
+    ],
   },
   {
     slug: "gift-cupcakes",
