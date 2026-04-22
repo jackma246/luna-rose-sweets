@@ -49,6 +49,7 @@ const SIZES = [
 const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
+  { id: "madeleines", label: "Madeleines" },
   { id: "pretzels", label: "Pretzels" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "rice-krispies", label: "Rice Krispies" },
