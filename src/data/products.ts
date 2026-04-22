@@ -334,6 +334,16 @@ export const products: Product[] = [
     ],
     badge: "Baked from scratch",
     image: "/images/cakesicles/5.png",
+    images: [
+      "/images/cakesicles/5.png",
+      "/images/cakesicles/cs0.jpeg",
+      "/images/cakesicles/cs1.jpeg",
+      "/images/cakesicles/cs2.jpeg",
+      "/images/cakesicles/cs3.jpeg",
+      "/images/cakesicles/cs4.png",
+      "/images/cakesicles/cs5.jpeg",
+      "/images/cakesicles/cs6.jpeg",
+    ],
   },
   {
     slug: "cakepops",
