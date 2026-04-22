@@ -709,7 +709,7 @@ export const products: Product[] = [
     name: "Madeleine Tower",
     category: "Towers",
     description:
-      "A stunning tower of freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
+      "A stunning tower of 35 freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
       "Each madeleine is hand-dipped and decorated. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.png" }],
