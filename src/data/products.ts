@@ -139,8 +139,8 @@ export const products: Product[] = [
     details:
       "Made with 100% real European buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/1.jpg" },
-      { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/1.jpg" },
+      { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/tray.png" },
+      { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/tray.png" },
     ],
     addons: [
       { label: "Extra Buttercream Decoration", price: "+$10–$25" },
@@ -148,7 +148,7 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/tray-bakes/1.jpg",
+    image: "/images/tray-bakes/tray.png",
   },
   {
     slug: "party-favour-flower-cupcake",
@@ -459,8 +459,8 @@ export const products: Product[] = [
     details:
       "Made with 100% real European buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
-      { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/1.jpg" },
-      { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/1.jpg" },
+      { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/tray.png" },
+      { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/tray.png" },
     ],
     addons: [
       { label: "Extra Buttercream Decoration", price: "+$10–$25" },
@@ -468,7 +468,7 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/tray-bakes/1.jpg",
+    image: "/images/tray-bakes/tray.png",
     hidden: true,
   },
   {
