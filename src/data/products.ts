@@ -242,6 +242,7 @@ export const products: Product[] = [
     slug: "flower-treat-box",
     name: "Cakepop & Rose Bouquet",
     category: "Gift",
+    subtitle: "1 Dozen Cake Pops",
     description:
       "A gorgeous combination of fresh roses and our handcrafted cake pops, beautifully arranged as a luxury bouquet. The perfect gift that looks and tastes amazing.",
     details:
