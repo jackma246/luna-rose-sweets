@@ -228,7 +228,7 @@ export const products: Product[] = [
       "A beautiful two-tier chocolate heart box filled with a surprise selection of our handcrafted treats. Smash through the heart to reveal the goodies inside!",
     details:
       "The Heart Surprise Box can be themed and personalised to your requirements. Contents can include cakesicles, chocolates, strawberries, and more. Perfect for Valentine's Day, anniversaries, and special occasions.",
-    variants: [{ label: "2-tier Heart Surprise Box", price: 45, image: "/images/heart-box/1.jpeg" }],
+    variants: [{ label: "2-tier Heart Surprise Box", price: 65, image: "/images/heart-box/1.jpeg" }],
     badge: "Baked from scratch",
     image: "/images/heart-box/1.jpeg",
     images: [
@@ -247,7 +247,7 @@ export const products: Product[] = [
       "A gorgeous combination of fresh roses and our handcrafted cake pops, beautifully arranged as a luxury bouquet. The perfect gift that looks and tastes amazing.",
     details:
       "The Cakepop & Rose Bouquet includes a selection of seasonal roses alongside our signature cake pops. Can be personalised with a message card. Please allow 3-5 days notice.",
-    variants: [{ label: "Cakepop & Rose Bouquet", price: 50, image: "/images/rose-bouquet/1.jpeg" }],
+    variants: [{ label: "Cakepop & Rose Bouquet", price: 95, image: "/images/rose-bouquet/1.jpeg" }],
     badge: "Baked from scratch",
     image: "/images/rose-bouquet/1.jpeg",
     images: [
@@ -266,8 +266,7 @@ export const products: Product[] = [
       "A delightful gift box combining our beautifully decorated cake pops with fresh flowers. A unique treat that's as stunning to look at as it is to eat.",
     details:
       "Each box is hand-arranged with freshly baked cake pops and seasonal flowers. Can be themed and personalised with colours and a message card. Please allow 3-5 days notice.",
-    variants: [],
-    enquireOnly: true,
+    variants: [{ label: "Cakepops & Flower Box", price: 55, image: "/images/gift-box/2.png" }],
     badge: "Baked from scratch",
     image: "/images/gift-box/2.png",
     images: [
