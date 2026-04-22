@@ -121,7 +121,7 @@ export const products: Product[] = [
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier.jpg" }],
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 200, image: "/images/cake/two-tier.jpg" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
