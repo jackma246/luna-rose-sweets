@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  pending
+  confirmed
+  deposit_received
+  prepping
+  cake_prepped
+  ready
+  delivered
+  completed
+  cancelled
+}
+
+enum ExpenseCategory {
+  ingredient
+  supply
+  packaging
+  other
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  customerName   String
+  customerEmail  String
+  customerPhone  String?
+
+  items          Json        // CartItem[]
+  totalPrice     Decimal     @db.Decimal(10, 2)
+
+  neededDate     DateTime?   @db.Date
+  customerNotes  String?     // what the customer typed in the form
+  internalNotes  String?     // owner's working notes
+
+  status         OrderStatus @default(pending)
+  remindersSent  String[]    @default([]) // e.g. ["d3","d2","d1","d0"]
+
+  @@index([neededDate])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Expense {
+  id         String          @id @default(cuid())
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  date       DateTime        @db.Date
+  amount     Decimal         @db.Decimal(10, 2)
+  vendor     String          // where bought (Costco, Amazon, etc.)
+  category   ExpenseCategory
+  notes      String?
+  receiptUrl String?
+
+  @@index([date])
+  @@index([category])
+}

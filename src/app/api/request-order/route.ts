@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { prisma } from "@/lib/prisma";
 
 interface CartItem {
   name: string;
@@ -169,6 +170,25 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(apiKey);
   const from = "Dip & Sprinkle <orders@dipsprinkle.com>";
   const priceStr = Number(totalPrice).toFixed(2);
+
+  try {
+    await prisma.order.create({
+      data: {
+        customerName: customer.name,
+        customerEmail: customer.email,
+        customerPhone: customer.phone || null,
+        items: items as unknown as object[],
+        totalPrice,
+        neededDate: customer.neededDate ? new Date(customer.neededDate + "T00:00:00") : null,
+        customerNotes: customer.message || null,
+        status: "pending",
+      },
+    });
+  } catch (err) {
+    console.error("Failed to persist order:", err);
+    // Fall through — we still want to send emails even if DB write fails,
+    // so the order isn't lost. Owner can backfill manually via /admin/orders/new.
+  }
 
   try {
     const [support, confirmation] = await Promise.all([
