@@ -4,6 +4,7 @@ import { STATUS_LABEL, STATUS_CHIP, daysUntil, daysUntilLabel, isTerminal } from
 import { ORDER_SOURCES, SOURCE_LABEL, SOURCE_CHIP } from "@/lib/orderSources";
 import { formatOrderNumber } from "@/lib/orderNumber";
 import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
+import { FilterChips, FilterSelect } from "./FilterChips";
 import type { Order, OrderSource, Prisma } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
@@ -14,32 +15,23 @@ function OrderCard({ order }: { order: Order }) {
   const soon = days !== null && days >= 0 && days <= 3 && !isTerminal(order.status);
 
   return (
-    <Link
-      href={`/admin/orders/${order.id}`}
-      className="block bg-white rounded-xl border border-neutral-200 p-4 hover:border-neutral-300 active:bg-neutral-50 transition-colors"
-    >
+    <Link href={`/admin/orders/${order.id}`} className="row-link">
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="min-w-0">
-          <div className="text-[11px] font-semibold tracking-wider text-rose-600 mb-0.5">
-            {formatOrderNumber(order.orderNumber)}
-          </div>
-          <div className="font-medium truncate">{order.customerName}</div>
-          <div className="text-sm text-neutral-500 truncate">{order.customerEmail}</div>
+          <div className="kicker mb-1">{formatOrderNumber(order.orderNumber)}</div>
+          <div className="text-[15px] font-semibold text-ink truncate">{order.customerName}</div>
+          <div className="text-sm text-ink-soft truncate">{order.customerEmail}</div>
         </div>
-        <div className="flex flex-col items-end gap-1 shrink-0">
-          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_CHIP[order.status]}`}>
-            {STATUS_LABEL[order.status]}
-          </span>
-          <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${SOURCE_CHIP[order.source]}`}>
-            {SOURCE_LABEL[order.source]}
-          </span>
+        <div className="flex flex-col items-end gap-1.5 shrink-0">
+          <span className={`pill ${STATUS_CHIP[order.status]}`}>{STATUS_LABEL[order.status]}</span>
+          <span className={`pill ${SOURCE_CHIP[order.source]}`}>{SOURCE_LABEL[order.source]}</span>
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-sm pt-2 border-t border-[var(--rule)]">
         <span
           className={`${
-            overdue ? "text-red-600 font-medium" : soon ? "text-amber-700 font-medium" : "text-neutral-600"
+            overdue ? "text-[#b91c1c] font-semibold" : soon ? "text-rose-deep font-semibold" : "text-ink-soft"
           }`}
         >
           {order.neededDate
@@ -49,10 +41,12 @@ function OrderCard({ order }: { order: Order }) {
                 day: "numeric",
               })
             : "No date"}
-          <span className="mx-1.5 text-neutral-400">·</span>
+          <span className="mx-2 text-[var(--rule)]">·</span>
           {daysUntilLabel(days)}
         </span>
-        <span className="font-medium">${Number(order.totalPrice).toFixed(2)}</span>
+        <span className="font-serif text-lg font-medium text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
+          ${Number(order.totalPrice).toFixed(2)}
+        </span>
       </div>
     </Link>
   );
@@ -60,12 +54,13 @@ function OrderCard({ order }: { order: Order }) {
 
 function Section({ title, orders, empty }: { title: string; orders: Order[]; empty?: string }) {
   return (
-    <section className="mb-7">
-      <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2.5 px-1">
-        {title} {orders.length > 0 && <span className="text-neutral-400">· {orders.length}</span>}
-      </h2>
+    <section className="mb-8">
+      <div className="flex items-baseline justify-between mb-3 px-1">
+        <h2 className="section-title">{title}</h2>
+        {orders.length > 0 && <span className="text-xs text-ink-soft">{orders.length}</span>}
+      </div>
       {orders.length === 0 ? (
-        <p className="text-sm text-neutral-400 px-1 py-3">{empty || "Nothing here."}</p>
+        <p className="text-sm text-ink-soft px-1 py-3">{empty || "Nothing here."}</p>
       ) : (
         <div className="space-y-2.5">
           {orders.map((o) => (
@@ -111,12 +106,10 @@ export default async function AdminOrdersPage({
   let totalForFiltered = 0;
   if (filtersActive) {
     totalForFiltered = orders
-      .filter((o) => !isTerminal(o.status) || o.status === "completed" || o.status === "delivered")
       .filter((o) => o.status !== "cancelled")
       .reduce((sum, o) => sum + Number(o.totalPrice), 0);
   }
 
-  // Unfiltered grouping
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const weekEnd = new Date(now);
@@ -126,55 +119,50 @@ export default async function AdminOrdersPage({
   const later = active.filter((o) => !o.neededDate || o.neededDate > weekEnd);
   const finished = orders.filter((o) => isTerminal(o.status)).slice(0, 20);
 
-  const selectCls =
-    "border border-neutral-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-300";
+  const sourceChipOptions = [
+    { value: "all", label: "All sources" },
+    ...ORDER_SOURCES.map((s) => ({ value: s, label: SOURCE_LABEL[s] })),
+  ];
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
-        <h1 className="text-2xl font-semibold">Orders</h1>
-        <Link
-          href="/admin/orders/new"
-          className="bg-rose-500 hover:bg-rose-600 text-white text-sm font-medium px-4 py-2 rounded-full"
-        >
-          + New
+      <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+        <div>
+          <div className="kicker mb-2">Orders</div>
+          <h1 className="text-4xl italic font-light leading-none">
+            All <span className="font-medium">orders</span>
+          </h1>
+        </div>
+        <Link href="/admin/orders/new" className="btn-cherry">
+          + New order
         </Link>
       </div>
 
-      <form method="get" className="flex flex-wrap items-center gap-2 mb-5">
-        <select name="month" defaultValue={sp.month || "all"} className={selectCls}>
-          <option value="all">All months</option>
-          {monthOptions.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-        <select name="source" defaultValue={sp.source || "all"} className={selectCls}>
-          <option value="all">All sources</option>
-          {ORDER_SOURCES.map((s) => (
-            <option key={s} value={s}>
-              {SOURCE_LABEL[s]}
-            </option>
-          ))}
-        </select>
-        <button type="submit" className="bg-neutral-900 hover:bg-neutral-700 text-white text-sm font-medium px-4 py-2 rounded-full">
-          Apply
-        </button>
-        {filtersActive && (
-          <Link href="/admin" className="text-sm text-neutral-500 hover:text-neutral-900 underline">
-            Clear
-          </Link>
-        )}
-      </form>
+      <div className="admin-card-soft p-4 mb-6 space-y-3">
+        <FilterChips param="source" options={sourceChipOptions} current={sp.source} />
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="kicker">Month</span>
+          <FilterSelect param="month" options={monthOptions} current={sp.month} placeholder="All months" />
+          {filtersActive && (
+            <Link href="/admin" className="text-xs text-ink-soft hover:text-ink underline ml-auto">
+              Clear filters
+            </Link>
+          )}
+        </div>
+      </div>
 
       {filtersActive ? (
         <>
-          <div className="bg-white rounded-xl border border-neutral-200 p-4 mb-5 flex items-center justify-between">
-            <div className="text-sm text-neutral-600">
-              <span className="font-semibold text-neutral-900">{orders.length}</span> order{orders.length === 1 ? "" : "s"} matched
+          <div className="admin-card p-5 mb-5 flex items-center justify-between">
+            <div className="text-sm text-ink-soft">
+              <span className="text-2xl font-medium text-ink mr-1" style={{ fontFamily: "var(--font-fraunces)" }}>
+                {orders.length}
+              </span>
+              order{orders.length === 1 ? "" : "s"} matched
             </div>
-            <div className="text-lg font-semibold">${totalForFiltered.toFixed(2)}</div>
+            <div className="text-2xl font-medium text-cherry" style={{ fontFamily: "var(--font-fraunces)" }}>
+              ${totalForFiltered.toFixed(2)}
+            </div>
           </div>
           <Section title="Filtered" orders={orders} empty="No orders match these filters." />
         </>

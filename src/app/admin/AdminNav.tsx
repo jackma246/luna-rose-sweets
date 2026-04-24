@@ -13,20 +13,21 @@ export default function AdminNav() {
   const pathname = usePathname();
   return (
     <nav className="max-w-5xl mx-auto px-4">
-      <div className="flex gap-1 -mb-px">
+      <div className="flex gap-6 -mb-px">
         {tabs.map((t) => {
           const active = t.match(pathname);
           return (
             <Link
               key={t.href}
               href={t.href}
-              className={`px-3.5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                active
-                  ? "border-rose-500 text-neutral-900"
-                  : "border-transparent text-neutral-500 hover:text-neutral-900"
+              className={`relative py-3 text-[12px] font-medium uppercase tracking-[0.2em] transition-colors ${
+                active ? "text-cherry" : "text-ink-soft hover:text-ink"
               }`}
             >
               {t.label}
+              {active && (
+                <span className="absolute left-0 right-0 -bottom-px h-[2px] bg-cherry" />
+              )}
             </Link>
           );
         })}

@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import OrderEditor from "./OrderEditor";
-import { formatOrderNumber } from "@/lib/orderNumber";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +24,9 @@ export default async function OrderDetailPage({
 
   return (
     <div>
-      <Link href="/admin" className="text-sm text-neutral-500 hover:text-neutral-900 mb-4 inline-block">
+      <Link href="/admin" className="text-[12px] tracking-[0.2em] uppercase text-ink-soft hover:text-cherry mb-4 inline-block">
         ← All orders
       </Link>
-      <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
-        {formatOrderNumber(order.orderNumber)}
-      </div>
       <OrderEditor order={serialized} />
     </div>
   );

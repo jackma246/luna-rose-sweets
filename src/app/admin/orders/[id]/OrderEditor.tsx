@@ -104,49 +104,37 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
 
   return (
     <div className="space-y-5">
-      <header className="bg-white rounded-xl border border-neutral-200 p-5">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div>
-            <div className="text-xs font-semibold tracking-wider text-rose-600 mb-1">
-              {formatOrderNumber(order.orderNumber)}
-            </div>
-            <h1 className="text-xl font-semibold">{order.customerName}</h1>
-            <a
-              href={`mailto:${order.customerEmail}`}
-              className="text-sm text-rose-600 hover:underline block mt-0.5"
-            >
+      <header className="admin-card p-6">
+        <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+          <div className="min-w-0">
+            <div className="kicker mb-2">{formatOrderNumber(order.orderNumber)}</div>
+            <h1 className="text-3xl font-medium italic mb-1" style={{ fontFamily: "var(--font-fraunces)" }}>
+              {order.customerName}
+            </h1>
+            <a href={`mailto:${order.customerEmail}`} className="text-sm text-cherry hover:text-rose-deep block">
               {order.customerEmail}
             </a>
             {order.customerPhone && (
-              <a
-                href={`tel:${order.customerPhone}`}
-                className="text-sm text-neutral-600 hover:underline block"
-              >
+              <a href={`tel:${order.customerPhone}`} className="text-sm text-ink-soft hover:text-ink block">
                 {order.customerPhone}
               </a>
             )}
           </div>
           <div className="flex flex-col items-end gap-1.5 shrink-0">
-            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_CHIP[status]}`}>
-              {STATUS_LABEL[status]}
-            </span>
-            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${SOURCE_CHIP[source]}`}>
-              {SOURCE_LABEL[source]}
-            </span>
+            <span className={`pill ${STATUS_CHIP[status]}`}>{STATUS_LABEL[status]}</span>
+            <span className={`pill ${SOURCE_CHIP[source]}`}>{SOURCE_LABEL[source]}</span>
           </div>
         </div>
-        <div className="text-xs text-neutral-500">
-          Received {new Date(order.createdAt).toLocaleString()}
-        </div>
+        <div className="text-xs text-ink-soft">Received {new Date(order.createdAt).toLocaleString()}</div>
       </header>
 
-      <section className="bg-white rounded-xl border border-neutral-200 p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">Status</h2>
+      <section className="admin-card p-5">
+        <div className="kicker mb-3">Status</div>
         <select
           value={status}
           onChange={(e) => handleStatusChange(e.target.value as OrderStatus)}
           disabled={saving}
-          className="w-full border border-neutral-300 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300"
+          className="field cursor-pointer"
         >
           {ORDER_STATUSES.map((s) => (
             <option key={s} value={s}>
@@ -154,16 +142,16 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
             </option>
           ))}
         </select>
-        {saved && <p className="text-xs text-emerald-600 mt-2">Saved ✓</p>}
+        {saved && <p className="text-xs text-cherry mt-2">Saved ✓</p>}
       </section>
 
-      <section className="bg-white rounded-xl border border-neutral-200 p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">Source</h2>
+      <section className="admin-card p-5">
+        <div className="kicker mb-3">Source</div>
         <select
           value={source}
           onChange={(e) => handleSourceChange(e.target.value as OrderSource)}
           disabled={saving}
-          className="w-full border border-neutral-300 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300"
+          className="field cursor-pointer"
         >
           {ORDER_SOURCES.map((s) => (
             <option key={s} value={s}>
@@ -173,42 +161,37 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
         </select>
       </section>
 
-      <section className="bg-white rounded-xl border border-neutral-200 p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">
-          Needed by
-        </h2>
+      <section className="admin-card p-5">
+        <div className="kicker mb-3">Needed by</div>
         <input
           type="date"
           value={neededDate}
           onChange={(e) => handleDateChange(e.target.value)}
           disabled={saving}
-          className="w-full border border-neutral-300 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300"
+          className="field"
         />
       </section>
 
-      <section className="bg-white rounded-xl border border-neutral-200 p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">
-          Items · ${Number(order.totalPrice).toFixed(2)}
-        </h2>
-        <ul className="divide-y divide-neutral-100">
+      <section className="admin-card p-5">
+        <div className="flex items-baseline justify-between mb-3">
+          <div className="kicker">Items</div>
+          <div className="text-xl font-medium text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
+            ${Number(order.totalPrice).toFixed(2)}
+          </div>
+        </div>
+        <ul className="divide-y divide-[var(--rule)]">
           {items.map((item, idx) => (
-            <li key={idx} className="py-2.5 first:pt-0 last:pb-0">
+            <li key={idx} className="py-3 first:pt-0 last:pb-0">
               <div className="flex justify-between gap-3 text-sm">
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{item.name}</div>
-                  {item.variantLabel && (
-                    <div className="text-neutral-500 text-xs">{item.variantLabel}</div>
-                  )}
-                  {item.flavour && (
-                    <div className="text-neutral-500 text-xs">Flavour: {item.flavour}</div>
-                  )}
-                  {item.note && (
-                    <div className="text-neutral-500 text-xs whitespace-pre-wrap">Note: {item.note}</div>
-                  )}
+                  <div className="font-semibold text-ink truncate">{item.name}</div>
+                  {item.variantLabel && <div className="text-ink-soft text-xs">{item.variantLabel}</div>}
+                  {item.flavour && <div className="text-ink-soft text-xs">Flavour: {item.flavour}</div>}
+                  {item.note && <div className="text-ink-soft text-xs whitespace-pre-wrap">Note: {item.note}</div>}
                 </div>
                 <div className="shrink-0 text-right">
-                  <div>×{item.quantity}</div>
-                  <div className="font-medium">${(item.price * item.quantity).toFixed(2)}</div>
+                  <div className="text-ink-soft">×{item.quantity}</div>
+                  <div className="font-medium text-ink">${(item.price * item.quantity).toFixed(2)}</div>
                 </div>
               </div>
             </li>
@@ -217,18 +200,14 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
       </section>
 
       {order.customerNotes && (
-        <section className="bg-white rounded-xl border border-neutral-200 p-5">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-2">
-            Customer notes
-          </h2>
-          <p className="text-sm whitespace-pre-wrap">{order.customerNotes}</p>
+        <section className="admin-card p-5">
+          <div className="kicker mb-2">Customer notes</div>
+          <p className="text-sm whitespace-pre-wrap text-ink">{order.customerNotes}</p>
         </section>
       )}
 
-      <section className="bg-white rounded-xl border border-neutral-200 p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">
-          Internal notes
-        </h2>
+      <section className="admin-card p-5">
+        <div className="kicker mb-3">Internal notes</div>
         <textarea
           value={internalNotes}
           onChange={(e) => setInternalNotes(e.target.value)}
@@ -236,17 +215,15 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
           disabled={saving}
           rows={4}
           placeholder="Reminders to self, payment details, delivery info…"
-          className="w-full border border-neutral-300 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300 resize-vertical"
+          className="field resize-vertical"
         />
-        <p className="text-xs text-neutral-400 mt-1.5">Saves when you tap away.</p>
+        <p className="text-xs text-ink-soft mt-1.5">Saves when you tap away.</p>
       </section>
 
       {order.remindersSent.length > 0 && (
-        <section className="bg-white rounded-xl border border-neutral-200 p-5">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-2">
-            Reminders sent
-          </h2>
-          <p className="text-xs text-neutral-500">{order.remindersSent.join(", ")}</p>
+        <section className="admin-card p-5">
+          <div className="kicker mb-2">Reminders sent</div>
+          <p className="text-xs text-ink-soft">{order.remindersSent.join(", ")}</p>
         </section>
       )}
 
@@ -254,10 +231,10 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
         <button
           onClick={handleDelete}
           disabled={saving}
-          className={`w-full text-sm font-medium py-2.5 rounded-full border transition-colors ${
+          className={`w-full text-[12px] tracking-[0.18em] uppercase font-semibold py-3 rounded-full border transition-colors ${
             deleteConfirm
-              ? "bg-red-600 text-white border-red-600"
-              : "text-red-600 border-red-200 hover:bg-red-50"
+              ? "bg-[#b91c1c] text-paper border-[#b91c1c]"
+              : "text-[#b91c1c] border-[#fecaca] hover:bg-[#fef2f2]"
           }`}
         >
           {deleteConfirm ? "Tap again to confirm delete" : "Delete order"}

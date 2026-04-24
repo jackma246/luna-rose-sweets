@@ -67,31 +67,30 @@ export default function ExpenseEditor({ expense }: { expense: SerializedExpense 
     }
   }
 
-  const inputCls =
-    "w-full border border-neutral-300 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300";
-  const labelCls = "block text-sm font-medium text-neutral-700 mb-1";
-
   return (
     <>
-      <h1 className="text-2xl font-semibold mb-5">Edit expense</h1>
-      <form onSubmit={onSubmit} className="space-y-4 bg-white rounded-xl border border-neutral-200 p-5">
+      <div className="kicker mb-2">Edit</div>
+      <h1 className="text-3xl italic font-light leading-none mb-6">
+        Update <span className="font-medium">expense</span>
+      </h1>
+      <form onSubmit={onSubmit} className="admin-card p-6 space-y-4">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className={labelCls}>Date</label>
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required className={inputCls} />
+            <label className="kicker block mb-1.5">Date</label>
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required className="field" />
           </div>
           <div>
-            <label className={labelCls}>Amount ($)</label>
-            <input type="number" step="0.01" min="0" value={amount} onChange={(e) => setAmount(e.target.value)} required className={inputCls} />
+            <label className="kicker block mb-1.5">Amount ($)</label>
+            <input type="number" step="0.01" min="0" value={amount} onChange={(e) => setAmount(e.target.value)} required className="field" />
           </div>
         </div>
         <div>
-          <label className={labelCls}>Vendor</label>
-          <input value={vendor} onChange={(e) => setVendor(e.target.value)} required className={inputCls} />
+          <label className="kicker block mb-1.5">Vendor</label>
+          <input value={vendor} onChange={(e) => setVendor(e.target.value)} required className="field" />
         </div>
         <div>
-          <label className={labelCls}>Category</label>
-          <select value={category} onChange={(e) => setCategory(e.target.value as ExpenseCategory)} className={inputCls}>
+          <label className="kicker block mb-1.5">Category</label>
+          <select value={category} onChange={(e) => setCategory(e.target.value as ExpenseCategory)} className="field cursor-pointer">
             {EXPENSE_CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {CATEGORY_LABEL[c]}
@@ -100,19 +99,19 @@ export default function ExpenseEditor({ expense }: { expense: SerializedExpense 
           </select>
         </div>
         <div>
-          <label className={labelCls}>Notes</label>
-          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className={inputCls + " resize-vertical"} />
+          <label className="kicker block mb-1.5">Notes</label>
+          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="field resize-vertical" />
         </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button type="submit" disabled={saving} className="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 rounded-full disabled:opacity-60">
+        {error && <p className="text-sm text-[#b91c1c]">{error}</p>}
+        <button type="submit" disabled={saving} className="btn-cherry w-full justify-center disabled:opacity-60">
           {saving ? "Saving…" : "Save changes"}
         </button>
       </form>
       <button
         onClick={handleDelete}
         disabled={saving}
-        className={`mt-4 w-full text-sm font-medium py-2.5 rounded-full border transition-colors ${
-          deleteConfirm ? "bg-red-600 text-white border-red-600" : "text-red-600 border-red-200 hover:bg-red-50"
+        className={`mt-4 w-full text-[12px] tracking-[0.18em] uppercase font-semibold py-3 rounded-full border transition-colors ${
+          deleteConfirm ? "bg-[#b91c1c] text-paper border-[#b91c1c]" : "text-[#b91c1c] border-[#fecaca] hover:bg-[#fef2f2]"
         }`}
       >
         {deleteConfirm ? "Tap again to confirm delete" : "Delete expense"}

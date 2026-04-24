@@ -46,11 +46,9 @@ export default function NewOrderPage() {
   function updateRow(idx: number, field: keyof RowItem, value: string) {
     setRows((prev) => prev.map((r, i) => (i === idx ? { ...r, [field]: value } : r)));
   }
-
   function addRow() {
     setRows((prev) => [...prev, blankItem()]);
   }
-
   function removeRow(idx: number) {
     setRows((prev) => (prev.length === 1 ? prev : prev.filter((_, i) => i !== idx)));
   }
@@ -100,44 +98,43 @@ export default function NewOrderPage() {
     }
   }
 
-  const inputCls =
-    "w-full border border-neutral-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300 text-sm";
-  const labelCls = "block text-sm font-medium text-neutral-700 mb-1";
-
   return (
     <div>
-      <Link href="/admin" className="text-sm text-neutral-500 hover:text-neutral-900 mb-4 inline-block">
+      <Link href="/admin" className="text-[12px] tracking-[0.2em] uppercase text-ink-soft hover:text-cherry mb-4 inline-block">
         ← All orders
       </Link>
-      <h1 className="text-2xl font-semibold mb-5">New order</h1>
+      <div className="kicker mb-2">New order</div>
+      <h1 className="text-3xl italic font-light leading-none mb-6">
+        Create an <span className="font-medium">order</span>
+      </h1>
 
       <form onSubmit={onSubmit} className="space-y-5">
-        <section className="bg-white rounded-xl border border-neutral-200 p-5 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500">Customer</h2>
+        <section className="admin-card p-6 space-y-4">
+          <h2 className="section-title">Customer</h2>
           <div>
-            <label className={labelCls}>Name</label>
-            <input value={customerName} onChange={(e) => setCustomerName(e.target.value)} required className={inputCls} />
+            <label className="kicker block mb-1.5">Name</label>
+            <input value={customerName} onChange={(e) => setCustomerName(e.target.value)} required className="field" />
           </div>
           <div>
-            <label className={labelCls}>Email</label>
-            <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} required className={inputCls} />
+            <label className="kicker block mb-1.5">Email</label>
+            <input type="email" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} required className="field" />
           </div>
           <div>
-            <label className={labelCls}>Phone <span className="text-neutral-400 font-normal">(optional)</span></label>
-            <input type="tel" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} className={inputCls} />
+            <label className="kicker block mb-1.5">Phone <span className="text-ink-soft normal-case tracking-normal font-normal text-[10px] ml-1">(optional)</span></label>
+            <input type="tel" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} className="field" />
           </div>
         </section>
 
-        <section className="bg-white rounded-xl border border-neutral-200 p-5 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500">Order</h2>
+        <section className="admin-card p-6 space-y-4">
+          <h2 className="section-title">Order</h2>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={labelCls}>Needed by</label>
-              <input type="date" value={neededDate} onChange={(e) => setNeededDate(e.target.value)} className={inputCls} />
+              <label className="kicker block mb-1.5">Needed by</label>
+              <input type="date" value={neededDate} onChange={(e) => setNeededDate(e.target.value)} className="field" />
             </div>
             <div>
-              <label className={labelCls}>Status</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value as OrderStatus)} className={inputCls}>
+              <label className="kicker block mb-1.5">Status</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value as OrderStatus)} className="field cursor-pointer">
                 {ORDER_STATUSES.map((s) => (
                   <option key={s} value={s}>
                     {STATUS_LABEL[s]}
@@ -148,8 +145,8 @@ export default function NewOrderPage() {
           </div>
 
           <div>
-            <label className={labelCls}>Source</label>
-            <select value={source} onChange={(e) => setSource(e.target.value as OrderSource)} className={inputCls}>
+            <label className="kicker block mb-1.5">Source</label>
+            <select value={source} onChange={(e) => setSource(e.target.value as OrderSource)} className="field cursor-pointer">
               {ORDER_SOURCES.map((s) => (
                 <option key={s} value={s}>
                   {SOURCE_LABEL[s]}
@@ -158,53 +155,55 @@ export default function NewOrderPage() {
             </select>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-neutral-700">Items</div>
-              <button type="button" onClick={addRow} className="text-sm text-rose-600 font-medium">
+              <div className="kicker">Items</div>
+              <button type="button" onClick={addRow} className="text-[11px] tracking-[0.18em] uppercase text-cherry hover:text-rose-deep font-semibold">
                 + Add item
               </button>
             </div>
             {rows.map((row, idx) => (
-              <div key={idx} className="border border-neutral-200 rounded-lg p-3 space-y-2">
+              <div key={idx} className="border border-[var(--rule)] rounded-2xl p-3 space-y-2 bg-white/40">
                 <div className="grid grid-cols-2 gap-2">
-                  <input placeholder="Item name" value={row.name} onChange={(e) => updateRow(idx, "name", e.target.value)} className={inputCls} />
-                  <input placeholder="Variant / size" value={row.variantLabel} onChange={(e) => updateRow(idx, "variantLabel", e.target.value)} className={inputCls} />
+                  <input placeholder="Item name" value={row.name} onChange={(e) => updateRow(idx, "name", e.target.value)} className="field" />
+                  <input placeholder="Variant / size" value={row.variantLabel} onChange={(e) => updateRow(idx, "variantLabel", e.target.value)} className="field" />
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  <input type="number" min="1" placeholder="Qty" value={row.quantity} onChange={(e) => updateRow(idx, "quantity", e.target.value)} className={inputCls} />
-                  <input type="number" step="0.01" min="0" placeholder="Unit price" value={row.price} onChange={(e) => updateRow(idx, "price", e.target.value)} className={inputCls} />
-                  <button type="button" onClick={() => removeRow(idx)} disabled={rows.length === 1} className="text-sm text-neutral-500 hover:text-red-600 disabled:opacity-40">
+                  <input type="number" min="1" placeholder="Qty" value={row.quantity} onChange={(e) => updateRow(idx, "quantity", e.target.value)} className="field" />
+                  <input type="number" step="0.01" min="0" placeholder="Unit price" value={row.price} onChange={(e) => updateRow(idx, "price", e.target.value)} className="field" />
+                  <button type="button" onClick={() => removeRow(idx)} disabled={rows.length === 1} className="text-[11px] tracking-[0.16em] uppercase font-medium text-ink-soft hover:text-[#b91c1c] disabled:opacity-40">
                     Remove
                   </button>
                 </div>
-                <input placeholder="Flavour (optional)" value={row.flavour} onChange={(e) => updateRow(idx, "flavour", e.target.value)} className={inputCls} />
-                <input placeholder="Design / note (optional)" value={row.note} onChange={(e) => updateRow(idx, "note", e.target.value)} className={inputCls} />
+                <input placeholder="Flavour (optional)" value={row.flavour} onChange={(e) => updateRow(idx, "flavour", e.target.value)} className="field" />
+                <input placeholder="Design / note (optional)" value={row.note} onChange={(e) => updateRow(idx, "note", e.target.value)} className="field" />
               </div>
             ))}
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-neutral-100">
-            <span className="text-sm font-medium text-neutral-600">Total</span>
-            <span className="text-lg font-semibold">${total.toFixed(2)}</span>
+          <div className="flex items-center justify-between pt-3 border-t border-[var(--rule)]">
+            <span className="kicker">Total</span>
+            <span className="text-2xl font-medium text-cherry" style={{ fontFamily: "var(--font-fraunces)" }}>
+              ${total.toFixed(2)}
+            </span>
           </div>
         </section>
 
-        <section className="bg-white rounded-xl border border-neutral-200 p-5 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500">Notes</h2>
+        <section className="admin-card p-6 space-y-4">
+          <h2 className="section-title">Notes</h2>
           <div>
-            <label className={labelCls}>Customer notes <span className="text-neutral-400 font-normal">(what they said)</span></label>
-            <textarea value={customerNotes} onChange={(e) => setCustomerNotes(e.target.value)} rows={2} className={inputCls + " resize-vertical"} />
+            <label className="kicker block mb-1.5">Customer notes <span className="text-ink-soft normal-case tracking-normal font-normal text-[10px] ml-1">(what they said)</span></label>
+            <textarea value={customerNotes} onChange={(e) => setCustomerNotes(e.target.value)} rows={2} className="field resize-vertical" />
           </div>
           <div>
-            <label className={labelCls}>Internal notes <span className="text-neutral-400 font-normal">(your notes)</span></label>
-            <textarea value={internalNotes} onChange={(e) => setInternalNotes(e.target.value)} rows={2} className={inputCls + " resize-vertical"} />
+            <label className="kicker block mb-1.5">Internal notes <span className="text-ink-soft normal-case tracking-normal font-normal text-[10px] ml-1">(your notes)</span></label>
+            <textarea value={internalNotes} onChange={(e) => setInternalNotes(e.target.value)} rows={2} className="field resize-vertical" />
           </div>
         </section>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-[#b91c1c]">{error}</p>}
 
-        <button type="submit" disabled={saving} className="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 rounded-full disabled:opacity-60">
+        <button type="submit" disabled={saving} className="btn-cherry w-full justify-center disabled:opacity-60">
           {saving ? "Saving…" : "Save order"}
         </button>
       </form>

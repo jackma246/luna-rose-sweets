@@ -20,7 +20,7 @@ export default async function ExpenseEditPage({ params }: { params: Promise<{ id
 
   return (
     <div>
-      <Link href="/admin/expenses" className="text-sm text-neutral-500 hover:text-neutral-900 mb-4 inline-block">
+      <Link href="/admin/expenses" className="text-[12px] tracking-[0.2em] uppercase text-ink-soft hover:text-cherry mb-4 inline-block">
         ← All expenses
       </Link>
       <ExpenseEditor expense={serialized} />

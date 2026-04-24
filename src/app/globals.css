@@ -13,6 +13,19 @@
   --mint: #A8D8CB;
   --chocolate: #5C3828;
   --cream: #FBF5D6;
+
+  /* v2 brand tokens (also used by admin) */
+  --ink: #3A1F18;
+  --ink-soft: #6B4A3A;
+  --paper: #FBF6EE;
+  --paper-deep: #F4EAD7;
+  --blush: #F7C6CE;
+  --blush-soft: #FBE3E7;
+  --cherry: #B94A64;
+  --rose-deep: #8F3550;
+  --butter: #F5D76E;
+  --crease: #EADFCB;
+  --rule: rgba(58, 31, 24, 0.12);
 }
 
 @theme inline {
@@ -28,8 +41,20 @@
   --color-mint: var(--mint);
   --color-chocolate: var(--chocolate);
   --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-blush: var(--blush);
+  --color-blush-soft: var(--blush-soft);
+  --color-cherry: var(--cherry);
+  --color-rose-deep: var(--rose-deep);
+  --color-butter: var(--butter);
+  --color-crease: var(--crease);
   --font-serif: "Fredoka", "Nunito", system-ui, sans-serif;
   --font-sans: "Nunito", system-ui, sans-serif;
+  --font-fraunces: "Fraunces", Georgia, serif;
+  --font-dm-sans: "DM Sans", system-ui, sans-serif;
 }
 
 body {
@@ -282,6 +307,168 @@ html {
   body:has(.pd-sticky-cta) .version-switch {
     bottom: calc(110px + env(safe-area-inset-bottom));
   }
+}
+
+/* ─── Admin scope (matches v2 brand) ─── */
+.admin-scope {
+  font-family: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+}
+.admin-scope .logo-mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--font-fraunces), "Fraunces", serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-decoration: none;
+}
+.admin-scope .logo-mark .amp {
+  font-family: var(--font-caveat), "Caveat", cursive;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  color: var(--cherry);
+  display: inline-block;
+  transform: translateY(3px) rotate(-6deg);
+  margin: 0 1px;
+}
+.admin-scope h1, .admin-scope h2.h-display {
+  font-family: var(--font-fraunces), "Fraunces", serif;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.admin-scope .admin-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+  box-shadow: 0 1px 0 rgba(58, 31, 24, 0.02);
+}
+.admin-scope .admin-card-soft {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--rule);
+  border-radius: 18px;
+}
+.admin-scope .kicker {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--cherry);
+  font-weight: 600;
+}
+.admin-scope .field {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: var(--ink);
+  font: 500 14px/1.4 var(--font-dm-sans), "DM Sans", sans-serif;
+  width: 100%;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.admin-scope .field:focus {
+  outline: none;
+  border-color: var(--cherry);
+  box-shadow: 0 0 0 3px rgba(185, 74, 100, 0.18);
+}
+.admin-scope .btn-cherry {
+  background: var(--cherry);
+  color: var(--paper);
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font: 600 12px/1 var(--font-dm-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.admin-scope .btn-cherry:hover {
+  background: var(--rose-deep);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px -10px rgba(185, 74, 100, 0.5);
+}
+.admin-scope .btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font: 500 12px/1 var(--font-dm-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.admin-scope .btn-ghost:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.admin-scope .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font: 500 12px/1 var(--font-dm-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s, transform 0.18s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.admin-scope .chip:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.admin-scope .chip.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.admin-scope .chip.active.chip-cherry {
+  background: var(--cherry);
+  border-color: var(--cherry);
+}
+.admin-scope .pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font: 600 10.5px/1 var(--font-dm-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.admin-scope a.row-link {
+  display: block;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+.admin-scope a.row-link:hover {
+  border-color: var(--ink);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px -18px rgba(58, 31, 24, 0.25);
+}
+.admin-scope .section-title {
+  font: 600 11px/1 var(--font-dm-sans), "DM Sans", sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
 }
 
 /* Smooth button hover */

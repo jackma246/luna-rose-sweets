@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { CATEGORY_LABEL, CATEGORY_CHIP, EXPENSE_CATEGORIES } from "@/lib/expenseCategories";
 import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
+import { FilterChips, FilterSelect } from "../FilterChips";
 import type { ExpenseCategory, Prisma } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +35,6 @@ export default async function ExpensesPage({
     take: filtersActive ? 1000 : 200,
   });
 
-  // Summary card data
   const summaryRange = monthRange ?? (() => {
     const now = new Date();
     return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: new Date(now.getFullYear(), now.getMonth() + 1, 1) };
@@ -43,8 +43,6 @@ export default async function ExpensesPage({
     ? new Date(summaryRange.start).toLocaleDateString("en-US", { month: "long", year: "numeric" })
     : "This month";
 
-  // Pull summary expenses separately when filters cut the visible list down,
-  // so the card always reflects the chosen month regardless of category filter.
   const summaryExpenses = await prisma.expense.findMany({
     where: { date: { gte: summaryRange.start, lt: summaryRange.end } },
   });
@@ -55,63 +53,51 @@ export default async function ExpensesPage({
   }, {});
 
   const monthOptions = lastNMonthOptions(12);
-  const selectCls =
-    "border border-neutral-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-300";
+  const categoryChipOptions = [
+    { value: "all", label: "All" },
+    ...EXPENSE_CATEGORIES.map((c) => ({ value: c, label: CATEGORY_LABEL[c] })),
+  ];
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
-        <h1 className="text-2xl font-semibold">Expenses</h1>
-        <Link
-          href="/admin/expenses/new"
-          className="bg-rose-500 hover:bg-rose-600 text-white text-sm font-medium px-4 py-2 rounded-full"
-        >
-          + New
+      <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
+        <div>
+          <div className="kicker mb-2">Expenses</div>
+          <h1 className="text-4xl italic font-light leading-none">
+            Tracking <span className="font-medium">spend</span>
+          </h1>
+        </div>
+        <Link href="/admin/expenses/new" className="btn-cherry">
+          + New expense
         </Link>
       </div>
 
-      <form method="get" className="flex flex-wrap items-center gap-2 mb-5">
-        <select name="month" defaultValue={sp.month || "all"} className={selectCls}>
-          <option value="all">All months</option>
-          {monthOptions.map((m) => (
-            <option key={m.value} value={m.value}>
-              {m.label}
-            </option>
-          ))}
-        </select>
-        <select name="category" defaultValue={sp.category || "all"} className={selectCls}>
-          <option value="all">All categories</option>
-          {EXPENSE_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {CATEGORY_LABEL[c]}
-            </option>
-          ))}
-        </select>
-        <button type="submit" className="bg-neutral-900 hover:bg-neutral-700 text-white text-sm font-medium px-4 py-2 rounded-full">
-          Apply
-        </button>
-        {filtersActive && (
-          <Link href="/admin/expenses" className="text-sm text-neutral-500 hover:text-neutral-900 underline">
-            Clear
-          </Link>
-        )}
-      </form>
-
-      <section className="bg-white rounded-xl border border-neutral-200 p-5 mb-5">
-        <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">
-          {summaryLabel}
+      <div className="admin-card-soft p-4 mb-6 space-y-3">
+        <FilterChips param="category" options={categoryChipOptions} current={sp.category} />
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="kicker">Month</span>
+          <FilterSelect param="month" options={monthOptions} current={sp.month} placeholder="All months" />
+          {filtersActive && (
+            <Link href="/admin/expenses" className="text-xs text-ink-soft hover:text-ink underline ml-auto">
+              Clear filters
+            </Link>
+          )}
         </div>
-        <div className="text-2xl font-semibold mb-3">${summaryTotal.toFixed(2)}</div>
+      </div>
+
+      <section className="admin-card p-6 mb-6">
+        <div className="kicker mb-2">{summaryLabel}</div>
+        <div className="text-4xl font-medium text-ink mb-3" style={{ fontFamily: "var(--font-fraunces)" }}>
+          ${summaryTotal.toFixed(2)}
+        </div>
         <div className="flex flex-wrap gap-2">
           {Object.entries(byCategory).length === 0 ? (
-            <span className="text-sm text-neutral-400">No expenses for this period.</span>
+            <span className="text-sm text-ink-soft">No expenses for this period.</span>
           ) : (
             Object.entries(byCategory).map(([cat, amt]) => (
               <span
                 key={cat}
-                className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                  CATEGORY_CHIP[cat as keyof typeof CATEGORY_CHIP]
-                }`}
+                className={`pill ${CATEGORY_CHIP[cat as keyof typeof CATEGORY_CHIP]}`}
               >
                 {CATEGORY_LABEL[cat as keyof typeof CATEGORY_LABEL]} ${amt.toFixed(2)}
               </span>
@@ -120,25 +106,23 @@ export default async function ExpensesPage({
         </div>
       </section>
 
-      <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2.5 px-1">
-        {filtersActive ? "Matching" : "Recent"} · {expenses.length}
-      </h2>
+      <div className="flex items-baseline justify-between mb-3 px-1">
+        <h2 className="section-title">{filtersActive ? "Matching" : "Recent"}</h2>
+        <span className="text-xs text-ink-soft">{expenses.length}</span>
+      </div>
+
       {expenses.length === 0 ? (
-        <p className="text-sm text-neutral-400 px-1">
+        <p className="text-sm text-ink-soft px-1">
           {filtersActive ? "No expenses match these filters." : "No expenses logged yet."}
         </p>
       ) : (
         <div className="space-y-2.5">
           {expenses.map((e) => (
-            <Link
-              key={e.id}
-              href={`/admin/expenses/${e.id}`}
-              className="block bg-white rounded-xl border border-neutral-200 p-4 hover:border-neutral-300 active:bg-neutral-50 transition-colors"
-            >
+            <Link key={e.id} href={`/admin/expenses/${e.id}`} className="row-link">
               <div className="flex items-start justify-between gap-3 mb-1">
                 <div className="min-w-0">
-                  <div className="font-medium truncate">{e.vendor}</div>
-                  <div className="text-xs text-neutral-500">
+                  <div className="text-[15px] font-semibold text-ink truncate">{e.vendor}</div>
+                  <div className="text-xs text-ink-soft">
                     {new Date(e.date).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -146,13 +130,13 @@ export default async function ExpensesPage({
                     })}
                   </div>
                 </div>
-                <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${CATEGORY_CHIP[e.category]}`}>
-                  {CATEGORY_LABEL[e.category]}
-                </span>
+                <span className={`pill shrink-0 ${CATEGORY_CHIP[e.category]}`}>{CATEGORY_LABEL[e.category]}</span>
               </div>
-              <div className="flex items-center justify-between">
-                {e.notes && <span className="text-xs text-neutral-500 truncate mr-3">{e.notes}</span>}
-                <span className="font-medium ml-auto">${Number(e.amount).toFixed(2)}</span>
+              <div className="flex items-center justify-between pt-2 border-t border-[var(--rule)]">
+                {e.notes && <span className="text-xs text-ink-soft truncate mr-3">{e.notes}</span>}
+                <span className="font-medium ml-auto text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
+                  ${Number(e.amount).toFixed(2)}
+                </span>
               </div>
             </Link>
           ))}
