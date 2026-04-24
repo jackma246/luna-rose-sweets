@@ -2,12 +2,10 @@
 
 import { useState, FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { EXPENSE_CATEGORIES, CATEGORY_LABEL } from "@/lib/expenseCategories";
 import type { ExpenseCategory } from "@/generated/prisma";
 
 export default function NewExpensePage() {
-  const router = useRouter();
   const today = new Date().toISOString().slice(0, 10);
   const [date, setDate] = useState(today);
   const [amount, setAmount] = useState("");
@@ -35,7 +33,7 @@ export default function NewExpensePage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      router.replace("/admin/expenses");
+      window.location.assign("/admin/expenses");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);

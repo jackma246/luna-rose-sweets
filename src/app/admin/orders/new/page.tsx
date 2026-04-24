@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ORDER_STATUSES, STATUS_LABEL } from "@/lib/orderStatus";
 import type { OrderStatus } from "@/generated/prisma";
@@ -25,7 +24,6 @@ const blankItem = (): RowItem => ({
 });
 
 export default function NewOrderPage() {
-  const router = useRouter();
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
@@ -92,7 +90,7 @@ export default function NewOrderPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      router.replace(`/admin/orders/${data.id}`);
+      window.location.assign(`/admin/orders/${data.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);

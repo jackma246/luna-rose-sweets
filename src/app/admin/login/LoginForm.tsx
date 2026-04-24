@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
-  const router = useRouter();
   const params = useSearchParams();
   const next = params.get("next") || "/admin";
   const [password, setPassword] = useState("");
@@ -26,7 +25,7 @@ export default function LoginForm() {
         setLoading(false);
         return;
       }
-      router.replace(next);
+      window.location.assign(next);
     } catch {
       setError(true);
       setLoading(false);
