@@ -27,8 +27,16 @@ enum ExpenseCategory {
   other
 }
 
+enum OrderSource {
+  fb_marketplace
+  tiktok
+  instagram
+  website
+}
+
 model Order {
   id             String      @id @default(cuid())
+  orderNumber    Int         @unique @default(autoincrement())
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
@@ -44,11 +52,13 @@ model Order {
   internalNotes  String?     // owner's working notes
 
   status         OrderStatus @default(pending)
-  remindersSent  String[]    @default([]) // e.g. ["d3","d2","d1","d0"]
+  source         OrderSource @default(website)
+  remindersSent  String[]    @default([]) // e.g. ["d3","d2","d0"]
 
   @@index([neededDate])
   @@index([status])
   @@index([createdAt])
+  @@index([source])
 }
 
 model Expense {

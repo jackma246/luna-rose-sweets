@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
 import { STATUS_LABEL, isTerminal } from "@/lib/orderStatus";
+import { formatOrderNumber } from "@/lib/orderNumber";
 import type { Order } from "@/generated/prisma";
 
-type ReminderKey = "d3" | "d2" | "d1" | "d0";
+type ReminderKey = "d3" | "d2" | "d0";
 
 const WINDOWS: Array<{ key: ReminderKey; daysAway: number; label: string }> = [
   { key: "d3", daysAway: 3, label: "3 days away" },
   { key: "d2", daysAway: 2, label: "2 days away" },
-  { key: "d1", daysAway: 1, label: "tomorrow" },
   { key: "d0", daysAway: 0, label: "today" },
 ];
 
@@ -39,6 +39,7 @@ function reminderHtml(orders: Order[], windowLabel: string, baseUrl: string): st
         : "—";
       return `
         <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #f0ebe4;font-size:12px;color:#c05;font-weight:600;white-space:nowrap;">${formatOrderNumber(o.orderNumber)}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #f0ebe4;">
             <div style="font-weight:600;">${escapeHtml(o.customerName)}</div>
             <div style="color:#999;font-size:12px;">${escapeHtml(o.customerEmail)}${
@@ -88,7 +89,7 @@ export async function GET(req: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_URL || process.env.APP_URL || "https://dipsprinkle.com";
   const from = "Dip & Sprinkle <orders@dipsprinkle.com>";
 
-  const summary: Record<ReminderKey, number> = { d3: 0, d2: 0, d1: 0, d0: 0 };
+  const summary: Record<ReminderKey, number> = { d3: 0, d2: 0, d0: 0 };
 
   for (const w of WINDOWS) {
     const { start, end } = dateAtMidnight(w.daysAway);

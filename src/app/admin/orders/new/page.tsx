@@ -3,7 +3,8 @@
 import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { ORDER_STATUSES, STATUS_LABEL } from "@/lib/orderStatus";
-import type { OrderStatus } from "@/generated/prisma";
+import { ORDER_SOURCES, SOURCE_LABEL } from "@/lib/orderSources";
+import type { OrderStatus, OrderSource } from "@/generated/prisma";
 
 interface RowItem {
   name: string;
@@ -31,6 +32,7 @@ export default function NewOrderPage() {
   const [customerNotes, setCustomerNotes] = useState("");
   const [internalNotes, setInternalNotes] = useState("");
   const [status, setStatus] = useState<OrderStatus>("pending");
+  const [source, setSource] = useState<OrderSource>("website");
   const [rows, setRows] = useState<RowItem[]>([blankItem()]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +88,7 @@ export default function NewOrderPage() {
           customerNotes: customerNotes || undefined,
           internalNotes: internalNotes || undefined,
           status,
+          source,
         }),
       });
       const data = await res.json();
@@ -142,6 +145,17 @@ export default function NewOrderPage() {
                 ))}
               </select>
             </div>
+          </div>
+
+          <div>
+            <label className={labelCls}>Source</label>
+            <select value={source} onChange={(e) => setSource(e.target.value as OrderSource)} className={inputCls}>
+              {ORDER_SOURCES.map((s) => (
+                <option key={s} value={s}>
+                  {SOURCE_LABEL[s]}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="space-y-3">

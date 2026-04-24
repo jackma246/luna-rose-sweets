@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ORDER_STATUSES, STATUS_LABEL, STATUS_CHIP } from "@/lib/orderStatus";
-import type { OrderStatus } from "@/generated/prisma";
+import { ORDER_SOURCES, SOURCE_LABEL, SOURCE_CHIP } from "@/lib/orderSources";
+import { formatOrderNumber } from "@/lib/orderNumber";
+import type { OrderStatus, OrderSource } from "@/generated/prisma";
 
 interface CartItem {
   name: string;
@@ -16,6 +18,7 @@ interface CartItem {
 
 interface SerializedOrder {
   id: string;
+  orderNumber: number;
   customerName: string;
   customerEmail: string;
   customerPhone: string | null;
@@ -25,6 +28,7 @@ interface SerializedOrder {
   customerNotes: string | null;
   internalNotes: string | null;
   status: OrderStatus;
+  source: OrderSource;
   remindersSent: string[];
   createdAt: string;
   updatedAt: string;
@@ -33,6 +37,7 @@ interface SerializedOrder {
 export default function OrderEditor({ order }: { order: SerializedOrder }) {
   const router = useRouter();
   const [status, setStatus] = useState<OrderStatus>(order.status);
+  const [source, setSource] = useState<OrderSource>(order.source);
   const [internalNotes, setInternalNotes] = useState(order.internalNotes || "");
   const [neededDate, setNeededDate] = useState(order.neededDate || "");
   const [saving, setSaving] = useState(false);
@@ -66,6 +71,11 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
     await save({ status: newStatus });
   }
 
+  async function handleSourceChange(newSource: OrderSource) {
+    setSource(newSource);
+    await save({ source: newSource });
+  }
+
   async function handleNotesBlur() {
     if (internalNotes === (order.internalNotes || "")) return;
     await save({ internalNotes: internalNotes || null });
@@ -97,6 +107,9 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
       <header className="bg-white rounded-xl border border-neutral-200 p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div>
+            <div className="text-xs font-semibold tracking-wider text-rose-600 mb-1">
+              {formatOrderNumber(order.orderNumber)}
+            </div>
             <h1 className="text-xl font-semibold">{order.customerName}</h1>
             <a
               href={`mailto:${order.customerEmail}`}
@@ -113,9 +126,14 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
               </a>
             )}
           </div>
-          <span className={`shrink-0 text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_CHIP[status]}`}>
-            {STATUS_LABEL[status]}
-          </span>
+          <div className="flex flex-col items-end gap-1.5 shrink-0">
+            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_CHIP[status]}`}>
+              {STATUS_LABEL[status]}
+            </span>
+            <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${SOURCE_CHIP[source]}`}>
+              {SOURCE_LABEL[source]}
+            </span>
+          </div>
         </div>
         <div className="text-xs text-neutral-500">
           Received {new Date(order.createdAt).toLocaleString()}
@@ -137,6 +155,22 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
           ))}
         </select>
         {saved && <p className="text-xs text-emerald-600 mt-2">Saved ✓</p>}
+      </section>
+
+      <section className="bg-white rounded-xl border border-neutral-200 p-5">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 mb-3">Source</h2>
+        <select
+          value={source}
+          onChange={(e) => handleSourceChange(e.target.value as OrderSource)}
+          disabled={saving}
+          className="w-full border border-neutral-300 rounded-lg px-3.5 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-rose-300"
+        >
+          {ORDER_SOURCES.map((s) => (
+            <option key={s} value={s}>
+              {SOURCE_LABEL[s]}
+            </option>
+          ))}
+        </select>
       </section>
 
       <section className="bg-white rounded-xl border border-neutral-200 p-5">

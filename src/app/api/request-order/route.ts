@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
+import { formatOrderNumber } from "@/lib/orderNumber";
 
 interface CartItem {
   name: string;
@@ -89,11 +90,11 @@ function detailsBlock(rows: Array<[string, string]>): string {
   return `<table style="width:100%;border-collapse:collapse;margin-bottom:24px;background:#faf9f7;border-radius:8px;overflow:hidden;">${body}</table>`;
 }
 
-function supportEmail(customer: Customer, items: CartItem[], totalPrice: number, neededDateLabel?: string): string {
-  const rows: Array<[string, string]> = [
-    ["Name", `<strong>${escapeHtml(customer.name)}</strong>`],
-    ["Email", `<a href="mailto:${escapeHtml(customer.email)}" style="color:#c05;text-decoration:none;">${escapeHtml(customer.email)}</a>`],
-  ];
+function supportEmail(customer: Customer, items: CartItem[], totalPrice: number, orderNumberLabel: string | undefined, neededDateLabel?: string): string {
+  const rows: Array<[string, string]> = [];
+  if (orderNumberLabel) rows.push(["Order #", `<strong>${escapeHtml(orderNumberLabel)}</strong>`]);
+  rows.push(["Name", `<strong>${escapeHtml(customer.name)}</strong>`]);
+  rows.push(["Email", `<a href="mailto:${escapeHtml(customer.email)}" style="color:#c05;text-decoration:none;">${escapeHtml(customer.email)}</a>`]);
   if (customer.phone) rows.push(["Phone", escapeHtml(customer.phone)]);
   if (neededDateLabel) rows.push(["Needed by", escapeHtml(neededDateLabel)]);
   if (customer.message) rows.push(["Notes", escapeHtml(customer.message)]);
@@ -101,7 +102,7 @@ function supportEmail(customer: Customer, items: CartItem[], totalPrice: number,
   return `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#2a1a14;">
       <div style="background:#c05;padding:24px 32px;">
-        <h1 style="color:#fff;margin:0;font-size:22px;">New Order Request</h1>
+        <h1 style="color:#fff;margin:0;font-size:22px;">New Order Request${orderNumberLabel ? ` · ${escapeHtml(orderNumberLabel)}` : ""}</h1>
         <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:14px;">Dip &amp; Sprinkle</p>
       </div>
       <div style="padding:32px;">
@@ -115,8 +116,9 @@ function supportEmail(customer: Customer, items: CartItem[], totalPrice: number,
   `;
 }
 
-function customerEmail(customer: Customer, items: CartItem[], totalPrice: number, neededDateLabel?: string): string {
+function customerEmail(customer: Customer, items: CartItem[], totalPrice: number, orderNumberLabel: string | undefined, neededDateLabel?: string): string {
   const detailsRows: Array<[string, string]> = [];
+  if (orderNumberLabel) detailsRows.push(["Order #", `<strong>${escapeHtml(orderNumberLabel)}</strong>`]);
   if (neededDateLabel) detailsRows.push(["Needed by", escapeHtml(neededDateLabel)]);
   if (customer.message) detailsRows.push(["Your notes", escapeHtml(customer.message)]);
 
@@ -124,7 +126,7 @@ function customerEmail(customer: Customer, items: CartItem[], totalPrice: number
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#2a1a14;">
       <div style="background:#c05;padding:24px 32px;">
         <h1 style="color:#fff;margin:0;font-size:22px;">Your order is pending review</h1>
-        <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:14px;">Dip &amp; Sprinkle</p>
+        <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:14px;">Dip &amp; Sprinkle${orderNumberLabel ? ` · ${escapeHtml(orderNumberLabel)}` : ""}</p>
       </div>
       <div style="padding:32px;">
         <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">
@@ -171,8 +173,9 @@ export async function POST(req: NextRequest) {
   const from = "Dip & Sprinkle <orders@dipsprinkle.com>";
   const priceStr = Number(totalPrice).toFixed(2);
 
+  let orderNumberLabel: string | undefined;
   try {
-    await prisma.order.create({
+    const created = await prisma.order.create({
       data: {
         customerName: customer.name,
         customerEmail: customer.email,
@@ -184,11 +187,14 @@ export async function POST(req: NextRequest) {
         status: "pending",
       },
     });
+    orderNumberLabel = formatOrderNumber(created.orderNumber);
   } catch (err) {
     console.error("Failed to persist order:", err);
     // Fall through — we still want to send emails even if DB write fails,
     // so the order isn't lost. Owner can backfill manually via /admin/orders/new.
   }
+
+  const subjectSuffix = orderNumberLabel ? ` (${orderNumberLabel})` : "";
 
   try {
     const [support, confirmation] = await Promise.all([
@@ -196,15 +202,15 @@ export async function POST(req: NextRequest) {
         from,
         to: "supportdipsprinkle@gmail.com",
         replyTo: customer.email,
-        subject: `New Order Request — ${customer.name} — $${priceStr}`,
-        html: supportEmail(customer, items, totalPrice, neededDateLabel),
+        subject: `New Order Request — ${customer.name} — $${priceStr}${subjectSuffix}`,
+        html: supportEmail(customer, items, totalPrice, orderNumberLabel, neededDateLabel),
       }),
       resend.emails.send({
         from,
         to: customer.email,
         replyTo: "supportdipsprinkle@gmail.com",
-        subject: `Your Dip & Sprinkle order is pending — $${priceStr}`,
-        html: customerEmail(customer, items, totalPrice, neededDateLabel),
+        subject: `Your Dip & Sprinkle order is pending — $${priceStr}${subjectSuffix}`,
+        html: customerEmail(customer, items, totalPrice, orderNumberLabel, neededDateLabel),
       }),
     ]);
 

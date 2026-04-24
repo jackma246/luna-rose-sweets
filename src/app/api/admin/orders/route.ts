@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ORDER_STATUSES } from "@/lib/orderStatus";
-import type { OrderStatus } from "@/generated/prisma";
+import { ORDER_SOURCES } from "@/lib/orderSources";
+import type { OrderStatus, OrderSource } from "@/generated/prisma";
 
 interface NewOrderItem {
   name: string;
@@ -23,6 +24,7 @@ export async function POST(req: NextRequest) {
     customerNotes?: string;
     internalNotes?: string;
     status?: OrderStatus;
+    source?: OrderSource;
   };
 
   if (!body.customerName || !body.customerEmail) {
@@ -32,6 +34,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "At least one item required." }, { status: 400 });
   }
   const status: OrderStatus = body.status && ORDER_STATUSES.includes(body.status) ? body.status : "pending";
+  const source: OrderSource = body.source && ORDER_SOURCES.includes(body.source) ? body.source : "website";
 
   const order = await prisma.order.create({
     data: {
@@ -44,6 +47,7 @@ export async function POST(req: NextRequest) {
       customerNotes: body.customerNotes || null,
       internalNotes: body.internalNotes || null,
       status,
+      source,
     },
   });
 

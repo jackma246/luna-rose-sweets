@@ -1,25 +1,62 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { CATEGORY_LABEL, CATEGORY_CHIP } from "@/lib/expenseCategories";
+import { CATEGORY_LABEL, CATEGORY_CHIP, EXPENSE_CATEGORIES } from "@/lib/expenseCategories";
+import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
+import type { ExpenseCategory, Prisma } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
 
-export default async function ExpensesPage() {
-  const expenses = await prisma.expense.findMany({ orderBy: { date: "desc" }, take: 200 });
+interface SearchParams {
+  month?: string;
+  category?: string;
+}
 
-  const now = new Date();
-  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  const monthTotal = expenses
-    .filter((e) => e.date >= monthStart)
-    .reduce((sum, e) => sum + Number(e.amount), 0);
+export default async function ExpensesPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const sp = await searchParams;
+  const monthRange = parseMonth(sp.month);
+  const categoryFilter = sp.category && EXPENSE_CATEGORIES.includes(sp.category as ExpenseCategory)
+    ? (sp.category as ExpenseCategory)
+    : null;
 
-  const byCategory = expenses
-    .filter((e) => e.date >= monthStart)
-    .reduce<Record<string, number>>((acc, e) => {
-      const k = e.category;
-      acc[k] = (acc[k] || 0) + Number(e.amount);
-      return acc;
-    }, {});
+  const filtersActive = Boolean(monthRange) || Boolean(categoryFilter);
+
+  const where: Prisma.ExpenseWhereInput = {};
+  if (monthRange) where.date = { gte: monthRange.start, lt: monthRange.end };
+  if (categoryFilter) where.category = categoryFilter;
+
+  const expenses = await prisma.expense.findMany({
+    where,
+    orderBy: { date: "desc" },
+    take: filtersActive ? 1000 : 200,
+  });
+
+  // Summary card data
+  const summaryRange = monthRange ?? (() => {
+    const now = new Date();
+    return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: new Date(now.getFullYear(), now.getMonth() + 1, 1) };
+  })();
+  const summaryLabel = monthRange
+    ? new Date(summaryRange.start).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    : "This month";
+
+  // Pull summary expenses separately when filters cut the visible list down,
+  // so the card always reflects the chosen month regardless of category filter.
+  const summaryExpenses = await prisma.expense.findMany({
+    where: { date: { gte: summaryRange.start, lt: summaryRange.end } },
+  });
+  const summaryTotal = summaryExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
+  const byCategory = summaryExpenses.reduce<Record<string, number>>((acc, e) => {
+    acc[e.category] = (acc[e.category] || 0) + Number(e.amount);
+    return acc;
+  }, {});
+
+  const monthOptions = lastNMonthOptions(12);
+  const selectCls =
+    "border border-neutral-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-300";
 
   return (
     <div>
@@ -33,14 +70,41 @@ export default async function ExpensesPage() {
         </Link>
       </div>
 
+      <form method="get" className="flex flex-wrap items-center gap-2 mb-5">
+        <select name="month" defaultValue={sp.month || "all"} className={selectCls}>
+          <option value="all">All months</option>
+          {monthOptions.map((m) => (
+            <option key={m.value} value={m.value}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+        <select name="category" defaultValue={sp.category || "all"} className={selectCls}>
+          <option value="all">All categories</option>
+          {EXPENSE_CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {CATEGORY_LABEL[c]}
+            </option>
+          ))}
+        </select>
+        <button type="submit" className="bg-neutral-900 hover:bg-neutral-700 text-white text-sm font-medium px-4 py-2 rounded-full">
+          Apply
+        </button>
+        {filtersActive && (
+          <Link href="/admin/expenses" className="text-sm text-neutral-500 hover:text-neutral-900 underline">
+            Clear
+          </Link>
+        )}
+      </form>
+
       <section className="bg-white rounded-xl border border-neutral-200 p-5 mb-5">
         <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">
-          This month
+          {summaryLabel}
         </div>
-        <div className="text-2xl font-semibold mb-3">${monthTotal.toFixed(2)}</div>
+        <div className="text-2xl font-semibold mb-3">${summaryTotal.toFixed(2)}</div>
         <div className="flex flex-wrap gap-2">
           {Object.entries(byCategory).length === 0 ? (
-            <span className="text-sm text-neutral-400">No expenses yet.</span>
+            <span className="text-sm text-neutral-400">No expenses for this period.</span>
           ) : (
             Object.entries(byCategory).map(([cat, amt]) => (
               <span
@@ -57,10 +121,12 @@ export default async function ExpensesPage() {
       </section>
 
       <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2.5 px-1">
-        Recent · {expenses.length}
+        {filtersActive ? "Matching" : "Recent"} · {expenses.length}
       </h2>
       {expenses.length === 0 ? (
-        <p className="text-sm text-neutral-400 px-1">No expenses logged yet.</p>
+        <p className="text-sm text-neutral-400 px-1">
+          {filtersActive ? "No expenses match these filters." : "No expenses logged yet."}
+        </p>
       ) : (
         <div className="space-y-2.5">
           {expenses.map((e) => (

@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ORDER_STATUSES } from "@/lib/orderStatus";
-import type { OrderStatus } from "@/generated/prisma";
+import { ORDER_SOURCES } from "@/lib/orderSources";
+import type { OrderStatus, OrderSource } from "@/generated/prisma";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = (await req.json()) as {
     status?: OrderStatus;
+    source?: OrderSource;
     internalNotes?: string | null;
     neededDate?: string | null;
     customerName?: string;
@@ -21,6 +23,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       return NextResponse.json({ ok: false, error: "Invalid status." }, { status: 400 });
     }
     data.status = body.status;
+  }
+  if (body.source !== undefined) {
+    if (!ORDER_SOURCES.includes(body.source)) {
+      return NextResponse.json({ ok: false, error: "Invalid source." }, { status: 400 });
+    }
+    data.source = body.source;
   }
   if (body.internalNotes !== undefined) data.internalNotes = body.internalNotes;
   if (body.neededDate !== undefined) {

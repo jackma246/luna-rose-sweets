@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const tabs = [
   { href: "/admin", label: "Orders", match: (p: string) => p === "/admin" || p.startsWith("/admin/orders") },
   { href: "/admin/expenses", label: "Expenses", match: (p: string) => p.startsWith("/admin/expenses") },
+  { href: "/admin/dashboard", label: "Dashboard", match: (p: string) => p.startsWith("/admin/dashboard") },
 ];
 
 export default function AdminNav() {
