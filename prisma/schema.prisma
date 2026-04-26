@@ -34,6 +34,14 @@ enum OrderSource {
   website
 }
 
+enum InventoryCategory {
+  ingredient
+  supply
+  packaging
+  equipment
+  other
+}
+
 model Order {
   id             String      @id @default(cuid())
   orderNumber    Int         @unique @default(autoincrement())
@@ -59,6 +67,22 @@ model Order {
   @@index([status])
   @@index([createdAt])
   @@index([source])
+}
+
+model InventoryItem {
+  id                 String            @id @default(cuid())
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  name               String
+  quantity           Decimal           @db.Decimal(10, 2)
+  unit               String?           // e.g. "lbs", "cups", "ea", "rolls"
+  category           InventoryCategory @default(ingredient)
+  lowStockThreshold  Decimal?          @db.Decimal(10, 2)
+  notes              String?
+
+  @@index([category])
+  @@index([name])
 }
 
 model Expense {

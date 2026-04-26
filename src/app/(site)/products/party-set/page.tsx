@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { CAKE_FLAVOURS } from "@/data/products";
 import { useCart } from "@/context/CartContext";
@@ -142,6 +142,13 @@ function formatPickupDate(dateStr: string): string {
 
 export default function PartySetPage() {
   const [sizeId, setSizeId] = useState("medium");
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("size");
+    if (requested && SIZES.some((s) => s.id === requested)) {
+      setSizeId(requested);
+    }
+  }, []);
   const [treats, setTreats] = useState<string[]>([]);
   const [colorNote, setColorNote] = useState("");
   const [designTier, setDesignTier] = useState("");

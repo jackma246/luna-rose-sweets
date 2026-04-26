@@ -24,6 +24,7 @@ const marqueeWords = [
 
 const SETS = [
   {
+    id: "small",
     label: "Small Set",
     pcs: "36 pcs",
     price: 135,
@@ -32,6 +33,7 @@ const SETS = [
     desc: "A sweet and simple option for intimate gatherings.",
   },
   {
+    id: "medium",
     label: "Medium Set",
     pcs: "48 pcs",
     price: 185,
@@ -40,6 +42,7 @@ const SETS = [
     desc: "Our most popular choice — balanced and polished.",
   },
   {
+    id: "large",
     label: "Large Set",
     pcs: "96 pcs",
     price: 310,
@@ -147,7 +150,7 @@ export default function HomePage() {
           {SETS.map((s) => (
             <Link
               key={s.label}
-              href="/products/party-set"
+              href={`/products/party-set?size=${s.id}`}
               style={{
                 display: "flex",
                 alignItems: "center",
