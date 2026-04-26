@@ -36,7 +36,7 @@ const SETS = [
     id: "medium",
     label: "Medium Set",
     pcs: "48 pcs",
-    price: 185,
+    price: 175,
     badge: "⭐ Most Popular",
     badgeBg: "var(--cherry, #c05)",
     desc: "Our most popular choice — balanced and polished.",

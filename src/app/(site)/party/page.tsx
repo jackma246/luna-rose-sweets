@@ -14,7 +14,7 @@ const SETS = [
   {
     label: "Medium Set",
     pcs: "48 pcs",
-    price: 185,
+    price: 175,
     badge: "Most Popular",
     desc: "Our most popular choice for a balanced and polished dessert table.",
   },

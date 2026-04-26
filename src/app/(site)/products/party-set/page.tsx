@@ -24,7 +24,7 @@ const SIZES = [
     id: "medium",
     label: "Medium Set",
     pcs: 48,
-    price: 185,
+    price: 175,
     badge: "⭐ Most Popular",
     badgeColor: "var(--cherry, #c05)",
     desc: "Balanced, polished, and perfect for most events.",
