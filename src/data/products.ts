@@ -90,9 +90,9 @@ export const products: Product[] = [
     variants: [
       { label: "Small Set (36 pcs)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" },
       { label: "Medium Set (48 pcs)", price: 175, image: "/images/brand-spread-new.png" },
-      { label: "Large Set (96 pcs)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" },
+      { label: "Large Set (96 pcs)", price: 310, image: "/images/treat-boxes/party-set-large.jpeg" },
     ],
-    image: "/images/brand-spread-new.png",
+    image: "/images/treat-boxes/party-set-large.jpeg",
   },
   {
     slug: "party-layer-cake",

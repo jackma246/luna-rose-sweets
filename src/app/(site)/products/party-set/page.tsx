@@ -45,7 +45,7 @@ const SIZES = [
     badgeColor: "#2a7a5e",
     desc: "More variety and visual impact for larger celebrations.",
     subDesc: null,
-    previewImg: "/images/treat-boxes/mixed-treats.jpg",
+    previewImg: "/images/treat-boxes/party-set-large.jpeg",
     previewLabel: "Large Set",
   },
 ];
