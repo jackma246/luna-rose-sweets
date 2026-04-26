@@ -89,7 +89,7 @@ export const products: Product[] = [
     details: "Choose your set size, treat types, design finish, and flavor. Handcrafted in small batches with premium Belgian chocolate. Please allow 3–7 days notice.",
     variants: [
       { label: "Small Set (36 pcs)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" },
-      { label: "Medium Set (48 pcs)", price: 185, image: "/images/brand-spread-new.png" },
+      { label: "Medium Set (48 pcs)", price: 175, image: "/images/brand-spread-new.png" },
       { label: "Large Set (96 pcs)", price: 310, image: "/images/treat-boxes/mixed-treats.jpg" },
     ],
     image: "/images/brand-spread-new.png",
@@ -135,7 +135,7 @@ export const products: Product[] = [
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 200, image: "/images/cake/two-tier-new.jpeg" }],
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 240, image: "/images/cake/two-tier-new.jpeg" }],
     flavours: CAKE_FLAVOURS,
     designTiers: [
       { name: "Classic", description: "Simple finish · 2 colors · minimal decoration", priceLabel: "Included", priceAdd: 0 },
@@ -199,7 +199,7 @@ export const products: Product[] = [
       "A child-friendly DIY kit where kids get to be creative and decorate their own cakesicles and treats. A fun activity and delicious treat in one!",
     details:
       "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
-    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread-new.png" }],
+    variants: [{ label: "DIY Decorating Set", price: 38, image: "/images/brand-spread-new.png" }],
     image: "/images/brand-spread-new.png",
     hidden: true,
   },
@@ -216,7 +216,7 @@ export const products: Product[] = [
       "Each bouquet is hand-arranged with 8 freshly baked cake pops dipped in premium Belgian chocolate. Bouquets can be themed and personalised with colours, toppings, and edible toppers.",
     fixedFlavour: "Classic Vanilla — we use our own custom blend of premium Madagascar and Mexican vanilla, with real vanilla beans included. The result is a clean, true vanilla flavour that is rich, warm, and anything but ordinary.",
     variants: [
-      { label: "Bouquet (8 pops)", price: 35, image: "/images/popsicle-bouquet/1.jpg" },
+      { label: "Bouquet (8 pops)", price: 42, image: "/images/popsicle-bouquet/1.jpg" },
     ],
     badge: "Baked from scratch",
     image: "/images/popsicle-bouquet/1.jpg",
@@ -319,9 +319,9 @@ export const products: Product[] = [
     details:
       "Slightly more detailed than cake pops — designs may vary based on mold shape. Best consumed within 2 weeks.",
     variants: [
-      { label: "1 Dozen", price: 48, image: "/images/cakesicles/1.jpg" },
-      { label: "2 Dozen", price: 92, image: "/images/cakesicles/1.jpg" },
-      { label: "3 Dozen", price: 135, image: "/images/cakesicles/1.jpg" },
+      { label: "1 Dozen", price: 54, image: "/images/cakesicles/1.jpg" },
+      { label: "2 Dozen", price: 104, image: "/images/cakesicles/1.jpg" },
+      { label: "3 Dozen", price: 150, image: "/images/cakesicles/1.jpg" },
     ],
     addons: [
       { label: "3rd Color", price: "+$5" },
@@ -356,9 +356,9 @@ export const products: Product[] = [
     details:
       "Designs are semi-custom. Custom characters and logos require a Signature Custom upgrade. Flavor splits are evenly divided. Pairs perfectly with cakesicles and pretzels for a full dessert table.",
     variants: [
-      { label: "1 Dozen (12 pcs)", price: 36, image: "/images/cake-pops/new.jpeg" },
-      { label: "2 Dozen (24 pcs)", price: 68, image: "/images/cake-pops/new.jpeg" },
-      { label: "3 Dozen (36 pcs)", price: 100, image: "/images/cake-pops/new.jpeg" },
+      { label: "1 Dozen (12 pcs)", price: 40, image: "/images/cake-pops/new.jpeg" },
+      { label: "2 Dozen (24 pcs)", price: 76, image: "/images/cake-pops/new.jpeg" },
+      { label: "3 Dozen (36 pcs)", price: 112, image: "/images/cake-pops/new.jpeg" },
     ],
     addons: [
       { label: "3rd Color", price: "+$5" },
@@ -455,7 +455,7 @@ export const products: Product[] = [
       "These chocolate covered twisted pretzels are a simple yet satisfying addition to any dessert spread.\n\nLight, crunchy, and easy to eat, they bring balance to richer treats.",
     details:
       "Great filler item for party trays and dessert tables. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen", price: 35, image: "/images/twisted-pretzel/twis.jpeg" }],
+    variants: [{ label: "1 Dozen", price: 26, image: "/images/twisted-pretzel/twis.jpeg" }],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$8", priceAdd: 8 },
@@ -555,7 +555,7 @@ export const products: Product[] = [
       "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 260, image: "/images/cake/two-tier-new.jpeg" }],
+    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 240, image: "/images/cake/two-tier-new.jpeg" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
@@ -637,7 +637,7 @@ export const products: Product[] = [
       "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
     details:
       "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
-    variants: [{ label: "1 Dozen (Base Design)", price: 42, image: "/images/cake-pops/new.jpeg" }],
+    variants: [{ label: "1 Dozen (Base Design)", price: 40, image: "/images/cake-pops/new.jpeg" }],
     addons: [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
       { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
@@ -680,7 +680,7 @@ export const products: Product[] = [
       "A child-friendly DIY kit where kids get to be creative and decorate their own cakesicles and treats. A fun activity and delicious treat in one!",
     details:
       "Kits contain: Instructional Steps, 5 Dipped Milk Chocolate Strawberries, 4 Dipped White Chocolate Cakesicles (Vanilla & Chocolate Fudge), decorating supplies and sprinkles.",
-    variants: [{ label: "DIY Decorating Set", price: 31, image: "/images/brand-spread-new.png" }],
+    variants: [{ label: "DIY Decorating Set", price: 38, image: "/images/brand-spread-new.png" }],
     image: "/images/brand-spread-new.png",
     hidden: true,
   },
@@ -692,7 +692,7 @@ export const products: Product[] = [
       "Our Dates are covered in luxury chocolate and can be topped with a variety of toppings.",
     details:
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed Chocolate sandwich cookies (Oreos®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
-    variants: [{ label: "1 Dozen", price: 36, image: "/images/luxury-dates/1.jpg" }],
+    variants: [{ label: "1 Dozen", price: 42, image: "/images/luxury-dates/1.jpg" }],
     image: "/images/luxury-dates/1.jpg",
   },
   {
@@ -741,7 +741,7 @@ export const products: Product[] = [
       "A stunning tower of 35 freshly baked madeleines dipped in premium chocolate. An eye-catching centrepiece for any dessert table or celebration.",
     details:
       "Each madeleine is hand-dipped and decorated. Tower height: 11.9 inches. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Madeleine Tower", price: 245, image: "/images/towers/mt.png" }],
+    variants: [{ label: "Madeleine Tower", price: 195, image: "/images/towers/mt.png" }],
     image: "/images/towers/mt.png",
   },
   {
@@ -763,7 +763,7 @@ export const products: Product[] = [
       "A decadent tower of 70 handcrafted chocolate treats, beautifully arranged and perfect for any celebration.",
     details:
       "Tower height: 11.9 inches. The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
-    variants: [{ label: "Chocolate Tower", price: 175, image: "/images/towers/cht.png" }],
+    variants: [{ label: "Chocolate Tower", price: 200, image: "/images/towers/cht.png" }],
     image: "/images/towers/cht.png",
   },
   {
