@@ -2,26 +2,31 @@ import Link from "next/link";
 import Image from "next/image";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
+import { getProductBySlug } from "@/data/products";
+
+const _partySetVariants = getProductBySlug("party-set")!.variants;
+const _setPrice = (keyword: string): number =>
+  _partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
 
 const SETS = [
   {
     label: "Small Set",
     pcs: "36 pcs",
-    price: 135,
+    price: _setPrice("small"),
     badge: null,
     desc: "A sweet and simple option for intimate gatherings.",
   },
   {
     label: "Medium Set",
     pcs: "48 pcs",
-    price: 175,
+    price: _setPrice("medium"),
     badge: "Most Popular",
     desc: "Our most popular choice for a balanced and polished dessert table.",
   },
   {
     label: "Large Set",
     pcs: "96 pcs",
-    price: 310,
+    price: _setPrice("large"),
     badge: "Best Value",
     desc: "Perfect for larger celebrations with more variety and visual impact.",
   },

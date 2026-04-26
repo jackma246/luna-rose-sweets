@@ -2,17 +2,21 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { CAKE_FLAVOURS } from "@/data/products";
+import { CAKE_FLAVOURS, getProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../../components/V2Header";
 import V2Footer from "../../components/V2Footer";
+
+const _partySetVariants = getProductBySlug("party-set")!.variants;
+const _setPrice = (keyword: string): number =>
+  _partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
 
 const SIZES = [
   {
     id: "small",
     label: "Small Set",
     pcs: 36,
-    price: 135,
+    price: _setPrice("small"),
     badge: null as string | null,
     badgeColor: "",
     desc: "A sweet and simple option for small gatherings.",
@@ -24,7 +28,7 @@ const SIZES = [
     id: "medium",
     label: "Medium Set",
     pcs: 48,
-    price: 175,
+    price: _setPrice("medium"),
     badge: "⭐ Most Popular",
     badgeColor: "var(--cherry, #c05)",
     desc: "Balanced, polished, and perfect for most events.",
@@ -36,7 +40,7 @@ const SIZES = [
     id: "large",
     label: "Large Set",
     pcs: 96,
-    price: 310,
+    price: _setPrice("large"),
     badge: "✨ Best Value",
     badgeColor: "#2a7a5e",
     desc: "More variety and visual impact for larger celebrations.",

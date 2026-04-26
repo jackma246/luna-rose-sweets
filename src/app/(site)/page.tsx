@@ -3,6 +3,7 @@ import Image from "next/image";
 import V2Header from "./components/V2Header";
 import V2Footer from "./components/V2Footer";
 import StickyPartyBtn from "./components/StickyPartyBtn";
+import { getProductBySlug } from "@/data/products";
 
 const confetti = [
   { top: "12%", left: "5%", color: "var(--cherry)", rotate: "30deg" },
@@ -22,12 +23,16 @@ const marqueeWords = [
   "Custom color palettes available",
 ];
 
+const _partySetVariants = getProductBySlug("party-set")!.variants;
+const _setPrice = (keyword: string): number =>
+  _partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
+
 const SETS = [
   {
     id: "small",
     label: "Small Set",
     pcs: "36 pcs",
-    price: 135,
+    price: _setPrice("small"),
     badge: null,
     badgeBg: "",
     desc: "A sweet and simple option for intimate gatherings.",
@@ -36,7 +41,7 @@ const SETS = [
     id: "medium",
     label: "Medium Set",
     pcs: "48 pcs",
-    price: 175,
+    price: _setPrice("medium"),
     badge: "⭐ Most Popular",
     badgeBg: "var(--cherry, #c05)",
     desc: "Our most popular choice — balanced and polished.",
@@ -45,7 +50,7 @@ const SETS = [
     id: "large",
     label: "Large Set",
     pcs: "96 pcs",
-    price: 310,
+    price: _setPrice("large"),
     badge: "✨ Best Value",
     badgeBg: "#2a7a5e",
     desc: "Perfect for larger celebrations with maximum impact.",
