@@ -614,8 +614,7 @@ export default function V2ProductDetail() {
                   <summary>How to store &amp; serve</summary>
                   <p>
                     Best enjoyed within 5 days. Store at room temperature in
-                    the original box. We don&rsquo;t freeze our treats — and
-                    neither should you.
+                    the original box, or freeze for longer storage.
                   </p>
                 </details>
               </div>
