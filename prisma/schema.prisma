@@ -53,6 +53,7 @@ model Order {
   customerPhone  String?
 
   items          Json        // CartItem[]
+  adjustments    Json        @default("[]") // [{label,amount}] — tips, discounts, custom lines
   totalPrice     Decimal     @db.Decimal(10, 2)
 
   neededDate     DateTime?   @db.Date
@@ -63,10 +64,25 @@ model Order {
   source         OrderSource @default(website)
   remindersSent  String[]    @default([]) // e.g. ["d3","d2","d0"]
 
+  images         OrderImage[]
+
   @@index([neededDate])
   @@index([status])
   @@index([createdAt])
   @@index([source])
+}
+
+model OrderImage {
+  id           String   @id @default(cuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  filename     String   // uuid-based name on disk
+  originalName String
+  mimeType     String
+  size         Int
+  createdAt    DateTime @default(now())
+
+  @@index([orderId])
 }
 
 model InventoryItem {

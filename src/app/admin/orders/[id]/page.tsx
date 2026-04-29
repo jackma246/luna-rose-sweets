@@ -11,7 +11,15 @@ export default async function OrderDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const order = await prisma.order.findUnique({ where: { id } });
+  const order = await prisma.order.findUnique({
+    where: { id },
+    include: {
+      images: {
+        orderBy: { createdAt: "asc" },
+        select: { id: true, originalName: true, mimeType: true, size: true, createdAt: true },
+      },
+    },
+  });
   if (!order) notFound();
 
   const serialized = {
@@ -20,6 +28,13 @@ export default async function OrderDetailPage({
     neededDate: order.neededDate ? order.neededDate.toISOString().slice(0, 10) : null,
     createdAt: order.createdAt.toISOString(),
     updatedAt: order.updatedAt.toISOString(),
+    images: order.images.map((img) => ({
+      id: img.id,
+      originalName: img.originalName,
+      mimeType: img.mimeType,
+      size: img.size,
+      createdAt: img.createdAt.toISOString(),
+    })),
   };
 
   return (

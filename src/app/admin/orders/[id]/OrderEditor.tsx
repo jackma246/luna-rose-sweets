@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ORDER_STATUSES, STATUS_LABEL, STATUS_CHIP } from "@/lib/orderStatus";
 import { ORDER_SOURCES, SOURCE_LABEL, SOURCE_CHIP } from "@/lib/orderSources";
@@ -25,6 +25,24 @@ interface RowItem {
   note: string;
 }
 
+interface Adjustment {
+  label: string;
+  amount: number;
+}
+
+interface AdjustmentRow {
+  label: string;
+  amount: string;
+}
+
+interface OrderImage {
+  id: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  createdAt: string;
+}
+
 interface SerializedOrder {
   id: string;
   orderNumber: number;
@@ -32,6 +50,7 @@ interface SerializedOrder {
   customerEmail: string;
   customerPhone: string | null;
   items: unknown;
+  adjustments: unknown;
   totalPrice: number;
   neededDate: string | null;
   customerNotes: string | null;
@@ -41,6 +60,7 @@ interface SerializedOrder {
   remindersSent: string[];
   createdAt: string;
   updatedAt: string;
+  images: OrderImage[];
 }
 
 const blankRow = (): RowItem => ({
@@ -65,6 +85,32 @@ function itemsToRows(items: unknown): RowItem[] {
   }));
 }
 
+function adjustmentsArray(input: unknown): Adjustment[] {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((raw) => {
+      if (!raw || typeof raw !== "object") return null;
+      const r = raw as { label?: unknown; amount?: unknown };
+      const label = typeof r.label === "string" ? r.label : "";
+      const amount = typeof r.amount === "number" && Number.isFinite(r.amount) ? r.amount : NaN;
+      if (!Number.isFinite(amount)) return null;
+      return { label, amount };
+    })
+    .filter((a): a is Adjustment => a !== null);
+}
+
+function adjustmentsToRows(input: unknown): AdjustmentRow[] {
+  return adjustmentsArray(input).map((a) => ({ label: a.label, amount: String(a.amount) }));
+}
+
+function itemsSum(items: CartItem[]): number {
+  return items.reduce((sum, it) => sum + (Number(it.price) || 0) * (Number(it.quantity) || 0), 0);
+}
+
+function adjustmentsSum(adjs: Adjustment[]): number {
+  return adjs.reduce((sum, a) => sum + (Number(a.amount) || 0), 0);
+}
+
 export default function OrderEditor({ order }: { order: SerializedOrder }) {
   const router = useRouter();
   const [status, setStatus] = useState<OrderStatus>(order.status);
@@ -81,15 +127,32 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
   const [itemsSaving, setItemsSaving] = useState(false);
   const [itemsError, setItemsError] = useState<string | null>(null);
 
+  const savedAdjustments = adjustmentsArray(order.adjustments);
+  const [adjRows, setAdjRows] = useState<AdjustmentRow[]>(adjustmentsToRows(order.adjustments));
+  const [adjError, setAdjError] = useState<string | null>(null);
+
+  const [images, setImages] = useState<OrderImage[]>(order.images);
+  const [uploading, setUploading] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
+
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
 
+  // Resync local image state if server state changes (e.g. after router.refresh)
+  useEffect(() => {
+    setImages(order.images);
+  }, [order.images]);
+
   const items = (Array.isArray(order.items) ? order.items : []) as CartItem[];
-  const editingTotal = rows.reduce(
+  const editingItemsTotal = rows.reduce(
     (sum, r) => sum + (Number(r.quantity) || 0) * (Number(r.price) || 0),
     0,
   );
+  const liveAdjustmentsTotal = adjRows.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+  const displayTotal = (editingItems ? editingItemsTotal : itemsSum(items)) + liveAdjustmentsTotal;
 
   async function save(fields: Record<string, unknown>) {
     setSaving(true);
@@ -202,7 +265,7 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
       setItemsError("Add at least one item.");
       return;
     }
-    const total = cleaned.reduce((sum, it) => sum + it.quantity * it.price, 0);
+    const total = cleaned.reduce((sum, it) => sum + it.quantity * it.price, 0) + adjustmentsSum(savedAdjustments);
 
     setItemsSaving(true);
     try {
@@ -210,6 +273,86 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
       if (ok) setEditingItems(false);
     } finally {
       setItemsSaving(false);
+    }
+  }
+
+  // ── Adjustments ───────────────────────────────────────────────────────
+  function updateAdjRow(idx: number, field: keyof AdjustmentRow, value: string) {
+    setAdjRows((prev) => prev.map((r, i) => (i === idx ? { ...r, [field]: value } : r)));
+  }
+  function addAdjRow() {
+    setAdjRows((prev) => [...prev, { label: "", amount: "0" }]);
+  }
+  async function removeAdjRow(idx: number) {
+    const next = adjRows.filter((_, i) => i !== idx);
+    setAdjRows(next);
+    await persistAdjustments(next);
+  }
+
+  async function persistAdjustments(rowsToSave: AdjustmentRow[]) {
+    setAdjError(null);
+    const cleaned: Adjustment[] = [];
+    for (const r of rowsToSave) {
+      const amount = Number(r.amount);
+      if (!Number.isFinite(amount)) {
+        setAdjError("Amount must be a number.");
+        return;
+      }
+      cleaned.push({ label: r.label.trim(), amount });
+    }
+    const total = itemsSum(items) + cleaned.reduce((sum, a) => sum + a.amount, 0);
+    await save({ adjustments: cleaned, totalPrice: total });
+  }
+
+  async function handleAdjBlur() {
+    // Only save if changed vs server state
+    const current = adjRows.map((r) => ({ label: r.label.trim(), amount: Number(r.amount) }));
+    const same =
+      current.length === savedAdjustments.length &&
+      current.every((c, i) => c.label === savedAdjustments[i].label && c.amount === savedAdjustments[i].amount);
+    if (same) return;
+    await persistAdjustments(adjRows);
+  }
+
+  // ── Images ────────────────────────────────────────────────────────────
+  async function uploadFiles(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) return;
+    setImageError(null);
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      Array.from(fileList).forEach((f) => fd.append("file", f));
+      const res = await fetch(`/api/admin/orders/${order.id}/images`, {
+        method: "POST",
+        body: fd,
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || "Upload failed.");
+      }
+      // Refetch list to keep ordering consistent with server
+      const listRes = await fetch(`/api/admin/orders/${order.id}/images`);
+      const listData = await listRes.json();
+      if (listRes.ok && listData.ok) setImages(listData.images);
+    } catch (err) {
+      setImageError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (cameraInputRef.current) cameraInputRef.current.value = "";
+    }
+  }
+
+  async function deleteImage(imageId: string) {
+    setImageError(null);
+    try {
+      const res = await fetch(`/api/admin/orders/${order.id}/images/${imageId}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Delete failed.");
+      setImages((prev) => prev.filter((img) => img.id !== imageId));
+    } catch (err) {
+      setImageError(err instanceof Error ? err.message : "Delete failed.");
     }
   }
 
@@ -331,32 +474,24 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
         </div>
 
         {!editingItems ? (
-          <>
-            <ul className="divide-y divide-[var(--rule)]">
-              {items.map((item, idx) => (
-                <li key={idx} className="py-3 first:pt-0 last:pb-0">
-                  <div className="flex justify-between gap-3 text-sm">
-                    <div className="min-w-0">
-                      <div className="font-semibold text-ink truncate">{item.name}</div>
-                      {item.variantLabel && <div className="text-ink-soft text-xs">{item.variantLabel}</div>}
-                      {item.flavour && <div className="text-ink-soft text-xs">Flavour: {item.flavour}</div>}
-                      {item.note && <div className="text-ink-soft text-xs whitespace-pre-wrap">Note: {item.note}</div>}
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <div className="text-ink-soft">×{item.quantity}</div>
-                      <div className="font-medium text-ink">${(item.price * item.quantity).toFixed(2)}</div>
-                    </div>
+          <ul className="divide-y divide-[var(--rule)]">
+            {items.map((item, idx) => (
+              <li key={idx} className="py-3 first:pt-0 last:pb-0">
+                <div className="flex justify-between gap-3 text-sm">
+                  <div className="min-w-0">
+                    <div className="font-semibold text-ink truncate">{item.name}</div>
+                    {item.variantLabel && <div className="text-ink-soft text-xs">{item.variantLabel}</div>}
+                    {item.flavour && <div className="text-ink-soft text-xs">Flavour: {item.flavour}</div>}
+                    {item.note && <div className="text-ink-soft text-xs whitespace-pre-wrap">Note: {item.note}</div>}
                   </div>
-                </li>
-              ))}
-            </ul>
-            <div className="flex items-center justify-between pt-3 mt-3 border-t border-[var(--rule)]">
-              <span className="kicker">Total</span>
-              <span className="text-xl font-medium text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
-                ${Number(order.totalPrice).toFixed(2)}
-              </span>
-            </div>
-          </>
+                  <div className="shrink-0 text-right">
+                    <div className="text-ink-soft">×{item.quantity}</div>
+                    <div className="font-medium text-ink">${(item.price * item.quantity).toFixed(2)}</div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         ) : (
           <div className="space-y-3">
             {rows.map((row, idx) => (
@@ -384,13 +519,6 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
               + Add item
             </button>
 
-            <div className="flex items-center justify-between pt-3 border-t border-[var(--rule)]">
-              <span className="kicker">New total</span>
-              <span className="text-xl font-medium text-cherry" style={{ fontFamily: "var(--font-fraunces)" }}>
-                ${editingTotal.toFixed(2)}
-              </span>
-            </div>
-
             {itemsError && <p className="text-sm text-[#b91c1c]">{itemsError}</p>}
 
             <div className="flex gap-2 pt-2">
@@ -413,6 +541,146 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
             </div>
           </div>
         )}
+      </section>
+
+      <section className="admin-card p-5">
+        <div className="flex items-baseline justify-between mb-3">
+          <div className="kicker">Adjustments</div>
+          <span className="text-[11px] text-ink-soft">Custom lines, tips, discounts</span>
+        </div>
+
+        {adjRows.length === 0 ? (
+          <p className="text-sm text-ink-soft">No adjustments. Add a tip, discount, or custom line below.</p>
+        ) : (
+          <div className="space-y-2">
+            {adjRows.map((row, idx) => (
+              <div key={idx} className="grid grid-cols-[1fr_auto_auto] gap-2 items-center">
+                <input
+                  placeholder="Label (e.g. Extra tip, Loyalty discount)"
+                  value={row.label}
+                  onChange={(e) => updateAdjRow(idx, "label", e.target.value)}
+                  onBlur={handleAdjBlur}
+                  disabled={saving}
+                  className="field"
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Amount"
+                  value={row.amount}
+                  onChange={(e) => updateAdjRow(idx, "amount", e.target.value)}
+                  onBlur={handleAdjBlur}
+                  disabled={saving}
+                  className="field w-28 text-right"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeAdjRow(idx)}
+                  disabled={saving}
+                  className="text-[11px] tracking-[0.16em] uppercase font-medium text-ink-soft hover:text-[#b91c1c] disabled:opacity-40 px-2"
+                  aria-label="Remove adjustment"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {adjError && <p className="text-sm text-[#b91c1c] mt-2">{adjError}</p>}
+
+        <button
+          type="button"
+          onClick={addAdjRow}
+          className="mt-3 text-[11px] tracking-[0.18em] uppercase text-cherry hover:text-rose-deep font-semibold"
+        >
+          + Add adjustment
+        </button>
+
+        <div className="flex items-center justify-between pt-3 mt-3 border-t border-[var(--rule)]">
+          <span className="kicker">Total</span>
+          <span className="text-xl font-medium text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
+            ${displayTotal.toFixed(2)}
+          </span>
+        </div>
+      </section>
+
+      <section className="admin-card p-5">
+        <div className="flex items-baseline justify-between mb-3">
+          <div className="kicker">Reference images</div>
+          <span className="text-[11px] text-ink-soft">{images.length}/20</span>
+        </div>
+
+        {images.length === 0 ? (
+          <p className="text-sm text-ink-soft mb-3">No images yet — upload custom designs the customer sent, or take a photo.</p>
+        ) : (
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
+            {images.map((img) => (
+              <div key={img.id} className="relative group aspect-square rounded-xl overflow-hidden border border-[var(--rule)] bg-white/40">
+                <a
+                  href={`/api/admin/orders/${order.id}/images/${img.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full h-full"
+                  title={img.originalName}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/api/admin/orders/${order.id}/images/${img.id}`}
+                    alt={img.originalName}
+                    className="w-full h-full object-cover"
+                  />
+                </a>
+                <button
+                  type="button"
+                  onClick={() => deleteImage(img.id)}
+                  className="absolute top-1 right-1 bg-black/60 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                  aria-label={`Delete ${img.originalName}`}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="hidden"
+          onChange={(e) => uploadFiles(e.target.files)}
+        />
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={(e) => uploadFiles(e.target.files)}
+        />
+
+        <div className="flex gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading || images.length >= 20}
+            className="text-[11px] tracking-[0.18em] uppercase font-semibold py-2.5 px-4 rounded-full border border-[var(--rule)] text-cherry hover:bg-white/60 disabled:opacity-50"
+          >
+            {uploading ? "Uploading…" : "Upload image"}
+          </button>
+          <button
+            type="button"
+            onClick={() => cameraInputRef.current?.click()}
+            disabled={uploading || images.length >= 20}
+            className="text-[11px] tracking-[0.18em] uppercase font-semibold py-2.5 px-4 rounded-full border border-[var(--rule)] text-cherry hover:bg-white/60 disabled:opacity-50"
+          >
+            Take photo
+          </button>
+        </div>
+
+        {imageError && <p className="text-sm text-[#b91c1c] mt-2">{imageError}</p>}
       </section>
 
       <section className="admin-card p-5">

@@ -15,6 +15,11 @@ interface RowItem {
   note: string;
 }
 
+interface AdjustmentRow {
+  label: string;
+  amount: string;
+}
+
 const blankItem = (): RowItem => ({
   name: "",
   variantLabel: "",
@@ -34,14 +39,17 @@ export default function NewOrderPage() {
   const [status, setStatus] = useState<OrderStatus>("pending");
   const [source, setSource] = useState<OrderSource>("website");
   const [rows, setRows] = useState<RowItem[]>([blankItem()]);
+  const [adjRows, setAdjRows] = useState<AdjustmentRow[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const total = rows.reduce((sum, r) => {
+  const itemsTotal = rows.reduce((sum, r) => {
     const qty = Number(r.quantity) || 0;
     const price = Number(r.price) || 0;
     return sum + qty * price;
   }, 0);
+  const adjTotal = adjRows.reduce((sum, r) => sum + (Number(r.amount) || 0), 0);
+  const total = itemsTotal + adjTotal;
 
   function updateRow(idx: number, field: keyof RowItem, value: string) {
     setRows((prev) => prev.map((r, i) => (i === idx ? { ...r, [field]: value } : r)));
@@ -51,6 +59,15 @@ export default function NewOrderPage() {
   }
   function removeRow(idx: number) {
     setRows((prev) => (prev.length === 1 ? prev : prev.filter((_, i) => i !== idx)));
+  }
+  function updateAdjRow(idx: number, field: keyof AdjustmentRow, value: string) {
+    setAdjRows((prev) => prev.map((r, i) => (i === idx ? { ...r, [field]: value } : r)));
+  }
+  function addAdjRow() {
+    setAdjRows((prev) => [...prev, { label: "", amount: "0" }]);
+  }
+  function removeAdjRow(idx: number) {
+    setAdjRows((prev) => prev.filter((_, i) => i !== idx));
   }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -70,6 +87,9 @@ export default function NewOrderPage() {
       setError("Add at least one item.");
       return;
     }
+    const cleanedAdj = adjRows
+      .map((r) => ({ label: r.label.trim(), amount: Number(r.amount) }))
+      .filter((a) => Number.isFinite(a.amount));
 
     setSaving(true);
     try {
@@ -81,6 +101,7 @@ export default function NewOrderPage() {
           customerEmail,
           customerPhone: customerPhone || undefined,
           items: cleaned,
+          adjustments: cleanedAdj,
           totalPrice: total,
           neededDate: neededDate || undefined,
           customerNotes: customerNotes || undefined,
@@ -177,6 +198,41 @@ export default function NewOrderPage() {
                 </div>
                 <input placeholder="Flavour (optional)" value={row.flavour} onChange={(e) => updateRow(idx, "flavour", e.target.value)} className="field" />
                 <input placeholder="Design / note (optional)" value={row.note} onChange={(e) => updateRow(idx, "note", e.target.value)} className="field" />
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <div className="kicker">Adjustments <span className="text-ink-soft normal-case tracking-normal font-normal text-[10px] ml-1">(tips, discounts, custom lines)</span></div>
+              <button type="button" onClick={addAdjRow} className="text-[11px] tracking-[0.18em] uppercase text-cherry hover:text-rose-deep font-semibold">
+                + Add
+              </button>
+            </div>
+            {adjRows.map((row, idx) => (
+              <div key={idx} className="grid grid-cols-[1fr_auto_auto] gap-2 items-center">
+                <input
+                  placeholder="Label (e.g. Extra tip, Loyalty discount)"
+                  value={row.label}
+                  onChange={(e) => updateAdjRow(idx, "label", e.target.value)}
+                  className="field"
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Amount"
+                  value={row.amount}
+                  onChange={(e) => updateAdjRow(idx, "amount", e.target.value)}
+                  className="field w-28 text-right"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeAdjRow(idx)}
+                  className="text-[11px] tracking-[0.16em] uppercase font-medium text-ink-soft hover:text-[#b91c1c] px-2"
+                  aria-label="Remove adjustment"
+                >
+                  ×
+                </button>
               </div>
             ))}
           </div>
