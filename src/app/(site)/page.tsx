@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import V2Header from "./components/V2Header";
 import V2Footer from "./components/V2Footer";
-import StickyPartyBtn from "./components/StickyPartyBtn";
 import { getProductBySlug } from "@/data/products";
 
 const confetti = [
@@ -334,9 +333,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* ── Sticky CTA (bottom, after scroll) ── */}
-      <StickyPartyBtn />
 
       <V2Footer />
     </>
