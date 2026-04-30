@@ -16,6 +16,7 @@ const SIZES = [
     id: "small",
     label: "Small Set",
     pcs: 36,
+    treatCount: 3,
     price: _setPrice("small"),
     badge: null as string | null,
     badgeColor: "",
@@ -28,6 +29,7 @@ const SIZES = [
     id: "medium",
     label: "Medium Set",
     pcs: 48,
+    treatCount: 4,
     price: _setPrice("medium"),
     badge: "⭐ Most Popular",
     badgeColor: "var(--cherry, #c05)",
@@ -40,6 +42,7 @@ const SIZES = [
     id: "large",
     label: "Large Set",
     pcs: 96,
+    treatCount: 5,
     price: _setPrice("large"),
     badge: "✨ Best Value",
     badgeColor: "#2a7a5e",
@@ -61,12 +64,11 @@ const TREAT_OPTIONS = [
   { id: "marshmallows", label: "Marshmallows" },
 ];
 
-const MAX_TREATS = 4;
 
 const DESIGN_TIERS = [
   { id: "classic", label: "Classic", desc: "Clean coating, drizzle, simple accents", priceLabel: "Included", priceAdd: 0, popular: false },
   { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "+$15", priceAdd: 15, popular: true },
-  { id: "signature", label: "Signature", desc: "More detailed and elevated finish", priceLabel: "+$30", priceAdd: 30, popular: false },
+  { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "+$30", priceAdd: 30, popular: false },
 ];
 
 const FLAVOUR_ADDON_PRICE = 12;
@@ -170,21 +172,49 @@ export default function PartySetPage() {
   const { addItem } = useCart();
 
   const size = SIZES.find((s) => s.id === sizeId)!;
+  const requiredTreats = size.treatCount;
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
   const flavourAddon = useTwoFlavours ? FLAVOUR_ADDON_PRICE : 0;
   const effectivePrice = size.price + (design?.priceAdd ?? 0) + flavourAddon;
 
+  useEffect(() => {
+    setTreats((prev) => (prev.length > requiredTreats ? prev.slice(0, requiredTreats) : prev));
+  }, [requiredTreats]);
+
   const isComplete =
-    treats.length > 0 &&
+    treats.length >= requiredTreats &&
     colorNote.trim().length > 0 &&
     designTier !== "" &&
     flavour !== "" &&
     pickupDate !== "";
 
+  function scrollToMissing() {
+    let id = "";
+    if (treats.length < requiredTreats) id = "step-treats";
+    else if (!colorNote.trim()) id = "step-colors";
+    else if (!designTier) id = "step-design";
+    else if (!flavour || (useTwoFlavours && !secondFlavour)) id = "step-flavor";
+    else if (!pickupDate) id = "step-date";
+    if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function getMissingLabel(): string {
+    if (treats.length < requiredTreats) {
+      const need = requiredTreats - treats.length;
+      return `Select ${need} more treat ${need === 1 ? "type" : "types"}`;
+    }
+    if (!colorNote.trim()) return "Add your color palette";
+    if (!designTier) return "Choose a design style";
+    if (!flavour) return "Choose a flavor";
+    if (useTwoFlavours && !secondFlavour) return "Choose your 2nd flavor";
+    if (!pickupDate) return "Reserve your pickup date";
+    return "";
+  }
+
   function toggleTreat(id: string) {
     setTreats((prev) => {
       if (prev.includes(id)) return prev.filter((t) => t !== id);
-      if (prev.length >= MAX_TREATS) return prev;
+      if (prev.length >= requiredTreats) return prev;
       return [...prev, id];
     });
   }
@@ -302,18 +332,18 @@ export default function PartySetPage() {
         </div>
 
         {/* STEP 2: Treat Mix */}
-        <div style={sectionStyle}>
+        <div id="step-treats" style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 2</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your treat mix</span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your treat mix — pick {requiredTreats}</span>
           </div>
           <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.6 }}>
-            Select up to 4 types. We'll balance the quantity to create a full and beautiful set.
+            Select {requiredTreats} types for your {size.label}. We'll balance the quantity to create a full and beautiful set.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
             {TREAT_OPTIONS.map((t) => {
               const active = treats.includes(t.id);
-              const disabled = !active && treats.length >= MAX_TREATS;
+              const disabled = !active && treats.length >= requiredTreats;
               return (
                 <div
                   key={t.id}
@@ -332,15 +362,19 @@ export default function PartySetPage() {
               );
             })}
           </div>
-          {treats.length === MAX_TREATS && (
+          {treats.length < requiredTreats ? (
             <p style={{ margin: "0.5rem 0 0", fontSize: "0.78rem", color: "var(--cherry, #c05)" }}>
-              Maximum 4 types selected.
+              Please select {requiredTreats - treats.length} more {requiredTreats - treats.length === 1 ? "type" : "types"} to continue.
+            </p>
+          ) : (
+            <p style={{ margin: "0.5rem 0 0", fontSize: "0.78rem", color: "var(--cherry, #c05)" }}>
+              All {requiredTreats} types selected ✓
             </p>
           )}
         </div>
 
         {/* STEP 3: Color Palette */}
-        <div style={sectionStyle}>
+        <div id="step-colors" style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 3</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Color palette</span>
@@ -363,7 +397,7 @@ export default function PartySetPage() {
         </div>
 
         {/* STEP 4: Design Style */}
-        <div style={sectionStyle}>
+        <div id="step-design" style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 4</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Design style</span>
@@ -398,7 +432,7 @@ export default function PartySetPage() {
         </div>
 
         {/* STEP 5: Flavor */}
-        <div style={sectionStyle}>
+        <div id="step-flavor" style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 5</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Flavor</span>
@@ -500,7 +534,7 @@ export default function PartySetPage() {
         </div>
 
         {/* STEP 6: Mid CTA */}
-        <div style={{ ...sectionStyle, textAlign: "center", padding: "1.5rem 0 2rem" }}>
+        <div id="step-date" style={{ ...sectionStyle, textAlign: "center", padding: "1.5rem 0 2rem" }}>
           <p style={{ margin: "0 0 1rem", fontWeight: 700, fontSize: "1rem" }}>Ready to lock in your order?</p>
           <button
             onClick={() => { setTempDate(pickupDate); setShowDatePicker(true); }}
@@ -701,18 +735,17 @@ export default function PartySetPage() {
           </button>
         ) : (
           <button
-            onClick={handleAddToCart}
-            disabled={!isComplete}
+            onClick={isComplete ? handleAddToCart : scrollToMissing}
             style={{
               width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
               padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
-              borderRadius: "999px", border: "none", cursor: isComplete ? "pointer" : "not-allowed",
-              background: isComplete ? "var(--cherry, #c05)" : "#ccc",
+              borderRadius: "999px", border: "none", cursor: "pointer",
+              background: isComplete ? "var(--cherry, #c05)" : "#bbb",
               color: "#fff",
               transition: "background 0.2s",
             }}
           >
-            {added ? "Added to cart ✓" : isComplete ? "Add to Cart ✨" : "Complete your selections above"}
+            {added ? "Added to cart ✓" : isComplete ? "Add to Cart ✨" : getMissingLabel()}
           </button>
         )}
       </div>

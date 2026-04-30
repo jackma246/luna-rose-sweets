@@ -29,7 +29,7 @@ export default function Footer() {
           </svg>
         </a>
         <a
-          href="https://www.tiktok.com/@sanjosesweets"
+          href="https://www.tiktok.com/@dipsprinkle"
           target="_blank"
           rel="noopener noreferrer"
           className="text-chocolate/70 hover:text-accent transition-colors"
@@ -151,7 +151,7 @@ export default function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.tiktok.com/@sanjosesweets"
+                  href="https://www.tiktok.com/@dipsprinkle"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/80 hover:text-accent transition-colors"
