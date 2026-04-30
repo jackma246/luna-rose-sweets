@@ -811,8 +811,9 @@
     flex-wrap: wrap;
     gap: 16px;
   }
-  .footer-bot .social { display: flex; gap: 18px; }
-  .footer-bot .social a { color: var(--paper); text-decoration: none; }
+  .footer-bot .social { display: flex; gap: 16px; align-items: center; }
+  .footer-bot .social a { color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; opacity: 0.85; transition: opacity 0.15s; }
+  .footer-bot .social a:hover { opacity: 1; }
 
   /* ---------- shop page ---------- */
   .shop-hero {
