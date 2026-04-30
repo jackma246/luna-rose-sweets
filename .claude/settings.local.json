@@ -11,7 +11,16 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(gh pr create --title 'Party set: per-size treat counts and clearer required-selection UX' --body ' *)",
+      "Bash(command -v gh)",
+      "Read(//usr/local/bin/**)",
+      "Read(//opt/homebrew/opt/gh/**)",
+      "Read(//opt/homebrew/Cellar/**)",
+      "Bash(brew list *)",
+      "Bash(curl -sI https://dipsprinkle.com)",
+      "Bash(curl -s https://dipsprinkle.com/products/party-set)",
+      "Bash(curl -s https://dipsprinkle.com/)"
     ]
   }
 }
