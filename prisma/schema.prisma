@@ -116,3 +116,22 @@ model Expense {
   @@index([date])
   @@index([category])
 }
+
+model AdminAuditLog {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  actorType    String
+  actorId      String
+  method       String
+  path         String
+  action       String?
+  targetType   String?
+  targetId     String?
+  requestJson  Json?
+  responseJson Json?
+  ok           Boolean
+
+  @@index([createdAt])
+  @@index([actorType])
+  @@index([targetType, targetId])
+}
