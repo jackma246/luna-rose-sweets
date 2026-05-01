@@ -151,7 +151,7 @@ def handle_orders(args: argparse.Namespace) -> dict[str, Any]:
 def handle_expenses(args: argparse.Namespace) -> dict[str, Any]:
     if args.action == "list":
         return request("GET", "/api/admin/expenses", execute=True)
-    if args.category and args.category not in EXPENSE_CATEGORIES:
+    if getattr(args, "category", None) and args.category not in EXPENSE_CATEGORIES:
         die(f"invalid expense category: {args.category}")
     if args.action == "create":
         if not args.date or args.amount is None or not args.vendor or not args.category:
