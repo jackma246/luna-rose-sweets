@@ -3,11 +3,16 @@ import { readFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { prisma } from "@/lib/prisma";
 import { orderUploadDir } from "@/lib/imageStorage";
+import { isAuthResponse, requireAdmin, requireSunjaeDeleteConfirmation } from "@/lib/adminAuth";
+import { logAdminWriteWithClient } from "@/lib/adminAudit";
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string; imageId: string }> },
 ) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
   const { id, imageId } = await params;
   const image = await prisma.orderImage.findUnique({ where: { id: imageId } });
   if (!image || image.orderId !== id) {
@@ -31,20 +36,39 @@ export async function GET(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string; imageId: string }> },
 ) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
   const { id, imageId } = await params;
+  const confirmation = requireSunjaeDeleteConfirmation(req, actor, "order image", imageId);
+  if (confirmation) return confirmation;
   const image = await prisma.orderImage.findUnique({ where: { id: imageId } });
   if (!image || image.orderId !== id) {
     return NextResponse.json({ ok: false, error: "Not found." }, { status: 404 });
   }
-  await prisma.orderImage.delete({ where: { id: imageId } });
+  await prisma.$transaction(async (tx) => {
+    await tx.orderImage.delete({ where: { id: imageId } });
+    await logAdminWriteWithClient(tx, {
+      actor,
+      method: req.method,
+      path: req.nextUrl.pathname,
+      action: "order_image.delete",
+      targetType: "order_image",
+      targetId: imageId,
+      responseJson: { id: imageId, orderId: id },
+      ok: true,
+    });
+  });
+
   const target = path.join(orderUploadDir(id), image.filename);
   try {
     await unlink(target);
   } catch {
     // Soft-fail: row is already gone, treat missing file as already-deleted.
   }
+
   return NextResponse.json({ ok: true });
 }

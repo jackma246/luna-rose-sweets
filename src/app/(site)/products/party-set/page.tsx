@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { CAKE_FLAVOURS, getProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
@@ -146,15 +146,14 @@ function formatPickupDate(dateStr: string): string {
   return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 }
 
-export default function PartySetPage() {
-  const [sizeId, setSizeId] = useState("medium");
+function getInitialSizeId(): string {
+  if (typeof window === "undefined") return "medium";
+  const requested = new URLSearchParams(window.location.search).get("size");
+  return requested && SIZES.some((s) => s.id === requested) ? requested : "medium";
+}
 
-  useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("size");
-    if (requested && SIZES.some((s) => s.id === requested)) {
-      setSizeId(requested);
-    }
-  }, []);
+export default function PartySetPage() {
+  const [sizeId, setSizeId] = useState(getInitialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
   const [colorNote, setColorNote] = useState("");
   const [designTier, setDesignTier] = useState("");
@@ -165,7 +164,7 @@ export default function PartySetPage() {
   const [pickupDate, setPickupDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [tempDate, setTempDate] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [quantity] = useState(1);
   const [added, setAdded] = useState(false);
   const themeRef = useRef<HTMLTextAreaElement>(null);
 
@@ -177,9 +176,11 @@ export default function PartySetPage() {
   const flavourAddon = useTwoFlavours ? FLAVOUR_ADDON_PRICE : 0;
   const effectivePrice = size.price + (design?.priceAdd ?? 0) + flavourAddon;
 
-  useEffect(() => {
-    setTreats((prev) => (prev.length > requiredTreats ? prev.slice(0, requiredTreats) : prev));
-  }, [requiredTreats]);
+  function handleSizeChange(nextSizeId: string) {
+    const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
+    setSizeId(nextSizeId);
+    setTreats((prev) => (prev.length > nextSize.treatCount ? prev.slice(0, nextSize.treatCount) : prev));
+  }
 
   const isComplete =
     treats.length >= requiredTreats &&
@@ -303,7 +304,7 @@ export default function PartySetPage() {
               <div
                 key={s.id}
                 style={sizeId === s.id ? cardActive : card}
-                onClick={() => setSizeId(s.id)}
+                onClick={() => handleSizeChange(s.id)}
               >
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
                   <Dot active={sizeId === s.id} />
@@ -338,7 +339,7 @@ export default function PartySetPage() {
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your treat mix — pick {requiredTreats}</span>
           </div>
           <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.6 }}>
-            Select {requiredTreats} types for your {size.label}. We'll balance the quantity to create a full and beautiful set.
+            Select {requiredTreats} types for your {size.label}. We&apos;ll balance the quantity to create a full and beautiful set.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
             {TREAT_OPTIONS.map((t) => {

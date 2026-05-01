@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { prisma } from "@/lib/prisma";
+import { isAuthResponse, requireAdmin } from "@/lib/adminAuth";
+import { logAdminWriteWithClient } from "@/lib/adminAudit";
 import {
   ALLOWED_MIME,
   MAX_IMAGES_PER_ORDER,
@@ -11,7 +13,10 @@ import {
   orderUploadDir,
 } from "@/lib/imageStorage";
 
-export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
   const { id } = await params;
   const images = await prisma.orderImage.findMany({
     where: { orderId: id },
@@ -22,6 +27,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
   const { id } = await params;
 
   const order = await prisma.order.findUnique({ where: { id }, select: { id: true } });
@@ -55,7 +63,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const dir = orderUploadDir(id);
   await mkdir(dir, { recursive: true });
 
-  const created: Array<{ id: string; originalName: string; mimeType: string; size: number; createdAt: Date }> = [];
+  const staged: Array<{ filename: string; originalName: string; mimeType: string; size: number; target: string }> = [];
 
   for (const file of files) {
     if (!ALLOWED_MIME.includes(file.type)) {
@@ -70,18 +78,44 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const buf = Buffer.from(await file.arrayBuffer());
     await writeFile(target, buf);
 
-    const row = await prisma.orderImage.create({
-      data: {
-        orderId: id,
-        filename,
-        originalName: file.name,
-        mimeType: file.type,
-        size: file.size,
-      },
-      select: { id: true, originalName: true, mimeType: true, size: true, createdAt: true },
-    });
-    created.push(row);
+    staged.push({ filename, originalName: file.name, mimeType: file.type, size: file.size, target });
   }
 
-  return NextResponse.json({ ok: true, images: created });
+  try {
+    const created = await prisma.$transaction(async (tx) => {
+      const rows = [];
+      for (const file of staged) {
+        const row = await tx.orderImage.create({
+          data: {
+            orderId: id,
+            filename: file.filename,
+            originalName: file.originalName,
+            mimeType: file.mimeType,
+            size: file.size,
+          },
+          select: { id: true, originalName: true, mimeType: true, size: true, createdAt: true },
+        });
+        rows.push(row);
+      }
+
+      await logAdminWriteWithClient(tx, {
+        actor,
+        method: req.method,
+        path: req.nextUrl.pathname,
+        action: "order_image.create",
+        targetType: "order",
+        targetId: id,
+        requestJson: { fileCount: files.length, files: files.map((f) => ({ name: f.name, type: f.type, size: f.size })) },
+        responseJson: { imageIds: rows.map((img) => img.id) },
+        ok: true,
+      });
+
+      return rows;
+    });
+
+    return NextResponse.json({ ok: true, images: created });
+  } catch (err) {
+    await Promise.allSettled(staged.map((file) => unlink(file.target)));
+    throw err;
+  }
 }

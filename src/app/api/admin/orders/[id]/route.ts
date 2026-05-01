@@ -1,11 +1,42 @@
+import { rm } from "node:fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ORDER_STATUSES } from "@/lib/orderStatus";
 import { ORDER_SOURCES } from "@/lib/orderSources";
-import { purgeOrderImages } from "@/lib/imageStorage";
+import { orderUploadDir } from "@/lib/imageStorage";
 import type { OrderStatus, OrderSource, Prisma } from "@/generated/prisma";
+import { isAuthResponse, requireAdmin, requireSunjaeDeleteConfirmation } from "@/lib/adminAuth";
+import { logAdminWriteWithClient } from "@/lib/adminAudit";
+
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
+  const { id } = await params;
+  const order = await prisma.order.findUnique({
+    where: { id },
+    include: { images: { orderBy: { createdAt: "asc" } } },
+  });
+  if (!order) return NextResponse.json({ ok: false, error: "Not found" }, { status: 404 });
+  return NextResponse.json({
+    ok: true,
+    order: {
+      ...order,
+      totalPrice: Number(order.totalPrice),
+      neededDate: order.neededDate ? order.neededDate.toISOString().slice(0, 10) : null,
+      createdAt: order.createdAt.toISOString(),
+      updatedAt: order.updatedAt.toISOString(),
+      images: order.images.map((image) => ({
+        ...image,
+        createdAt: image.createdAt.toISOString(),
+      })),
+    },
+  });
+}
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
   const { id } = await params;
   const body = (await req.json()) as {
     status?: OrderStatus;
@@ -73,28 +104,75 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ ok: false, error: "Nothing to update." }, { status: 400 });
   }
 
-  const order = await prisma.order.update({ where: { id }, data });
+  const shouldPurgeImages = data.status === "completed";
+  const order = await prisma.$transaction(async (tx) => {
+    const updated = await tx.order.update({ where: { id }, data });
+    await logAdminWriteWithClient(tx, {
+      actor,
+      method: req.method,
+      path: req.nextUrl.pathname,
+      action: "order.patch",
+      targetType: "order",
+      targetId: id,
+      requestJson: body,
+      responseJson: { id },
+      ok: true,
+    });
 
-  // Free up volume space once an order is finished — the design photos aren't needed anymore.
-  if (data.status === "completed") {
+    if (shouldPurgeImages) {
+      const deleted = await tx.orderImage.deleteMany({ where: { orderId: id } });
+      await logAdminWriteWithClient(tx, {
+        actor,
+        method: req.method,
+        path: req.nextUrl.pathname,
+        action: "order_image.purge_completed_order",
+        targetType: "order",
+        targetId: id,
+        responseJson: { orderId: id, deletedImageRows: deleted.count },
+        ok: true,
+      });
+    }
+
+    return updated;
+  });
+
+  // Free up volume space once an order is finished. DB row deletion is audited in the transaction above.
+  if (shouldPurgeImages) {
     try {
-      await purgeOrderImages(id);
+      await rm(orderUploadDir(id), { recursive: true, force: true });
     } catch (err) {
-      console.error("Failed to purge images for completed order:", err);
+      console.error("Failed to remove upload directory for completed order:", err);
     }
   }
+
 
   return NextResponse.json({ ok: true, order });
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
   const { id } = await params;
-  // Wipe images from disk before the cascade removes the DB rows.
+  const confirmation = requireSunjaeDeleteConfirmation(req, actor, "order", id);
+  if (confirmation) return confirmation;
+  const uploadDir = orderUploadDir(id);
+  await prisma.$transaction(async (tx) => {
+    await tx.order.delete({ where: { id } });
+    await logAdminWriteWithClient(tx, {
+      actor,
+      method: req.method,
+      path: req.nextUrl.pathname,
+      action: "order.delete",
+      targetType: "order",
+      targetId: id,
+      responseJson: { id },
+      ok: true,
+    });
+  });
   try {
-    await purgeOrderImages(id);
+    await rm(uploadDir, { recursive: true, force: true });
   } catch (err) {
-    console.error("Failed to purge images for deleted order:", err);
+    console.error("Failed to remove upload directory for deleted order:", err);
   }
-  await prisma.order.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

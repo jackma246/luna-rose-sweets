@@ -176,12 +176,6 @@ export default function V2ProductDetail() {
                     ...images,
                   ];
                   const total = slides.length;
-                  const current = Math.min(mainImgIdx + (product.video ? 1 : 0), total - 1);
-                  const safeIdx = Math.max(0, Math.min(current, total - 1));
-                  const prev = () => setMainImgIdx(Math.max(0, mainImgIdx - 1));
-                  const next = () => setMainImgIdx(Math.min(images.length - 1 + (product.video ? 0 : 0), mainImgIdx + 1));
-                  const atStart = mainImgIdx <= (product.video ? -1 : 0);
-                  const atEnd = mainImgIdx >= images.length - 1;
                   const displayIdx = product.video ? mainImgIdx + 1 : mainImgIdx;
                   const isVideo = product.video && displayIdx === 0;
                   const imgSrc = !isVideo ? images[product.video ? displayIdx - 1 : displayIdx] : null;
@@ -229,7 +223,6 @@ export default function V2ProductDetail() {
                       {/* Dot indicators */}
                       <div style={{ display: "flex", justifyContent: "center", gap: "0.4rem", marginTop: "0.75rem" }}>
                         {slides.map((_, i) => {
-                          const dotIdx = product.video ? i - 1 : i;
                           const active = product.video ? displayIdx === i : mainImgIdx === i;
                           return (
                             <button

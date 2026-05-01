@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isAuthResponse, requireAdmin } from "@/lib/adminAuth";
+import { logAdminWriteWithClient } from "@/lib/adminAudit";
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
   const { id } = await params;
   const body = (await req.json()) as { delta: number };
 
@@ -19,9 +23,25 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ ok: false, error: "Not enough on hand." }, { status: 400 });
   }
 
-  const item = await prisma.inventoryItem.update({
-    where: { id },
-    data: { quantity: next },
+  const item = await prisma.$transaction(async (tx) => {
+    const updated = await tx.inventoryItem.update({
+      where: { id },
+      data: { quantity: next },
+    });
+
+    await logAdminWriteWithClient(tx, {
+      actor,
+      method: req.method,
+      path: req.nextUrl.pathname,
+      action: "inventory.adjust",
+      targetType: "inventory_item",
+      targetId: id,
+      requestJson: body,
+      responseJson: { id, previousQuantity: Number(current.quantity), quantity: next },
+      ok: true,
+    });
+
+    return updated;
   });
 
   return NextResponse.json({

@@ -10,7 +10,8 @@ export default function MobileFilters({ children }: { children: React.ReactNode 
 
   // close drawer after any navigation (category click)
   useEffect(() => {
-    setOpen(false);
+    const id = window.setTimeout(() => setOpen(false), 0);
+    return () => window.clearTimeout(id);
   }, [pathname, search]);
 
   return (

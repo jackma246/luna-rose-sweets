@@ -14,6 +14,8 @@ import {
 } from "@/lib/orderEmails";
 import { buildOrderInvite } from "@/lib/calendarInvite";
 import type { OrderStatus, OrderSource } from "@/generated/prisma";
+import { isAuthResponse, requireAdmin } from "@/lib/adminAuth";
+import { logAdminWriteWithClient } from "@/lib/adminAudit";
 
 interface NewOrderItem {
   name: string;
@@ -38,7 +40,30 @@ function sanitizeAdjustments(input: unknown): Adjustment[] {
   return out;
 }
 
+export async function GET(req: NextRequest) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
+  const orders = await prisma.order.findMany({
+    orderBy: [{ neededDate: "asc" }, { createdAt: "desc" }],
+    take: 500,
+  });
+  return NextResponse.json({
+    ok: true,
+    orders: orders.map((order) => ({
+      ...order,
+      totalPrice: Number(order.totalPrice),
+      neededDate: order.neededDate ? order.neededDate.toISOString().slice(0, 10) : null,
+      createdAt: order.createdAt.toISOString(),
+      updatedAt: order.updatedAt.toISOString(),
+    })),
+  });
+}
+
 export async function POST(req: NextRequest) {
+  const actor = await requireAdmin(req);
+  if (isAuthResponse(actor)) return actor;
+
   const body = (await req.json()) as {
     customerName: string;
     customerEmail: string;
@@ -63,20 +88,36 @@ export async function POST(req: NextRequest) {
   const source: OrderSource = body.source && ORDER_SOURCES.includes(body.source) ? body.source : "website";
   const adjustments = sanitizeAdjustments(body.adjustments);
 
-  const order = await prisma.order.create({
-    data: {
-      customerName: body.customerName,
-      customerEmail: body.customerEmail,
-      customerPhone: body.customerPhone || null,
-      items: body.items as unknown as object[],
-      adjustments: adjustments as unknown as object[],
-      totalPrice: body.totalPrice,
-      neededDate: body.neededDate ? new Date(body.neededDate + "T00:00:00") : null,
-      customerNotes: body.customerNotes || null,
-      internalNotes: body.internalNotes || null,
-      status,
-      source,
-    },
+  const order = await prisma.$transaction(async (tx) => {
+    const created = await tx.order.create({
+      data: {
+        customerName: body.customerName,
+        customerEmail: body.customerEmail,
+        customerPhone: body.customerPhone || null,
+        items: body.items as unknown as object[],
+        adjustments: adjustments as unknown as object[],
+        totalPrice: body.totalPrice,
+        neededDate: body.neededDate ? new Date(body.neededDate + "T00:00:00") : null,
+        customerNotes: body.customerNotes || null,
+        internalNotes: body.internalNotes || null,
+        status,
+        source,
+      },
+    });
+
+    await logAdminWriteWithClient(tx, {
+      actor,
+      method: req.method,
+      path: req.nextUrl.pathname,
+      action: "order.create",
+      targetType: "order",
+      targetId: created.id,
+      requestJson: body,
+      responseJson: { id: created.id, orderNumber: created.orderNumber },
+      ok: true,
+    });
+
+    return created;
   });
 
   // Notify support with optional .ics calendar invite. Failures shouldn't block order creation.
@@ -121,6 +162,7 @@ export async function POST(req: NextRequest) {
       console.error("Admin order support email failed:", err);
     }
   }
+
 
   return NextResponse.json({ ok: true, id: order.id });
 }
