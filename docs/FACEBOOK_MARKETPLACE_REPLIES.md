@@ -109,9 +109,20 @@ scripts/facebook_marketplace_replies.py \
 5. Sunjae replies in Korean.
 6. Follow-up work translates her Korean answer into customer-facing English and sends it back to the Marketplace chat.
 
+## Personal inbox fallback
+
+If Marketplace messages land in a personal Facebook inbox instead of a Page inbox, official webhook/API automation may not be available. The experimental browser-assist fallback is documented in:
+
+```text
+docs/FACEBOOK_PERSONAL_INBOX_BROWSER_ASSIST.md
+```
+
+It uses manual login in a local browser profile and stays dry-run by default.
+
 ## Current limitations
 
-- Webhook receive/verify/decision/live-auto-reply scaffolding exists.
+- Webhook receive/verify/decision/live-auto-reply scaffolding exists for Page/Messenger API flows.
+- Personal inbox browser automation is experimental, fragile, and manual-login only.
 - The return path from Sunjae's Korean Telegram reply back into the original Facebook chat is not built yet.
 - Language detection is simple: English, Spanish, Korean.
 - Product matching is heuristic and uses the local TypeScript product list.
