@@ -115,6 +115,21 @@ class FacebookCopyPasteTelegramBotTests(unittest.TestCase):
         self.assertNotIn("123", state["pending"])
         self.assertIn("maria", state["threads"]["123"])
 
+    def test_korean_shortcuts_start_continue_finish_and_change_threads(self):
+        state = {"pending": {}, "threads": {}, "active_threads": {}}
+        first = bot.build_outgoing_messages('마리아: How much are cake pops?', 123, state)
+        follow_up = bot.build_outgoing_messages('마리아: Can I get 2 dozen tomorrow morning?', 123, state)
+        pending_thread_name = state["pending"].get("123", {}).get("thread_name")
+        revised = bot.build_outgoing_messages('수정 더 따뜻하게 픽업도 말해줘', 123, state)
+        finished = bot.build_outgoing_messages('끝 마리아', 123, state)
+
+        self.assertIn("Cake Pops", first[0])
+        self.assertIn("한국어로", follow_up[0])
+        self.assertEqual(pending_thread_name, "마리아")
+        self.assertIn("pickup", revised[0].lower())
+        self.assertEqual(finished, ["마리아 대화를 종료하고 저장된 맥락을 삭제했어요."])
+        self.assertNotIn("마리아", state["threads"].get("123", {}))
+
     def test_allowed_users_parser(self):
         self.assertEqual(bot.allowed_user_ids_from_env("123, 456"), {123, 456})
         self.assertEqual(bot.allowed_user_ids_from_env(""), set())

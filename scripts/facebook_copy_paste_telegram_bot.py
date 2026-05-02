@@ -91,23 +91,38 @@ def is_reset_command(text: str) -> bool:
 
 
 def parse_thread_command(text: str) -> tuple[str, str] | None:
-    if not text.strip().lower().startswith("/thread "):
+    stripped = text.strip()
+    if not stripped.lower().startswith("/thread "):
+        # Korean low-friction shortcut: "마리아: customer message".
+        # This is easier for Yun than slash commands and works for English,
+        # Spanish, or Korean customer messages.
+        if ":" in stripped and not stripped.startswith("http"):
+            name, message = stripped.split(":", 1)
+            name = name.strip()
+            message = message.strip()
+            if name and message and len(name) <= 40 and " " not in name:
+                return name.lower(), message
         return None
     try:
-        parts = shlex.split(text)
+        parts = shlex.split(stripped)
     except ValueError:
-        parts = text.split(maxsplit=2)
+        parts = stripped.split(maxsplit=2)
     if len(parts) < 3:
         return None
     return parts[1].strip().lower(), parts[2].strip()
 
 
 def parse_finish_command(text: str) -> str | None:
-    lower = text.strip().lower()
+    stripped = text.strip()
+    lower = stripped.lower()
     if lower.startswith("/thread-finish "):
-        return text.strip().split(maxsplit=1)[1].strip().lower()
+        return stripped.split(maxsplit=1)[1].strip().lower()
     if lower.startswith("/finish "):
-        return text.strip().split(maxsplit=1)[1].strip().lower()
+        return stripped.split(maxsplit=1)[1].strip().lower()
+    if stripped.startswith("끝 "):
+        return stripped.split(maxsplit=1)[1].strip().lower()
+    if stripped.endswith(" 끝"):
+        return stripped.rsplit(maxsplit=1)[0].strip().lower()
     return None
 
 
@@ -118,6 +133,9 @@ def parse_change_command(text: str) -> str | None:
         return stripped[len("change ") :].strip()
     if lower.startswith("/change "):
         return stripped[len("/change ") :].strip()
+    for prefix in ("수정 ", "바꿔줘 ", "고쳐줘 ", "다시 "):
+        if stripped.startswith(prefix):
+            return stripped[len(prefix) :].strip()
     return None
 
 
@@ -154,10 +172,12 @@ def revise_reply(previous_reply: str, instruction: str) -> str:
     if not reply:
         return "수정할 이전 답장이 없어요. 고객 메시지를 다시 보내주세요."
     lower = instruction.lower()
-    if "pickup" in lower and "pickup" not in reply.lower():
-        reply += " Pickup is available depending on the date/time."
-    if any(word in lower for word in ["warmer", "friendly", "nice"]) and "😊" not in reply:
-        reply += " 😊"
+    if any(word in lower for word in ["warmer", "friendly", "nice"]) or any(word in instruction for word in ["따뜻", "친절", "부드럽"]):
+        if "😊" not in reply:
+            reply += " 😊"
+    if "pickup" in lower or "픽업" in instruction:
+        if "pickup" not in reply.lower():
+            reply += " Pickup is available depending on the date/time."
     if "website" in lower or "link" in lower or "dipsprinkle" in lower:
         if "dipsprinkle.com" not in reply:
             reply += " You can also order here: https://dipsprinkle.com"

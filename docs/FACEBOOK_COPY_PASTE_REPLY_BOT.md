@@ -65,13 +65,27 @@ The bot keeps lightweight named thread context in:
 runtime/facebook-copy-paste-bot/state.json
 ```
 
-Yun should start or continue each customer with a named thread:
+Yun should start or continue each customer with a named thread. English slash command works:
 
 ```text
 /thread maria "How much are cake pops?"
 ```
 
+But the recommended low-friction Korean-friendly shortcut is just:
+
+```text
+마리아: How much are cake pops?
+```
+
+The text before `:` is the customer/thread name. The text after `:` is the copied customer message.
+
 The bot stores Maria's recent copied customer turns, Yun's Korean answers, bot replies, and product context. Later, Yun can paste Maria's follow-up into the same thread:
+
+```text
+마리아: Can I get 2 dozen for tomorrow morning?
+```
+
+The slash-command equivalent also works:
 
 ```text
 /thread maria "Can I get 2 dozen for tomorrow morning?"
@@ -82,6 +96,12 @@ If the answer depends on availability, timing, delivery, pickup, allergy, or cus
 If Yun does not like a generated reply, she can ask for a revision while that thread is active:
 
 ```text
+수정 더 따뜻하게 픽업도 말해줘
+```
+
+English also works:
+
+```text
 change make it warmer and mention pickup
 ```
 
@@ -90,10 +110,16 @@ The bot returns one new standalone copy/paste reply and stores it in Maria's thr
 When the customer conversation is done:
 
 ```text
+끝 마리아
+```
+
+English also works:
+
+```text
 /finish maria
 ```
 
-That deletes Maria's stored context. `/thread-finish maria` also works.
+That deletes Maria's stored context. `/thread-finish maria` and `마리아 끝` also work.
 
 `/new` still clears all active context for the Telegram chat, but named `/finish <name>` is preferred when Yun is handling multiple customers.
 
