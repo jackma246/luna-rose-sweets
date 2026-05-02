@@ -2,10 +2,10 @@
 
 This is the safe personal-Marketplace lane for Dip & Sprinkle.
 
-It does **not** log into Facebook, read Facebook, click Facebook, or send Facebook messages. The human operator copies a customer message from personal Facebook Marketplace into this Telegram bot. The bot returns either:
+It does **not** log into Facebook, read Facebook, click Facebook, or send Facebook messages. Yun copies a customer message from personal Facebook Marketplace into this Telegram bot. The bot returns either:
 
 1. a single standalone customer reply that can be copied/pasted back into Facebook, or
-2. a Korean follow-up question for the operator when the answer is not safe to infer.
+2. a Korean follow-up question for Yun when the answer is not safe to infer.
 
 Customer-facing replies are always sent as their own Telegram message with no preface, label, or explanation.
 
@@ -57,29 +57,45 @@ Bot asks the operator in Korean:
 
 Operator replies in Korean. The bot then sends one standalone copy/paste customer reply.
 
-### Multi-turn context
+### Multi-turn / parallel customer context
 
-The bot keeps lightweight per-Telegram-chat context in:
+The bot keeps lightweight named thread context in:
 
 ```text
 runtime/facebook-copy-paste-bot/state.json
 ```
 
-It remembers the recent copied customer turns, bot replies, operator Korean answers, and product context such as `Cake Pops`. This lets a later pasted message like:
+Yun should start or continue each customer with a named thread:
 
 ```text
-Can I get 2 dozen for tomorrow morning?
+/thread maria "How much are cake pops?"
 ```
 
-be evaluated with the prior thread context instead of as an isolated message. If the answer depends on availability, timing, delivery, pickup, allergy, or customization, the bot asks the operator in Korean and includes the previous conversation summary.
-
-Use `/new` when starting a different customer conversation so context does not leak across customers:
+The bot stores Maria's recent copied customer turns, Yun's Korean answers, bot replies, and product context. Later, Yun can paste Maria's follow-up into the same thread:
 
 ```text
-/new
+/thread maria "Can I get 2 dozen for tomorrow morning?"
 ```
 
-For Phase 1 there is one active copied Facebook thread per operator Telegram chat. If she needs to handle several Facebook customers in parallel, the next upgrade should add explicit thread labels like `/thread maria` or `/thread order12`.
+If the answer depends on availability, timing, delivery, pickup, allergy, or customization, the bot asks Yun in Korean and includes Maria's previous conversation summary.
+
+If Yun does not like a generated reply, she can ask for a revision while that thread is active:
+
+```text
+change make it warmer and mention pickup
+```
+
+The bot returns one new standalone copy/paste reply and stores it in Maria's thread context.
+
+When the customer conversation is done:
+
+```text
+/finish maria
+```
+
+That deletes Maria's stored context. `/thread-finish maria` also works.
+
+`/new` still clears all active context for the Telegram chat, but named `/finish <name>` is preferred when Yun is handling multiple customers.
 
 ## Local scripts
 
@@ -132,7 +148,7 @@ Allowed:
 
 - Receive copied customer text in Telegram.
 - Return exact copy/paste customer replies.
-- Ask Korean follow-up questions to the operator.
+- Ask Korean follow-up questions to Yun.
 - Use `src/data/products.ts` as product/price source of truth.
 - Use `https://dipsprinkle.com` as website/order destination.
 

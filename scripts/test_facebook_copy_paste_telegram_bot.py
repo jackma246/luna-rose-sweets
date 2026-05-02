@@ -55,7 +55,7 @@ class FacebookCopyPasteTelegramBotTests(unittest.TestCase):
         self.assertIn("한국어로", outgoing[0])
         self.assertIn("Cake Pops", outgoing[0])
         self.assertIn("이전 대화", outgoing[0])
-        self.assertIn("2 dozen", state["threads"]["123"]["turns"][-1]["text"])
+        self.assertIn("2 dozen", state["threads"]["123"]["default"]["turns"][-1]["text"])
 
     def test_start_command_clears_thread_context(self):
         state = {"pending": {}, "threads": {"123": {"turns": [{"role": "customer", "text": "old"}]}}}
@@ -64,6 +64,56 @@ class FacebookCopyPasteTelegramBotTests(unittest.TestCase):
         self.assertEqual(outgoing, ["새 고객 대화를 시작했어요. 고객 메시지를 복사해서 보내주세요."])
         self.assertNotIn("123", state["threads"])
         self.assertNotIn("123", state["pending"])
+
+    def test_named_thread_starts_context_from_first_message(self):
+        state = {"pending": {}, "threads": {}, "active_threads": {}}
+        outgoing = bot.build_outgoing_messages('/thread maria "How much are cake pops?"', 123, state)
+
+        self.assertEqual(len(outgoing), 1)
+        self.assertIn("Cake Pops", outgoing[0])
+        self.assertIn("https://dipsprinkle.com", outgoing[0])
+        self.assertEqual(state["active_threads"]["123"], "maria")
+        self.assertIn("maria", state["threads"]["123"])
+        self.assertEqual(state["threads"]["123"]["maria"]["customer_name"], "maria")
+
+    def test_named_thread_followup_uses_customer_specific_context(self):
+        state = {"pending": {}, "threads": {}, "active_threads": {}}
+        bot.build_outgoing_messages('/thread maria "How much are cake pops?"', 123, state)
+        outgoing = bot.build_outgoing_messages('/thread maria "Can I get 2 dozen tomorrow morning?"', 123, state)
+
+        self.assertEqual(len(outgoing), 1)
+        self.assertIn("한국어로", outgoing[0])
+        self.assertIn("Cake Pops", outgoing[0])
+        self.assertEqual(state["pending"]["123"]["thread_name"], "maria")
+        self.assertIn("2 dozen", state["threads"]["123"]["maria"]["turns"][-1]["text"])
+
+    def test_finish_named_thread_deletes_context(self):
+        state = {"pending": {}, "threads": {}, "active_threads": {}}
+        bot.build_outgoing_messages('/thread maria "How much are cake pops?"', 123, state)
+        outgoing = bot.build_outgoing_messages('/finish maria', 123, state)
+
+        self.assertEqual(outgoing, ["maria 대화를 종료하고 저장된 맥락을 삭제했어요."])
+        self.assertNotIn("maria", state["threads"].get("123", {}))
+        self.assertNotIn("123", state["active_threads"])
+
+    def test_change_command_revises_last_reply_and_updates_thread_context(self):
+        state = {"pending": {}, "threads": {}, "active_threads": {}}
+        bot.build_outgoing_messages('/thread maria "How much are cake pops?"', 123, state)
+        outgoing = bot.build_outgoing_messages('change make it warmer and mention pickup', 123, state)
+
+        self.assertEqual(len(outgoing), 1)
+        self.assertIn("pickup", outgoing[0].lower())
+        self.assertIn("😊", outgoing[0])
+        self.assertEqual(state["threads"]["123"]["maria"]["turns"][-1]["role"], "bot_reply")
+
+    def test_operator_answer_for_named_thread_clears_pending_but_keeps_thread(self):
+        state = {"pending": {}, "threads": {}, "active_threads": {}}
+        bot.build_outgoing_messages('/thread maria "Can you make these gluten free tomorrow?"', 123, state)
+        outgoing = bot.build_outgoing_messages('글루텐프리는 어렵고 내일 픽업은 가능해요.', 123, state)
+
+        self.assertIn("gluten-free", outgoing[0].lower())
+        self.assertNotIn("123", state["pending"])
+        self.assertIn("maria", state["threads"]["123"])
 
     def test_allowed_users_parser(self):
         self.assertEqual(bot.allowed_user_ids_from_env("123, 456"), {123, 456})
