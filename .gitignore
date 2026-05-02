@@ -49,3 +49,6 @@ next-env.d.ts
 
 # local order image uploads (Railway volume in prod)
 /uploads
+
+# local bot/runtime state
+/runtime

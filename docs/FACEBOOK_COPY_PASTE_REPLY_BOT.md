@@ -125,20 +125,37 @@ That deletes Maria's stored context. `/thread-finish maria` and `마리아 끝` 
 
 ## Local scripts
 
+Primary runtime is now the Hermes gateway profile:
+
+```text
+/Users/jacma/.hermes/profiles/dipsreply
+launchd service: ai.hermes.gateway-dipsreply
+```
+
+The Hermes profile is LLM-backed and uses this bridge script as the guardrail/state engine:
+
+```bash
+python3 scripts/hermes_reply_gateway_bridge.py "마리아: How much are cake pops?"
+```
+
+The bridge updates the same named-thread state and returns JSON `outgoing_messages`. The Hermes profile sends only the returned final text to Yun.
+
+Standalone long-polling mode remains available as a fallback, but should not normally be used while the Hermes gateway service is running.
+
 Decision layer:
 
 ```bash
 python3 scripts/facebook_copy_paste_copilot.py "How much are cake pops?"
 ```
 
-Long-polling Telegram bot:
+Long-polling Telegram bot fallback:
 
 ```bash
 # Reads local secrets from /Users/jacma/.hermes/profiles/dipsreply/.env
 scripts/run_facebook_copy_paste_telegram_bot.sh
 ```
 
-Direct form:
+Direct fallback form:
 
 ```bash
 DIPSPRINKLE_REPLY_BOT_TOKEN=*** \
@@ -164,9 +181,12 @@ DIPSPRINKLE_REPLY_BOT_TOKEN=***
 
 ```bash
 DIPSPRINKLE_REPLY_BOT_ALLOWED_USERS=***
+TELEGRAM_BOT_TOKEN=***
+TELEGRAM_ALLOWED_USERS=***
+TELEGRAM_HOME_CHANNEL=***
 ```
 
-For the current operating policy, this allowlist should contain **Sunjae's Telegram user ID only**. The token/user ID must not be committed.
+For the current operating policy, this allowlist should contain **Yun's Telegram user ID only**. `TELEGRAM_BOT_TOKEN` mirrors the same token for Hermes gateway mode; the standalone fallback uses `DIPSPRINKLE_REPLY_BOT_TOKEN`. The token/user ID must not be committed.
 
 ## Safety boundary
 
