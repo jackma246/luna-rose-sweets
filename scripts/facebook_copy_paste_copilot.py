@@ -44,16 +44,18 @@ def _message(kind: str, text: str, *, copy_paste_only: bool) -> dict[str, Any]:
     }
 
 
-def korean_follow_up_text(decision: dict[str, Any]) -> str:
+def korean_follow_up_text(decision: dict[str, Any], conversation_context: str = "") -> str:
     customer_message = decision.get("customer_message", "").strip()
     listing_title = decision.get("listing_title") or "미상"
     sender = decision.get("sender") or "미상"
     lower = customer_message.lower()
     detected_topics = [label for key, label in SAFETY_TOPIC_KO.items() if key in lower]
     topic_line = ", ".join(dict.fromkeys(detected_topics)) if detected_topics else "자동 답변하기 어려운 맞춤/가능 여부 질문"
+    context_block = f"\n이전 대화:\n{conversation_context}\n" if conversation_context else "\n"
     return (
         "아래 고객 질문은 자동 답변하지 않는 게 안전해요.\n"
-        "고객에게 보낼 답을 한국어로 알려주세요. 제가 고객 언어로 복사/붙여넣기용 답장을 따로 만들게요.\n\n"
+        "고객에게 보낼 답을 한국어로 알려주세요. 제가 고객 언어로 복사/붙여넣기용 답장을 따로 만들게요.\n"
+        f"{context_block}\n"
         f"고객: {sender}\n"
         f"광고: {listing_title}\n"
         f"확인 필요: {topic_line}\n"
@@ -69,6 +71,7 @@ def build_copilot_response(
     products_path: Path = fb.DEFAULT_PRODUCTS_PATH,
     escalation_path: Path | None = None,
     website_url: str | None = None,
+    conversation_context: str = "",
 ) -> dict[str, Any]:
     decision = fb.decide_reply(
         customer_message,
@@ -91,7 +94,7 @@ def build_copilot_response(
         "intent": decision["intent"],
         "customer_language": decision["language"],
         "escalation_id": decision.get("escalation_id"),
-        "telegram_messages": [_message("korean_follow_up", korean_follow_up_text(decision), copy_paste_only=False)],
+        "telegram_messages": [_message("korean_follow_up", korean_follow_up_text(decision, conversation_context), copy_paste_only=False)],
     }
 
 

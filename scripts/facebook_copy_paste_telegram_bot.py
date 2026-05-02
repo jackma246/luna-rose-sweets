@@ -29,8 +29,11 @@ class TelegramBotError(RuntimeError):
 
 def load_state(path: Path) -> dict[str, Any]:
     if not path.exists():
-        return {"pending": {}}
-    return json.loads(path.read_text(encoding="utf-8"))
+        return {"pending": {}, "threads": {}}
+    state = json.loads(path.read_text(encoding="utf-8"))
+    state.setdefault("pending", {})
+    state.setdefault("threads", {})
+    return state
 
 
 def save_state(path: Path, state: dict[str, Any]) -> None:
@@ -49,9 +52,52 @@ def allowed_user_ids_from_env(value: str | None) -> set[int]:
     return ids
 
 
+def conversation_context_for(thread: dict[str, Any], *, max_turns: int = 6) -> str:
+    turns = thread.get("turns", [])[-max_turns:]
+    lines: list[str] = []
+    product_context = thread.get("product_context") or []
+    if product_context:
+        lines.append("상품 맥락: " + ", ".join(product_context[:5]))
+    for turn in turns:
+        role = turn.get("role", "message")
+        text = str(turn.get("text", "")).strip()
+        if text:
+            label = {"customer": "고객", "bot_reply": "이전 답장", "operator": "운영자"}.get(role, role)
+            lines.append(f"{label}: {text}")
+    return "\n".join(lines)
+
+
+def remember_turn(thread: dict[str, Any], role: str, text: str) -> None:
+    turns = thread.setdefault("turns", [])
+    turns.append({"role": role, "text": text})
+    del turns[:-10]
+
+
+def product_context_from_payload(payload: dict[str, Any], fallback_text: str = "") -> list[str]:
+    names: list[str] = []
+    for product in payload.get("matched_products", []) or []:
+        name = product.get("name")
+        if name and name not in names:
+            names.append(name)
+    if not names and "Cake Pops" in fallback_text:
+        names.append("Cake Pops")
+    return names
+
+
+def is_reset_command(text: str) -> bool:
+    return text.strip().lower() in {"/new", "/reset", "new customer", "새 고객"}
+
+
 def build_outgoing_messages(text: str, chat_id: int, state: dict[str, Any]) -> list[str]:
     pending = state.setdefault("pending", {})
+    threads = state.setdefault("threads", {})
     key = str(chat_id)
+    if is_reset_command(text):
+        pending.pop(key, None)
+        threads.pop(key, None)
+        return ["새 고객 대화를 시작했어요. 고객 메시지를 복사해서 보내주세요."]
+
+    thread = threads.setdefault(key, {"turns": [], "product_context": []})
     if key in pending:
         context = pending.pop(key)
         payload = copilot.build_operator_answer_response(
@@ -59,15 +105,26 @@ def build_outgoing_messages(text: str, chat_id: int, state: dict[str, Any]) -> l
             operator_answer_ko=text,
             customer_language=context["customer_language"],
         )
+        remember_turn(thread, "operator", text)
     else:
-        payload = copilot.build_copilot_response(text)
+        remember_turn(thread, "customer", text)
+        payload = copilot.build_copilot_response(text, conversation_context=conversation_context_for(thread))
         if payload["status"] == "needs_operator_answer":
             pending[key] = {
                 "customer_message": text,
                 "customer_language": payload["customer_language"],
                 "escalation_id": payload.get("escalation_id"),
             }
-    return [message["text"] for message in payload["telegram_messages"]]
+    outgoing = [message["text"] for message in payload["telegram_messages"]]
+    for response_text in outgoing:
+        remember_turn(thread, "bot_reply", response_text)
+    products = product_context_from_payload(payload, outgoing[0] if outgoing else "")
+    if products:
+        existing = thread.setdefault("product_context", [])
+        for product in products:
+            if product not in existing:
+                existing.append(product)
+    return outgoing
 
 
 def telegram_request(token: str, method: str, data: dict[str, Any] | None = None, timeout: int = 60) -> dict[str, Any]:

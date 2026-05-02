@@ -57,6 +57,30 @@ Bot asks the operator in Korean:
 
 Operator replies in Korean. The bot then sends one standalone copy/paste customer reply.
 
+### Multi-turn context
+
+The bot keeps lightweight per-Telegram-chat context in:
+
+```text
+runtime/facebook-copy-paste-bot/state.json
+```
+
+It remembers the recent copied customer turns, bot replies, operator Korean answers, and product context such as `Cake Pops`. This lets a later pasted message like:
+
+```text
+Can I get 2 dozen for tomorrow morning?
+```
+
+be evaluated with the prior thread context instead of as an isolated message. If the answer depends on availability, timing, delivery, pickup, allergy, or customization, the bot asks the operator in Korean and includes the previous conversation summary.
+
+Use `/new` when starting a different customer conversation so context does not leak across customers:
+
+```text
+/new
+```
+
+For Phase 1 there is one active copied Facebook thread per operator Telegram chat. If she needs to handle several Facebook customers in parallel, the next upgrade should add explicit thread labels like `/thread maria` or `/thread order12`.
+
 ## Local scripts
 
 Decision layer:
@@ -100,7 +124,7 @@ DIPSPRINKLE_REPLY_BOT_TOKEN=***
 DIPSPRINKLE_REPLY_BOT_ALLOWED_USERS=***
 ```
 
-The token/user IDs must not be committed.
+For the current operating policy, this allowlist should contain **Sunjae's Telegram user ID only**. The token/user ID must not be committed.
 
 ## Safety boundary
 

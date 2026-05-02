@@ -46,6 +46,25 @@ class FacebookCopyPasteTelegramBotTests(unittest.TestCase):
         self.assertIn("pickup", outgoing[0].lower())
         self.assertEqual(state["pending"], {})
 
+    def test_follow_up_customer_message_uses_prior_thread_context(self):
+        state = {"pending": {}, "threads": {}}
+        bot.build_outgoing_messages("How much for cake pops?", 123, state)
+        outgoing = bot.build_outgoing_messages("Can I get 2 dozen for tomorrow morning?", 123, state)
+
+        self.assertEqual(len(outgoing), 1)
+        self.assertIn("한국어로", outgoing[0])
+        self.assertIn("Cake Pops", outgoing[0])
+        self.assertIn("이전 대화", outgoing[0])
+        self.assertIn("2 dozen", state["threads"]["123"]["turns"][-1]["text"])
+
+    def test_start_command_clears_thread_context(self):
+        state = {"pending": {}, "threads": {"123": {"turns": [{"role": "customer", "text": "old"}]}}}
+        outgoing = bot.build_outgoing_messages("/new", 123, state)
+
+        self.assertEqual(outgoing, ["새 고객 대화를 시작했어요. 고객 메시지를 복사해서 보내주세요."])
+        self.assertNotIn("123", state["threads"])
+        self.assertNotIn("123", state["pending"])
+
     def test_allowed_users_parser(self):
         self.assertEqual(bot.allowed_user_ids_from_env("123, 456"), {123, 456})
         self.assertEqual(bot.allowed_user_ids_from_env(""), set())
