@@ -11,6 +11,16 @@ Local + webhook decision helper for Dip & Sprinkle cake-pop Marketplace chats.
 - Live Facebook sending only occurs when `FB_PAGE_ACCESS_TOKEN` is configured locally/in production.
 - Sunjae Telegram escalation only sends when `SUNJAE_TELEGRAM_BOT_TOKEN`/`SUNJAE_TELEGRAM_CHAT_ID` are configured locally/in production.
 
+## Personal Marketplace copy/paste bot
+
+For the high-engagement personal Facebook Marketplace channel, use the copy/paste Telegram bot instead of browser automation:
+
+- `docs/FACEBOOK_COPY_PASTE_REPLY_BOT.md`
+- `scripts/facebook_copy_paste_copilot.py`
+- `scripts/facebook_copy_paste_telegram_bot.py`
+
+It receives copied customer messages in Telegram and returns either one standalone copy/paste customer reply or one Korean follow-up question. It never logs into Facebook or sends Facebook messages.
+
 ## Local script
 
 ```bash
