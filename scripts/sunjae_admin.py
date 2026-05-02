@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """Safe Sunjae admin client for Dip & Sprinkle.
 
-Writes dry-run by default. Use --execute only after explicit human approval.
+Writes dry-run by default. Use --execute when the operator clearly requests the non-destructive change in Korean or English; deletes still require exact confirmation.
 Secrets are read from environment variables, never stored by this script.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import mimetypes
 import os
 import sys
+import uuid
 import urllib.error
 import urllib.request
 from typing import Any
@@ -28,6 +30,15 @@ ORDER_STATUSES = {
     "cancelled",
 }
 ORDER_SOURCES = {"fb_marketplace", "tiktok", "instagram", "website"}
+ALLOWED_IMAGE_MIME_TYPES = {
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "image/heic",
+    "image/heif",
+}
+MAX_IMAGE_BYTES = 10 * 1024 * 1024
 
 
 def die(message: str) -> None:
@@ -61,6 +72,74 @@ def print_preview(method: str, path: str, payload: Any | None) -> None:
     print(f"{method} {base_url()}{path}")
     if payload is not None:
         print(json.dumps(payload, indent=2, sort_keys=True))
+
+
+def image_metadata(file_path: str) -> dict[str, Any]:
+    if not os.path.isfile(file_path):
+        die(f"image file does not exist: {file_path}")
+    size = os.path.getsize(file_path)
+    if size > MAX_IMAGE_BYTES:
+        die(f"image file is too large: {file_path} ({size} bytes; max {MAX_IMAGE_BYTES})")
+    mime_type = mimetypes.guess_type(file_path)[0] or "application/octet-stream"
+    if mime_type not in ALLOWED_IMAGE_MIME_TYPES:
+        die(f"unsupported image type for {file_path}: {mime_type}")
+    return {
+        "path": file_path,
+        "filename": os.path.basename(file_path),
+        "mimeType": mime_type,
+        "size": size,
+    }
+
+
+def encode_multipart_files(files: list[dict[str, Any]]) -> tuple[bytes, str]:
+    boundary = f"----sunjae-{uuid.uuid4().hex}"
+    chunks: list[bytes] = []
+    for file_info in files:
+        with open(file_info["path"], "rb") as handle:
+            data = handle.read()
+        chunks.extend([
+            f"--{boundary}\r\n".encode("utf-8"),
+            (
+                'Content-Disposition: form-data; name="file"; '
+                f'filename="{file_info["filename"]}"\r\n'
+            ).encode("utf-8"),
+            f"Content-Type: {file_info['mimeType']}\r\n\r\n".encode("utf-8"),
+            data,
+            b"\r\n",
+        ])
+    chunks.append(f"--{boundary}--\r\n".encode("utf-8"))
+    return b"".join(chunks), boundary
+
+
+def multipart_request(path: str, file_paths: list[str], execute: bool = False) -> dict[str, Any]:
+    files = [image_metadata(file_path) for file_path in file_paths]
+    if not execute:
+        print("DRY RUN")
+        print(f"POST {base_url()}{path}")
+        print(json.dumps({"files": files}, indent=2, sort_keys=True))
+        return {"ok": True, "dryRun": True, "method": "POST", "path": path, "files": files}
+
+    data, boundary = encode_multipart_files(files)
+    headers = {
+        "Authorization": f"Bearer {token()}",
+        "Content-Type": f"multipart/form-data; boundary={boundary}",
+        "Accept": "application/json",
+    }
+    req = urllib.request.Request(
+        f"{base_url()}{path}",
+        data=data,
+        method="POST",
+        headers=headers,
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            body = resp.read().decode("utf-8")
+            if not body:
+                return {"ok": True}
+            return json.loads(body)
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", "replace")
+        die(f"HTTP {exc.code}: {body}")
 
 
 def request(
@@ -105,7 +184,21 @@ def require_delete_confirmation(kind: str, object_id: str, confirmation: str | N
         die(f"delete requires exact confirmation: {expected!r}")
 
 
+def handle_order_images(args: argparse.Namespace) -> dict[str, Any]:
+    path = f"/api/admin/orders/{args.order_id}/images"
+    if args.image_action == "list":
+        return request("GET", path, execute=True)
+    if args.image_action == "upload":
+        return multipart_request(path, args.files, args.execute)
+    if args.image_action == "delete":
+        require_delete_confirmation("order image", args.image_id, args.confirm_delete)
+        return request("DELETE", f"{path}/{args.image_id}", {}, args.execute, args.confirm_delete)
+    raise AssertionError(args.image_action)
+
+
 def handle_orders(args: argparse.Namespace) -> dict[str, Any]:
+    if args.action == "images":
+        return handle_order_images(args)
     if args.action == "list":
         return request("GET", "/api/admin/orders", execute=True)
     if args.action == "create":
@@ -222,6 +315,19 @@ def build_parser() -> argparse.ArgumentParser:
     order_create = orders_sub.add_parser("create")
     order_patch = orders_sub.add_parser("patch")
     order_delete = orders_sub.add_parser("delete")
+    order_images = orders_sub.add_parser("images")
+    order_images_sub = order_images.add_subparsers(dest="image_action", required=True)
+    order_images_list = order_images_sub.add_parser("list")
+    order_images_upload = order_images_sub.add_parser("upload")
+    order_images_delete = order_images_sub.add_parser("delete")
+    order_images_list.add_argument("order_id")
+    order_images_upload.add_argument("order_id")
+    order_images_upload.add_argument("files", nargs="+")
+    order_images_upload.add_argument("--execute", action="store_true")
+    order_images_delete.add_argument("order_id")
+    order_images_delete.add_argument("image_id")
+    order_images_delete.add_argument("--confirm-delete")
+    order_images_delete.add_argument("--execute", action="store_true")
     for p in (order_create, order_patch):
         if p is order_patch:
             p.add_argument("id")

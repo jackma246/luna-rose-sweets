@@ -41,6 +41,7 @@ Examples:
 
 ```bash
 scripts/sunjae_admin.py orders list
+scripts/sunjae_admin.py orders images list ORDER_ID
 scripts/sunjae_admin.py expenses list
 scripts/sunjae_admin.py inventory list
 ```
@@ -68,6 +69,30 @@ scripts/sunjae_admin.py expenses create \
   --execute
 ```
 
+Attach order images after the operator clearly requests it and provides local image paths:
+
+```bash
+# dry-run preview
+scripts/sunjae_admin.py orders images upload ORDER_ID /path/to/image.png
+
+# execute after clear Korean or English operator request
+scripts/sunjae_admin.py orders images upload ORDER_ID /path/to/image.png --execute
+```
+
+Image limits are enforced before upload:
+
+- max 10 MB per file
+- jpeg, png, webp, gif, heic, or heif
+- backend max 20 images per order
+
+Delete an order image requires exact confirmation:
+
+```bash
+scripts/sunjae_admin.py orders images delete ORDER_ID IMAGE_ID \
+  --confirm-delete "Approve delete order image IMAGE_ID" \
+  --execute
+```
+
 Delete requires exact confirmation:
 
 ```bash
@@ -75,6 +100,16 @@ scripts/sunjae_admin.py orders delete ORDER_ID \
   --confirm-delete "Approve delete order ORDER_ID" \
   --execute
 ```
+
+## Facebook Marketplace reply helper
+
+Local decision script:
+
+```bash
+scripts/facebook_marketplace_replies.py "How much are cake pops?" --no-write
+```
+
+See `docs/FACEBOOK_MARKETPLACE_REPLIES.md`.
 
 ## Approval policy
 
