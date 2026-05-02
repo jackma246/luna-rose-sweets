@@ -69,6 +69,16 @@ OPENAI_API_KEY=***
 FB_MARKETPLACE_LLM_MODEL=gpt-4o-mini
 ```
 
+## Readiness check
+
+Run this before/after you create the Facebook Page app and set env vars:
+
+```bash
+scripts/facebook_marketplace_setup_check.py
+```
+
+It reports only `configured` / `missing` and never prints token values. It also verifies the product list and webhook files exist.
+
 ## Decision strategy
 
 1. Deterministic rules run first for obvious price / website / menu / order-link questions.
@@ -105,7 +115,7 @@ scripts/facebook_marketplace_replies.py \
 1. Facebook/Messenger webhook receives a Marketplace message.
 2. Adapter calls `decideMarketplaceReply()`.
 3. If `auto_reply`, adapter sends the returned `reply` to the Marketplace chat when `FB_PAGE_ACCESS_TOKEN` is configured; otherwise it logs the local-only decision.
-4. If `ask_sunjae`, adapter sends the Korean escalation to Sunjae's Telegram bot when Telegram env vars are configured; otherwise it logs the local-only decision.
+4. If `ask_sunjae`, adapter sends the Korean escalation to Sunjae's Telegram bot when Telegram env vars are configured; otherwise it logs the local-only decision. Escalations include an `Escalation ID` built from the Facebook message ID so the later Sunjae reply bridge can map her answer back to the original customer thread.
 5. Sunjae replies in Korean.
 6. Follow-up work translates her Korean answer into customer-facing English and sends it back to the Marketplace chat.
 

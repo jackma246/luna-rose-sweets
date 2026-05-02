@@ -20,6 +20,7 @@ export interface MarketplaceDecision {
   confidence: "high" | "medium" | "low";
   matchedProducts?: Array<{ slug: string; name: string; variants: Array<{ label: string; price: number }> }>;
   sunjaeMessageKo?: string;
+  escalationId?: string;
   customerMessage: string;
   context: MarketplaceMessageContext;
 }
@@ -66,11 +67,25 @@ function visibleProducts(): Product[] {
   return products.filter((product) => !product.hidden);
 }
 
-function matchProducts(message: string): Product[] {
+function suppressGenericProductKeys(keys: string[]): string[] {
+  const specificCakeKeys = new Set(["cakepop", "cupcake"]);
+  if (keys.includes("cake") && keys.some((key) => specificCakeKeys.has(key))) {
+    return keys.filter((key) => key !== "cake");
+  }
+  return keys;
+}
+
+function requestedProductKeys(message: string): string[] {
   const lower = message.toLowerCase();
-  const requestedKeys = Object.entries(PRODUCT_ALIASES)
-    .filter(([, aliases]) => aliases.some((alias) => lower.includes(alias)))
-    .map(([key]) => key);
+  return suppressGenericProductKeys(
+    Object.entries(PRODUCT_ALIASES)
+      .filter(([, aliases]) => aliases.some((alias) => lower.includes(alias)))
+      .map(([key]) => key),
+  );
+}
+
+function matchProducts(message: string): Product[] {
+  const requestedKeys = requestedProductKeys(message);
   const visible = visibleProducts();
   if (requestedKeys.length === 0) {
     return visible.filter((product) => /cake\s*pop|cakepop/i.test(`${product.slug} ${product.name}`));
@@ -106,12 +121,19 @@ function priceReply(language: MarketplaceLanguage, matched: Product[]): string {
   return `Hi! Current pricing is:\n${lines}\nYou can see more options or order here: ${WEBSITE_URL}`;
 }
 
-function sunjaeMessageKo(message: string, context: MarketplaceMessageContext, language: MarketplaceLanguage): string {
+function escalationIdFor(context: MarketplaceMessageContext): string {
+  const seed = context.messageId || `${context.senderId || "unknown"}-${Date.now()}`;
+  return `fbm:${seed}`;
+}
+
+function sunjaeMessageKo(message: string, context: MarketplaceMessageContext, language: MarketplaceLanguage, escalationId: string): string {
   return [
+    `Escalation ID: ${escalationId}`,
     "Sunjae, 아래 Facebook Marketplace 고객 질문에 답변이 필요해요.",
     "한국어로 답장해주면 영어 고객 답변으로 번역해서 보낼게요.",
     `고객 언어: ${language}`,
     `고객/PSID: ${context.senderName || context.senderId || "unknown"}`,
+    `메시지 ID: ${context.messageId || "unknown"}`,
     `광고: ${context.listingTitle || "unknown"}`,
     `질문: ${message}`,
   ].join("\n");
@@ -192,13 +214,15 @@ export async function decideMarketplaceReply(message: string, context: Marketpla
     };
   }
 
+  const escalationId = escalationIdFor(context);
   return {
     action: "ask_sunjae",
     intent: "needs_human",
     language,
     source: "sunjae_escalation",
     confidence: "low",
-    sunjaeMessageKo: sunjaeMessageKo(message, context, language),
+    escalationId,
+    sunjaeMessageKo: sunjaeMessageKo(message, context, language, escalationId),
     customerMessage: message,
     context,
   };

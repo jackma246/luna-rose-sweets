@@ -27,6 +27,8 @@ class FacebookMarketplaceWebhookTests(unittest.TestCase):
         self.assertIn("local_only", text)
         self.assertIn("decideMarketplaceReply", text)
         self.assertIn("safeLogPayload", text)
+        self.assertIn("escalationId", text)
+        self.assertIn("messageId", text)
 
     def test_reply_library_has_optional_llm_classifier_but_uses_local_facts_for_replies(self):
         text = REPLY_LIB.read_text(encoding="utf-8")
@@ -44,6 +46,19 @@ class FacebookMarketplaceWebhookTests(unittest.TestCase):
         self.assertTrue("local product" in text.lower() or "src/data/products.ts" in text)
         self.assertIn("FB_MARKETPLACE_VERIFY_TOKEN", text)
         self.assertIn("FB_PAGE_ACCESS_TOKEN", text)
+    def test_setup_check_reports_missing_and_configured_without_printing_secret_values(self):
+        text = (ROOT / "scripts/facebook_marketplace_setup_check.py").read_text(encoding="utf-8")
+        self.assertIn("FB_MARKETPLACE_VERIFY_TOKEN", text)
+        self.assertIn("FB_PAGE_ACCESS_TOKEN", text)
+        self.assertIn("OPENAI_API_KEY", text)
+        self.assertIn("configured", text)
+        self.assertNotIn("process.env.FB_PAGE_ACCESS_TOKEN", text)
+
+    def test_reply_library_prioritizes_specific_cake_pop_alias_over_generic_cake(self):
+        text = REPLY_LIB.read_text(encoding="utf-8")
+        self.assertIn("suppressGenericProductKeys", text)
+        self.assertIn('"cakepop"', text)
+        self.assertIn('"cake"', text)
 
 
 if __name__ == "__main__":

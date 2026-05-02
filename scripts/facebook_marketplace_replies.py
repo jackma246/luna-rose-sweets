@@ -123,9 +123,27 @@ def detect_intent(message: str) -> str:
     return "needs_human"
 
 
-def matching_products(message: str, products: list[Product]) -> list[Product]:
+def suppress_generic_product_keys(keys: list[str]) -> list[str]:
+    """Prefer specific product families over generic parents.
+
+    A message like "cake pops" contains the substring "cake", but it should
+    not return cakes/cakesicles. Keep the generic cake key only when no more
+    specific cake-family key was found.
+    """
+    specific_cake_keys = {"cakepop", "cupcake"}
+    if "cake" in keys and any(key in keys for key in specific_cake_keys):
+        return [key for key in keys if key != "cake"]
+    return keys
+
+
+def requested_product_keys(message: str) -> list[str]:
     lower = message.lower()
-    requested_keys = [key for key, aliases in PRODUCT_ALIASES.items() if any(alias in lower for alias in aliases)]
+    keys = [key for key, aliases in PRODUCT_ALIASES.items() if any(alias in lower for alias in aliases)]
+    return suppress_generic_product_keys(keys)
+
+
+def matching_products(message: str, products: list[Product]) -> list[Product]:
+    requested_keys = requested_product_keys(message)
     visible = [product for product in products if not product.hidden]
     if not requested_keys:
         return [product for product in visible if "cakepop" in product.name.lower() or "cake pop" in product.name.lower()]

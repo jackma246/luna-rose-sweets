@@ -53,6 +53,7 @@ function safeLogPayload(decision: MarketplaceDecision): Record<string, unknown> 
     context: decision.context,
     customerMessage: decision.customerMessage,
     reply: decision.reply,
+    escalationId: decision.escalationId,
     sunjaeMessageKo: decision.sunjaeMessageKo,
   };
 }

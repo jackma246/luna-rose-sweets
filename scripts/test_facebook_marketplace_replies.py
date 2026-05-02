@@ -18,10 +18,9 @@ class FacebookMarketplaceReplyTests(unittest.TestCase):
 
         self.assertEqual(decision["action"], "auto_reply")
         self.assertEqual(decision["intent"], "price")
-        self.assertIn("Cakepop Bouquet", decision["reply"])
-        self.assertIn("$42", decision["reply"])
-        self.assertIn("Cakepop & Rose Bouquet", decision["reply"])
-        self.assertIn("$95", decision["reply"])
+        self.assertIn("Cake Pops", decision["reply"])
+        self.assertIn("1 Dozen (12 pcs): $40", decision["reply"])
+        self.assertNotIn("Cakesicles", decision["reply"])
         self.assertEqual(decision["source"], "local_products_list")
 
     def test_spanish_website_question_redirects_to_website_in_spanish(self):
