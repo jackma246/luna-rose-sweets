@@ -100,7 +100,7 @@ export const products: Product[] = [
     category: "Party Sets",
     subtitle: "100% Real Buttercream · 6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real swiss meringue buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
       "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
     variants: [
@@ -530,7 +530,7 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "100% Real Buttercream · 6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real swiss meringue buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
     details:
       "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
     variants: [
