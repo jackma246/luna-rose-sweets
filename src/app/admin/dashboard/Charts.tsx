@@ -33,6 +33,12 @@ export interface SlicePoint {
   value: number;
 }
 
+export interface DayOfWeekPoint {
+  day: string;
+  placed: number;
+  needed: number;
+}
+
 function dollarTick(v: number) {
   if (Math.abs(v) >= 1000) return `$${(v / 1000).toFixed(1)}k`;
   return `$${v.toFixed(0)}`;
@@ -110,6 +116,24 @@ export function OrdersBars({ data }: { data: MonthlyPoint[] }) {
           <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} />
           <Tooltip formatter={countFmt} contentStyle={tooltipStyle} cursor={{ fill: "rgba(185,74,100,0.06)" }} />
           <Bar dataKey="orders" name="Orders" fill={CHERRY} radius={[6, 6, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+export function DayOfWeekBars({ data }: { data: DayOfWeekPoint[] }) {
+  return (
+    <div style={{ width: "100%", height: 240 }}>
+      <ResponsiveContainer>
+        <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <CartesianGrid stroke="rgba(58,31,24,0.08)" vertical={false} />
+          <XAxis dataKey="day" tick={axisTick} tickLine={false} axisLine={{ stroke: "rgba(58,31,24,0.12)" }} />
+          <YAxis allowDecimals={false} tick={axisTick} tickLine={false} axisLine={false} />
+          <Tooltip formatter={countFmt} contentStyle={tooltipStyle} cursor={{ fill: "rgba(185,74,100,0.06)" }} />
+          <Legend wrapperStyle={{ fontSize: 12, color: INK, paddingTop: 8 }} />
+          <Bar dataKey="placed" name="Placed" fill={CHERRY} radius={[6, 6, 0, 0]} />
+          <Bar dataKey="needed" name="Needed" fill={MINT} radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

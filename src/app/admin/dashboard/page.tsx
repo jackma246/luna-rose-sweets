@@ -2,8 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { SOURCE_LABEL } from "@/lib/orderSources";
 import { CATEGORY_LABEL } from "@/lib/expenseCategories";
-import { MonthlyBars, NetBars, OrdersBars, SlicePie } from "./Charts";
-import type { MonthlyPoint, SlicePoint } from "./Charts";
+import { DayOfWeekBars, MonthlyBars, NetBars, OrdersBars, SlicePie } from "./Charts";
+import type { DayOfWeekPoint, MonthlyPoint, SlicePoint } from "./Charts";
 import { isTerminal } from "@/lib/orderStatus";
 import { FilterChips } from "../FilterChips";
 import type { OrderSource, ExpenseCategory } from "@/generated/prisma";
@@ -118,6 +118,19 @@ export default async function DashboardPage({
     orders: ordersByMonth[k],
   }));
 
+  const DAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const placedByDow = [0, 0, 0, 0, 0, 0, 0];
+  const neededByDow = [0, 0, 0, 0, 0, 0, 0];
+  for (const o of orders) {
+    placedByDow[new Date(o.createdAt).getDay()] += 1;
+    if (o.neededDate) neededByDow[new Date(o.neededDate).getUTCDay()] += 1;
+  }
+  const dayOfWeek: DayOfWeekPoint[] = DAY_LABELS.map((day, i) => ({
+    day,
+    placed: placedByDow[i],
+    needed: neededByDow[i],
+  }));
+
   const sourceTotals = new Map<OrderSource, number>();
   for (const o of orders) {
     sourceTotals.set(o.source, (sourceTotals.get(o.source) || 0) + Number(o.totalPrice));
@@ -189,6 +202,14 @@ export default async function DashboardPage({
           <NetBars data={monthly} />
         </section>
       </div>
+
+      <section className="admin-card p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="section-title">Orders by day of week</h2>
+          <span className="text-[11px] tracking-[0.18em] uppercase text-ink-soft">Placed vs needed</span>
+        </div>
+        <DayOfWeekBars data={dayOfWeek} />
+      </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <section className="admin-card p-6">
