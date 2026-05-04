@@ -25,10 +25,32 @@ export default function InventoryRow({ item }: { item: SerializedItem }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(item.quantity);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const isLow =
     item.lowStockThreshold !== null && quantity <= item.lowStockThreshold;
   const unitLabel = item.unit ? ` ${item.unit}` : "";
+
+  async function handleDelete() {
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      setError(null);
+      return;
+    }
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/admin/inventory/${item.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Couldn't delete.");
+      }
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't delete.");
+      setBusy(false);
+      setConfirmDelete(false);
+    }
+  }
 
   async function adjust(sign: 1 | -1) {
     const amt = Number(delta);
@@ -124,6 +146,19 @@ export default function InventoryRow({ item }: { item: SerializedItem }) {
             className="text-[11px] tracking-[0.18em] uppercase font-semibold py-1.5 px-3 rounded-full bg-cherry text-paper hover:bg-rose-deep disabled:opacity-50"
           >
             + Add
+          </button>
+          <button
+            type="button"
+            onClick={handleDelete}
+            onBlur={() => setConfirmDelete(false)}
+            disabled={busy}
+            className={`text-[11px] tracking-[0.18em] uppercase font-semibold py-1.5 px-3 rounded-full border disabled:opacity-50 ${
+              confirmDelete
+                ? "bg-rose-deep text-paper border-rose-deep"
+                : "border-[var(--rule)] text-ink-soft hover:bg-paper-deep hover:text-ink"
+            }`}
+          >
+            {confirmDelete ? "Confirm?" : "Delete"}
           </button>
         </div>
       </div>
