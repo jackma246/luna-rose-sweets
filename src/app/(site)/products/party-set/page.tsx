@@ -56,7 +56,7 @@ const SIZES = [
 const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
-  { id: "madeleines", label: "Madeleines" },
+  { id: "madeleines", label: "Madeleines", sizeIds: ["medium", "large"] },
   { id: "caramel-pretzel-rods", label: "Caramel Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
