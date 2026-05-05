@@ -62,7 +62,7 @@ const TREAT_OPTIONS = [
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "rice-krispies", label: "Rice Krispies" },
   { id: "marshmallows", label: "Marshmallows" },
-  { id: "chocolate-shooter-cups", label: "Chocolate shooter cups" },
+  { id: "chocolate-shooter-cups", label: "Brownie Shooter Cups", sizeIds: ["large"] },
 ];
 
 
@@ -173,14 +173,24 @@ export default function PartySetPage() {
 
   const size = SIZES.find((s) => s.id === sizeId)!;
   const requiredTreats = size.treatCount;
+  const availableTreatOptions = TREAT_OPTIONS.filter((t) => !t.sizeIds || t.sizeIds.includes(sizeId));
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
   const flavourAddon = useTwoFlavours ? FLAVOUR_ADDON_PRICE : 0;
   const effectivePrice = size.price + (design?.priceAdd ?? 0) + flavourAddon;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
+    const nextAvailableTreatIds = new Set(
+      TREAT_OPTIONS
+        .filter((t) => !t.sizeIds || t.sizeIds.includes(nextSizeId))
+        .map((t) => t.id)
+    );
+
     setSizeId(nextSizeId);
-    setTreats((prev) => (prev.length > nextSize.treatCount ? prev.slice(0, nextSize.treatCount) : prev));
+    setTreats((prev) => {
+      const validTreats = prev.filter((t) => nextAvailableTreatIds.has(t));
+      return validTreats.length > nextSize.treatCount ? validTreats.slice(0, nextSize.treatCount) : validTreats;
+    });
   }
 
   const isComplete =
@@ -343,7 +353,7 @@ export default function PartySetPage() {
             Select {requiredTreats} types for your {size.label}. We&apos;ll balance the quantity to create a full and beautiful set.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-            {TREAT_OPTIONS.map((t) => {
+            {availableTreatOptions.map((t) => {
               const active = treats.includes(t.id);
               const disabled = !active && treats.length >= requiredTreats;
               return (
