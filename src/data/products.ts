@@ -100,12 +100,14 @@ export const products: Product[] = [
     category: "Party Sets",
     subtitle: "100% Real Buttercream · 6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle.",
     details:
-      "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
+      "Choose from 6 flavours. 6\" (3 layers) serves 10-12. 8\" (3 layers) is our standard main cake size — serves 18-22, up to 24 with wedding-style slicing. 6\" Tall Cake (4 layers) serves 10-13 with a fuller, more dramatic look. 8\" Tall Cake (4 layers) is our premium event size — serves 20-26 and visually reads even larger than its size. Please allow at least 5 days notice.",
     variants: [
-      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/cake00.jpeg" },
-      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/cake00.jpeg" },
+      { label: "6\" (3 layers) — 10–12 servings", price: 250, image: "/images/cake/cake00.jpeg" },
+      { label: "8\" (3 layers) — Main Cake Size · 18–22 servings (up to 24 wedding cut)", price: 350, image: "/images/cake/cake00.jpeg" },
+      { label: "6\" Tall Cake (4 layers) — 10–13 servings", price: 285, image: "/images/cake/cake00.jpeg" },
+      { label: "8\" Tall Cake (4 layers) — Premium / Event · 20–26 servings", price: 410, image: "/images/cake/cake00.jpeg" },
     ],
     addons: [
       { label: "Extra Cream Decoration", price: "+$10–$25" },
@@ -529,12 +531,14 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "100% Real Buttercream · 6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle.",
     details:
-      "Choose from 6 flavours. 6\" serves approx. 6-8 people, 8\" serves approx. 10-14 people. Please allow at least 5 days notice.",
+      "Choose from 6 flavours. 6\" (3 layers) serves 10-12. 8\" (3 layers) is our standard main cake size — serves 18-22, up to 24 with wedding-style slicing. 6\" Tall Cake (4 layers) serves 10-13 with a fuller, more dramatic look. 8\" Tall Cake (4 layers) is our premium event size — serves 20-26 and visually reads even larger than its size. Please allow at least 5 days notice.",
     variants: [
-      { label: "Basic Design 6\" (6–8 servings)", price: 85, image: "/images/cake/7.jpg" },
-      { label: "Basic Design 8\" (10–14 servings)", price: 125, image: "/images/cake/8.jpg" },
+      { label: "6\" (3 layers) — 10–12 servings", price: 250, image: "/images/cake/7.jpg" },
+      { label: "8\" (3 layers) — Main Cake Size · 18–22 servings (up to 24 wedding cut)", price: 350, image: "/images/cake/8.jpg" },
+      { label: "6\" Tall Cake (4 layers) — 10–13 servings", price: 285, image: "/images/cake/7.jpg" },
+      { label: "8\" Tall Cake (4 layers) — Premium / Event · 20–26 servings", price: 410, image: "/images/cake/8.jpg" },
     ],
     addons: [
       { label: "Extra Cream Decoration", price: "+$10–$25" },
