@@ -128,22 +128,21 @@ export const products: Product[] = [
   },
   {
     slug: "party-two-tier-cake",
-    name: "Two-Tier Cake (8\"/6\")",
+    name: "Two-Tier Cake (6\"&4\")",
     category: "Party Sets",
     subtitle: "6 Flavours",
     description:
-      "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
+      "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 240, image: "/images/cake/two-tier-new.jpeg" }],
+      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+    variants: [{ label: "Two-Tier Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
     flavours: CAKE_FLAVOURS,
     designTiers: [
-      { name: "Classic", description: "Simple finish · 2 colors · minimal decoration", priceLabel: "Included", priceAdd: 0 },
-      { name: "Enhanced", description: "Color mix · basic decor · simple lettering", priceLabel: "+$30", priceAdd: 30, popular: true },
-      { name: "Full Custom", description: "Full custom design · edible image · elaborate decoration", priceLabel: "+$60", priceAdd: 60 },
+      { name: "Classic", description: "Decoration similar to the photo", priceLabel: "Included", priceAdd: 0 },
+      { name: "Full Custom", description: "Full custom design · edible image · elaborate decoration", priceLabel: "+$80", priceAdd: 80 },
     ],
     badge: "Baked from scratch",
-    image: "/images/cake/two-tier-new.jpeg",
+    image: "/images/cake/two-tier-new.png",
   },
   {
     slug: "party-tray-bakes",
@@ -548,20 +547,20 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-two-tier-cake",
-    name: "Two-Tier Cake (8\"/6\")",
+    name: "Two-Tier Cake (6\"&4\")",
     category: "Bakes",
     subtitle: "6 Flavours",
     description:
-      "A show-stopping two-tier cake featuring an 8 inch base and 6 inch top tier. The perfect centrepiece for weddings, milestone birthdays, and special events.",
+      "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Choose from 6 flavours — mix and match per tier. Serves approximately 20-25 people. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (8\"/6\")", price: 240, image: "/images/cake/two-tier-new.jpeg" }],
+      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+    variants: [{ label: "Two-Tier Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/cake/two-tier-new.jpeg",
+    image: "/images/cake/two-tier-new.png",
     hidden: true,
   },
   {
