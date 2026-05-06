@@ -128,14 +128,14 @@ export const products: Product[] = [
   },
   {
     slug: "party-two-tier-cake",
-    name: "Two-Tier Cake (6\"&4\")",
+    name: "Two-Tier Tall Cake (6\"&4\")",
     category: "Party Sets",
     subtitle: "6 Flavours",
     description:
       "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
+    variants: [{ label: "Two-Tier Tall Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
     flavours: CAKE_FLAVOURS,
     designTiers: [
       { name: "Classic", description: "Decoration similar to the photo", priceLabel: "Included", priceAdd: 0 },
@@ -547,14 +547,14 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-two-tier-cake",
-    name: "Two-Tier Cake (6\"&4\")",
+    name: "Two-Tier Tall Cake (6\"&4\")",
     category: "Bakes",
     subtitle: "6 Flavours",
     description:
       "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
       "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
-    variants: [{ label: "Two-Tier Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
+    variants: [{ label: "Two-Tier Tall Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
       { label: "Custom Design Details", price: "Additional cost" },
