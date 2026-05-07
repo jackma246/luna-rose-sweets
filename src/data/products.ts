@@ -100,9 +100,9 @@ export const products: Product[] = [
     category: "Party Sets",
     subtitle: "100% Real Buttercream · 6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette. Filled with your choice of fruit jam or nut butter filling, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle.",
     details:
-      "Choose from 6 flavours. 6\" (3 layers) serves 10-12. 8\" (3 layers) is our standard main cake size — serves 18-22, up to 24 with wedding-style slicing. 6\" Tall Cake (4 layers) serves 10-13 with a fuller, more dramatic look. 8\" Tall Cake (4 layers) is our premium event size — serves 20-26 and visually reads even larger than its size. Please allow at least 5 days notice.",
+      "Choose from 6 flavours with your choice of fruit jam or nut butter filling. 6\" (3 layers) serves 10-12. 8\" (3 layers) is our standard main cake size — serves 18-22, up to 24 with wedding-style slicing. 6\" Tall Cake (4 layers) serves 10-13 with a fuller, more dramatic look. 8\" Tall Cake (4 layers) is our premium event size — serves 20-26 and visually reads even larger than its size. Please allow at least 5 days notice.",
     variants: [
       { label: "6\" (3 layers) — 10–12 servings", price: 250, image: "/images/cake/cake00.jpeg" },
       { label: "8\" (3 layers) — Main Cake Size · 18–22 servings (up to 24 wedding cut)", price: 350, image: "/images/cake/cake00.jpeg" },
@@ -134,9 +134,9 @@ export const products: Product[] = [
     category: "Party Sets",
     subtitle: "6 Flavours",
     description:
-      "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
+      "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with your choice of fruit jam or nut butter filling, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with your choice of fruit jam or nut butter filling and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Tall Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
     flavours: CAKE_FLAVOURS,
     designTiers: [
@@ -152,9 +152,9 @@ export const products: Product[] = [
     category: "Party Sets",
     subtitle: "100% Real Buttercream · 2 Sizes · 6 Flavours",
     description:
-      "Made with 100% real European buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
+      "Made with 100% real buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
     details:
-      "Made with 100% real European buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
+      "Made with 100% real buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
       { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/tray.png" },
       { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/tray.png" },
@@ -384,7 +384,7 @@ export const products: Product[] = [
     description:
       "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
-      "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
+      "Choose from 6 flavours. Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
       { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new2.png" },
     ],
@@ -509,9 +509,9 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "100% Real Buttercream · 2 Sizes · 6 Flavours",
     description:
-      "Made with 100% real European buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
+      "Made with 100% real buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
     details:
-      "Made with 100% real European buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
+      "Made with 100% real buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
       { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/tray.png" },
       { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/tray.png" },
@@ -531,9 +531,9 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "100% Real Buttercream · 6 Flavours",
     description:
-      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle.",
+      "A stunning 3-layer custom cake made from scratch with 100% real buttercream. Available in 6\" and 8\" sizes, fully customisable to your theme and colour palette. Filled with your choice of fruit jam or nut butter filling, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle.",
     details:
-      "Choose from 6 flavours. 6\" (3 layers) serves 10-12. 8\" (3 layers) is our standard main cake size — serves 18-22, up to 24 with wedding-style slicing. 6\" Tall Cake (4 layers) serves 10-13 with a fuller, more dramatic look. 8\" Tall Cake (4 layers) is our premium event size — serves 20-26 and visually reads even larger than its size. Please allow at least 5 days notice.",
+      "Choose from 6 flavours with your choice of fruit jam or nut butter filling. 6\" (3 layers) serves 10-12. 8\" (3 layers) is our standard main cake size — serves 18-22, up to 24 with wedding-style slicing. 6\" Tall Cake (4 layers) serves 10-13 with a fuller, more dramatic look. 8\" Tall Cake (4 layers) is our premium event size — serves 20-26 and visually reads even larger than its size. Please allow at least 5 days notice.",
     variants: [
       { label: "6\" (3 layers) — 10–12 servings", price: 250, image: "/images/cake/7.jpg" },
       { label: "8\" (3 layers) — Main Cake Size · 18–22 servings (up to 24 wedding cut)", price: 350, image: "/images/cake/8.jpg" },
@@ -555,9 +555,9 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "6 Flavours",
     description:
-      "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
+      "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with your choice of fruit jam or nut butter filling, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with handcrafted seasonal jam made from locally-grown San Jose, California fruits and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with your choice of fruit jam or nut butter filling and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Tall Cake (6\"&4\")", price: 340, image: "/images/cake/two-tier-new.png" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
@@ -575,7 +575,7 @@ export const products: Product[] = [
     description:
       "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
-      "Choose from 6 flavours. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
+      "Choose from 6 flavours. Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
       { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new2.png" },
     ],
