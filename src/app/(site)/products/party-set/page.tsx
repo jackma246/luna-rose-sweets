@@ -62,7 +62,7 @@ const TREAT_OPTIONS = [
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "rice-krispies", label: "Rice Krispies" },
   { id: "marshmallows", label: "Marshmallows" },
-  { id: "chocolate-shooter-cups", label: "Brownie Shooter Cups", sizeIds: ["large"] },
+  { id: "chocolate-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups", sizeIds: ["large"] },
 ];
 
 
