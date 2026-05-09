@@ -205,7 +205,13 @@ export default function Footer() {
             </div>
           </div>
           <div className="border-t border-white/15 mt-8 pt-6 text-center text-sm text-white/50">
-            &copy; {new Date().getFullYear()} Dip & Sprinkle. All rights reserved.
+            <div>&copy; {new Date().getFullYear()} Dip & Sprinkle. All rights reserved.</div>
+            <div className="mt-3 leading-relaxed">
+              San Jose, CA based made in a home kitchen.<br />
+              Cottage Food Operation (Class A)<br />
+              Permit #: PT0506991<br />
+              Santa Clara County.
+            </div>
           </div>
         </div>
       </div>

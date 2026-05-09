@@ -811,6 +811,11 @@
     flex-wrap: wrap;
     gap: 16px;
   }
+  .footer-permit {
+    margin-top: 10px;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
   .footer-bot .social { display: flex; gap: 16px; align-items: center; }
   .footer-bot .social a { color: var(--paper); text-decoration: none; display: inline-flex; align-items: center; opacity: 0.85; transition: opacity 0.15s; }
   .footer-bot .social a:hover { opacity: 1; }

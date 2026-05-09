@@ -76,7 +76,15 @@ export default function V2Footer() {
           </details>
         </div>
         <div className="footer-bot">
-          <div>© {new Date().getFullYear()} Dip &amp; Sprinkle · Made with sugar</div>
+          <div>
+            <div>© {new Date().getFullYear()} Dip &amp; Sprinkle · Made with sugar</div>
+            <div className="footer-permit">
+              San Jose, CA based made in a home kitchen.<br />
+              Cottage Food Operation (Class A)<br />
+              Permit #: PT0506991<br />
+              Santa Clara County.
+            </div>
+          </div>
           <div className="social">
             <a
               href="https://www.instagram.com/dipsprinkle"
