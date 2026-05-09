@@ -210,7 +210,9 @@ export default function Footer() {
               San Jose, CA based made in a home kitchen.<br />
               Cottage Food Operation (Class A)<br />
               Permit #: PT0506991<br />
-              Santa Clara County.
+              Santa Clara County.<br />
+              All products are non potentially hazardous baked goods made in
+              compliance with California Cottage Food laws.
             </div>
           </div>
         </div>

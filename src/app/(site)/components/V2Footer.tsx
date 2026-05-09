@@ -10,8 +10,8 @@ export default function V2Footer() {
               Dip <span className="amp">&amp;</span> Sprinkle
             </div>
             <p>
-              Handmade cake pops, cakesicles and little bakes — crafted with
-              care in a small studio kitchen.
+              Handmade cake pops, cakesicles and little bakes, crafted with
+              care in a home kitchen.
             </p>
           </div>
 
@@ -82,7 +82,9 @@ export default function V2Footer() {
               San Jose, CA based made in a home kitchen.<br />
               Cottage Food Operation (Class A)<br />
               Permit #: PT0506991<br />
-              Santa Clara County.
+              Santa Clara County.<br />
+              All products are non potentially hazardous baked goods made in
+              compliance with California Cottage Food laws.
             </div>
           </div>
           <div className="social">
