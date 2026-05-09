@@ -77,7 +77,7 @@ export default function V2Footer() {
         </div>
         <div className="footer-bot">
           <div>
-            <div>© {new Date().getFullYear()} Dip &amp; Sprinkle · Made with sugar</div>
+            <div>© {new Date().getFullYear()} Dip &amp; Sprinkle · Made with love</div>
             <div className="footer-permit">
               San Jose, CA based made in a home kitchen.<br />
               Cottage Food Operation (Class A)<br />
