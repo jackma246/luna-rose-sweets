@@ -380,11 +380,11 @@ export const products: Product[] = [
     slug: "madeleines",
     name: "Madeleines (1 Dozen)",
     category: "Chocolate Dipped Treats",
-    subtitle: "6 Flavours",
+    subtitle: "Chocolate Dipped",
     description:
       "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
-      "Choose from 6 flavours. Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
+      "Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
       { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new2.png" },
     ],
@@ -392,7 +392,6 @@ export const products: Product[] = [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
-    flavours: CAKE_FLAVOURS,
     badge: "Baked from scratch",
     image: "/images/madeleines/new2.png",
   },
@@ -571,11 +570,11 @@ export const products: Product[] = [
     slug: "bakes-madeleines",
     name: "Madeleines (1 Dozen)",
     category: "Bakes",
-    subtitle: "6 Flavours",
+    subtitle: "Chocolate Dipped",
     description:
       "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
-      "Choose from 6 flavours. Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
+      "Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
       { label: "1 Dozen (Base Design)", price: 34, image: "/images/madeleines/new2.png" },
     ],
@@ -583,7 +582,6 @@ export const products: Product[] = [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
     ],
-    flavours: CAKE_FLAVOURS,
     image: "/images/madeleines/new2.png",
     hidden: true,
   },
