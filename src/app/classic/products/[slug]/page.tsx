@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
@@ -18,6 +18,7 @@ export default function ProductDetailPage() {
   const [designNote, setDesignNote] = useState("");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
+  const inspirationInputRef = useRef<HTMLInputElement | null>(null);
 
   if (!product) {
     return (
@@ -271,12 +272,21 @@ export default function ProductDetailPage() {
                     Inspiration Photos
                   </label>
                   <input
+                    ref={inspirationInputRef}
                     type="file"
                     accept="image/*"
                     multiple
+                    aria-label="Choose inspiration photos"
                     onChange={(e) => void handleInspirationFiles(e.target.files)}
-                    className="w-full border border-accent/30 rounded-xl px-4 py-3 bg-white text-foreground text-sm"
+                    className="hidden"
                   />
+                  <button
+                    type="button"
+                    onClick={() => inspirationInputRef.current?.click()}
+                    className="w-full border border-accent/30 rounded-xl px-4 py-3 bg-white text-foreground text-sm font-semibold hover:border-accent/60 transition-colors"
+                  >
+                    Choose Photos
+                  </button>
                   <p className="text-xs text-foreground/45 mt-1">Optional: upload reference photos for the design. You can still order without photos.</p>
                   {inspirationImages.length > 0 && (
                     <p className="text-xs text-foreground/60 mt-2">Selected: {inspirationImages.map((img) => img.name).join(", ")}</p>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { getProductBySlug, CAKE_FLAVOURS } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../../components/V2Header";
@@ -24,6 +24,7 @@ export default function V2ProductDetail() {
   const [selectedDesignTier, setSelectedDesignTier] = useState<string>("");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
+  const inspirationInputRef = useRef<HTMLInputElement | null>(null);
   const [designDescription, setDesignDescription] = useState("");
 
   const images = useMemo(() => {
@@ -621,12 +622,22 @@ export default function V2ProductDetail() {
                         Optional: upload reference photos for the design. You can still order without photos.
                       </p>
                       <input
+                        ref={inspirationInputRef}
                         type="file"
                         accept="image/*"
                         multiple
+                        aria-label="Choose inspiration photos"
                         onChange={(e) => void handleInspirationFiles(e.target.files)}
-                        style={{ width: "100%", fontSize: "0.85rem" }}
+                        style={{ display: "none" }}
                       />
+                      <button
+                        type="button"
+                        className="option"
+                        onClick={() => inspirationInputRef.current?.click()}
+                        style={{ width: "100%", justifyContent: "center", fontWeight: 700 }}
+                      >
+                        Choose Photos
+                      </button>
                       {inspirationImages.length > 0 && (
                         <p style={{ marginTop: "0.5rem", fontSize: "0.8rem", opacity: 0.65 }}>
                           Selected: {inspirationImages.map((img) => img.name).join(", ")}
@@ -694,9 +705,7 @@ export default function V2ProductDetail() {
                       {added ? "Added ✓" : `Add to cart · $${(effectivePrice * quantity).toFixed(2)}`}
                     </button>
                   </div>
-                  <div className="pd-note">
-                    ~ ships in a cushioned box, wrapped with a hand-tied ribbon
-                  </div>
+
                 </>
               )
             )}
