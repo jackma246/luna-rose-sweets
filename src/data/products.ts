@@ -96,7 +96,7 @@ export const products: Product[] = [
   },
   {
     slug: "party-layer-cake",
-    name: "Custom Cake",
+    name: "Custom Cake (4\"/6\"/8\")",
     category: "Party Sets",
     subtitle: "Starting Prices · 100% Real Buttercream · 6 Flavours",
     description:
@@ -528,7 +528,7 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-layer-cake",
-    name: "Custom Cake",
+    name: "Custom Cake (4\"/6\"/8\")",
     category: "Bakes",
     subtitle: "Starting Prices · 100% Real Buttercream · 6 Flavours",
     description:

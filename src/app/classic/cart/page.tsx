@@ -15,8 +15,7 @@ export default function CartPage() {
   const [phone, setPhone] = useState("");
   const [neededDate, setNeededDate] = useState("");
   const [message, setMessage] = useState("");
-
-  const minDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const [minDate] = useState(() => new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
 
   async function submitRequest(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ORDER_STATUSES, STATUS_LABEL, STATUS_CHIP } from "@/lib/orderStatus";
 import { ORDER_SOURCES, SOURCE_LABEL, SOURCE_CHIP } from "@/lib/orderSources";
@@ -140,11 +140,6 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-
-  // Resync local image state if server state changes (e.g. after router.refresh)
-  useEffect(() => {
-    setImages(order.images);
-  }, [order.images]);
 
   const items = (Array.isArray(order.items) ? order.items : []) as CartItem[];
   const editingItemsTotal = rows.reduce(
