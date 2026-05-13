@@ -17,6 +17,7 @@ export default function ProductDetailPage() {
   const [showDetails, setShowDetails] = useState(false);
   const [designNote, setDesignNote] = useState("");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
+  const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
 
   if (!product) {
     return (
@@ -44,9 +45,30 @@ export default function ProductDetailPage() {
       .map((addon) => `${addon.label} (${addon.price})`)
       .join(", ");
     if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
+    if (inspirationImages.length > 0) {
+      parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
+    }
     const note = designNote.trim();
-    if (note) parts.push(`Design Notes: ${note}`);
+    if (note) parts.push(`Cake design request: ${note}`);
     return parts.length > 0 ? parts.join(" | ") : undefined;
+  }
+
+
+  async function handleInspirationFiles(fileList: FileList | null) {
+    if (!fileList) return;
+    const files = Array.from(fileList).filter((file) => file.type.startsWith("image/")).slice(0, 5);
+    const images = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise<{ name: string; type: string; size: number; dataUrl: string }>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, dataUrl: String(reader.result) });
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          }),
+      ),
+    );
+    setInspirationImages(images);
   }
 
   function handleAddToCart() {
@@ -59,6 +81,7 @@ export default function ProductDetailPage() {
         price: effectivePrice,
         image: p.image,
         note: buildCartNote(),
+        inspirationImages: inspirationImages.length > 0 ? inspirationImages : undefined,
       },
       quantity
     );
@@ -170,19 +193,6 @@ export default function ProductDetailPage() {
                 </p>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
-                  Design Ideas / Notes
-                </label>
-                <textarea
-                  value={designNote}
-                  onChange={(e) => setDesignNote(e.target.value)}
-                  placeholder="Share your design ideas, colour palette, theme, or any special requests..."
-                  rows={4}
-                  className="w-full border border-accent/30 rounded-xl px-4 py-3 bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 resize-none"
-                />
-                <p className="text-xs text-foreground/45 mt-1">Your note will be included with your order.</p>
-              </div>
             </div>
           )}
 
@@ -251,6 +261,38 @@ export default function ProductDetailPage() {
                         <span className="float-right font-bold text-heading">{addon.price}</span>
                       </button>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {p.slug.includes("cake") && (
+                <div>
+                  <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
+                    Inspiration Photos
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => void handleInspirationFiles(e.target.files)}
+                    className="w-full border border-accent/30 rounded-xl px-4 py-3 bg-white text-foreground text-sm"
+                  />
+                  <p className="text-xs text-foreground/45 mt-1">Optional: upload reference photos for the design. You can still order without photos.</p>
+                  {inspirationImages.length > 0 && (
+                    <p className="text-xs text-foreground/60 mt-2">Selected: {inspirationImages.map((img) => img.name).join(", ")}</p>
+                  )}
+                  <div className="mt-4">
+                    <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
+                      Describe Your Cake
+                    </label>
+                    <textarea
+                      value={designNote}
+                      onChange={(e) => setDesignNote(e.target.value)}
+                      placeholder="Tell us your theme, colors, writing, characters, or any design details you want..."
+                      rows={4}
+                      className="w-full border border-accent/30 rounded-xl px-4 py-3 bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 resize-none"
+                    />
+                    <p className="text-xs text-foreground/45 mt-1">Optional, but helpful for custom designs.</p>
                   </div>
                 </div>
               )}

@@ -2,6 +2,13 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 
+export interface InspirationImage {
+  name: string;
+  type: string;
+  size: number;
+  dataUrl: string;
+}
+
 export interface CartItem {
   productSlug: string;
   variantLabel: string;
@@ -11,6 +18,7 @@ export interface CartItem {
   image?: string;
   flavour?: string;
   note?: string;
+  inspirationImages?: InspirationImage[];
 }
 
 interface CartContextType {
@@ -37,6 +45,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             i.variantLabel === item.variantLabel &&
             i.flavour === item.flavour &&
             i.note === item.note &&
+            JSON.stringify(i.inspirationImages ?? []) === JSON.stringify(item.inspirationImages ?? []) &&
             i.price === item.price
         );
         if (existing) {
@@ -45,6 +54,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             i.variantLabel === item.variantLabel &&
             i.flavour === item.flavour &&
             i.note === item.note &&
+            JSON.stringify(i.inspirationImages ?? []) === JSON.stringify(item.inspirationImages ?? []) &&
             i.price === item.price
               ? { ...i, quantity: i.quantity + quantity }
               : i

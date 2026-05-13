@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { randomUUID } from "node:crypto";
 import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
 import { formatOrderNumber } from "@/lib/orderNumber";
@@ -12,6 +15,43 @@ import {
   type CustomerInfo,
 } from "@/lib/orderEmails";
 import { buildOrderInvite } from "@/lib/calendarInvite";
+import { ALLOWED_MIME, MAX_IMAGE_BYTES, extensionFromMime, orderUploadDir } from "@/lib/imageStorage";
+
+function dataUrlToBuffer(dataUrl: string): Buffer | null {
+  const match = /^data:([^;,]+);base64,(.+)$/.exec(dataUrl);
+  if (!match) return null;
+  return Buffer.from(match[2], "base64");
+}
+
+async function saveInspirationImages(orderId: string, items: CartItem[]): Promise<number> {
+  const images = items.flatMap((item) => item.inspirationImages ?? []);
+  if (images.length === 0) return 0;
+
+  const dir = orderUploadDir(orderId);
+  await mkdir(dir, { recursive: true });
+
+  let saved = 0;
+  for (const image of images.slice(0, 20)) {
+    if (!ALLOWED_MIME.includes(image.type)) continue;
+    if (image.size > MAX_IMAGE_BYTES) continue;
+    const buffer = dataUrlToBuffer(image.dataUrl ?? "");
+    if (!buffer || buffer.byteLength > MAX_IMAGE_BYTES) continue;
+
+    const filename = `${randomUUID()}${extensionFromMime(image.type, image.name)}`;
+    await writeFile(path.join(dir, filename), buffer);
+    await prisma.orderImage.create({
+      data: {
+        orderId,
+        filename,
+        originalName: image.name,
+        mimeType: image.type,
+        size: buffer.byteLength,
+      },
+    });
+    saved += 1;
+  }
+  return saved;
+}
 
 export async function POST(req: NextRequest) {
   const { items, totalPrice, customer } = (await req.json()) as {
@@ -54,6 +94,15 @@ export async function POST(req: NextRequest) {
     });
     orderId = created.id;
     orderNumberLabel = formatOrderNumber(created.orderNumber);
+    const imageCount = await saveInspirationImages(created.id, items);
+    if (imageCount > 0) {
+      await prisma.order.update({
+        where: { id: created.id },
+        data: {
+          customerNotes: [customer.message, `Inspiration photos uploaded: ${imageCount}`].filter(Boolean).join("\n"),
+        },
+      });
+    }
   } catch (err) {
     console.error("Failed to persist order:", err);
     // Fall through — we still want to send emails even if DB write fails,

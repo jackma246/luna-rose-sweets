@@ -1,3 +1,10 @@
+export interface InspirationImage {
+  name: string;
+  type: string;
+  size: number;
+  dataUrl?: string;
+}
+
 export interface CartItem {
   name: string;
   variantLabel?: string;
@@ -5,6 +12,7 @@ export interface CartItem {
   price: number;
   flavour?: string;
   note?: string;
+  inspirationImages?: InspirationImage[];
 }
 
 export interface Adjustment {
@@ -55,6 +63,10 @@ function buildItemRows(items: CartItem[]): string {
       }
       if (item.note) {
         row += `<tr><td colspan="3" style="padding:0 12px 8px;font-size:12px;color:#777;border-bottom:1px solid #f0ebe4;">Details: ${escapeHtml(item.note)}</td></tr>`;
+      }
+      if (item.inspirationImages && item.inspirationImages.length > 0) {
+        const names = item.inspirationImages.map((img) => escapeHtml(img.name)).join(", ");
+        row += `<tr><td colspan="3" style="padding:0 12px 8px;font-size:12px;color:#777;border-bottom:1px solid #f0ebe4;">Inspiration photos: ${names}</td></tr>`;
       }
       return row;
     })

@@ -23,6 +23,8 @@ export default function V2ProductDetail() {
   const [treatCounts, setTreatCounts] = useState<Record<string, number>>({});
   const [selectedDesignTier, setSelectedDesignTier] = useState<string>("");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
+  const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
+  const [designDescription, setDesignDescription] = useState("");
 
   const images = useMemo(() => {
     if (!product) return [];
@@ -94,6 +96,24 @@ export default function V2ProductDetail() {
     return false;
   }
 
+
+  async function handleInspirationFiles(fileList: FileList | null) {
+    if (!fileList) return;
+    const files = Array.from(fileList).filter((file) => file.type.startsWith("image/")).slice(0, 5);
+    const images = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise<{ name: string; type: string; size: number; dataUrl: string }>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, dataUrl: String(reader.result) });
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          }),
+      ),
+    );
+    setInspirationImages(images);
+  }
+
   function buildTreatsLabel(): string {
     if (!product!.treats) return "";
     return product!.treats
@@ -119,6 +139,10 @@ export default function V2ProductDetail() {
       .map((addon) => `${addon.label} (${addon.price})`)
       .join(", ");
     if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
+    if (inspirationImages.length > 0) {
+      parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
+    }
+    if (designDescription.trim()) parts.push(`Cake design request: ${designDescription.trim()}`);
     return parts.join(" | ");
   }
 
@@ -146,6 +170,7 @@ export default function V2ProductDetail() {
         image: variant.image ?? product!.image,
         flavour: selectedFlavour || undefined,
         note: note || undefined,
+        inspirationImages: inspirationImages.length > 0 ? inspirationImages : undefined,
       },
       quantity
     );
@@ -588,8 +613,43 @@ export default function V2ProductDetail() {
                     </div>
                   )}
 
+                  {/* ── Inspiration photo upload ── */}
+                  {product.slug.includes("cake") && (
+                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                      <h4>Inspiration photos</h4>
+                      <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.7, lineHeight: 1.5 }}>
+                        Optional: upload reference photos for the design. You can still order without photos.
+                      </p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => void handleInspirationFiles(e.target.files)}
+                        style={{ width: "100%", fontSize: "0.85rem" }}
+                      />
+                      {inspirationImages.length > 0 && (
+                        <p style={{ marginTop: "0.5rem", fontSize: "0.8rem", opacity: 0.65 }}>
+                          Selected: {inspirationImages.map((img) => img.name).join(", ")}
+                        </p>
+                      )}
+                      <div style={{ marginTop: "1rem" }}>
+                        <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 700, marginBottom: "0.35rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                          Describe your cake
+                        </label>
+                        <textarea
+                          value={designDescription}
+                          onChange={(e) => setDesignDescription(e.target.value)}
+                          placeholder="Tell us your theme, colors, writing, characters, or any design details you want..."
+                          rows={4}
+                          style={{ width: "100%", boxSizing: "border-box", padding: "0.75rem 0.85rem", borderRadius: "0.55rem", border: "1.5px solid var(--border, #e8e4de)", fontFamily: "inherit", fontSize: "0.9rem", resize: "vertical" }}
+                        />
+                        <p style={{ margin: "0.4rem 0 0", fontSize: "0.78rem", opacity: 0.6 }}>Optional, but helpful for custom designs.</p>
+                      </div>
+                    </div>
+                  )}
+
                   {/* ── Order summary preview ── */}
-                  {(selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier || Object.values(selectedAddons).some(Boolean)) && (
+                  {(selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier || Object.values(selectedAddons).some(Boolean) || inspirationImages.length > 0 || designDescription.trim()) && (
                     <div style={{ marginBottom: "1rem", padding: "0.75rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)", fontSize: "0.85rem", lineHeight: 1.6 }}>
                       <p style={{ margin: 0, fontWeight: 600, marginBottom: "0.25rem", opacity: 0.55, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Your selection</p>
                       {(selectedFlavour || product.fixedFlavour) && (
@@ -609,6 +669,12 @@ export default function V2ProductDetail() {
                       {product.addons?.filter((addon) => selectedAddons[addon.label]).map((addon) => (
                         <p key={addon.label} style={{ margin: 0 }}><strong>Add-on:</strong> {addon.label} <span style={{ opacity: 0.65 }}>({addon.price})</span></p>
                       ))}
+                      {inspirationImages.length > 0 && (
+                        <p style={{ margin: 0 }}><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</p>
+                      )}
+                      {designDescription.trim() && (
+                        <p style={{ margin: 0 }}><strong>Cake design request:</strong> {designDescription.trim()}</p>
+                      )}
                     </div>
                   )}
 
