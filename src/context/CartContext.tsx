@@ -32,11 +32,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     (item: Omit<CartItem, "quantity">, quantity = 1) => {
       setItems((prev) => {
         const existing = prev.find(
-          (i) => i.productSlug === item.productSlug && i.variantLabel === item.variantLabel
+          (i) =>
+            i.productSlug === item.productSlug &&
+            i.variantLabel === item.variantLabel &&
+            i.flavour === item.flavour &&
+            i.note === item.note &&
+            i.price === item.price
         );
         if (existing) {
           return prev.map((i) =>
-            i.productSlug === item.productSlug && i.variantLabel === item.variantLabel
+            i.productSlug === item.productSlug &&
+            i.variantLabel === item.variantLabel &&
+            i.flavour === item.flavour &&
+            i.note === item.note &&
+            i.price === item.price
               ? { ...i, quantity: i.quantity + quantity }
               : i
           );

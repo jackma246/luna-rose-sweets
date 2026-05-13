@@ -22,6 +22,7 @@ export default function V2ProductDetail() {
   const [secondFlavour, setSecondFlavour] = useState<string>("");
   const [treatCounts, setTreatCounts] = useState<Record<string, number>>({});
   const [selectedDesignTier, setSelectedDesignTier] = useState<string>("");
+  const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
 
   const images = useMemo(() => {
     if (!product) return [];
@@ -59,7 +60,8 @@ export default function V2ProductDetail() {
   const totalTreatsSelected = Object.values(treatCounts).reduce((s, c) => s + c, 0);
   const designPriceAdd = product.designTiers?.find((t) => t.name === selectedDesignTier)?.priceAdd ?? 0;
   const flavourAddonAdd = secondFlavour ? (product.flavourAddonPrice ?? 0) : 0;
-  const effectivePrice = variant ? variant.price + designPriceAdd + flavourAddonAdd : 0;
+  const addonPriceAdd = product.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? (addon.priceAdd ?? 0) : 0), 0) ?? 0;
+  const effectivePrice = variant ? variant.price + designPriceAdd + flavourAddonAdd + addonPriceAdd : 0;
 
   function getTreatCount(name: string) {
     return treatCounts[name] ?? 0;
@@ -112,6 +114,11 @@ export default function V2ProductDetail() {
       const tier = product!.designTiers!.find((t) => t.name === selectedDesignTier)!;
       parts.push(`Design: ${tier.name}${tier.priceAdd > 0 ? ` (${tier.priceLabel})` : ""}`);
     }
+    const addonLabels = product!.addons
+      ?.filter((addon) => selectedAddons[addon.label])
+      .map((addon) => `${addon.label} (${addon.price})`)
+      .join(", ");
+    if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
     return parts.join(" | ");
   }
 
@@ -524,8 +531,42 @@ export default function V2ProductDetail() {
                     </div>
                   )}
 
+                  {/* ── Add-on selector ── */}
+                  {product.addons && product.addons.length > 0 && (
+                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                      <h4>Add-ons</h4>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        {product.addons.map((addon) => {
+                          const isPriced = typeof addon.priceAdd === "number";
+                          return (
+                            <button
+                              key={addon.label}
+                              type="button"
+                              className={`option${selectedAddons[addon.label] ? " active" : ""}`}
+                              onClick={() => {
+                                if (!isPriced) return;
+                                setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }));
+                              }}
+                              style={{
+                                textAlign: "left",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: "0.5rem",
+                                cursor: isPriced ? "pointer" : "default",
+                                opacity: isPriced ? 1 : 0.75,
+                              }}
+                            >
+                              <span style={{ fontWeight: 600 }}>{addon.label}</span>
+                              <small style={{ fontWeight: 700, color: isPriced ? "var(--cherry, #c05)" : "inherit" }}>{addon.price}</small>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
                   {/* ── Order summary preview ── */}
-                  {product.treats && (selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier) && (
+                  {(selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier || Object.values(selectedAddons).some(Boolean)) && (
                     <div style={{ marginBottom: "1rem", padding: "0.75rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)", fontSize: "0.85rem", lineHeight: 1.6 }}>
                       <p style={{ margin: 0, fontWeight: 600, marginBottom: "0.25rem", opacity: 0.55, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Your selection</p>
                       {(selectedFlavour || product.fixedFlavour) && (
@@ -542,6 +583,9 @@ export default function V2ProductDetail() {
                           {designPriceAdd > 0 && <span style={{ opacity: 0.65 }}> (+${designPriceAdd})</span>}
                         </p>
                       )}
+                      {product.addons?.filter((addon) => selectedAddons[addon.label]).map((addon) => (
+                        <p key={addon.label} style={{ margin: 0 }}><strong>Add-on:</strong> {addon.label} <span style={{ opacity: 0.65 }}>({addon.price})</span></p>
+                      ))}
                     </div>
                   )}
 

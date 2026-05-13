@@ -7,6 +7,7 @@ export interface ProductVariant {
 export interface ProductAddon {
   label: string;
   price: string;
+  priceAdd?: number;
 }
 
 export interface ProductFlavour {
@@ -111,9 +112,9 @@ export const products: Product[] = [
       { label: "8\" Cake, 3 Layers — serves 15–20", price: 155, image: "/images/cake/cake00.jpeg" },
     ],
     addons: [
-      { label: "Filling", price: "+$8+" },
-      { label: "Edible Image", price: "+$10+" },
-      { label: "Custom Topper", price: "+$15+" },
+      { label: "Filling", price: "+$8+", priceAdd: 8 },
+      { label: "Edible Image", price: "+$10+", priceAdd: 10 },
+      { label: "Custom Topper", price: "+$15+", priceAdd: 15 },
       { label: "Detailed custom designs, specialty flavours, florals, metallics, characters, or extra decorations", price: "Additional charge" },
     ],
     flavours: CAKE_FLAVOURS,
@@ -543,9 +544,9 @@ export const products: Product[] = [
       { label: "8\" Cake, 3 Layers — serves 15–20", price: 155, image: "/images/cake/8.jpg" },
     ],
     addons: [
-      { label: "Filling", price: "+$8+" },
-      { label: "Edible Image", price: "+$10+" },
-      { label: "Custom Topper", price: "+$15+" },
+      { label: "Filling", price: "+$8+", priceAdd: 8 },
+      { label: "Edible Image", price: "+$10+", priceAdd: 10 },
+      { label: "Custom Topper", price: "+$15+", priceAdd: 15 },
       { label: "Detailed custom designs, specialty flavours, florals, metallics, characters, or extra decorations", price: "Additional charge" },
     ],
     flavours: CAKE_FLAVOURS,

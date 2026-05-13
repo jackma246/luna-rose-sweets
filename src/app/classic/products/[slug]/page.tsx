@@ -16,6 +16,7 @@ export default function ProductDetailPage() {
   const [added, setAdded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [designNote, setDesignNote] = useState("");
+  const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
 
   if (!product) {
     return (
@@ -33,6 +34,20 @@ export default function ProductDetailPage() {
   const p = product;
   const variant = p.variants[selectedVariant];
   const displayImage = variant?.image || p.image || null;
+  const addonPriceAdd = p.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? (addon.priceAdd ?? 0) : 0), 0) ?? 0;
+  const effectivePrice = variant ? variant.price + addonPriceAdd : 0;
+
+  function buildCartNote(): string | undefined {
+    const parts: string[] = [];
+    const addonLabels = p.addons
+      ?.filter((addon) => selectedAddons[addon.label])
+      .map((addon) => `${addon.label} (${addon.price})`)
+      .join(", ");
+    if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
+    const note = designNote.trim();
+    if (note) parts.push(`Design Notes: ${note}`);
+    return parts.length > 0 ? parts.join(" | ") : undefined;
+  }
 
   function handleAddToCart() {
     if (!variant || p.enquireOnly) return;
@@ -41,9 +56,9 @@ export default function ProductDetailPage() {
         productSlug: p.slug,
         variantLabel: variant.label,
         name: p.name,
-        price: variant.price,
+        price: effectivePrice,
         image: p.image,
-        note: designNote.trim() || undefined,
+        note: buildCartNote(),
       },
       quantity
     );
@@ -154,6 +169,31 @@ export default function ProductDetailPage() {
                   Please consult with us for custom design details and final pricing.
                 </p>
               </div>
+
+              {p.addons.some((addon) => typeof addon.priceAdd === "number") && (
+                <div>
+                  <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
+                    Add Options
+                  </label>
+                  <div className="space-y-2">
+                    {p.addons.filter((addon) => typeof addon.priceAdd === "number").map((addon) => (
+                      <button
+                        key={addon.label}
+                        type="button"
+                        onClick={() => setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }))}
+                        className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                          selectedAddons[addon.label]
+                            ? "border-accent bg-accent/10 shadow-sm"
+                            : "border-accent/15 hover:border-accent/40 bg-white/50"
+                        }`}
+                      >
+                        <span className="font-medium text-heading">{addon.label}</span>
+                        <span className="float-right font-bold text-heading">{addon.price}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div>
                 <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
                   Design Ideas / Notes
@@ -210,7 +250,7 @@ export default function ProductDetailPage() {
               {/* Price for single variant */}
               {p.variants.length === 1 && (
                 <p className="text-3xl font-bold text-heading">
-                  ${variant.price.toFixed(2)}
+                  ${effectivePrice.toFixed(2)}
                 </p>
               )}
 
@@ -247,7 +287,7 @@ export default function ProductDetailPage() {
                     : "bg-mint text-white"
                 }`}
               >
-                {added ? "Added to Cart \u2713" : "Add to Cart"}
+                {added ? "Added to Cart \u2713" : `Add to Cart · $${(effectivePrice * quantity).toFixed(2)}`}
               </button>
             </div>
           ) : null}
