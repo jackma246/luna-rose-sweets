@@ -170,30 +170,6 @@ export default function ProductDetailPage() {
                 </p>
               </div>
 
-              {p.addons.some((addon) => typeof addon.priceAdd === "number") && (
-                <div>
-                  <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
-                    Add Options
-                  </label>
-                  <div className="space-y-2">
-                    {p.addons.filter((addon) => typeof addon.priceAdd === "number").map((addon) => (
-                      <button
-                        key={addon.label}
-                        type="button"
-                        onClick={() => setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }))}
-                        className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
-                          selectedAddons[addon.label]
-                            ? "border-accent bg-accent/10 shadow-sm"
-                            : "border-accent/15 hover:border-accent/40 bg-white/50"
-                        }`}
-                      >
-                        <span className="font-medium text-heading">{addon.label}</span>
-                        <span className="float-right font-bold text-heading">{addon.price}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
               <div>
                 <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
                   Design Ideas / Notes
@@ -252,6 +228,31 @@ export default function ProductDetailPage() {
                 <p className="text-3xl font-bold text-heading">
                   ${effectivePrice.toFixed(2)}
                 </p>
+              )}
+
+              {p.addons?.some((addon) => typeof addon.priceAdd === "number") && (
+                <div>
+                  <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
+                    Add Options
+                  </label>
+                  <div className="space-y-2">
+                    {p.addons.filter((addon) => typeof addon.priceAdd === "number").map((addon) => (
+                      <button
+                        key={addon.label}
+                        type="button"
+                        onClick={() => setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }))}
+                        className={`w-full text-left px-4 py-3 rounded-xl border-2 transition-all duration-200 ${
+                          selectedAddons[addon.label]
+                            ? "border-accent bg-accent/10 shadow-sm"
+                            : "border-accent/15 hover:border-accent/40 bg-white/50"
+                        }`}
+                      >
+                        <span className="font-medium text-heading">{addon.label}</span>
+                        <span className="float-right font-bold text-heading">{addon.price}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
 
               {/* Quantity */}

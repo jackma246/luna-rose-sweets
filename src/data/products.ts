@@ -114,7 +114,7 @@ export const products: Product[] = [
     addons: [
       { label: "Filling", price: "+$8+", priceAdd: 8 },
       { label: "Edible Image", price: "+$10+", priceAdd: 10 },
-      { label: "Custom Topper", price: "+$15+", priceAdd: 15 },
+      { label: "Topper", price: "+$15+", priceAdd: 15 },
       { label: "Detailed custom designs, specialty flavours, florals, metallics, characters, or extra decorations", price: "Additional charge" },
     ],
     flavours: CAKE_FLAVOURS,
@@ -546,7 +546,7 @@ export const products: Product[] = [
     addons: [
       { label: "Filling", price: "+$8+", priceAdd: 8 },
       { label: "Edible Image", price: "+$10+", priceAdd: 10 },
-      { label: "Custom Topper", price: "+$15+", priceAdd: 15 },
+      { label: "Topper", price: "+$15+", priceAdd: 15 },
       { label: "Detailed custom designs, specialty flavours, florals, metallics, characters, or extra decorations", price: "Additional charge" },
     ],
     flavours: CAKE_FLAVOURS,

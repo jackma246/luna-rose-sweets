@@ -531,6 +531,29 @@ export default function V2ProductDetail() {
                     </div>
                   )}
 
+                  {/* ── Size / variant selector ── */}
+                  {product.variants.length > 1 && (
+                    <div className="options">
+                      <h4>Size / Option</h4>
+                      <div className="option-grid">
+                        {product.variants.map((v, i) => (
+                          <button
+                            key={v.label}
+                            className={`option${i === variantIdx ? " active" : ""}`}
+                            onClick={() => {
+                              setVariantIdx(i);
+                              const imgIdx = images.findIndex((s) => s === v.image);
+                              if (imgIdx >= 0) setMainImgIdx(imgIdx);
+                            }}
+                          >
+                            {v.label}
+                            <small>${v.price.toFixed(2)}</small>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {/* ── Add-on selector ── */}
                   {product.addons && product.addons.length > 0 && (
                     <div className="options" style={{ marginBottom: "1.5rem" }}>
@@ -589,28 +612,7 @@ export default function V2ProductDetail() {
                     </div>
                   )}
 
-                  {/* ── Size / variant selector ── */}
-                  {product.variants.length > 1 && (
-                    <div className="options">
-                      <h4>Size / Option</h4>
-                      <div className="option-grid">
-                        {product.variants.map((v, i) => (
-                          <button
-                            key={v.label}
-                            className={`option${i === variantIdx ? " active" : ""}`}
-                            onClick={() => {
-                              setVariantIdx(i);
-                              const imgIdx = images.findIndex((s) => s === v.image);
-                              if (imgIdx >= 0) setMainImgIdx(imgIdx);
-                            }}
-                          >
-                            {v.label}
-                            <small>${v.price.toFixed(2)}</small>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+
 
                   <div className="qty-row">
                     <div className="qty">
