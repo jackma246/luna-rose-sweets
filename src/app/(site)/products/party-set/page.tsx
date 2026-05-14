@@ -135,18 +135,6 @@ function Check({ active }: { active: boolean }) {
   );
 }
 
-function getMinDate(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 3);
-  return d.toISOString().split("T")[0];
-}
-
-function formatPickupDate(dateStr: string): string {
-  if (!dateStr) return "";
-  const d = new Date(dateStr + "T00:00:00");
-  return d.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-}
-
 function getInitialSizeId(): string {
   if (typeof window === "undefined") return "medium";
   const requested = new URLSearchParams(window.location.search).get("size");
@@ -156,18 +144,15 @@ function getInitialSizeId(): string {
 export default function PartySetPage() {
   const [sizeId, setSizeId] = useState(getInitialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
-  const [colorNote, setColorNote] = useState("");
   const [designTier, setDesignTier] = useState("");
   const [flavour, setFlavour] = useState("");
   const [secondFlavour, setSecondFlavour] = useState("");
   const [useTwoFlavours, setUseTwoFlavours] = useState(false);
   const [themeNote, setThemeNote] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [tempDate, setTempDate] = useState("");
+  const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
+  const inspirationInputRef = useRef<HTMLInputElement | null>(null);
   const [quantity] = useState(1);
   const [added, setAdded] = useState(false);
-  const themeRef = useRef<HTMLTextAreaElement>(null);
 
   const { addItem } = useCart();
 
@@ -195,18 +180,15 @@ export default function PartySetPage() {
 
   const isComplete =
     treats.length >= requiredTreats &&
-    colorNote.trim().length > 0 &&
     designTier !== "" &&
     flavour !== "" &&
-    pickupDate !== "";
+    (!useTwoFlavours || secondFlavour !== "");
 
   function scrollToMissing() {
     let id = "";
     if (treats.length < requiredTreats) id = "step-treats";
-    else if (!colorNote.trim()) id = "step-colors";
     else if (!designTier) id = "step-design";
     else if (!flavour || (useTwoFlavours && !secondFlavour)) id = "step-flavor";
-    else if (!pickupDate) id = "step-date";
     if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -215,11 +197,9 @@ export default function PartySetPage() {
       const need = requiredTreats - treats.length;
       return `Select ${need} more treat ${need === 1 ? "type" : "types"}`;
     }
-    if (!colorNote.trim()) return "Add your color palette";
     if (!designTier) return "Choose a design style";
     if (!flavour) return "Choose a flavor";
     if (useTwoFlavours && !secondFlavour) return "Choose your 2nd flavor";
-    if (!pickupDate) return "Reserve your pickup date";
     return "";
   }
 
@@ -231,11 +211,27 @@ export default function PartySetPage() {
     });
   }
 
+  async function handleInspirationFiles(fileList: FileList | null) {
+    if (!fileList) return;
+    const files = Array.from(fileList).filter((file) => file.type.startsWith("image/")).slice(0, 5);
+    const images = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise<{ name: string; type: string; size: number; dataUrl: string }>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({ name: file.name, type: file.type, size: file.size, dataUrl: String(reader.result) });
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          }),
+      ),
+    );
+    setInspirationImages(images);
+  }
+
   function buildCartNote() {
     const parts: string[] = [];
     parts.push(`Size: ${size.label}`);
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
-    parts.push(`Colors: ${colorNote}`);
     parts.push(`Design: ${design?.label ?? ""}${design?.priceAdd ? ` (${design.priceLabel})` : ""}`);
     if (useTwoFlavours && flavour && secondFlavour) {
       parts.push(`Flavor: ${flavour} + ${secondFlavour} (50/50 split, +$${FLAVOUR_ADDON_PRICE})`);
@@ -243,7 +239,7 @@ export default function PartySetPage() {
       parts.push(`Flavor: ${flavour}`);
     }
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
-    if (pickupDate) parts.push(`Pickup Date: ${formatPickupDate(pickupDate)}`);
+    if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
   }
 
@@ -256,6 +252,7 @@ export default function PartySetPage() {
       price: effectivePrice,
       image: "/images/brand-spread-new.png",
       note: buildCartNote(),
+      inspirationImages: inspirationImages.length > 0 ? inspirationImages : undefined,
     }, quantity);
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
@@ -385,33 +382,10 @@ export default function PartySetPage() {
           )}
         </div>
 
-        {/* STEP 3: Color Palette */}
-        <div id="step-colors" style={sectionStyle}>
-          <div style={stepHead}>
-            <span style={stepLabel}>Step 3</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Color palette</span>
-          </div>
-          <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.6 }}>
-            2–3 colors included. Upgraded designs may include additional colors.
-          </p>
-          <input
-            type="text"
-            placeholder="e.g. dusty rose, ivory, sage green"
-            value={colorNote}
-            onChange={(e) => setColorNote(e.target.value)}
-            style={{
-              width: "100%", boxSizing: "border-box",
-              padding: "0.75rem 1rem", fontSize: "0.92rem",
-              border: "1px solid var(--border, #e8e4de)", borderRadius: "0.5rem",
-              background: "#fff", outline: "none",
-            }}
-          />
-        </div>
-
-        {/* STEP 4: Design Style */}
+        {/* STEP 3: Design Style */}
         <div id="step-design" style={sectionStyle}>
           <div style={stepHead}>
-            <span style={stepLabel}>Step 4</span>
+            <span style={stepLabel}>Step 3</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Design style</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
@@ -443,10 +417,10 @@ export default function PartySetPage() {
           </div>
         </div>
 
-        {/* STEP 5: Flavor */}
+        {/* STEP 4: Flavor */}
         <div id="step-flavor" style={sectionStyle}>
           <div style={stepHead}>
-            <span style={stepLabel}>Step 5</span>
+            <span style={stepLabel}>Step 4</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Flavor</span>
           </div>
 
@@ -545,40 +519,16 @@ export default function PartySetPage() {
           )}
         </div>
 
-        {/* STEP 6: Mid CTA */}
-        <div id="step-date" style={{ ...sectionStyle, textAlign: "center", padding: "1.5rem 0 2rem" }}>
-          <p style={{ margin: "0 0 1rem", fontWeight: 700, fontSize: "1rem" }}>Ready to lock in your order?</p>
-          <button
-            onClick={() => { setTempDate(pickupDate); setShowDatePicker(true); }}
-            style={{
-              padding: "0.85rem 2rem", fontSize: "1rem", fontWeight: 700,
-              borderRadius: "999px", border: "none", cursor: "pointer",
-              background: "var(--cherry, #c05)", color: "#fff",
-            }}
-          >
-            {pickupDate ? `📅 ${formatPickupDate(pickupDate)}` : "Reserve Your Date ✨"}
-          </button>
-          {pickupDate && (
-            <button
-              onClick={() => { setTempDate(pickupDate); setShowDatePicker(true); }}
-              style={{ display: "block", margin: "0.5rem auto 0", fontSize: "0.78rem", opacity: 0.5, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
-            >
-              Change date
-            </button>
-          )}
-        </div>
-
-        {/* STEP 7: Theme Notes */}
+        {/* STEP 5: Theme Notes */}
         <div style={sectionStyle}>
           <div style={stepHead}>
-            <span style={stepLabel}>Step 6</span>
+            <span style={stepLabel}>Step 5</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Theme &amp; inspiration <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
           </div>
           <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.6 }}>
             Tell us your theme, colors, or overall vibe
           </p>
           <textarea
-            ref={themeRef}
             placeholder="e.g. soft pink + ivory, bows, minimal, elegant"
             value={themeNote}
             onChange={(e) => setThemeNote(e.target.value)}
@@ -590,9 +540,35 @@ export default function PartySetPage() {
               background: "#fff", outline: "none", resize: "vertical",
             }}
           />
+          <input
+            ref={inspirationInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            aria-label="Choose inspiration photos"
+            onChange={(e) => void handleInspirationFiles(e.target.files)}
+            style={{ display: "none" }}
+          />
+          <button
+            type="button"
+            onClick={() => inspirationInputRef.current?.click()}
+            style={{
+              width: "100%", marginTop: "0.75rem", padding: "0.75rem 1rem",
+              fontSize: "0.92rem", fontWeight: 700, borderRadius: "0.5rem",
+              border: "1px solid var(--border, #e8e4de)", background: "#fff",
+              color: "inherit", cursor: "pointer",
+            }}
+          >
+            Choose Photos
+          </button>
+          {inspirationImages.length > 0 && (
+            <p style={{ margin: "0.5rem 0 0", fontSize: "0.8rem", opacity: 0.65 }}>
+              Selected: {inspirationImages.map((img) => img.name).join(", ")}
+            </p>
+          )}
         </div>
 
-        {/* STEP 8: Important Notes */}
+        {/* STEP 6: Important Notes */}
         <div style={{ ...sectionStyle, background: "var(--surface, #faf9f7)", borderRadius: "0.65rem", padding: "1rem 1.15rem", border: "1px solid var(--border, #e8e4de)" }}>
           <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Good to know</div>
           <ul style={{ margin: 0, padding: "0 0 0 1rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.7 }}>
@@ -621,7 +597,6 @@ export default function PartySetPage() {
             <div style={{ fontSize: "0.88rem", lineHeight: 1.8 }}>
               <div><strong>Set:</strong> {size.label} ({size.pcs} pcs)</div>
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
-              <div><strong>Colors:</strong> {colorNote}</div>
               <div><strong>Design:</strong> {design?.label}</div>
               <div>
                 <strong>Flavor:</strong>{" "}
@@ -630,7 +605,7 @@ export default function PartySetPage() {
                   : flavour}
               </div>
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
-              {pickupDate && <div><strong>Pickup Date:</strong> {formatPickupDate(pickupDate)}</div>}
+              {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>
             <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid var(--border, #e8e4de)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <span style={{ fontWeight: 700, fontSize: "1rem" }}>Total</span>
@@ -640,90 +615,6 @@ export default function PartySetPage() {
         )}
       </div>
 
-      {/* DATE PICKER MODAL */}
-      {showDatePicker && (
-        <div
-          style={{
-            position: "fixed", inset: 0, zIndex: 500,
-            background: "rgba(0,0,0,0.45)",
-            display: "flex", alignItems: "flex-end", justifyContent: "center",
-          }}
-          onClick={(e) => { if (e.target === e.currentTarget) setShowDatePicker(false); }}
-        >
-          <div style={{
-            background: "#fff",
-            borderRadius: "1.25rem 1.25rem 0 0",
-            padding: "1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))",
-            width: "100%", maxWidth: 520,
-            boxSizing: "border-box",
-          }}>
-            {/* Handle */}
-            <div style={{ width: 40, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 1.5rem" }} />
-
-            <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.1rem" }}>Pick your date</h3>
-            <p style={{ margin: "0 0 1.25rem", fontSize: "0.83rem", opacity: 0.55 }}>
-              Please allow at least 3 days notice. Weekend spots fill quickly!
-            </p>
-
-            <input
-              type="date"
-              value={tempDate}
-              min={getMinDate()}
-              onChange={(e) => setTempDate(e.target.value)}
-              style={{
-                width: "100%", boxSizing: "border-box",
-                padding: "0.85rem 1rem", fontSize: "1rem",
-                border: "1.5px solid var(--border, #e8e4de)", borderRadius: "0.65rem",
-                background: "#fafafa", outline: "none",
-                marginBottom: "1.25rem",
-                colorScheme: "light",
-              }}
-            />
-
-            {tempDate && (
-              <div style={{
-                padding: "0.75rem 1rem", borderRadius: "0.5rem",
-                background: "#fff8f8", border: "1px solid #fdd",
-                fontSize: "0.88rem", fontWeight: 600, marginBottom: "1rem",
-                color: "var(--cherry, #c05)",
-              }}>
-                📅 {formatPickupDate(tempDate)}
-              </div>
-            )}
-
-            <div style={{ display: "flex", gap: "0.65rem" }}>
-              <button
-                onClick={() => setShowDatePicker(false)}
-                style={{
-                  flex: 1, padding: "0.85rem", fontWeight: 600, fontSize: "0.95rem",
-                  borderRadius: "999px", border: "1.5px solid var(--border, #e8e4de)",
-                  background: "#fff", cursor: "pointer", color: "inherit",
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (!tempDate) return;
-                  setPickupDate(tempDate);
-                  setShowDatePicker(false);
-                  setTimeout(() => themeRef.current?.scrollIntoView({ behavior: "smooth" }), 150);
-                }}
-                disabled={!tempDate}
-                style={{
-                  flex: 2, padding: "0.85rem", fontWeight: 700, fontSize: "0.95rem",
-                  borderRadius: "999px", border: "none",
-                  background: tempDate ? "var(--cherry, #c05)" : "#ccc",
-                  color: "#fff", cursor: tempDate ? "pointer" : "not-allowed",
-                }}
-              >
-                Confirm Date ✨
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* STICKY BUTTON */}
       <div style={{
         position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 200,
@@ -732,34 +623,19 @@ export default function PartySetPage() {
         backdropFilter: "blur(8px)",
         borderTop: "1px solid var(--border, #e8e4de)",
       }}>
-        {!pickupDate ? (
-          <button
-            onClick={() => { setTempDate(""); setShowDatePicker(true); }}
-            style={{
-              width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
-              padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
-              borderRadius: "999px", border: "none", cursor: "pointer",
-              background: "var(--cherry, #c05)", color: "#fff",
-              transition: "background 0.2s",
-            }}
-          >
-            Reserve Your Date ✨
-          </button>
-        ) : (
-          <button
-            onClick={isComplete ? handleAddToCart : scrollToMissing}
-            style={{
-              width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
-              padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
-              borderRadius: "999px", border: "none", cursor: "pointer",
-              background: isComplete ? "var(--cherry, #c05)" : "#bbb",
-              color: "#fff",
-              transition: "background 0.2s",
-            }}
-          >
-            {added ? "Added to cart ✓" : isComplete ? "Add to Cart ✨" : getMissingLabel()}
-          </button>
-        )}
+        <button
+          onClick={isComplete ? handleAddToCart : scrollToMissing}
+          style={{
+            width: "100%", maxWidth: 480, display: "block", margin: "0 auto",
+            padding: "0.9rem 1.5rem", fontSize: "1rem", fontWeight: 700,
+            borderRadius: "999px", border: "none", cursor: "pointer",
+            background: isComplete ? "var(--cherry, #c05)" : "#bbb",
+            color: "#fff",
+            transition: "background 0.2s",
+          }}
+        >
+          {added ? "Added to cart ✓" : isComplete ? "Add to Cart ✨" : getMissingLabel()}
+        </button>
       </div>
 
       <V2Footer />
