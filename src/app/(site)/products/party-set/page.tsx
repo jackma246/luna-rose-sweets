@@ -68,8 +68,8 @@ const TREAT_OPTIONS = [
 
 const DESIGN_TIERS = [
   { id: "classic", label: "Classic", desc: "Clean coating, drizzle, simple accents", priceLabel: "Included", priceAdd: 0, popular: false },
-  { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "+$15", priceAdd: 15, popular: true },
-  { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "+$30", priceAdd: 30, popular: false },
+  { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "", priceAddBySize: { small: 20, medium: 25, large: 35 }, popular: true },
+  { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "", priceAddBySize: { small: 35, medium: 45, large: 70 }, popular: false },
 ];
 
 const HAND_TIED_BOWS_PRICE_BY_SIZE: Record<string, number> = {
@@ -77,6 +77,14 @@ const HAND_TIED_BOWS_PRICE_BY_SIZE: Record<string, number> = {
   medium: 40,
   large: 50,
 };
+
+function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, sizeId: string): number {
+  if (!design) return 0;
+  if ("priceAddBySize" in design && design.priceAddBySize) {
+    return design.priceAddBySize[sizeId as keyof typeof design.priceAddBySize] ?? 0;
+  }
+  return "priceAdd" in design ? design.priceAdd : 0;
+}
 
 const card: React.CSSProperties = {
   borderRadius: "0.65rem",
@@ -162,8 +170,10 @@ export default function PartySetPage() {
   const requiredTreats = size.treatCount;
   const availableTreatOptions = TREAT_OPTIONS.filter((t) => !t.sizeIds || t.sizeIds.includes(sizeId));
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
+  const designPriceAdd = getDesignPriceAdd(design, sizeId);
+  const designPriceLabel = designPriceAdd > 0 ? `+$${designPriceAdd}` : "Included";
   const handTiedBowsPrice = handTiedBows ? HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId] : 0;
-  const effectivePrice = size.price + (design?.priceAdd ?? 0) + handTiedBowsPrice;
+  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -229,7 +239,7 @@ export default function PartySetPage() {
     const parts: string[] = [];
     parts.push(`Size: ${size.label}`);
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
-    parts.push(`Design: ${design?.label ?? ""}${design?.priceAdd ? ` (${design.priceLabel})` : ""}`);
+    parts.push(`Design: ${design?.label ?? ""}${designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}`);
     if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]})`);
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
@@ -382,12 +392,15 @@ export default function PartySetPage() {
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Design style</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-            {DESIGN_TIERS.map((d) => (
-              <div
-                key={d.id}
-                style={designTier === d.id ? cardActive : card}
-                onClick={() => setDesignTier(d.id)}
-              >
+            {DESIGN_TIERS.map((d) => {
+              const priceAdd = getDesignPriceAdd(d, sizeId);
+              const priceLabel = priceAdd > 0 ? `+$${priceAdd}` : "Included";
+              return (
+                <div
+                  key={d.id}
+                  style={designTier === d.id ? cardActive : card}
+                  onClick={() => setDesignTier(d.id)}
+                >
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
                   <Dot active={designTier === d.id} />
                   <div style={{ flex: 1 }}>
@@ -401,12 +414,13 @@ export default function PartySetPage() {
                     </div>
                     <div style={{ fontSize: "0.8rem", opacity: 0.6 }}>{d.desc}</div>
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: d.priceAdd > 0 ? "var(--cherry, #c05)" : "inherit", opacity: d.priceAdd === 0 ? 0.55 : 1 }}>
-                    {d.priceLabel}
+                  <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: priceAdd > 0 ? "var(--cherry, #c05)" : "inherit", opacity: priceAdd === 0 ? 0.55 : 1 }}>
+                    {priceLabel}
                   </div>
                 </div>
-              </div>
-            ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -510,7 +524,7 @@ export default function PartySetPage() {
             <div style={{ fontSize: "0.88rem", lineHeight: 1.8 }}>
               <div><strong>Set:</strong> {size.label} ({size.pcs} pcs)</div>
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
-              <div><strong>Design:</strong> {design?.label}</div>
+              <div><strong>Design:</strong> {design?.label}{designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}</div>
               {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
