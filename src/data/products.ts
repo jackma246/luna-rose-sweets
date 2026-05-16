@@ -106,7 +106,7 @@ export const products: Product[] = [
     details:
       "Includes 1 × 6\" custom round cake, 2 dozen cakesicles, 2 dozen Dubai Chocolate Brownie Shooter Cups, 2 dozen chocolate covered Oreos, and 2 dozen pretzel twists. Package includes custom colors, up to 3 coordinated treat designs, edible images or simple toppers where applicable, and premium decorative details. Custom character designs, logos, florals, metallics, or highly detailed themes may require an additional fee. Please allow at least 1 week notice.",
     variants: [
-      { label: "Luxe Party Package", price: 625, image: "/images/brand-spread-new.png" },
+      { label: "Luxe Party Package", price: 625, image: "/images/placeholders/under-construction.svg" },
     ],
     addons: [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAdd: 80 },
@@ -116,7 +116,7 @@ export const products: Product[] = [
     ],
     flavours: CAKE_FLAVOURS,
     badge: "Premium package",
-    image: "/images/brand-spread-new.png",
+    image: "/images/placeholders/under-construction.svg",
   },
   {
     slug: "party-layer-cake",

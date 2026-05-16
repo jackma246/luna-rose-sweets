@@ -1,0 +1,58 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" fill="#FFFCF8"/>
+  <circle cx="360" cy="275" r="8" fill="#C8B9A7" opacity="0.75"/>
+  <circle cx="1172" cy="360" r="7" fill="#C8B9A7" opacity="0.65"/>
+  <path d="M1245 270l9 24 24 9-24 9-9 24-9-24-24-9 24-9 9-24z" stroke="#C8B9A7" stroke-width="5" stroke-linejoin="round" opacity="0.75"/>
+  <path d="M300 392l8 21 21 8-21 8-8 21-8-21-21-8 21-8 8-21z" stroke="#D3BEA4" stroke-width="4" stroke-linejoin="round" opacity="0.75"/>
+  <path d="M1320 455c22-32 62 0 0 40-62-40-22-72 0-40z" fill="#E8CDA8" opacity="0.85"/>
+
+  <g transform="translate(495 220)">
+    <rect x="220" y="72" width="260" height="112" rx="8" fill="#E8D4BD" stroke="#C7A986" stroke-width="6"/>
+    <path d="M238 72l-18 112h58l18-112h-58zm104 0l-18 112h58l18-112h-58zm104 0l-18 112h52V72h-34z" fill="#FFF6EA" opacity="0.85"/>
+    <rect x="255" y="184" width="26" height="138" rx="8" fill="#B99169"/>
+    <rect x="425" y="184" width="26" height="138" rx="8" fill="#B99169"/>
+    <rect x="275" y="0" width="56" height="56" rx="12" fill="#6E6257"/>
+    <circle cx="303" cy="-16" r="32" fill="#F8B44E" stroke="#C58A35" stroke-width="6"/>
+    <circle cx="303" cy="-16" r="20" fill="#FFD276" opacity="0.75"/>
+    <path d="M303-78v-35M245-50l-25-25M361-50l25-25" stroke="#F3B14E" stroke-width="8" stroke-linecap="round"/>
+
+    <path d="M96 130L4 290c-18 31 4 70 40 70h184c36 0 58-39 40-70L176 130c-18-31-62-31-80 0z" fill="#FFD56A" stroke="#6C6259" stroke-width="10"/>
+    <path d="M136 178v82" stroke="#6C6259" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="136" cy="302" r="12" fill="#6C6259"/>
+
+    <g transform="translate(480 4)">
+      <ellipse cx="114" cy="305" rx="118" ry="35" fill="#E6D4BF" opacity="0.45"/>
+      <circle cx="55" cy="58" r="34" fill="#CFA47C"/>
+      <circle cx="177" cy="58" r="34" fill="#CFA47C"/>
+      <circle cx="116" cy="120" r="98" fill="#D9B28A"/>
+      <ellipse cx="116" cy="132" rx="44" ry="38" fill="#FFF0DC" opacity="0.9"/>
+      <circle cx="82" cy="108" r="9" fill="#4D3B2C"/>
+      <circle cx="150" cy="108" r="9" fill="#4D3B2C"/>
+      <ellipse cx="116" cy="125" rx="8" ry="7" fill="#4D3B2C"/>
+      <path d="M103 143c8 10 18 10 26 0" stroke="#4D3B2C" stroke-width="5" stroke-linecap="round"/>
+      <path d="M34 55c22-72 145-91 185 0 3 7-2 15-10 15H44c-8 0-13-8-10-15z" fill="#F4B54B"/>
+      <path d="M65 18c35-30 76-32 112 0" stroke="#CC8A2E" stroke-width="5" opacity="0.5"/>
+      <path d="M119-2v67M85 10l18 54M153 10l-18 54" stroke="#D28F32" stroke-width="6" stroke-linecap="round" opacity="0.65"/>
+      <rect x="31" y="60" width="176" height="22" rx="11" fill="#F4B54B" stroke="#CC8A2E" stroke-width="4"/>
+      <ellipse cx="70" cy="220" rx="50" ry="70" fill="#D9B28A"/>
+      <ellipse cx="165" cy="220" rx="50" ry="70" fill="#D9B28A"/>
+      <circle cx="48" cy="300" r="40" fill="#D9B28A"/>
+      <circle cx="180" cy="300" r="40" fill="#D9B28A"/>
+      <path d="M93 224l94-94 32 32-94 94-44 12 12-44z" fill="#C5C6C3" stroke="#6C6259" stroke-width="6" stroke-linejoin="round"/>
+      <circle cx="200" cy="148" r="18" fill="#FFFCF8"/>
+    </g>
+
+    <g transform="translate(875 210)">
+      <path d="M60 0l60 150H0L60 0z" fill="#EF8B2F"/>
+      <path d="M32 70h56M18 110h84" stroke="#FFF8EF" stroke-width="18"/>
+      <ellipse cx="60" cy="154" rx="74" ry="14" fill="#D77B24"/>
+    </g>
+  </g>
+
+  <text x="800" y="675" text-anchor="middle" font-family="Comic Sans MS, Bradley Hand, Chalkboard SE, cursive" font-size="92" fill="#4B321F" letter-spacing="2">Under Construction</text>
+  <line x1="480" y1="732" x2="730" y2="732" stroke="#EFE5D9" stroke-width="3"/>
+  <path d="M800 724c12-18 34 0 0 23-34-23-12-41 0-23z" fill="#F4B95D"/>
+  <line x1="870" y1="732" x2="1120" y2="732" stroke="#EFE5D9" stroke-width="3"/>
+  <text x="800" y="805" text-anchor="middle" font-family="Avenir, Helvetica, Arial, sans-serif" font-size="32" fill="#4B321F" letter-spacing="5">We’re still working on it.</text>
+  <text x="800" y="855" text-anchor="middle" font-family="Avenir, Helvetica, Arial, sans-serif" font-size="32" fill="#4B321F" letter-spacing="5">Thank you for your patience!</text>
+</svg>
