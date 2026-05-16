@@ -72,6 +72,12 @@ const DESIGN_TIERS = [
   { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "+$30", priceAdd: 30, popular: false },
 ];
 
+const HAND_TIED_BOWS_PRICE_BY_SIZE: Record<string, number> = {
+  small: 30,
+  medium: 40,
+  large: 50,
+};
+
 const card: React.CSSProperties = {
   borderRadius: "0.65rem",
   border: "1px solid var(--border, #e8e4de)",
@@ -143,6 +149,7 @@ export default function PartySetPage() {
   const [sizeId, setSizeId] = useState(getInitialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("");
+  const [handTiedBows, setHandTiedBows] = useState(false);
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -155,7 +162,8 @@ export default function PartySetPage() {
   const requiredTreats = size.treatCount;
   const availableTreatOptions = TREAT_OPTIONS.filter((t) => !t.sizeIds || t.sizeIds.includes(sizeId));
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
-  const effectivePrice = size.price + (design?.priceAdd ?? 0);
+  const handTiedBowsPrice = handTiedBows ? HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId] : 0;
+  const effectivePrice = size.price + (design?.priceAdd ?? 0) + handTiedBowsPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -222,6 +230,7 @@ export default function PartySetPage() {
     parts.push(`Size: ${size.label}`);
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
     parts.push(`Design: ${design?.label ?? ""}${design?.priceAdd ? ` (${design.priceLabel})` : ""}`);
+    if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]})`);
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
@@ -401,10 +410,33 @@ export default function PartySetPage() {
           </div>
         </div>
 
-        {/* STEP 4: Theme Notes */}
+        {/* STEP 4: Add-ons */}
         <div style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 4</span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Add-ons <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
+          </div>
+          <div
+            style={handTiedBows ? cardActive : card}
+            onClick={() => setHandTiedBows((selected) => !selected)}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <Check active={handTiedBows} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Hand Tied Bows</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>Add a bow finish to each treat</div>
+              </div>
+              <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                +${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* STEP 5: Theme Notes */}
+        <div style={sectionStyle}>
+          <div style={stepHead}>
+            <span style={stepLabel}>Step 5</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Theme &amp; inspiration <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
           </div>
           <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.6 }}>
@@ -450,7 +482,7 @@ export default function PartySetPage() {
           )}
         </div>
 
-        {/* STEP 5: Important Notes */}
+        {/* STEP 6: Important Notes */}
         <div style={{ ...sectionStyle, background: "var(--surface, #faf9f7)", borderRadius: "0.65rem", padding: "1rem 1.15rem", border: "1px solid var(--border, #e8e4de)" }}>
           <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Good to know</div>
           <ul style={{ margin: 0, padding: "0 0 0 1rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.7 }}>
@@ -479,6 +511,7 @@ export default function PartySetPage() {
               <div><strong>Set:</strong> {size.label} ({size.pcs} pcs)</div>
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
               <div><strong>Design:</strong> {design?.label}</div>
+              {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>

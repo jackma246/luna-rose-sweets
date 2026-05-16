@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import { getProductBySlug, CAKE_FLAVOURS } from "@/data/products";
+import type { ProductAddon } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../../components/V2Header";
 import V2Footer from "../../components/V2Footer";
@@ -63,7 +64,8 @@ export default function V2ProductDetail() {
   const totalTreatsSelected = Object.values(treatCounts).reduce((s, c) => s + c, 0);
   const designPriceAdd = product.designTiers?.find((t) => t.name === selectedDesignTier)?.priceAdd ?? 0;
   const flavourAddonAdd = secondFlavour ? (product.flavourAddonPrice ?? 0) : 0;
-  const addonPriceAdd = product.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? (addon.priceAdd ?? 0) : 0), 0) ?? 0;
+  const getAddonPriceAdd = (addon: ProductAddon) => addon.priceAddByVariant?.[variantIdx] ?? addon.priceAdd ?? 0;
+  const addonPriceAdd = product.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? getAddonPriceAdd(addon) : 0), 0) ?? 0;
   const effectivePrice = variant ? variant.price + designPriceAdd + flavourAddonAdd + addonPriceAdd : 0;
 
   function getTreatCount(name: string) {
@@ -137,7 +139,7 @@ export default function V2ProductDetail() {
     }
     const addonLabels = product!.addons
       ?.filter((addon) => selectedAddons[addon.label])
-      .map((addon) => `${addon.label} (${addon.price})`)
+      .map((addon) => `${addon.label} (+$${getAddonPriceAdd(addon)})`)
       .join(", ");
     if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
     if (inspirationImages.length > 0) {
@@ -586,7 +588,8 @@ export default function V2ProductDetail() {
                       <h4>Add-ons</h4>
                       <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                         {product.addons.map((addon) => {
-                          const isPriced = typeof addon.priceAdd === "number";
+                          const addonPriceAdd = getAddonPriceAdd(addon);
+                          const isPriced = addonPriceAdd > 0;
                           return (
                             <button
                               key={addon.label}
@@ -606,7 +609,7 @@ export default function V2ProductDetail() {
                               }}
                             >
                               <span style={{ fontWeight: 600 }}>{addon.label}</span>
-                              <small style={{ fontWeight: 700, color: isPriced ? "var(--cherry, #c05)" : "inherit" }}>{addon.price}</small>
+                              <small style={{ fontWeight: 700, color: isPriced ? "var(--cherry, #c05)" : "inherit" }}>{isPriced ? `+$${addonPriceAdd}` : addon.price}</small>
                             </button>
                           );
                         })}
@@ -678,7 +681,7 @@ export default function V2ProductDetail() {
                         </p>
                       )}
                       {product.addons?.filter((addon) => selectedAddons[addon.label]).map((addon) => (
-                        <p key={addon.label} style={{ margin: 0 }}><strong>Add-on:</strong> {addon.label} <span style={{ opacity: 0.65 }}>({addon.price})</span></p>
+                        <p key={addon.label} style={{ margin: 0 }}><strong>Add-on:</strong> {addon.label} <span style={{ opacity: 0.65 }}>(+${getAddonPriceAdd(addon)})</span></p>
                       ))}
                       {inspirationImages.length > 0 && (
                         <p style={{ margin: 0 }}><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</p>

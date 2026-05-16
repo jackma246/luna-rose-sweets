@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { getProductBySlug } from "@/data/products";
+import type { ProductAddon } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductDetailPage() {
@@ -36,14 +37,15 @@ export default function ProductDetailPage() {
   const p = product;
   const variant = p.variants[selectedVariant];
   const displayImage = variant?.image || p.image || null;
-  const addonPriceAdd = p.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? (addon.priceAdd ?? 0) : 0), 0) ?? 0;
+  const getAddonPriceAdd = (addon: ProductAddon) => addon.priceAddByVariant?.[selectedVariant] ?? addon.priceAdd ?? 0;
+  const addonPriceAdd = p.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? getAddonPriceAdd(addon) : 0), 0) ?? 0;
   const effectivePrice = variant ? variant.price + addonPriceAdd : 0;
 
   function buildCartNote(): string | undefined {
     const parts: string[] = [];
     const addonLabels = p.addons
       ?.filter((addon) => selectedAddons[addon.label])
-      .map((addon) => `${addon.label} (${addon.price})`)
+      .map((addon) => `${addon.label} (+$${getAddonPriceAdd(addon)})`)
       .join(", ");
     if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
     if (inspirationImages.length > 0) {
@@ -185,7 +187,7 @@ export default function ProductDetailPage() {
                   {p.addons.map((addon, i) => (
                     <li key={i} className="flex justify-between text-sm">
                       <span className="text-foreground/70">{addon.label}</span>
-                      <span className="font-medium text-heading">{addon.price}</span>
+                      <span className="font-medium text-heading">{getAddonPriceAdd(addon) > 0 ? `+$${getAddonPriceAdd(addon)}` : addon.price}</span>
                     </li>
                   ))}
                 </ul>
@@ -241,13 +243,13 @@ export default function ProductDetailPage() {
                 </p>
               )}
 
-              {p.addons?.some((addon) => typeof addon.priceAdd === "number") && (
+              {p.addons?.some((addon) => getAddonPriceAdd(addon) > 0) && (
                 <div>
                   <label className="block text-xs font-semibold text-heading uppercase tracking-wider mb-2">
                     Add Options
                   </label>
                   <div className="space-y-2">
-                    {p.addons.filter((addon) => typeof addon.priceAdd === "number").map((addon) => (
+                    {p.addons.filter((addon) => getAddonPriceAdd(addon) > 0).map((addon) => (
                       <button
                         key={addon.label}
                         type="button"
@@ -259,7 +261,7 @@ export default function ProductDetailPage() {
                         }`}
                       >
                         <span className="font-medium text-heading">{addon.label}</span>
-                        <span className="float-right font-bold text-heading">{addon.price}</span>
+                        <span className="float-right font-bold text-heading">+${getAddonPriceAdd(addon)}</span>
                       </button>
                     ))}
                   </div>

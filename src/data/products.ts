@@ -8,6 +8,7 @@ export interface ProductAddon {
   label: string;
   price: string;
   priceAdd?: number;
+  priceAddByVariant?: number[];
 }
 
 export interface ProductFlavour {
@@ -329,6 +330,7 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "3rd Color", price: "+$5" },
+      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
     ],
     flavours: CAKE_FLAVOURS,
     flavourAddonPrice: 12,
@@ -367,6 +369,7 @@ export const products: Product[] = [
     addons: [
       { label: "3rd Color", price: "+$5" },
       { label: "4+ Colors", price: "Signature Custom required" },
+      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
     ],
     flavours: CAKE_FLAVOURS,
     flavourAddonPrice: 12,
@@ -447,6 +450,9 @@ export const products: Product[] = [
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$10", priceAdd: 10 },
+    ],
+    addons: [
+      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10] },
     ],
     image: "/images/rice-krispies/rice.jpeg",
   },
