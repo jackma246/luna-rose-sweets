@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { CAKE_FLAVOURS, getProductBySlug } from "@/data/products";
+import { getProductBySlug } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../../components/V2Header";
 import V2Footer from "../../components/V2Footer";
@@ -71,8 +71,6 @@ const DESIGN_TIERS = [
   { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "+$15", priceAdd: 15, popular: true },
   { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "+$30", priceAdd: 30, popular: false },
 ];
-
-const FLAVOUR_ADDON_PRICE = 12;
 
 const card: React.CSSProperties = {
   borderRadius: "0.65rem",
@@ -145,9 +143,6 @@ export default function PartySetPage() {
   const [sizeId, setSizeId] = useState(getInitialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("");
-  const [flavour, setFlavour] = useState("");
-  const [secondFlavour, setSecondFlavour] = useState("");
-  const [useTwoFlavours, setUseTwoFlavours] = useState(false);
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -160,8 +155,7 @@ export default function PartySetPage() {
   const requiredTreats = size.treatCount;
   const availableTreatOptions = TREAT_OPTIONS.filter((t) => !t.sizeIds || t.sizeIds.includes(sizeId));
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
-  const flavourAddon = useTwoFlavours ? FLAVOUR_ADDON_PRICE : 0;
-  const effectivePrice = size.price + (design?.priceAdd ?? 0) + flavourAddon;
+  const effectivePrice = size.price + (design?.priceAdd ?? 0);
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -180,15 +174,12 @@ export default function PartySetPage() {
 
   const isComplete =
     treats.length >= requiredTreats &&
-    designTier !== "" &&
-    flavour !== "" &&
-    (!useTwoFlavours || secondFlavour !== "");
+    designTier !== "";
 
   function scrollToMissing() {
     let id = "";
     if (treats.length < requiredTreats) id = "step-treats";
     else if (!designTier) id = "step-design";
-    else if (!flavour || (useTwoFlavours && !secondFlavour)) id = "step-flavor";
     if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -198,8 +189,6 @@ export default function PartySetPage() {
       return `Select ${need} more treat ${need === 1 ? "type" : "types"}`;
     }
     if (!designTier) return "Choose a design style";
-    if (!flavour) return "Choose a flavor";
-    if (useTwoFlavours && !secondFlavour) return "Choose your 2nd flavor";
     return "";
   }
 
@@ -233,11 +222,6 @@ export default function PartySetPage() {
     parts.push(`Size: ${size.label}`);
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
     parts.push(`Design: ${design?.label ?? ""}${design?.priceAdd ? ` (${design.priceLabel})` : ""}`);
-    if (useTwoFlavours && flavour && secondFlavour) {
-      parts.push(`Flavor: ${flavour} + ${secondFlavour} (50/50 split, +$${FLAVOUR_ADDON_PRICE})`);
-    } else {
-      parts.push(`Flavor: ${flavour}`);
-    }
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
@@ -417,112 +401,10 @@ export default function PartySetPage() {
           </div>
         </div>
 
-        {/* STEP 4: Flavor */}
-        <div id="step-flavor" style={sectionStyle}>
-          <div style={stepHead}>
-            <span style={stepLabel}>Step 4</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Flavor</span>
-          </div>
-
-          {/* 1 flavor option */}
-          <div
-            style={!useTwoFlavours ? cardActive : card}
-            onClick={() => { setUseTwoFlavours(false); setSecondFlavour(""); }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <Dot active={!useTwoFlavours} />
-              <div>
-                <div style={{ fontWeight: 600, fontSize: "0.92rem" }}>1 flavor</div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>Included</div>
-              </div>
-            </div>
-          </div>
-
-          {!useTwoFlavours && (
-            <div style={{ marginTop: "0.65rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-              {CAKE_FLAVOURS.map((f) => (
-                <button
-                  key={f.name}
-                  onClick={() => setFlavour(f.name)}
-                  style={{
-                    textAlign: "left", padding: "0.6rem 0.9rem",
-                    borderRadius: "0.4rem", fontSize: "0.85rem", fontWeight: 500, cursor: "pointer",
-                    border: flavour === f.name ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)",
-                    background: flavour === f.name ? "#fff8f8" : "#fff",
-                    color: "inherit",
-                  }}
-                >
-                  {f.name}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* 2 flavors option */}
-          <div
-            style={{ ...(useTwoFlavours ? cardActive : card), marginTop: "0.65rem" }}
-            onClick={() => setUseTwoFlavours(true)}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <Dot active={useTwoFlavours} />
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-                  <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>2 flavors</span>
-                  <span style={{ fontSize: "0.65rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "999px", background: "var(--cherry, #c05)", color: "#fff" }}>
-                    ⭐ Recommended
-                  </span>
-                </div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55, marginTop: "0.1rem" }}>+$12 · even split · more variety &amp; crowd-friendly</div>
-              </div>
-            </div>
-          </div>
-
-          {useTwoFlavours && (
-            <div style={{ marginTop: "0.65rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-              <div style={{ fontSize: "0.78rem", fontWeight: 600, opacity: 0.55, marginBottom: "0.2rem" }}>1st flavor</div>
-              {CAKE_FLAVOURS.map((f) => (
-                <button
-                  key={f.name}
-                  onClick={() => { setFlavour(f.name); if (secondFlavour === f.name) setSecondFlavour(""); }}
-                  style={{
-                    textAlign: "left", padding: "0.6rem 0.9rem",
-                    borderRadius: "0.4rem", fontSize: "0.85rem", fontWeight: 500, cursor: "pointer",
-                    border: flavour === f.name ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)",
-                    background: flavour === f.name ? "#fff8f8" : "#fff",
-                    color: "inherit",
-                  }}
-                >
-                  {f.name}
-                </button>
-              ))}
-              {flavour && (
-                <>
-                  <div style={{ fontSize: "0.78rem", fontWeight: 600, opacity: 0.55, margin: "0.5rem 0 0.2rem" }}>2nd flavor</div>
-                  {CAKE_FLAVOURS.filter((f) => f.name !== flavour).map((f) => (
-                    <button
-                      key={f.name}
-                      onClick={() => setSecondFlavour(f.name)}
-                      style={{
-                        textAlign: "left", padding: "0.6rem 0.9rem",
-                        borderRadius: "0.4rem", fontSize: "0.85rem", fontWeight: 500, cursor: "pointer",
-                        border: secondFlavour === f.name ? "2px solid var(--cherry, #c05)" : "1px solid var(--border, #e8e4de)",
-                        background: secondFlavour === f.name ? "#fff8f8" : "#fff",
-                        color: "inherit",
-                      }}
-                    >
-                      {f.name}
-                    </button>
-                  ))}
-                </>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* STEP 5: Theme Notes */}
+        {/* STEP 4: Theme Notes */}
         <div style={sectionStyle}>
           <div style={stepHead}>
-            <span style={stepLabel}>Step 5</span>
+            <span style={stepLabel}>Step 4</span>
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Theme &amp; inspiration <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
           </div>
           <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.6 }}>
@@ -568,13 +450,12 @@ export default function PartySetPage() {
           )}
         </div>
 
-        {/* STEP 6: Important Notes */}
+        {/* STEP 5: Important Notes */}
         <div style={{ ...sectionStyle, background: "var(--surface, #faf9f7)", borderRadius: "0.65rem", padding: "1rem 1.15rem", border: "1px solid var(--border, #e8e4de)" }}>
           <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Good to know</div>
           <ul style={{ margin: 0, padding: "0 0 0 1rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.7 }}>
             <li>Designs are semi-custom based on your selected palette</li>
             <li>Detailed character or logo designs require custom approval</li>
-            <li>Flavor splits are evenly divided</li>
             <li>Please allow 3–7 days notice depending on set size</li>
           </ul>
         </div>
@@ -598,12 +479,6 @@ export default function PartySetPage() {
               <div><strong>Set:</strong> {size.label} ({size.pcs} pcs)</div>
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
               <div><strong>Design:</strong> {design?.label}</div>
-              <div>
-                <strong>Flavor:</strong>{" "}
-                {useTwoFlavours && flavour && secondFlavour
-                  ? `${flavour} + ${secondFlavour} (50/50 split, +$${FLAVOUR_ADDON_PRICE})`
-                  : flavour}
-              </div>
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>

@@ -87,7 +87,7 @@ export const products: Product[] = [
     category: "Party Sets",
     subtitle: "36 · 48 · 96 pieces",
     description: "Each set includes a coordinated selection of chocolate-covered treats with a polished, party-ready finish.",
-    details: "Choose your set size, treat types, design finish, and flavor. Handcrafted in small batches with premium Belgian chocolate. Please allow 3–7 days notice.",
+    details: "Choose your set size, treat types, and design finish. Handcrafted in small batches with premium Belgian chocolate. Please allow 3–7 days notice.",
     variants: [
       { label: "Small Set (36 pcs)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" },
       { label: "Medium Set (48 pcs)", price: 175, image: "/images/brand-spread-new.png" },
