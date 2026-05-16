@@ -724,7 +724,7 @@ export default function V2ProductDetail() {
                   <p>
                     Orders placed by Thursday noon ship Friday with weekend
                     delivery. Local pickup available from our studio Mon–Sat.
-                    Free delivery on orders over $85.
+                    Delivery may be available depending on distance, and delivery fees may vary by location.
                   </p>
                 </details>
                 <details>
