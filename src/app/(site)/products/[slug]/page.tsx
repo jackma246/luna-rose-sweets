@@ -717,7 +717,7 @@ export default function V2ProductDetail() {
               <div className="accordion">
                 <details open>
                   <summary>The details</summary>
-                  <p>{product.details}</p>
+                  <p style={{ whiteSpace: "pre-line" }}>{product.details}</p>
                 </details>
                 <details>
                   <summary>Shipping &amp; delivery</summary>
