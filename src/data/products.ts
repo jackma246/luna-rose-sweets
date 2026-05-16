@@ -97,6 +97,28 @@ export const products: Product[] = [
     image: "/images/treat-boxes/party-set-large.jpeg",
   },
   {
+    slug: "luxe-party-package",
+    name: "Luxe Party Package",
+    category: "Party Sets",
+    subtitle: "6\" cake · 8 dozen treats · premium dessert table package",
+    description:
+      "A premium dessert table package designed for birthdays, baby showers, bridal showers, and special celebrations. Includes one 6\" custom cake plus four matching dessert varieties, all styled in a coordinated color palette for a polished, party-ready look.",
+    details:
+      "Includes 1 × 6\" custom round cake, 2 dozen cakesicles, 2 dozen Dubai Chocolate Brownie Shooter Cups, 2 dozen chocolate covered Oreos, and 2 dozen pretzel twists. Package includes custom colors, up to 3 coordinated treat designs, edible images or simple toppers where applicable, and premium decorative details. Custom character designs, logos, florals, metallics, or highly detailed themes may require an additional fee. Please allow at least 1 week notice.",
+    variants: [
+      { label: "Luxe Party Package", price: 625, image: "/images/brand-spread-new.png" },
+    ],
+    addons: [
+      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAdd: 80 },
+      { label: "Extra edible images", price: "+$10+" },
+      { label: "Extra detailed character/logo designs", price: "Quoted separately" },
+      { label: "Delivery/setup", price: "Quoted by location" },
+    ],
+    flavours: CAKE_FLAVOURS,
+    badge: "Premium package",
+    image: "/images/brand-spread-new.png",
+  },
+  {
     slug: "party-layer-cake",
     name: "Custom Cake (4\"/6\"/8\")",
     category: "Party Sets",
