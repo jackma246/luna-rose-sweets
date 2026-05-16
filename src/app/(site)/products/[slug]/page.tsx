@@ -727,13 +727,6 @@ export default function V2ProductDetail() {
                     Delivery may be available depending on distance, and delivery fees may vary by location.
                   </p>
                 </details>
-                <details>
-                  <summary>How to store &amp; serve</summary>
-                  <p>
-                    Best enjoyed within 5 days. Store at room temperature in
-                    the original box, or freeze for longer storage.
-                  </p>
-                </details>
               </div>
             )}
           </div>
