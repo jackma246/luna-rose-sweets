@@ -71,11 +71,13 @@ const DESIGN_TIERS = [
   { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "", priceAddBySize: { small: 35, medium: 45, large: 70 }, popular: false },
 ];
 
-const HAND_TIED_BOWS_PRICE_BY_SIZE: Record<string, number> = {
-  small: 30,
-  medium: 40,
-  large: 50,
-};
+const HAND_TIED_BOWS_ELIGIBLE_TREATS = new Set([
+  "cakesicles",
+  "cake-pops",
+  "rice-krispies",
+  "marshmallows",
+]);
+const HAND_TIED_BOWS_PRICE_PER_DOZEN = 10;
 
 function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, sizeId: string): number {
   if (!design) return 0;
@@ -83,6 +85,10 @@ function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, si
     return design.priceAddBySize[sizeId as keyof typeof design.priceAddBySize] ?? 0;
   }
   return "priceAdd" in design ? design.priceAdd : 0;
+}
+
+function getHandTiedBowsPrice(selectedTreats: string[]): number {
+  return selectedTreats.filter((id) => HAND_TIED_BOWS_ELIGIBLE_TREATS.has(id)).length * HAND_TIED_BOWS_PRICE_PER_DOZEN;
 }
 
 const card: React.CSSProperties = {
@@ -171,7 +177,7 @@ export default function PartySetPage() {
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
   const designPriceAdd = getDesignPriceAdd(design, sizeId);
   const designPriceLabel = designPriceAdd > 0 ? `+$${designPriceAdd}` : "Included";
-  const handTiedBowsPrice = handTiedBows ? HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId] : 0;
+  const handTiedBowsPrice = handTiedBows ? getHandTiedBowsPrice(treats) : 0;
   const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice;
 
   function handleSizeChange(nextSizeId: string) {
@@ -239,7 +245,7 @@ export default function PartySetPage() {
     parts.push(`Size: ${size.label}`);
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
     parts.push(`Design: ${design?.label ?? ""}${designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}`);
-    if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]})`);
+    if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${handTiedBowsPrice})`);
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
@@ -437,10 +443,10 @@ export default function PartySetPage() {
               <Check active={handTiedBows} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Hand Tied Bows</div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>Add a bow finish to each treat</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, Rice Krispies, or Marshmallows</div>
               </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
-                +${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]}
+                +${getHandTiedBowsPrice(treats)}
               </div>
             </div>
           </div>
@@ -524,7 +530,7 @@ export default function PartySetPage() {
               <div><strong>Set:</strong> {size.label} ({size.pcs} pcs)</div>
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
               <div><strong>Design:</strong> {design?.label}{designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}</div>
-              {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${HAND_TIED_BOWS_PRICE_BY_SIZE[sizeId]})</div>}
+              {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${handTiedBowsPrice})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>
