@@ -478,6 +478,21 @@ export const products: Product[] = [
   },
   // ── Bakes ───────────────────────────────────────────────
   {
+    slug: "icing-sugar-cookies",
+    name: "Icing Sugar Cookies",
+    category: "Bakes",
+    subtitle: "Starting at $50/dozen · 3.5\" standard size",
+    description:
+      "Custom icing sugar cookies baked and decorated to match your celebration. Starting price is $50 per dozen for our standard 3.5\" cookies, with final pricing depending on design complexity.",
+    details:
+      "Includes 1 dozen icing sugar cookies in our standard 3.5\" size. Pricing may vary depending on the number of colors, level of detail, lettering, characters, logos, metallic finishes, or other custom design requests. Please share your theme and inspiration photos for an accurate quote.",
+    variants: [
+      { label: "1 Dozen (3.5\" cookies)", price: 50, image: "/images/placeholders/under-construction.svg" },
+    ],
+    image: "/images/placeholders/under-construction.svg",
+    badge: "New",
+  },
+  {
     slug: "muffins",
     name: "Bakery-Style Tall Muffins (1 Dozen)",
     category: "Bakes",

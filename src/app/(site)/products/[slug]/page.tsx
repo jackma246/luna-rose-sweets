@@ -145,7 +145,7 @@ export default function V2ProductDetail() {
     if (inspirationImages.length > 0) {
       parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     }
-    if (designDescription.trim()) parts.push(`Cake design request: ${designDescription.trim()}`);
+    if (designDescription.trim()) parts.push(`Design request: ${designDescription.trim()}`);
     return parts.join(" | ");
   }
 
@@ -618,8 +618,7 @@ export default function V2ProductDetail() {
                   )}
 
                   {/* ── Inspiration photo upload ── */}
-                  {product.slug.includes("cake") && (
-                    <div className="options" style={{ marginBottom: "1.5rem" }}>
+                  <div className="options" style={{ marginBottom: "1.5rem" }}>
                       <h4>Inspiration photos</h4>
                       <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.7, lineHeight: 1.5 }}>
                         Optional: upload reference photos for the design. You can still order without photos.
@@ -648,7 +647,7 @@ export default function V2ProductDetail() {
                       )}
                       <div style={{ marginTop: "1rem" }}>
                         <label style={{ display: "block", fontSize: "0.78rem", fontWeight: 700, marginBottom: "0.35rem", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-                          Describe your cake
+                          Describe your design
                         </label>
                         <textarea
                           value={designDescription}
@@ -657,10 +656,9 @@ export default function V2ProductDetail() {
                           rows={4}
                           style={{ width: "100%", boxSizing: "border-box", padding: "0.75rem 0.85rem", borderRadius: "0.55rem", border: "1.5px solid var(--border, #e8e4de)", fontFamily: "inherit", fontSize: "0.9rem", resize: "vertical" }}
                         />
-                        <p style={{ margin: "0.4rem 0 0", fontSize: "0.78rem", opacity: 0.6 }}>Optional, but helpful for custom designs.</p>
+                        <p style={{ margin: "0.4rem 0 0", fontSize: "0.78rem", opacity: 0.6 }}>Optional, but helpful for custom colors, themes, and design details.</p>
                       </div>
                     </div>
-                  )}
 
                   {/* ── Order summary preview ── */}
                   {(selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier || Object.values(selectedAddons).some(Boolean) || inspirationImages.length > 0 || designDescription.trim()) && (
@@ -687,7 +685,7 @@ export default function V2ProductDetail() {
                         <p style={{ margin: 0 }}><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</p>
                       )}
                       {designDescription.trim() && (
-                        <p style={{ margin: 0 }}><strong>Cake design request:</strong> {designDescription.trim()}</p>
+                        <p style={{ margin: 0 }}><strong>Design request:</strong> {designDescription.trim()}</p>
                       )}
                     </div>
                   )}
