@@ -337,7 +337,6 @@ export const products: Product[] = [
       { label: "3 Dozen", price: 150, image: "/images/cakesicles/1.jpg" },
     ],
     addons: [
-      { label: "3rd Color", price: "+$5" },
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
     ],
     flavours: CAKE_FLAVOURS,
@@ -375,8 +374,6 @@ export const products: Product[] = [
       { label: "3 Dozen (36 pcs)", price: 112, image: "/images/cake-pops/new.jpeg" },
     ],
     addons: [
-      { label: "3rd Color", price: "+$5" },
-      { label: "4+ Colors", price: "Signature Custom required" },
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
     ],
     flavours: CAKE_FLAVOURS,
