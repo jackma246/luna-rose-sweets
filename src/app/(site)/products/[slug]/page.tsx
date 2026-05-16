@@ -385,7 +385,7 @@ export default function V2ProductDetail() {
                   {/* ── Flavour selector ── */}
                   {product.flavours && product.flavours.length > 0 && (
                     <div className="options" style={{ marginBottom: product.flavourAddonPrice ? "0.75rem" : "1.5rem" }}>
-                      <h4>Choose your flavour</h4>
+                      <h4>Choose your cake flavour</h4>
                       <div className="option-grid" style={{ gap: "0.5rem" }}>
                         {product.flavours.map((f) => (
                           <button

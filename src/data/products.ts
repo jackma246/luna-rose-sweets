@@ -70,14 +70,6 @@ export const CAKE_FLAVOURS: ProductFlavour[] = [
     name: "Strawberry",
     description: "Made with 100% freeze-dried strawberry powder — never artificial flavouring. Inspired by strawberry milk, with extra toasted milk powder for an authentic, non-artificial taste.",
   },
-  {
-    name: "Coffee",
-    description: "Made with freshly brewed espresso.",
-  },
-  {
-    name: "Lemon",
-    description: "Contains fresh lemon juice and lemon zest for a perfectly balanced sweet-and-sour flavour that tastes completely natural.",
-  },
 ];
 
 export const products: Product[] = [
@@ -107,12 +99,6 @@ export const products: Product[] = [
       "Includes 1 × 6\" custom round cake, 2 dozen cakesicles, 2 dozen Dubai Chocolate Brownie Shooter Cups, 2 dozen chocolate covered Oreos, and 2 dozen pretzel twists. Package includes custom colors, up to 3 coordinated treat designs, edible images or simple toppers where applicable, and premium decorative details. Custom character designs, logos, florals, metallics, or highly detailed themes may require an additional fee. Please allow at least 1 week notice.",
     variants: [
       { label: "Luxe Party Package", price: 625, image: "/images/placeholders/under-construction.svg" },
-    ],
-    addons: [
-      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAdd: 80 },
-      { label: "Extra edible images", price: "+$10+" },
-      { label: "Extra detailed character/logo designs", price: "Quoted separately" },
-      { label: "Delivery/setup", price: "Quoted by location" },
     ],
     flavours: CAKE_FLAVOURS,
     badge: "Premium package",
