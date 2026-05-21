@@ -82,7 +82,7 @@ export const products: Product[] = [
     description: "Each set includes a coordinated selection of chocolate-covered treats with a polished, party-ready finish.",
     details: "Choose your set size, treat types, and design finish. Handcrafted in small batches with premium Belgian chocolate. Please allow 3–7 days notice.",
     variants: [
-      { label: "Small Set (36 pcs)", price: 135, image: "/images/treat-boxes/mixed-treats.jpg" },
+      { label: "Small Set (36 pcs)", price: 125, image: "/images/treat-boxes/mixed-treats.jpg" },
       { label: "Medium Set (48 pcs)", price: 175, image: "/images/brand-spread-new.png" },
       { label: "Large Set (96 pcs)", price: 310, image: "/images/treat-boxes/party-set-large.jpeg" },
     ],
@@ -469,10 +469,9 @@ export const products: Product[] = [
       "These chocolate covered twisted pretzels are a simple yet satisfying addition to any dessert spread.\n\nLight, crunchy, and easy to eat, they bring balance to richer treats.",
     details:
       "Great filler item for party trays and dessert tables. Best consumed within 2 weeks.",
-    variants: [{ label: "1 Dozen", price: 26, image: "/images/twisted-pretzel/twis.jpeg" }],
+    variants: [{ label: "1 Dozen", price: 30, image: "/images/twisted-pretzel/twis.jpeg" }],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
-      { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$8", priceAdd: 8 },
     ],
     image: "/images/twisted-pretzel/twis.jpeg",
   },
