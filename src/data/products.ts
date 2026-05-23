@@ -100,6 +100,9 @@ export const products: Product[] = [
     variants: [
       { label: "Luxe Party Package", price: 595, image: "/images/placeholders/under-construction.svg" },
     ],
+    addons: [
+      { label: "3.5\" Icing Sugar Cookies (1 Dozen)", price: "+$50", priceAdd: 50 },
+    ],
     flavours: CAKE_FLAVOURS,
     badge: "Premium package",
     image: "/images/placeholders/under-construction.svg",

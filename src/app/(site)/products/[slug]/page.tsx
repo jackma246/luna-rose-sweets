@@ -24,6 +24,7 @@ export default function V2ProductDetail() {
   const [treatCounts, setTreatCounts] = useState<Record<string, number>>({});
   const [selectedDesignTier, setSelectedDesignTier] = useState<string>("");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, boolean>>({});
+  const [addonQuantities, setAddonQuantities] = useState<Record<string, number>>({});
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
   const [designDescription, setDesignDescription] = useState("");
@@ -65,7 +66,9 @@ export default function V2ProductDetail() {
   const designPriceAdd = product.designTiers?.find((t) => t.name === selectedDesignTier)?.priceAdd ?? 0;
   const flavourAddonAdd = secondFlavour ? (product.flavourAddonPrice ?? 0) : 0;
   const getAddonPriceAdd = (addon: ProductAddon) => addon.priceAddByVariant?.[variantIdx] ?? addon.priceAdd ?? 0;
-  const addonPriceAdd = product.addons?.reduce((sum, addon) => sum + (selectedAddons[addon.label] ? getAddonPriceAdd(addon) : 0), 0) ?? 0;
+  const isQuantityAddon = (addon: ProductAddon) => addon.label.includes("Icing Sugar Cookies");
+  const getAddonQuantity = (addon: ProductAddon) => isQuantityAddon(addon) ? (addonQuantities[addon.label] ?? 0) : (selectedAddons[addon.label] ? 1 : 0);
+  const addonPriceAdd = product.addons?.reduce((sum, addon) => sum + (getAddonQuantity(addon) * getAddonPriceAdd(addon)), 0) ?? 0;
   const effectivePrice = variant ? variant.price + designPriceAdd + flavourAddonAdd + addonPriceAdd : 0;
 
   function getTreatCount(name: string) {
@@ -138,8 +141,14 @@ export default function V2ProductDetail() {
       parts.push(`Design: ${tier.name}${tier.priceAdd > 0 ? ` (${tier.priceLabel})` : ""}`);
     }
     const addonLabels = product!.addons
-      ?.filter((addon) => selectedAddons[addon.label])
-      .map((addon) => `${addon.label} (+$${getAddonPriceAdd(addon)})`)
+      ?.filter((addon) => getAddonQuantity(addon) > 0)
+      .map((addon) => {
+        const addonQuantity = getAddonQuantity(addon);
+        const addonPrice = getAddonPriceAdd(addon) * addonQuantity;
+        return isQuantityAddon(addon)
+          ? `${addon.label} ×${addonQuantity} (+$${addonPrice})`
+          : `${addon.label} (+$${addonPrice})`;
+      })
       .join(", ");
     if (addonLabels) parts.push(`Add-ons: ${addonLabels}`);
     if (inspirationImages.length > 0) {
@@ -590,27 +599,55 @@ export default function V2ProductDetail() {
                         {product.addons.map((addon) => {
                           const addonPriceAdd = getAddonPriceAdd(addon);
                           const isPriced = addonPriceAdd > 0;
+                          const hasQuantity = isQuantityAddon(addon);
+                          const addonQuantity = getAddonQuantity(addon);
                           return (
-                            <button
+                            <div
                               key={addon.label}
-                              type="button"
                               className={`option${selectedAddons[addon.label] ? " active" : ""}`}
-                              onClick={() => {
-                                if (!isPriced) return;
-                                setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }));
-                              }}
                               style={{
                                 textAlign: "left",
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 gap: "0.5rem",
-                                cursor: isPriced ? "pointer" : "default",
+                                cursor: hasQuantity ? "default" : isPriced ? "pointer" : "default",
                                 opacity: isPriced ? 1 : 0.75,
+                              }}
+                              onClick={() => {
+                                if (!isPriced || hasQuantity) return;
+                                setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }));
                               }}
                             >
                               <span style={{ fontWeight: 600 }}>{addon.label}</span>
-                              <small style={{ fontWeight: 700, color: isPriced ? "var(--cherry, #c05)" : "inherit" }}>{isPriced ? `+$${addonPriceAdd}` : addon.price}</small>
-                            </button>
+                              {hasQuantity ? (
+                                <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                  <button
+                                    type="button"
+                                    aria-label={`Decrease ${addon.label}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setAddonQuantities((prev) => ({ ...prev, [addon.label]: Math.max(0, (prev[addon.label] ?? 0) - 1) }));
+                                    }}
+                                    style={{ width: "2rem", height: "2rem", borderRadius: "999px", border: "1px solid var(--border, #e8e4de)", background: "white", fontWeight: 700 }}
+                                  >−</button>
+                                  <small style={{ minWidth: "4.5rem", textAlign: "center", fontWeight: 700, color: addonQuantity > 0 ? "var(--cherry, #c05)" : "inherit" }}>
+                                    {addonQuantity} dozen
+                                  </small>
+                                  <button
+                                    type="button"
+                                    aria-label={`Increase ${addon.label}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setAddonQuantities((prev) => ({ ...prev, [addon.label]: (prev[addon.label] ?? 0) + 1 }));
+                                    }}
+                                    style={{ width: "2rem", height: "2rem", borderRadius: "999px", border: "1px solid var(--border, #e8e4de)", background: "white", fontWeight: 700 }}
+                                  >+</button>
+                                  <small style={{ fontWeight: 700, color: addonQuantity > 0 ? "var(--cherry, #c05)" : "inherit" }}>+${addonPriceAdd}/dozen</small>
+                                </span>
+                              ) : (
+                                <small style={{ fontWeight: 700, color: isPriced ? "var(--cherry, #c05)" : "inherit" }}>{isPriced ? `+$${addonPriceAdd}` : addon.price}</small>
+                              )}
+                            </div>
                           );
                         })}
                       </div>
@@ -661,7 +698,7 @@ export default function V2ProductDetail() {
                     </div>
 
                   {/* ── Order summary preview ── */}
-                  {(selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier || Object.values(selectedAddons).some(Boolean) || inspirationImages.length > 0 || designDescription.trim()) && (
+                  {(selectedFlavour || product.fixedFlavour || totalTreatsSelected > 0 || selectedDesignTier || Object.values(selectedAddons).some(Boolean) || Object.values(addonQuantities).some((count) => count > 0) || inspirationImages.length > 0 || designDescription.trim()) && (
                     <div style={{ marginBottom: "1rem", padding: "0.75rem 1rem", background: "var(--surface, #faf9f7)", borderRadius: "0.5rem", border: "1px solid var(--border, #e8e4de)", fontSize: "0.85rem", lineHeight: 1.6 }}>
                       <p style={{ margin: 0, fontWeight: 600, marginBottom: "0.25rem", opacity: 0.55, fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Your selection</p>
                       {(selectedFlavour || product.fixedFlavour) && (
@@ -678,9 +715,16 @@ export default function V2ProductDetail() {
                           {designPriceAdd > 0 && <span style={{ opacity: 0.65 }}> (+${designPriceAdd})</span>}
                         </p>
                       )}
-                      {product.addons?.filter((addon) => selectedAddons[addon.label]).map((addon) => (
-                        <p key={addon.label} style={{ margin: 0 }}><strong>Add-on:</strong> {addon.label} <span style={{ opacity: 0.65 }}>(+${getAddonPriceAdd(addon)})</span></p>
-                      ))}
+                      {product.addons?.filter((addon) => getAddonQuantity(addon) > 0).map((addon) => {
+                        const addonQuantity = getAddonQuantity(addon);
+                        const addonPrice = getAddonPriceAdd(addon) * addonQuantity;
+                        return (
+                          <p key={addon.label} style={{ margin: 0 }}>
+                            <strong>Add-on:</strong> {addon.label}
+                            {isQuantityAddon(addon) ? ` ×${addonQuantity}` : ""} <span style={{ opacity: 0.65 }}>(+${addonPrice})</span>
+                          </p>
+                        );
+                      })}
                       {inspirationImages.length > 0 && (
                         <p style={{ margin: 0 }}><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</p>
                       )}
