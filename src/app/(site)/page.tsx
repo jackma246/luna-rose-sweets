@@ -20,7 +20,6 @@ const confetti = [
 
 const marqueeWords = [
   "San Jose & Bay Area pick up",
-  "Order by Thursday for weekend pickup",
   "Made from scratch",
   "Custom color palettes available",
 ];

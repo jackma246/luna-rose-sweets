@@ -27,7 +27,7 @@ export default function V2Header({ current }: { current?: string }) {
   return (
     <>
       <div className="ribbon">
-        Delivery may be available depending on distance <span>✿</span> Order by Thursday for weekend pickup
+        Delivery may be available depending on distance
       </div>
       <header className="site-header">
         <div className="bar">
