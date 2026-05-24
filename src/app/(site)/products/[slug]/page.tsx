@@ -615,7 +615,12 @@ export default function V2ProductDetail() {
                               }}
                               onClick={() => {
                                 if (!isPriced || hasQuantity) return;
-                                setSelectedAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }));
+                                setSelectedAddons((prev) => {
+                                  const next = { ...prev, [addon.label]: !prev[addon.label] };
+                                  if (addon.label === "Individually Wrapped" && next[addon.label]) next["Individually Wrapped in Boxes"] = false;
+                                  if (addon.label === "Individually Wrapped in Boxes" && next[addon.label]) next["Individually Wrapped"] = false;
+                                  return next;
+                                });
                               }}
                             >
                               <span style={{ fontWeight: 600 }}>{addon.label}</span>

@@ -341,6 +341,9 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3, 6, 9] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5, 10, 15] },
     ],
     flavours: CAKE_FLAVOURS,
     flavourAddonPrice: 12,
@@ -378,6 +381,9 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3, 6, 9] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5, 10, 15] },
     ],
     flavours: CAKE_FLAVOURS,
     flavourAddonPrice: 12,
@@ -405,6 +411,9 @@ export const products: Product[] = [
     addons: [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     badge: "Baked from scratch",
     image: "/images/madeleines/new2.png",
@@ -419,6 +428,10 @@ export const products: Product[] = [
       "Pairs well with cake pops and pretzels for a balanced mix. Photos are for style reference only — slight variation in colour and decorative placement is normal and part of the handmade process.",
     variants: [
       { label: "1 Dozen", price: 30, image: "/images/choco-cookies/1.jpg" },
+    ],
+    addons: [
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and finishing details", priceLabel: "Included", priceAdd: 0 },
@@ -437,6 +450,10 @@ export const products: Product[] = [
     variants: [
       { label: "Classic Pretzel Rods (1 Dozen)", price: 36, image: "/images/caramel-pretzel/rods.jpeg" },
       { label: "Caramel Pretzel Rods (1 Dozen)", price: 42, image: "/images/caramel-pretzel/rods.jpeg" },
+    ],
+    addons: [
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3, 3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5, 5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
@@ -461,6 +478,9 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10] },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/rice-krispies/rice.jpeg",
   },
@@ -473,6 +493,10 @@ export const products: Product[] = [
     details:
       "Great filler item for party trays and dessert tables. Best consumed within 2 weeks.",
     variants: [{ label: "1 Dozen", price: 30, image: "/images/twisted-pretzel/twis.jpeg" }],
+    addons: [
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
+    ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
     ],
@@ -614,6 +638,9 @@ export const products: Product[] = [
     addons: [
       { label: "Semi Custom Design (expanded palette, marbling, themed styling)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/madeleines/new2.png",
     hidden: true,
@@ -657,6 +684,9 @@ export const products: Product[] = [
     addons: [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$6–$10/dozen" },
       { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$12–$20/dozen" },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cakesicles/5.png",
@@ -675,6 +705,9 @@ export const products: Product[] = [
     addons: [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
       { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     flavours: CAKE_FLAVOURS,
     image: "/images/cake-pops/new.jpeg",
@@ -727,6 +760,10 @@ export const products: Product[] = [
     details:
       "Toppings: Almond, Coconut, Pistachios, Edible Roses, Crushed Chocolate sandwich cookies (Oreos®️)/lotus and many more! We also offer chocolate FILLED dates. Fillings include: Lotus, Peanut Butter, Nutella, Pistachio Spread, Milk Chocolate, and many more!",
     variants: [{ label: "1 Dozen", price: 42, image: "/images/luxury-dates/1.jpg" }],
+    addons: [
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
+    ],
     image: "/images/luxury-dates/1.jpg",
   },
   {
@@ -743,6 +780,9 @@ export const products: Product[] = [
     addons: [
       { label: "Semi Custom Design (color variations, marbling, two-tone chocolate)", price: "+$4–$6/dozen" },
       { label: "Full Custom Design (detailed styling, seasonal themes, mixed designs)", price: "+$8–$12/dozen" },
+
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/butter-cookies/4.jpg",
     hidden: true,
@@ -758,6 +798,10 @@ export const products: Product[] = [
       "Perfect as a lighter option alongside richer treats.",
     variants: [
       { label: "1 Dozen", price: 30, image: "/images/marshmallow.png" },
+    ],
+    addons: [
+      { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
+      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },

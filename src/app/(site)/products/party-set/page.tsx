@@ -78,6 +78,8 @@ const HAND_TIED_BOWS_ELIGIBLE_TREATS = new Set([
   "marshmallows",
 ]);
 const HAND_TIED_BOWS_PRICE_PER_DOZEN = 10;
+const WRAPPING_PRICE_PER_DOZEN = 3;
+const BOXED_WRAPPING_PRICE_PER_DOZEN = 5;
 
 function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, sizeId: string): number {
   if (!design) return 0;
@@ -89,6 +91,17 @@ function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, si
 
 function getHandTiedBowsPrice(selectedTreats: string[]): number {
   return selectedTreats.filter((id) => HAND_TIED_BOWS_ELIGIBLE_TREATS.has(id)).length * HAND_TIED_BOWS_PRICE_PER_DOZEN;
+}
+
+function getPartySetDozens(size: (typeof SIZES)[number]): number {
+  return size.pcs / 12;
+}
+
+function getWrappingPrice(size: (typeof SIZES)[number], wrapping: string): number {
+  const dozens = getPartySetDozens(size);
+  if (wrapping === "wrapped") return dozens * WRAPPING_PRICE_PER_DOZEN;
+  if (wrapping === "boxed") return dozens * BOXED_WRAPPING_PRICE_PER_DOZEN;
+  return 0;
 }
 
 const card: React.CSSProperties = {
@@ -163,6 +176,7 @@ export default function PartySetPage() {
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("");
   const [handTiedBows, setHandTiedBows] = useState(false);
+  const [wrappingOption, setWrappingOption] = useState("");
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -178,7 +192,9 @@ export default function PartySetPage() {
   const designPriceAdd = getDesignPriceAdd(design, sizeId);
   const designPriceLabel = designPriceAdd > 0 ? `+$${designPriceAdd}` : "Included";
   const handTiedBowsPrice = handTiedBows ? getHandTiedBowsPrice(treats) : 0;
-  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice;
+  const wrappingPrice = getWrappingPrice(size, wrappingOption);
+  const wrappingLabel = wrappingOption === "wrapped" ? "Individually Wrapped" : wrappingOption === "boxed" ? "Individually Wrapped in Boxes" : "";
+  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + wrappingPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -246,6 +262,7 @@ export default function PartySetPage() {
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
     parts.push(`Design: ${design?.label ?? ""}${designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}`);
     if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${handTiedBowsPrice})`);
+    if (wrappingOption) parts.push(`Packaging: ${wrappingLabel} (+$${wrappingPrice})`);
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
@@ -450,6 +467,32 @@ export default function PartySetPage() {
               </div>
             </div>
           </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem", marginTop: "0.65rem" }}>
+            {[
+              { id: "wrapped", label: "Individually Wrapped", desc: "+$3 per dozen", price: getPartySetDozens(size) * WRAPPING_PRICE_PER_DOZEN },
+              { id: "boxed", label: "Individually Wrapped in Boxes", desc: "+$5 per dozen", price: getPartySetDozens(size) * BOXED_WRAPPING_PRICE_PER_DOZEN },
+            ].map((option) => {
+              const active = wrappingOption === option.id;
+              return (
+                <div
+                  key={option.id}
+                  style={active ? cardActive : card}
+                  onClick={() => setWrappingOption((current) => current === option.id ? "" : option.id)}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                    <Check active={active} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{option.label}</div>
+                      <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc}</div>
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                      +${option.price}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* STEP 5: Theme Notes */}
@@ -531,6 +574,7 @@ export default function PartySetPage() {
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
               <div><strong>Design:</strong> {design?.label}{designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}</div>
               {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${handTiedBowsPrice})</div>}
+              {wrappingOption && <div><strong>Packaging:</strong> {wrappingLabel} (+${wrappingPrice})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>
