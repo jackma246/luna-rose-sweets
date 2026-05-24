@@ -42,6 +42,13 @@ enum InventoryCategory {
   other
 }
 
+enum AvailabilityStatus {
+  available
+  limited
+  fully_booked
+  closed
+}
+
 model Order {
   id             String      @id @default(cuid())
   orderNumber    Int         @unique @default(autoincrement())
@@ -83,6 +90,18 @@ model OrderImage {
   createdAt    DateTime @default(now())
 
   @@index([orderId])
+}
+
+model AvailabilityDate {
+  id        String             @id @default(cuid())
+  date      DateTime           @unique @db.Date
+  status    AvailabilityStatus
+  note      String?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([date])
+  @@index([status])
 }
 
 model InventoryItem {

@@ -2,7 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import V2Header from "./components/V2Header";
 import V2Footer from "./components/V2Footer";
+import AvailabilityCalendar from "./components/AvailabilityCalendar";
 import { getProductBySlug } from "@/data/products";
+
+export const dynamic = "force-dynamic";
 
 const confetti = [
   { top: "12%", left: "5%", color: "var(--cherry)", rotate: "30deg" },
@@ -137,6 +140,8 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      <AvailabilityCalendar />
 
       {/* ── SECTION 2: BESTSELLER SETS ── */}
       <section style={{ padding: "3rem 1.25rem 2.5rem" }}>
