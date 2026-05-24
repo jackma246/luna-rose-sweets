@@ -13,12 +13,20 @@ const statusLabels: Record<AvailabilityStatus, string> = {
   closed: "Closed",
 };
 
-const statusColors: Record<AvailabilityStatus, { bg: string; color: string; border: string }> = {
-  available: { bg: "#edf8ef", color: "#2f7a45", border: "#b8dfc1" },
+type VisibleStatus = Exclude<AvailabilityStatus, "available">;
+
+const visibleStatuses: VisibleStatus[] = ["limited", "fully_booked", "closed"];
+
+const statusColors: Record<VisibleStatus, { bg: string; color: string; border: string }> = {
   limited: { bg: "#fff6d8", color: "#8a6200", border: "#f0d27a" },
   fully_booked: { bg: "#ffe7ec", color: "#a32643", border: "#f2a9b9" },
   closed: { bg: "#eee9e2", color: "#70675d", border: "#d8d0c6" },
 };
+
+function getStatusColors(status: AvailabilityStatus | undefined) {
+  if (!status || status === "available") return null;
+  return statusColors[status];
+}
 
 function dateKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
@@ -53,7 +61,7 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
         </p>
 
         <div style={{ display: "flex", justifyContent: "center", gap: "0.6rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
-          {(Object.keys(statusLabels) as AvailabilityStatus[]).map((key) => (
+          {visibleStatuses.map((key) => (
             <span key={key} style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: 700 }}>
               <span style={{ width: 10, height: 10, borderRadius: 99, background: statusColors[key].bg, border: `1px solid ${statusColors[key].border}` }} />
               {statusLabels[key]}
@@ -92,7 +100,7 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
             {buildMonthDays(calendarMonth).map((day, index) => {
               if (!day) return <div key={`blank-${index}`} style={{ aspectRatio: "1 / 1" }} />;
               const record = byDate.get(dateKey(day));
-              const colors = record ? statusColors[record.status] : null;
+              const colors = getStatusColors(record?.status);
               const isPast = day < new Date(today.getFullYear(), today.getMonth(), today.getDate());
               return (
                 <div
