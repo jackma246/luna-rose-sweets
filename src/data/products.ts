@@ -519,6 +519,22 @@ export const products: Product[] = [
     badge: "New",
   },
   {
+    slug: "custom-design-macarons",
+    name: "Custom Design Macarons",
+    category: "Bakes",
+    subtitle: "Custom colors · designs · themes",
+    description:
+      "Custom macarons designed to match your celebration with coordinated colors, themed details, and a polished dessert-table look.",
+    details:
+      "Pricing is being finalized. Please share your theme, colors, quantity, and inspiration photos for a custom quote.",
+    variants: [
+      { label: "Custom Design Macarons", price: 0, image: "/images/placeholders/under-construction.svg" },
+    ],
+    image: "/images/placeholders/under-construction.svg",
+    enquireOnly: true,
+    badge: "Coming soon",
+  },
+  {
     slug: "muffins",
     name: "Bakery-Style Tall Muffins (1 Dozen)",
     category: "Bakes",
