@@ -30,8 +30,11 @@ class TelegramBotError(RuntimeError):
 
 def load_state(path: Path) -> dict[str, Any]:
     if not path.exists():
-        return {"pending": {}, "threads": {}}
-    state = json.loads(path.read_text(encoding="utf-8"))
+        return {"pending": {}, "threads": {}, "active_threads": {}}
+    raw = path.read_text(encoding="utf-8").strip()
+    if not raw:
+        return {"pending": {}, "threads": {}, "active_threads": {}}
+    state = json.loads(raw)
     state.setdefault("pending", {})
     state.setdefault("threads", {})
     state.setdefault("active_threads", {})
