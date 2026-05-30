@@ -89,10 +89,6 @@ export default function V2CartPage() {
     );
   }
 
-  const shippingThreshold = 85;
-  const qualifiesForFreeShipping = totalPrice >= shippingThreshold;
-  const toFreeShipping = Math.max(0, shippingThreshold - totalPrice);
-
   return (
     <>
       <V2Header />
@@ -172,34 +168,30 @@ export default function V2CartPage() {
 
           <aside className="cart-summary">
             <h3>Order summary</h3>
+            <p style={{ margin: "-6px 0 14px", fontSize: 12.5, color: "var(--ink-soft)", lineHeight: 1.5 }}>
+              No payment yet — we confirm details first.
+            </p>
             <div className="summary-row">
               <span>Subtotal ({totalItems} {totalItems === 1 ? "item" : "items"})</span>
               <span>${totalPrice.toFixed(2)}</span>
             </div>
             <div className="summary-row">
-              <span>Shipping</span>
-              <span>
-                {qualifiesForFreeShipping
-                  ? "Free"
-                  : "Quoted on confirmation"}
-              </span>
+              <span>Pickup · San Jose</span>
+              <span>Free</span>
             </div>
-            {!qualifiesForFreeShipping && (
-              <div className="summary-row" style={{ color: "var(--cherry)", fontSize: 13 }}>
-                <span>
-                  Add ${toFreeShipping.toFixed(2)} for free shipping
-                </span>
-              </div>
-            )}
+            <div className="summary-row" style={{ fontSize: 13 }}>
+              <span>Delivery</span>
+              <span>Quoted on confirmation</span>
+            </div>
             <div className="summary-row total">
-              <span>Total</span>
+              <span>Estimated</span>
               <span>${totalPrice.toFixed(2)}</span>
             </div>
             <button
               onClick={() => setStatus("form")}
               className="btn btn-primary"
             >
-              Request Order →
+              Request this order →
             </button>
             <p style={{ marginTop: 10, fontSize: 12, opacity: 0.55, textAlign: "center", lineHeight: 1.5 }}>
               We&rsquo;ll email you back within 24 hours to confirm availability, pickup/delivery, and payment.

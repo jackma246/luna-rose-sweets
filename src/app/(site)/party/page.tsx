@@ -8,48 +8,73 @@ const _partySetVariants = getProductBySlug("party-set")!.variants;
 const _setPrice = (keyword: string): number =>
   _partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
 
+// pulls the shop's own image / category / price so the treat cards match the shop
+const _treat = (slug: string, name: string, badge?: string) => {
+  const p = getProductBySlug(slug);
+  const prices = p?.variants.map((v) => v.price) ?? [];
+  const min = prices.length ? Math.min(...prices) : 0;
+  const max = prices.length ? Math.max(...prices) : 0;
+  return {
+    slug,
+    name,
+    badge: badge ?? null,
+    img: p?.image ?? "",
+    category: p?.category ?? "",
+    price: prices.length ? (min === max ? `$${min}` : `from $${min}`) : "",
+  };
+};
+
 const SETS = [
   {
     label: "Small Set",
     pcs: "36 pcs",
     price: _setPrice("small"),
-    badge: null,
+    badge: null as string | null,
+    mark: "",
+    badgeBg: "",
+    featured: false,
     desc: "A sweet and simple option for intimate gatherings.",
   },
   {
     label: "Medium Set",
     pcs: "48 pcs",
     price: _setPrice("medium"),
-    badge: "Most Popular",
+    badge: "Most loved" as string | null,
+    mark: "♥",
+    badgeBg: "var(--cherry)",
+    featured: true,
     desc: "Our most popular choice for a balanced and polished dessert table.",
   },
   {
     label: "Large Set",
     pcs: "96 pcs",
     price: _setPrice("large"),
-    badge: "Best Value",
+    badge: "Best value" as string | null,
+    mark: "✦",
+    badgeBg: "var(--pine)",
+    featured: false,
     desc: "Perfect for larger celebrations with more variety and visual impact.",
   },
 ];
 
 const WHY = [
   {
-    icon: "✨",
+    mark: "♥",
     title: "Better together",
     body: "Enjoy a more complete dessert table with our curated sets — thoughtfully designed to offer more variety and better value than ordering individual items.",
   },
   {
-    icon: "🎨",
+    mark: "✦",
     title: "A cohesive look",
     body: "Our dessert sets are styled in a unified color palette to elevate your entire table — effortlessly.",
   },
   {
-    icon: "💝",
+    mark: "❖",
     title: "More value",
     body: "Sets give you more variety per dollar and save you the hassle of coordinating multiple orders.",
   },
   {
-    icon: "🎉",
+    mark: "•",
     title: "Perfect for hosting",
     body: "Whether it's a birthday, baby shower, or wedding — our sets are ready to impress.",
   },
@@ -74,10 +99,10 @@ const REVIEWS = [
 ];
 
 const TREATS = [
-  { name: "Cake Pops", slug: "cakepops", img: "/images/cake-pops/basic.jpg" },
-  { name: "Cakesicles", slug: "cakesicles", img: "/images/cakesicles/5.png" },
-  { name: "Pretzel Rods", slug: "choc-dipped-caramel-pretzel-rods", img: "/images/caramel-pretzel/1.jpg" },
-  { name: "Chocolate sandwich cookies (Oreos®️) & more", slug: "choc-covered-oreos", img: "/images/choco-cookies/1.jpg" },
+  _treat("cakepops", "Cake Pops", "Best seller"),
+  _treat("cakesicles", "Cakesicles", "Best seller"),
+  _treat("choc-dipped-caramel-pretzel-rods", "Pretzel Rods"),
+  _treat("choc-covered-oreos", "Chocolate Sandwich Cookies (Oreos®️)"),
 ];
 
 export default function PartyLandingPage() {
@@ -135,9 +160,15 @@ export default function PartyLandingPage() {
           </p>
 
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 2rem", display: "flex", flexDirection: "column", gap: "0.35rem", alignItems: "center", fontSize: "0.9rem", opacity: 0.7 }}>
-            <li>✨ Mix of chocolate-covered treats</li>
-            <li>✨ Designed in your color palette</li>
-            <li>✨ Perfect for parties &amp; dessert tables</li>
+            {[
+              { mark: "♥", text: "Mix of chocolate-covered treats" },
+              { mark: "✦", text: "Designed in your color palette" },
+              { mark: "❖", text: "Perfect for parties & dessert tables" },
+            ].map((b) => (
+              <li key={b.text}>
+                <span style={{ color: "var(--cherry, #c05)" }}>{b.mark}</span> {b.text}
+              </li>
+            ))}
           </ul>
 
           <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center", flexWrap: "wrap" }}>
@@ -169,7 +200,12 @@ export default function PartyLandingPage() {
           fontWeight: 600,
         }}>
           {["Made from scratch", "Custom color palettes", "Perfect for dessert tables", "San Jose / Bay Area pickup"].map((t) => (
-            <span key={t} style={{ opacity: 0.7 }}>✔ {t}</span>
+            <span key={t} style={{ opacity: 0.7, display: "inline-flex", alignItems: "center", gap: "0.4rem" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--cherry, #c05)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flexShrink: 0 }}>
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              {t}
+            </span>
           ))}
         </div>
       </div>
@@ -198,50 +234,45 @@ export default function PartyLandingPage() {
             Most popular <em>party sets.</em>
           </h2>
           <p style={{ opacity: 0.65, maxWidth: 480, margin: "0 auto" }}>
-            ⭐ Most customers choose Medium or Large for the best experience.
+            Most customers choose Medium or Large for the best experience.
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem", alignItems: "stretch" }}>
           {SETS.map((s) => (
             <Link
               key={s.label}
               href="/products/party-set"
               style={{
-                display: "block",
-                padding: "1.5rem",
-                borderRadius: "0.75rem",
-                border: s.badge === "Most Popular"
-                  ? "2px solid var(--cherry, #c05)"
-                  : "1px solid var(--border, #e8e4de)",
-                background: s.badge === "Most Popular" ? "#fff8f8" : "#fff",
+                position: "relative",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.55rem",
+                padding: "19px",
+                borderRadius: 14,
+                border: s.featured ? "1.5px solid var(--cherry)" : "1px solid var(--rule)",
+                background: s.featured ? "linear-gradient(180deg, #fff, var(--blush-soft))" : "#fff",
+                boxShadow: s.featured ? "0 14px 30px -18px rgba(185,74,100,.5)" : "none",
                 textDecoration: "none",
                 color: "inherit",
-                transition: "box-shadow 0.2s",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
-                <div>
-                  <span style={{ fontWeight: 700, fontSize: "1rem" }}>{s.label}</span>
-                  <span style={{ marginLeft: "0.5rem", fontSize: "0.8rem", opacity: 0.5 }}>{s.pcs}</span>
-                </div>
-                {s.badge && (
-                  <span style={{
-                    fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.04em",
-                    padding: "0.2rem 0.6rem", borderRadius: "999px",
-                    background: s.badge === "Most Popular" ? "var(--cherry, #c05)" : "#2a7a5e",
-                    color: "#fff",
-                  }}>
-                    {s.badge}
-                  </span>
-                )}
+              {s.badge && (
+                <span style={{
+                  position: "absolute", top: -9, left: 18,
+                  fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.04em",
+                  padding: "0.22rem 0.62rem", borderRadius: 999,
+                  background: s.badgeBg, color: "#fff",
+                }}>
+                  {s.mark} {s.badge}
+                </span>
+              )}
+              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginTop: s.badge ? "0.4rem" : 0 }}>
+                <span style={{ fontFamily: "var(--font-fraunces)", fontSize: "1.4rem", letterSpacing: "-0.01em" }}>{s.label}</span>
+                <span style={{ fontFamily: "var(--font-fraunces)", fontSize: "1.4rem", color: "var(--cherry, #c05)" }}>${s.price}</span>
               </div>
-              <div style={{ fontSize: "0.82rem", opacity: 0.6, marginBottom: "0.85rem", lineHeight: 1.5 }}>
-                {s.desc}
-              </div>
-              <div style={{ fontWeight: 800, fontSize: "1.3rem", color: "var(--cherry, #c05)" }}>
-                ${s.price}
-              </div>
+              <div style={{ fontSize: "0.66rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-soft)", fontWeight: 600 }}>{s.pcs}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)", lineHeight: 1.5 }}>{s.desc}</div>
             </Link>
           ))}
         </div>
@@ -269,8 +300,8 @@ export default function PartyLandingPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem" }}>
             {WHY.map((w) => (
               <div key={w.title} style={{ padding: "1.25rem", background: "#fff", borderRadius: "0.65rem", border: "1px solid var(--border, #e8e4de)" }}>
-                <div style={{ fontSize: "1.5rem", marginBottom: "0.6rem" }}>{w.icon}</div>
-                <h4 style={{ margin: "0 0 0.4rem", fontSize: "0.95rem" }}>{w.title}</h4>
+                <div style={{ fontSize: 20, color: "var(--cherry, #c05)", marginBottom: "0.6rem", lineHeight: 1 }}>{w.mark}</div>
+                <h4 style={{ margin: "0 0 0.4rem", fontSize: "1rem", fontFamily: "var(--font-fraunces)", fontWeight: 500 }}>{w.title}</h4>
                 <p style={{ margin: 0, fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.6 }}>{w.body}</p>
               </div>
             ))}
@@ -290,7 +321,7 @@ export default function PartyLandingPage() {
               Choose your color palette and upgrade your design for a more elevated and cohesive finish.
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1.75rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              {["Classic — simple, clean, and elegant", "Enhanced — elevated with coordinated details ⭐", "Signature Custom — fully themed and bespoke"].map((item) => (
+              {["Classic — simple, clean, and elegant", "Enhanced — elevated with coordinated details", "Signature Custom — fully themed and bespoke"].map((item) => (
                 <li key={item} style={{ fontSize: "0.88rem", display: "flex", gap: "0.5rem", alignItems: "flex-start" }}>
                   <span style={{ color: "var(--cherry, #c05)", fontWeight: 700, flexShrink: 0 }}>→</span>
                   <span style={{ opacity: 0.75 }}>{item}</span>
@@ -326,24 +357,25 @@ export default function PartyLandingPage() {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "2rem 1.25rem" }}>
             {TREATS.map((t) => (
-              <Link
-                key={t.slug}
-                href={`/products/${t.slug}`}
-                style={{ display: "block", borderRadius: "0.65rem", overflow: "hidden", border: "1px solid var(--border, #e8e4de)", textDecoration: "none", color: "inherit", background: "#fff" }}
-              >
-                <div style={{ aspectRatio: "1", overflow: "hidden" }}>
-                  <Image
-                    src={t.img}
-                    alt={t.name}
-                    width={400}
-                    height={400}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
+              <Link key={t.slug} href={`/products/${t.slug}`} className="product">
+                {t.badge && (
+                  <div className="ribbon-tag cocoa">
+                    {t.badge.split(" ").slice(0, 1).join(" ")}
+                    <br />
+                    {t.badge.split(" ").slice(1).join(" ")}
+                  </div>
+                )}
+                <div className="thumb">
+                  {t.img && (
+                    <Image src={t.img} alt={t.name} width={600} height={600} />
+                  )}
                 </div>
-                <div style={{ padding: "0.75rem 1rem", fontWeight: 600, fontSize: "0.88rem" }}>
-                  {t.name}
+                <div className="info">
+                  <h3>{t.name}</h3>
+                  <div className="caption">{t.category}</div>
+                  <div className="price">{t.price}</div>
                 </div>
               </Link>
             ))}

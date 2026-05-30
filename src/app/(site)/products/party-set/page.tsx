@@ -31,10 +31,10 @@ const SIZES = [
     pcs: 48,
     treatCount: 4,
     price: _setPrice("medium"),
-    badge: "⭐ Most Popular",
+    badge: "♥ Most loved",
     badgeColor: "var(--cherry, #c05)",
     desc: "Balanced, polished, and perfect for most events.",
-    subDesc: "Most customers choose this for the best balance of variety and presentation ✨",
+    subDesc: "Most customers choose this for the best balance of variety and presentation.",
     previewImg: "/images/brand-spread-new.png",
     previewLabel: "Medium Set",
   },
@@ -44,8 +44,8 @@ const SIZES = [
     pcs: 96,
     treatCount: 5,
     price: _setPrice("large"),
-    badge: "✨ Best Value",
-    badgeColor: "#2a7a5e",
+    badge: "✦ Best value",
+    badgeColor: "var(--pine)",
     desc: "More variety and visual impact for larger celebrations.",
     subDesc: null,
     previewImg: "/images/treat-boxes/party-set-large.jpeg",
@@ -430,7 +430,7 @@ export default function PartySetPage() {
                       <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>{d.label}</span>
                       {d.popular && (
                         <span style={{ fontSize: "0.65rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "999px", background: "var(--cherry, #c05)", color: "#fff" }}>
-                          ⭐ Most Popular
+                          ♥ Most loved
                         </span>
                       )}
                     </div>
@@ -556,7 +556,7 @@ export default function PartySetPage() {
 
         {/* URGENCY */}
         <div style={{ textAlign: "center", padding: "0.5rem 0 1rem", fontSize: "0.85rem", opacity: 0.7 }}>
-          Weekend spots fill quickly — order by Thursday to secure your pickup ✨
+          Weekend spots fill quickly — order by Thursday to secure your pickup.
         </div>
 
         {/* ORDER SUMMARY */}
@@ -605,7 +605,7 @@ export default function PartySetPage() {
             transition: "background 0.2s",
           }}
         >
-          {added ? "Added to cart ✓" : isComplete ? "Add to Cart ✨" : getMissingLabel()}
+          {added ? "Added to cart ✓" : isComplete ? "Add to Cart" : getMissingLabel()}
         </button>
       </div>
 

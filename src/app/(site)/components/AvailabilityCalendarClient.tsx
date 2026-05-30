@@ -7,9 +7,9 @@ type AvailabilityStatus = "available" | "limited" | "fully_booked" | "closed";
 type AvailabilityRecord = { date: string; status: AvailabilityStatus; note?: string | null };
 
 const statusLabels: Record<AvailabilityStatus, string> = {
-  available: "Available",
+  available: "Open",
   limited: "Limited",
-  fully_booked: "Fully Booked",
+  fully_booked: "Booked",
   closed: "Closed",
 };
 
@@ -17,9 +17,13 @@ type VisibleStatus = Exclude<AvailabilityStatus, "available">;
 
 const visibleStatuses: VisibleStatus[] = ["limited", "fully_booked", "closed"];
 
+// open days are the calm default; booked is a soft dusty rose, not alarm-pink
+const OPEN_BORDER = "#cfe5da";
+const OPEN_DOT = "#9FC8B8";
+
 const statusColors: Record<VisibleStatus, { bg: string; color: string; border: string }> = {
   limited: { bg: "#fff6d8", color: "#8a6200", border: "#f0d27a" },
-  fully_booked: { bg: "#ffe7ec", color: "#a32643", border: "#f2a9b9" },
+  fully_booked: { bg: "#f1e3df", color: "#9c7d78", border: "#dcc4c0" },
   closed: { bg: "#eee9e2", color: "#70675d", border: "#d8d0c6" },
 };
 
@@ -49,6 +53,17 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
   const calendarMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + monthOffset, 1);
   const byDate = useMemo(() => new Map(records.map((r) => [r.date, r])), [records]);
 
+  // first non-booked, non-closed, non-past day — the soonest date worth requesting
+  const nextOpen = useMemo(() => {
+    const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    for (let i = 0; i < 365; i += 1) {
+      const day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+      const status = byDate.get(dateKey(day))?.status;
+      if (status !== "fully_booked" && status !== "closed") return day;
+    }
+    return null;
+  }, [today, byDate]);
+
   return (
     <section style={{ padding: "3rem 1.25rem", background: "#fffaf3", borderTop: "1px solid var(--border, #e8e4de)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
       <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
@@ -61,6 +76,10 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
         </p>
 
         <div style={{ display: "flex", justifyContent: "center", gap: "0.6rem", flexWrap: "wrap", marginBottom: "1.25rem" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: 700 }}>
+            <span style={{ width: 10, height: 10, borderRadius: 99, background: "#fff", border: `1.5px solid ${OPEN_BORDER}` }} />
+            Open
+          </span>
           {visibleStatuses.map((key) => (
             <span key={key} style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", fontWeight: 700 }}>
               <span style={{ width: 10, height: 10, borderRadius: 99, background: statusColors[key].bg, border: `1px solid ${statusColors[key].border}` }} />
@@ -68,6 +87,18 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
             </span>
           ))}
         </div>
+
+        {nextOpen && (
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "0.85rem", marginBottom: "1.25rem", padding: "0.85rem 1.1rem", borderRadius: "0.9rem", background: "#fff", border: `1px solid ${OPEN_BORDER}` }}>
+            <span style={{ fontSize: "0.92rem" }}>
+              Next open date —{" "}
+              <strong>{nextOpen.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</strong>
+            </span>
+            <Link href={`/contact?date=${dateKey(nextOpen)}`} className="btn btn-primary" style={{ fontSize: "0.82rem", padding: "0.6rem 1.25rem" }}>
+              Request {nextOpen.toLocaleDateString("en-US", { month: "short", day: "numeric" })} →
+            </Link>
+          </div>
+        )}
 
         <div style={{ border: "1px solid var(--border, #e8e4de)", borderRadius: "1.4rem", background: "#fff", padding: "1rem", boxShadow: "0 12px 35px rgba(70, 45, 25, 0.06)", textAlign: "left" }}>
           <div style={{ display: "grid", gridTemplateColumns: "44px 1fr 44px", alignItems: "center", gap: "0.5rem", marginBottom: "0.8rem" }}>
@@ -102,14 +133,20 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
               const record = byDate.get(dateKey(day));
               const colors = getStatusColors(record?.status);
               const isPast = day < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+              const isOpen = !colors && !isPast;
               return (
                 <div
                   key={dateKey(day)}
-                  title={record?.note || (record ? statusLabels[record.status] : "Request to confirm")}
+                  title={record?.note || (record ? statusLabels[record.status] : "Open — request to confirm")}
                   style={{
+                    position: "relative",
                     aspectRatio: "1 / 1",
                     borderRadius: "0.75rem",
-                    border: `1px solid ${colors?.border || "#eee8df"}`,
+                    border: colors
+                      ? `1px solid ${colors.border}`
+                      : isOpen
+                        ? `1.5px solid ${OPEN_BORDER}`
+                        : "1px solid #eee8df",
                     background: colors?.bg || (isPast ? "#f4f0ea" : "#fff"),
                     color: colors?.color || (isPast ? "#b5aaa0" : "inherit"),
                     display: "flex",
@@ -121,6 +158,9 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
                   }}
                 >
                   {day.getDate()}
+                  {isOpen && (
+                    <span style={{ position: "absolute", bottom: 5, left: "50%", transform: "translateX(-50%)", width: 4, height: 4, borderRadius: 99, background: OPEN_DOT }} />
+                  )}
                 </div>
               );
             })}
