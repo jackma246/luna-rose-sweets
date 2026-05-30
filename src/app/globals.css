@@ -23,6 +23,7 @@
   --blush-soft: #FBE3E7;
   --cherry: #B94A64;
   --rose-deep: #8F3550;
+  --pine: #5E8A6E; /* positive Net / "best value" — green always means good */
   --butter: #F5D76E;
   --crease: #EADFCB;
   --rule: rgba(58, 31, 24, 0.12);
@@ -49,6 +50,7 @@
   --color-blush-soft: var(--blush-soft);
   --color-cherry: var(--cherry);
   --color-rose-deep: var(--rose-deep);
+  --color-pine: var(--pine);
   --color-butter: var(--butter);
   --color-crease: var(--crease);
   --font-serif: "Fredoka", "Nunito", system-ui, sans-serif;

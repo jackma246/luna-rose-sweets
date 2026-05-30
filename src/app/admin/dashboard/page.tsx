@@ -4,7 +4,7 @@ import { SOURCE_LABEL } from "@/lib/orderSources";
 import { CATEGORY_LABEL } from "@/lib/expenseCategories";
 import { DayOfWeekBars, MonthlyBars, NetBars, OrdersBars, SlicePie } from "./Charts";
 import type { DayOfWeekPoint, MonthlyPoint, SlicePoint } from "./Charts";
-import { isTerminal } from "@/lib/orderStatus";
+import { isTerminal, daysUntil } from "@/lib/orderStatus";
 import { FilterChips } from "../FilterChips";
 import type { OrderSource, ExpenseCategory } from "@/generated/prisma";
 
@@ -66,6 +66,14 @@ function buildMonthlyBuckets(start: Date, end: Date): string[] {
     cursor.setMonth(cursor.getMonth() + 1);
   }
   return out;
+}
+
+function itemSummary(items: unknown): string {
+  if (!Array.isArray(items) || items.length === 0) return "";
+  const first = items[0] as { name?: string };
+  const name = first?.name ?? "Item";
+  const extra = items.length - 1;
+  return extra > 0 ? `${name} +${extra} more` : name;
 }
 
 interface SearchParams {
@@ -158,6 +166,19 @@ export default async function DashboardPage({
   const allOrders = await prisma.order.findMany({ select: { status: true } });
   const activeCount = allOrders.filter((o) => !isTerminal(o.status)).length;
 
+  // "Coming up this week" — active, dated orders due within 7 days (incl. overdue)
+  const weekStart = new Date();
+  weekStart.setHours(0, 0, 0, 0);
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekEnd.getDate() + 7);
+  const weekOrders = await prisma.order.findMany({
+    where: { neededDate: { lte: weekEnd }, status: { not: "cancelled" } },
+    orderBy: [{ neededDate: "asc" }],
+  });
+  const upcoming = weekOrders.filter((o) => !isTerminal(o.status));
+  const upcomingTotal = upcoming.reduce((s, o) => s + Number(o.totalPrice), 0);
+  const next3 = upcoming.slice(0, 3);
+
   const rangeOptions = VALID_RANGES.map((r) => ({ value: r, label: RANGE_LABEL[r] }));
 
   return (
@@ -169,7 +190,64 @@ export default async function DashboardPage({
             How the <span className="font-medium">shop</span> is doing
           </h1>
         </div>
+        <div className="flex flex-wrap gap-2.5">
+          <Link href="/admin/orders/new" className="btn-cherry">+ New order</Link>
+          <Link href="/admin/expenses/new" className="btn-ghost">+ Add expense</Link>
+          <Link href="/admin/availability" className="btn-ghost">Availability</Link>
+        </div>
       </div>
+
+      {next3.length > 0 ? (
+        <section className="admin-card p-5">
+          <div className="flex items-baseline justify-between mb-3">
+            <h2 className="section-title">Coming up this week</h2>
+            <span className="text-xs text-ink-soft">
+              {upcoming.length} due this week ·{" "}
+              <span className="text-ink font-medium">${upcomingTotal.toFixed(2)}</span>
+            </span>
+          </div>
+          <div className="space-y-2">
+            {next3.map((o) => {
+              const days = daysUntil(o.neededDate);
+              const overdue = days !== null && days < 0;
+              const soon = days !== null && days >= 0 && days <= 3;
+              const chip = overdue
+                ? { background: "var(--rose-deep)", color: "#fff" }
+                : soon
+                  ? { background: "var(--butter)", color: "var(--ink)" }
+                  : { background: "var(--paper-deep)", color: "var(--ink-soft)" };
+              return (
+                <Link
+                  key={o.id}
+                  href={`/admin/orders/${o.id}`}
+                  className="flex items-center gap-3 rounded-2xl border border-[var(--rule)] bg-paper px-4 py-3 hover:border-ink transition-colors"
+                >
+                  <span
+                    className="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
+                    style={chip}
+                  >
+                    {o.neededDate
+                      ? new Date(o.neededDate).toLocaleDateString("en-US", { weekday: "short" })
+                      : "—"}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[14px] font-semibold text-ink truncate">{o.customerName}</div>
+                    <div className="text-xs text-ink-soft truncate">{itemSummary(o.items)}</div>
+                  </div>
+                  <span className="shrink-0 font-medium text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
+                    ${Number(o.totalPrice).toFixed(2)}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : (
+        <section className="admin-card p-5">
+          <h2 className="section-title mb-1">Coming up this week</h2>
+          <p className="text-sm text-ink-soft">A clear week ahead — nothing due in the next 7 days.</p>
+        </section>
+      )}
 
       <div className="admin-card-soft p-4">
         <FilterChips param="range" options={rangeOptions} current={range} variant="cherry" />
@@ -179,7 +257,7 @@ export default async function DashboardPage({
         <Tile label="Revenue" value={`$${totalRevenue.toFixed(2)}`} sub={RANGE_LABEL[range]} accent="cherry" />
         <Tile label="Orders" value={String(orderCount)} sub={`Avg $${avgOrder.toFixed(2)} · ${activeCount} active`} accent="ink" />
         <Tile label="Expenses" value={`$${totalExpenses.toFixed(2)}`} sub={RANGE_LABEL[range]} accent="mint" />
-        <Tile label="Net" value={`$${net.toFixed(2)}`} sub="Revenue − expenses" accent={net >= 0 ? "ink" : "rose"} />
+        <Tile label="Net" value={`${net >= 0 ? "+" : "−"}$${Math.abs(net).toFixed(2)}`} sub="Revenue − expenses" accent={net >= 0 ? "pine" : "rose"} />
       </div>
 
       <section className="admin-card p-6">
@@ -234,19 +312,21 @@ function Tile({
   label: string;
   value: string;
   sub: string;
-  accent: "cherry" | "mint" | "ink" | "rose";
+  accent: "cherry" | "mint" | "ink" | "rose" | "pine";
 }) {
   const accentBar: Record<typeof accent, string> = {
     cherry: "bg-cherry",
     mint: "bg-[#9FC8B8]",
     ink: "bg-ink",
     rose: "bg-rose-deep",
+    pine: "bg-[#5E8A6E]",
   };
+  const isPine = accent === "pine";
   return (
-    <div className="admin-card p-5 relative overflow-hidden">
+    <div className="admin-card p-5 relative overflow-hidden" style={isPine ? { background: "#f3f8f4" } : undefined}>
       <div className={`absolute left-0 top-0 bottom-0 w-1 ${accentBar[accent]}`} />
       <div className="kicker mb-2">{label}</div>
-      <div className="text-3xl font-medium text-ink leading-none" style={{ fontFamily: "var(--font-fraunces)" }}>
+      <div className="text-3xl font-medium leading-none" style={{ fontFamily: "var(--font-fraunces)", color: isPine ? "#3f6b54" : "var(--ink)" }}>
         {value}
       </div>
       <div className="text-xs text-ink-soft mt-2">{sub}</div>

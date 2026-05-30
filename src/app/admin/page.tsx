@@ -15,7 +15,11 @@ function OrderCard({ order }: { order: Order }) {
   const soon = days !== null && days >= 0 && days <= 3 && !isTerminal(order.status);
 
   return (
-    <Link href={`/admin/orders/${order.id}`} className="row-link">
+    <Link
+      href={`/admin/orders/${order.id}`}
+      className="row-link"
+      style={overdue ? { borderLeft: "4px solid #b91c1c", background: "#fff6f5" } : undefined}
+    >
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="min-w-0">
           <div className="kicker mb-1">{formatOrderNumber(order.orderNumber)}</div>
@@ -23,7 +27,11 @@ function OrderCard({ order }: { order: Order }) {
           <div className="text-sm text-ink-soft truncate">{order.customerEmail}</div>
         </div>
         <div className="flex flex-col items-end gap-1.5 shrink-0">
-          <span className={`pill ${STATUS_CHIP[order.status]}`}>{STATUS_LABEL[order.status]}</span>
+          {overdue ? (
+            <span className="pill" style={{ background: "#b91c1c", color: "#fff" }}>Overdue</span>
+          ) : (
+            <span className={`pill ${STATUS_CHIP[order.status]}`}>{STATUS_LABEL[order.status]}</span>
+          )}
           <span className={`pill ${SOURCE_CHIP[order.source]}`}>{SOURCE_LABEL[order.source]}</span>
         </div>
       </div>
@@ -75,6 +83,7 @@ function Section({ title, orders, empty }: { title: string; orders: Order[]; emp
 interface SearchParams {
   month?: string;
   source?: string;
+  q?: string;
 }
 
 export default async function AdminOrdersPage({
@@ -103,18 +112,30 @@ export default async function AdminOrdersPage({
 
   const monthOptions = lastNMonthOptions(12);
 
-  let totalForFiltered = 0;
-  if (filtersActive) {
-    totalForFiltered = orders
-      .filter((o) => o.status !== "cancelled")
-      .reduce((sum, o) => sum + Number(o.totalPrice), 0);
-  }
+  // text search (name / email / order #) over the already month/source-filtered set
+  const q = (sp.q ?? "").trim();
+  const searchActive = q.length > 0;
+  const needle = q.toLowerCase();
+  const visible = searchActive
+    ? orders.filter(
+        (o) =>
+          o.customerName.toLowerCase().includes(needle) ||
+          o.customerEmail.toLowerCase().includes(needle) ||
+          formatOrderNumber(o.orderNumber).toLowerCase().includes(needle)
+      )
+    : orders;
+
+  const anyFilter = filtersActive || searchActive;
+  const visibleTotal = visible
+    .filter((o) => o.status !== "cancelled")
+    .reduce((sum, o) => sum + Number(o.totalPrice), 0);
 
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const weekEnd = new Date(now);
   weekEnd.setDate(weekEnd.getDate() + 7);
   const active = orders.filter((o) => !isTerminal(o.status));
+  const activeTotal = active.reduce((sum, o) => sum + Number(o.totalPrice), 0);
   const dueThisWeek = active.filter((o) => o.neededDate && o.neededDate <= weekEnd);
   const later = active.filter((o) => !o.neededDate || o.neededDate > weekEnd);
   const finished = orders.filter((o) => isTerminal(o.status)).slice(0, 20);
@@ -139,11 +160,23 @@ export default async function AdminOrdersPage({
       </div>
 
       <div className="admin-card-soft p-4 mb-6 space-y-3">
+        <form action="/admin" method="get" className="flex items-center gap-2">
+          {sp.source && <input type="hidden" name="source" value={sp.source} />}
+          {sp.month && <input type="hidden" name="month" value={sp.month} />}
+          <input
+            type="search"
+            name="q"
+            defaultValue={q}
+            placeholder="Search name, email, or order #"
+            className="field flex-1"
+          />
+          <button type="submit" className="btn-ghost">Search</button>
+        </form>
         <FilterChips param="source" options={sourceChipOptions} current={sp.source} />
         <div className="flex items-center gap-3 flex-wrap">
           <span className="kicker">Month</span>
           <FilterSelect param="month" options={monthOptions} current={sp.month} placeholder="All months" />
-          {filtersActive && (
+          {anyFilter && (
             <Link href="/admin" className="text-xs text-ink-soft hover:text-ink underline ml-auto">
               Clear filters
             </Link>
@@ -151,24 +184,36 @@ export default async function AdminOrdersPage({
         </div>
       </div>
 
-      {filtersActive ? (
+      {anyFilter ? (
         <>
           <div className="admin-card p-5 mb-5 flex items-center justify-between">
             <div className="text-sm text-ink-soft">
               <span className="text-2xl font-medium text-ink mr-1" style={{ fontFamily: "var(--font-fraunces)" }}>
-                {orders.length}
+                {visible.length}
               </span>
-              order{orders.length === 1 ? "" : "s"} matched
+              order{visible.length === 1 ? "" : "s"} matched
+              {searchActive && <span className="ml-1">for &ldquo;{q}&rdquo;</span>}
             </div>
             <div className="text-2xl font-medium text-cherry" style={{ fontFamily: "var(--font-fraunces)" }}>
-              ${totalForFiltered.toFixed(2)}
+              ${visibleTotal.toFixed(2)}
             </div>
           </div>
-          <Section title="Filtered" orders={orders} empty="No orders match these filters." />
+          <Section title="Results" orders={visible} empty="No orders match." />
         </>
       ) : (
         <>
-          <Section title="Due this week" orders={dueThisWeek} empty="Nothing scheduled in the next 7 days." />
+          <div className="admin-card p-5 mb-5 flex items-center justify-between">
+            <div className="text-sm text-ink-soft">
+              <span className="text-2xl font-medium text-ink mr-1" style={{ fontFamily: "var(--font-fraunces)" }}>
+                {active.length}
+              </span>
+              active order{active.length === 1 ? "" : "s"} in the pipeline
+            </div>
+            <div className="text-2xl font-medium text-cherry" style={{ fontFamily: "var(--font-fraunces)" }}>
+              ${activeTotal.toFixed(2)}
+            </div>
+          </div>
+          <Section title="Due this week" orders={dueThisWeek} empty="A clear week ahead — nothing due in the next 7 days." />
           <Section title="Later" orders={later} empty="No future orders yet." />
           <Section title="Recently completed / cancelled" orders={finished} empty="No finished orders yet." />
         </>

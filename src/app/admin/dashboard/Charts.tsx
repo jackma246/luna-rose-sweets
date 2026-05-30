@@ -68,7 +68,18 @@ const tooltipStyle = {
 
 const axisTick = { fontSize: 12, fill: "#6B4A3A" };
 
+function EmptyChart({ height }: { height: number }) {
+  return (
+    <div style={{ height }} className="flex items-center justify-center text-sm text-ink-soft">
+      No data for this period.
+    </div>
+  );
+}
+
 export function MonthlyBars({ data }: { data: MonthlyPoint[] }) {
+  if (!data.length || data.every((d) => d.revenue === 0 && d.expenses === 0)) {
+    return <EmptyChart height={280} />;
+  }
   return (
     <div style={{ width: "100%", height: 280 }}>
       <ResponsiveContainer>
@@ -87,6 +98,9 @@ export function MonthlyBars({ data }: { data: MonthlyPoint[] }) {
 }
 
 export function NetBars({ data }: { data: MonthlyPoint[] }) {
+  if (!data.length || data.every((d) => d.net === 0)) {
+    return <EmptyChart height={220} />;
+  }
   return (
     <div style={{ width: "100%", height: 220 }}>
       <ResponsiveContainer>
@@ -107,6 +121,9 @@ export function NetBars({ data }: { data: MonthlyPoint[] }) {
 }
 
 export function OrdersBars({ data }: { data: MonthlyPoint[] }) {
+  if (!data.length || data.every((d) => d.orders === 0)) {
+    return <EmptyChart height={220} />;
+  }
   return (
     <div style={{ width: "100%", height: 220 }}>
       <ResponsiveContainer>
@@ -123,6 +140,9 @@ export function OrdersBars({ data }: { data: MonthlyPoint[] }) {
 }
 
 export function DayOfWeekBars({ data }: { data: DayOfWeekPoint[] }) {
+  if (!data.length || data.every((d) => d.placed === 0 && d.needed === 0)) {
+    return <EmptyChart height={240} />;
+  }
   return (
     <div style={{ width: "100%", height: 240 }}>
       <ResponsiveContainer>
@@ -145,7 +165,7 @@ export function SlicePie({ data }: { data: SlicePoint[] }) {
     return <div className="text-sm text-ink-soft py-12 text-center">No data for this period.</div>;
   }
   return (
-    <div style={{ width: "100%", height: 240 }}>
+    <div style={{ width: "100%", height: 260 }}>
       <ResponsiveContainer>
         <PieChart>
           <Pie
@@ -153,17 +173,17 @@ export function SlicePie({ data }: { data: SlicePoint[] }) {
             dataKey="value"
             nameKey="name"
             cx="50%"
-            cy="50%"
-            outerRadius={86}
-            innerRadius={42}
+            cy="45%"
+            outerRadius={78}
+            innerRadius={40}
             paddingAngle={2}
-            label={(e) => e.name}
           >
             {data.map((_, i) => (
               <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} stroke="#FBF6EE" strokeWidth={2} />
             ))}
           </Pie>
           <Tooltip formatter={dollarFmt} contentStyle={tooltipStyle} />
+          <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: 12, color: INK }} />
         </PieChart>
       </ResponsiveContainer>
     </div>

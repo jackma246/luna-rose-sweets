@@ -15,14 +15,14 @@ export default function AdminNav() {
   const pathname = usePathname();
   return (
     <nav className="max-w-5xl mx-auto px-4">
-      <div className="flex gap-6 -mb-px">
+      <div className="flex gap-6 -mb-px overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {tabs.map((t) => {
           const active = t.match(pathname);
           return (
             <Link
               key={t.href}
               href={t.href}
-              className={`relative py-3 text-[12px] font-medium uppercase tracking-[0.2em] transition-colors ${
+              className={`relative shrink-0 py-3 text-[12px] font-medium uppercase tracking-[0.2em] transition-colors ${
                 active ? "text-cherry" : "text-ink-soft hover:text-ink"
               }`}
             >
