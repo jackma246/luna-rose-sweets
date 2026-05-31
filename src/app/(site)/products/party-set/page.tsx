@@ -107,10 +107,10 @@ function getPartySetDozens(size: (typeof SIZES)[number]): number {
   return size.pcs / 12;
 }
 
-function getWrappingPrice(size: (typeof SIZES)[number], wrapping: string): number {
+function getWrappingPrice(size: (typeof SIZES)[number], wrapping: string, selectedTreats: string[]): number {
   const dozens = getPartySetDozens(size);
   if (wrapping === "wrapped") return dozens * WRAPPING_PRICE_PER_DOZEN;
-  if (wrapping === "boxed") return dozens * BOXED_WRAPPING_PRICE_PER_DOZEN;
+  if (wrapping === "boxed") return getPortableHolderBoxCount(selectedTreats) * BOXED_WRAPPING_PRICE_PER_DOZEN;
   return 0;
 }
 
@@ -206,7 +206,7 @@ export default function PartySetPage() {
   const portableHolderBoxCount = getPortableHolderBoxCount(treats);
   const portableHolderBoxesActive = portableHolderBoxes && portableHolderBoxCount > 0;
   const portableHolderPrice = portableHolderBoxesActive ? getPortableHolderPrice(treats) : 0;
-  const wrappingPrice = getWrappingPrice(size, wrappingOption);
+  const wrappingPrice = getWrappingPrice(size, wrappingOption, treats);
   const wrappingLabel = wrappingOption === "wrapped" ? "Individually Wrapped" : wrappingOption === "boxed" ? "Individually Wrapped in Boxes" : "";
   const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice;
 
@@ -223,6 +223,7 @@ export default function PartySetPage() {
       const validTreats = prev.filter((t) => nextAvailableTreatIds.has(t));
       const nextTreats = validTreats.length > nextSize.treatCount ? validTreats.slice(0, nextSize.treatCount) : validTreats;
       if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
+      if (getPortableHolderBoxCount(nextTreats) === 0) setWrappingOption((current) => current === "boxed" ? "" : current);
       return nextTreats;
     });
   }
@@ -255,6 +256,7 @@ export default function PartySetPage() {
           ? prev
           : [...prev, id];
       if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
+      if (getPortableHolderBoxCount(nextTreats) === 0) setWrappingOption((current) => current === "boxed" ? "" : current);
       return nextTreats;
     });
   }
@@ -514,14 +516,22 @@ export default function PartySetPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem", marginTop: "0.65rem" }}>
             {[
               { id: "wrapped", label: "Individually Wrapped", desc: "+$3 per dozen", price: getPartySetDozens(size) * WRAPPING_PRICE_PER_DOZEN },
-              { id: "boxed", label: "Individually Wrapped in Boxes", desc: "+$5 per dozen", price: getPartySetDozens(size) * BOXED_WRAPPING_PRICE_PER_DOZEN },
+              { id: "boxed", label: "Individually Wrapped in Boxes", desc: "+$5 per box for Cake Pops or Cakesicles only", price: getPortableHolderBoxCount(treats) * BOXED_WRAPPING_PRICE_PER_DOZEN, requiresEligibleTreat: true },
             ].map((option) => {
               const active = wrappingOption === option.id;
+              const disabled = Boolean(option.requiresEligibleTreat && portableHolderBoxCount === 0);
               return (
                 <div
                   key={option.id}
-                  style={active ? cardActive : card}
-                  onClick={() => setWrappingOption((current) => current === option.id ? "" : option.id)}
+                  style={{
+                    ...(active ? cardActive : card),
+                    opacity: disabled ? 0.5 : 1,
+                    cursor: disabled ? "not-allowed" : "pointer",
+                  }}
+                  onClick={() => {
+                    if (disabled) return;
+                    setWrappingOption((current) => current === option.id ? "" : option.id);
+                  }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     <Check active={active} />
