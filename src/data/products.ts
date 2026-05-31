@@ -341,7 +341,7 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
-
+      { label: "Portable Cake Pop Holder Standing Boxes", price: "+$3 per box", priceAddByVariant: [3, 6, 9] },
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3, 6, 9] },
       { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5, 10, 15] },
     ],
@@ -381,7 +381,7 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10, 20, 30] },
-
+      { label: "Portable Cake Pop Holder Standing Boxes", price: "+$3 per box", priceAddByVariant: [3, 6, 9] },
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3, 6, 9] },
       { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5, 10, 15] },
     ],
@@ -413,7 +413,6 @@ export const products: Product[] = [
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
 
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     badge: "Baked from scratch",
     image: "/images/madeleines/new2.png",
@@ -431,7 +430,6 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and finishing details", priceLabel: "Included", priceAdd: 0 },
@@ -453,7 +451,6 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3, 3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5, 5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with clean drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
@@ -480,7 +477,6 @@ export const products: Product[] = [
       { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10] },
 
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/rice-krispies/rice.jpeg",
   },
@@ -495,7 +491,6 @@ export const products: Product[] = [
     variants: [{ label: "1 Dozen", price: 30, image: "/images/twisted-pretzel/twis.jpeg" }],
     addons: [
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
@@ -656,7 +651,6 @@ export const products: Product[] = [
       { label: "Full Custom Design (refined decorative work, mixed designs)", price: "+$8–$12/dozen" },
 
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/madeleines/new2.png",
     hidden: true,
@@ -701,6 +695,8 @@ export const products: Product[] = [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$6–$10/dozen" },
       { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$12–$20/dozen" },
 
+      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10] },
+      { label: "Portable Cake Pop Holder Standing Boxes", price: "+$3 per box", priceAddByVariant: [3] },
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
       { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
@@ -722,6 +718,8 @@ export const products: Product[] = [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
       { label: "Full Custom Design (names, initials, logos, mixed designs)", price: "+$10–$18/dozen" },
 
+      { label: "Hand Tied Bows", price: "+$10 per dozen", priceAddByVariant: [10] },
+      { label: "Portable Cake Pop Holder Standing Boxes", price: "+$3 per box", priceAddByVariant: [3] },
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
       { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
@@ -778,7 +776,6 @@ export const products: Product[] = [
     variants: [{ label: "1 Dozen", price: 42, image: "/images/luxury-dates/1.jpg" }],
     addons: [
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/luxury-dates/1.jpg",
   },
@@ -798,7 +795,6 @@ export const products: Product[] = [
       { label: "Full Custom Design (detailed styling, seasonal themes, mixed designs)", price: "+$8–$12/dozen" },
 
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     image: "/images/butter-cookies/4.jpg",
     hidden: true,
@@ -817,7 +813,6 @@ export const products: Product[] = [
     ],
     addons: [
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
-      { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     designTiers: [
       { name: "Classic", description: "Simple chocolate coating with light drizzle and decorative accents", priceLabel: "Included", priceAdd: 0 },
