@@ -61,7 +61,7 @@ const TREAT_OPTIONS = [
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "rice-krispies", label: "Rice Krispies" },
-  { id: "marshmallows", label: "Marshmallows" },
+  { id: "gummi-candy-skewers", label: "Gummi Candy Skewers" },
 ];
 
 
@@ -75,7 +75,7 @@ const HAND_TIED_BOWS_ELIGIBLE_TREATS = new Set([
   "cakesicles",
   "cake-pops",
   "rice-krispies",
-  "marshmallows",
+  "gummi-candy-skewers",
 ]);
 const HAND_TIED_BOWS_PRICE_PER_DOZEN = 10;
 const WRAPPING_PRICE_PER_DOZEN = 3;
@@ -460,7 +460,7 @@ export default function PartySetPage() {
               <Check active={handTiedBows} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Hand Tied Bows</div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, Rice Krispies, or Marshmallows</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, Rice Krispies, or Gummi Candy Skewers</div>
               </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
                 +${getHandTiedBowsPrice(treats)}
