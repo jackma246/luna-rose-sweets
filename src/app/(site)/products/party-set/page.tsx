@@ -60,7 +60,7 @@ const TREAT_OPTIONS = [
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
-  { id: "rice-krispies", label: "Rice Krispies" },
+  { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["medium", "large"] },
   { id: "gummi-candy-skewers", label: "Gummi Candy Skewers" },
 ];
 
@@ -78,6 +78,8 @@ const HAND_TIED_BOWS_ELIGIBLE_TREATS = new Set([
   "gummi-candy-skewers",
 ]);
 const HAND_TIED_BOWS_PRICE_PER_DOZEN = 10;
+const PORTABLE_HOLDER_ELIGIBLE_TREATS = new Set(["cake-pops", "cakesicles"]);
+const PORTABLE_HOLDER_PRICE_PER_BOX = 3;
 const WRAPPING_PRICE_PER_DOZEN = 3;
 const BOXED_WRAPPING_PRICE_PER_DOZEN = 5;
 
@@ -91,6 +93,14 @@ function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, si
 
 function getHandTiedBowsPrice(selectedTreats: string[]): number {
   return selectedTreats.filter((id) => HAND_TIED_BOWS_ELIGIBLE_TREATS.has(id)).length * HAND_TIED_BOWS_PRICE_PER_DOZEN;
+}
+
+function getPortableHolderBoxCount(selectedTreats: string[]): number {
+  return selectedTreats.filter((id) => PORTABLE_HOLDER_ELIGIBLE_TREATS.has(id)).length;
+}
+
+function getPortableHolderPrice(selectedTreats: string[]): number {
+  return getPortableHolderBoxCount(selectedTreats) * PORTABLE_HOLDER_PRICE_PER_BOX;
 }
 
 function getPartySetDozens(size: (typeof SIZES)[number]): number {
@@ -176,6 +186,7 @@ export default function PartySetPage() {
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("");
   const [handTiedBows, setHandTiedBows] = useState(false);
+  const [portableHolderBoxes, setPortableHolderBoxes] = useState(false);
   const [wrappingOption, setWrappingOption] = useState("");
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
@@ -192,9 +203,12 @@ export default function PartySetPage() {
   const designPriceAdd = getDesignPriceAdd(design, sizeId);
   const designPriceLabel = designPriceAdd > 0 ? `+$${designPriceAdd}` : "Included";
   const handTiedBowsPrice = handTiedBows ? getHandTiedBowsPrice(treats) : 0;
+  const portableHolderBoxCount = getPortableHolderBoxCount(treats);
+  const portableHolderBoxesActive = portableHolderBoxes && portableHolderBoxCount > 0;
+  const portableHolderPrice = portableHolderBoxesActive ? getPortableHolderPrice(treats) : 0;
   const wrappingPrice = getWrappingPrice(size, wrappingOption);
   const wrappingLabel = wrappingOption === "wrapped" ? "Individually Wrapped" : wrappingOption === "boxed" ? "Individually Wrapped in Boxes" : "";
-  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + wrappingPrice;
+  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -207,7 +221,9 @@ export default function PartySetPage() {
     setSizeId(nextSizeId);
     setTreats((prev) => {
       const validTreats = prev.filter((t) => nextAvailableTreatIds.has(t));
-      return validTreats.length > nextSize.treatCount ? validTreats.slice(0, nextSize.treatCount) : validTreats;
+      const nextTreats = validTreats.length > nextSize.treatCount ? validTreats.slice(0, nextSize.treatCount) : validTreats;
+      if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
+      return nextTreats;
     });
   }
 
@@ -233,9 +249,13 @@ export default function PartySetPage() {
 
   function toggleTreat(id: string) {
     setTreats((prev) => {
-      if (prev.includes(id)) return prev.filter((t) => t !== id);
-      if (prev.length >= requiredTreats) return prev;
-      return [...prev, id];
+      const nextTreats = prev.includes(id)
+        ? prev.filter((t) => t !== id)
+        : prev.length >= requiredTreats
+          ? prev
+          : [...prev, id];
+      if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
+      return nextTreats;
     });
   }
 
@@ -262,6 +282,7 @@ export default function PartySetPage() {
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
     parts.push(`Design: ${design?.label ?? ""}${designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}`);
     if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${handTiedBowsPrice})`);
+    if (portableHolderBoxesActive) parts.push(`Add-ons: Portable Cake Pop Holder Standing Boxes (${portableHolderBoxCount} box${portableHolderBoxCount === 1 ? "" : "es"}, +$${portableHolderPrice})`);
     if (wrappingOption) parts.push(`Packaging: ${wrappingLabel} (+$${wrappingPrice})`);
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
@@ -467,6 +488,29 @@ export default function PartySetPage() {
               </div>
             </div>
           </div>
+          <div
+            style={{
+              ...(portableHolderBoxesActive ? cardActive : card),
+              opacity: portableHolderBoxCount > 0 ? 1 : 0.5,
+              cursor: portableHolderBoxCount > 0 ? "pointer" : "not-allowed",
+              marginTop: "0.65rem",
+            }}
+            onClick={() => {
+              if (portableHolderBoxCount === 0) return;
+              setPortableHolderBoxes((selected) => !selected);
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <Check active={portableHolderBoxesActive} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Portable Cake Pop Holder Standing Boxes</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$3 per box for Cake Pops or Cakesicles only</div>
+              </div>
+              <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                +${getPortableHolderPrice(treats)}
+              </div>
+            </div>
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem", marginTop: "0.65rem" }}>
             {[
               { id: "wrapped", label: "Individually Wrapped", desc: "+$3 per dozen", price: getPartySetDozens(size) * WRAPPING_PRICE_PER_DOZEN },
@@ -574,6 +618,7 @@ export default function PartySetPage() {
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
               <div><strong>Design:</strong> {design?.label}{designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}</div>
               {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${handTiedBowsPrice})</div>}
+              {portableHolderBoxesActive && <div><strong>Add-on:</strong> Portable Cake Pop Holder Standing Boxes ({portableHolderBoxCount} box{portableHolderBoxCount === 1 ? "" : "es"}, +${portableHolderPrice})</div>}
               {wrappingOption && <div><strong>Packaging:</strong> {wrappingLabel} (+${wrappingPrice})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
