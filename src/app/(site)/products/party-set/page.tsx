@@ -71,6 +71,8 @@ const SIZES = [
 const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
+  { id: "cupcakes", label: "Cupcakes" },
+  { id: "dubai-chocolate-brownie-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups" },
   { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
@@ -102,7 +104,10 @@ const CAKE_OPTIONS = [
   { id: "none", label: "No cake", priceAdd: 0, desc: "Treats only" },
   { id: "6-inch", label: "Add 6\" Cake", priceAdd: 75, desc: "Starting at +$75" },
   { id: "8-inch", label: "Add 8\" Cake", priceAdd: 125, desc: "Starting at +$125" },
-  { id: "two-tier", label: "Add 6\"&4\" Two-Tier Cake", priceAdd: 185, desc: "Starting at +$185" },
+];
+
+const PARTY_FAVOR_OPTIONS = [
+  { id: "royal-icing-sugar-cookies", label: "3.5\" Royal Icing Sugar Cookies (1 Dozen)", priceAdd: 50, desc: "+$50" },
 ];
 
 const CAKE_ADDONS = _cakeProduct.addons ?? [];
@@ -220,6 +225,7 @@ export default function PartySetPage() {
   const [wrappingOption, setWrappingOption] = useState("");
   const [cakeOptionId, setCakeOptionId] = useState("none");
   const [selectedCakeAddons, setSelectedCakeAddons] = useState<Record<string, boolean>>({});
+  const [selectedPartyFavors, setSelectedPartyFavors] = useState<Record<string, boolean>>({});
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -244,7 +250,9 @@ export default function PartySetPage() {
   const selectedCakeAddonItems = PARTY_SET_CAKE_ADDONS.filter((addon) => selectedCakeAddons[addon.label]);
   const cakeAddonPrice = selectedCakeAddonItems.reduce((sum, addon) => sum + (addon.priceAdd ?? 0), 0);
   const cakePrice = cakeOption.priceAdd + (cakeOption.id === "none" ? 0 : cakeAddonPrice);
-  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice;
+  const selectedPartyFavorItems = PARTY_FAVOR_OPTIONS.filter((option) => selectedPartyFavors[option.label]);
+  const partyFavorPrice = selectedPartyFavorItems.reduce((sum, option) => sum + option.priceAdd, 0);
+  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice + partyFavorPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -327,6 +335,9 @@ export default function PartySetPage() {
       if (selectedCakeAddonItems.length > 0) {
         parts.push(`Cake add-ons: ${selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}`);
       }
+    }
+    if (selectedPartyFavorItems.length > 0) {
+      parts.push(`Party favors: ${selectedPartyFavorItems.map((option) => `${option.label} (+$${option.priceAdd})`).join(", ")}`);
     }
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
@@ -654,6 +665,33 @@ export default function PartySetPage() {
               </div>
             )}
           </div>
+
+          <div style={{ marginTop: "1rem" }}>
+            <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.55rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Party favors</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+              {PARTY_FAVOR_OPTIONS.map((option) => {
+                const active = Boolean(selectedPartyFavors[option.label]);
+                return (
+                  <div
+                    key={option.id}
+                    style={active ? cardActive : card}
+                    onClick={() => setSelectedPartyFavors((prev) => ({ ...prev, [option.label]: !prev[option.label] }))}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <Check active={active} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{option.label}</div>
+                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc}</div>
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                        +${option.priceAdd}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* STEP 5: Theme Notes */}
@@ -741,6 +779,7 @@ export default function PartySetPage() {
               {cakeOption.id !== "none" && selectedCakeAddonItems.length > 0 && (
                 <div><strong>Cake add-ons:</strong> {selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}</div>
               )}
+              {selectedPartyFavorItems.length > 0 && <div><strong>Party favors:</strong> {selectedPartyFavorItems.map((option) => `${option.label} (+$${option.priceAdd})`).join(", ")}</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>

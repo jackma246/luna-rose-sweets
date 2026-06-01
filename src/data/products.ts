@@ -90,27 +90,8 @@ export const products: Product[] = [
     image: "/images/treat-boxes/party-set-large.jpeg",
   },
   {
-    slug: "luxe-party-package",
-    name: "Luxe Party Package",
-    category: "Party Sets",
-    subtitle: "6\" cake · 8 dozen treats · premium dessert table package",
-    description:
-      "A premium dessert table package designed for birthdays, baby showers, bridal showers, and special celebrations. Includes one 6\" custom cake plus four matching dessert varieties, all styled in a coordinated color palette for a polished, party-ready look.",
-    details:
-      "✨ Luxe Party Package — Detailed Description\n\nThis Luxe Party Package is designed to give you a beautifully coordinated dessert table with consistent colors, cohesive designs, and Dip & Sprinkle's premium aesthetic. To keep the experience smooth, simple, and fair for every client, the package includes the following:\n\n🎀 What's included in this package\n• 1 tall 6-inch custom round cake\n• 2 dozen cakesicles\n• 2 dozen Dubai Chocolate Brownie Shooter Cups\n• 2 dozen cupcakes or macarons\n• 2 dozen madeleines or butter cookies\n• All home-baked from scratch\n• Coordinated colors, edible images where applicable, and a cohesive theme\n\n🎨 Color & design guidelines\n• Package includes 2–3 colors of your choice\n• Includes up to 3 custom treat designs across the set\n• Designs will be coordinated to match your chosen theme\n• Edible images and luxe finishes are already included where applicable\n\nAdditional color palettes or design variations outside the 2–3 included options may require an upgrade fee.\n\n🍰 Cake details\n• One 6-inch tall custom round cake\n• Includes one standard-style custom topper\n• Decorated in your selected colors with matching florals, bows, or coordinating details\n\nHighly detailed edible elements may incur an additional charge.\n\n✨ What counts as an upgrade?\nOnly very intricate or labor-intensive designs fall outside the included pricing. If your request falls into this category, you will receive a clear quote before booking, so there are no surprises or hidden costs.\n\nPlease allow at least 1 week notice.",
-    variants: [
-      { label: "Luxe Party Package", price: 595, image: "/images/placeholders/under-construction.svg" },
-    ],
-    addons: [
-      { label: "3.5\" Icing Sugar Cookies (1 Dozen)", price: "+$50", priceAdd: 50 },
-    ],
-    flavours: CAKE_FLAVOURS,
-    badge: "Premium package",
-    image: "/images/placeholders/under-construction.svg",
-  },
-  {
     slug: "party-layer-cake",
-    name: "Custom Cake (4\"/6\"/8\")",
+    name: "Custom Cake (6\"/8\")",
     category: "Party Sets",
     subtitle: "Starting Prices · 100% Real Buttercream · 6 Flavours",
     description:
@@ -118,7 +99,6 @@ export const products: Product[] = [
     details:
       "All cake prices are starting prices. Final pricing may vary depending on design details, flavour, filling, toppers, edible images, and other custom requests. Please allow at least 5 days notice for custom cakes.",
     variants: [
-      { label: "4\" Cake, 2 Layers — serves 2–4", price: 45, image: "/images/cake/cake00.jpeg" },
       { label: "6\" Cake, 2 Layers — serves 6–8", price: 75, image: "/images/cake/cake00.jpeg" },
       { label: "6\" Cake, 3 Layers — serves 8–10", price: 95, image: "/images/cake/cake00.jpeg" },
       { label: "8\" Cake, 2 Layers — serves 12–15", price: 125, image: "/images/cake/cake00.jpeg" },
@@ -593,7 +573,7 @@ export const products: Product[] = [
   },
   {
     slug: "bakes-layer-cake",
-    name: "Custom Cake (4\"/6\"/8\")",
+    name: "Custom Cake (6\"/8\")",
     category: "Bakes",
     subtitle: "Starting Prices · 100% Real Buttercream · 6 Flavours",
     description:
@@ -601,7 +581,6 @@ export const products: Product[] = [
     details:
       "All cake prices are starting prices. Final pricing may vary depending on design details, flavour, filling, toppers, edible images, and other custom requests. Please allow at least 5 days notice for custom cakes.",
     variants: [
-      { label: "4\" Cake, 2 Layers — serves 2–4", price: 45, image: "/images/cake/7.jpg" },
       { label: "6\" Cake, 2 Layers — serves 6–8", price: 75, image: "/images/cake/7.jpg" },
       { label: "6\" Cake, 3 Layers — serves 8–10", price: 95, image: "/images/cake/7.jpg" },
       { label: "8\" Cake, 2 Layers — serves 12–15", price: 125, image: "/images/cake/8.jpg" },
@@ -882,3 +861,4 @@ export const categories = [
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
 }
+
