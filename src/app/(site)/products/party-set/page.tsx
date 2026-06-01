@@ -225,7 +225,7 @@ export default function PartySetPage() {
   const [wrappingOption, setWrappingOption] = useState("");
   const [cakeOptionId, setCakeOptionId] = useState("none");
   const [selectedCakeAddons, setSelectedCakeAddons] = useState<Record<string, boolean>>({});
-  const [selectedPartyFavors, setSelectedPartyFavors] = useState<Record<string, boolean>>({});
+  const [partyFavorQuantities, setPartyFavorQuantities] = useState<Record<string, number>>({});
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -250,8 +250,10 @@ export default function PartySetPage() {
   const selectedCakeAddonItems = PARTY_SET_CAKE_ADDONS.filter((addon) => selectedCakeAddons[addon.label]);
   const cakeAddonPrice = selectedCakeAddonItems.reduce((sum, addon) => sum + (addon.priceAdd ?? 0), 0);
   const cakePrice = cakeOption.priceAdd + (cakeOption.id === "none" ? 0 : cakeAddonPrice);
-  const selectedPartyFavorItems = PARTY_FAVOR_OPTIONS.filter((option) => selectedPartyFavors[option.label]);
-  const partyFavorPrice = selectedPartyFavorItems.reduce((sum, option) => sum + option.priceAdd, 0);
+  const selectedPartyFavorItems = PARTY_FAVOR_OPTIONS
+    .map((option) => ({ ...option, quantity: partyFavorQuantities[option.label] ?? 0 }))
+    .filter((option) => option.quantity > 0);
+  const partyFavorPrice = selectedPartyFavorItems.reduce((sum, option) => sum + option.priceAdd * option.quantity, 0);
   const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice + partyFavorPrice;
 
   function handleSizeChange(nextSizeId: string) {
@@ -337,7 +339,7 @@ export default function PartySetPage() {
       }
     }
     if (selectedPartyFavorItems.length > 0) {
-      parts.push(`Party favors: ${selectedPartyFavorItems.map((option) => `${option.label} (+$${option.priceAdd})`).join(", ")}`);
+      parts.push(`Party favors: ${selectedPartyFavorItems.map((option) => `${option.label} ×${option.quantity} dozen (+$${option.priceAdd * option.quantity})`).join(", ")}`);
     }
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
@@ -670,21 +672,38 @@ export default function PartySetPage() {
             <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.55rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Party favors</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
               {PARTY_FAVOR_OPTIONS.map((option) => {
-                const active = Boolean(selectedPartyFavors[option.label]);
+                const quantity = partyFavorQuantities[option.label] ?? 0;
                 return (
                   <div
                     key={option.id}
-                    style={active ? cardActive : card}
-                    onClick={() => setSelectedPartyFavors((prev) => ({ ...prev, [option.label]: !prev[option.label] }))}
+                    style={quantity > 0 ? cardActive : card}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <Check active={active} />
+                      <Check active={quantity > 0} />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{option.label}</div>
-                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc}</div>
+                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc} per dozen</div>
                       </div>
-                      <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
-                        +${option.priceAdd}
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexShrink: 0 }}>
+                        <button
+                          type="button"
+                          aria-label={`Decrease ${option.label}`}
+                          onClick={() => setPartyFavorQuantities((prev) => ({ ...prev, [option.label]: Math.max(0, (prev[option.label] ?? 0) - 1) }))}
+                          style={{ width: 28, height: 28, borderRadius: 99, border: "1px solid var(--border, #e8e4de)", background: "#fff", cursor: "pointer" }}
+                        >
+                          −
+                        </button>
+                        <span style={{ minWidth: "4.5rem", textAlign: "center", fontSize: "0.82rem", fontWeight: 700, color: quantity > 0 ? "var(--cherry, #c05)" : "inherit" }}>
+                          {quantity} dozen
+                        </span>
+                        <button
+                          type="button"
+                          aria-label={`Increase ${option.label}`}
+                          onClick={() => setPartyFavorQuantities((prev) => ({ ...prev, [option.label]: (prev[option.label] ?? 0) + 1 }))}
+                          style={{ width: 28, height: 28, borderRadius: 99, border: "1px solid var(--border, #e8e4de)", background: "#fff", cursor: "pointer" }}
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -779,7 +798,7 @@ export default function PartySetPage() {
               {cakeOption.id !== "none" && selectedCakeAddonItems.length > 0 && (
                 <div><strong>Cake add-ons:</strong> {selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}</div>
               )}
-              {selectedPartyFavorItems.length > 0 && <div><strong>Party favors:</strong> {selectedPartyFavorItems.map((option) => `${option.label} (+$${option.priceAdd})`).join(", ")}</div>}
+              {selectedPartyFavorItems.length > 0 && <div><strong>Party favors:</strong> {selectedPartyFavorItems.map((option) => `${option.label} ×${option.quantity} dozen (+$${option.priceAdd * option.quantity})`).join(", ")}</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>
