@@ -10,65 +10,80 @@ import V2Footer from "../../components/V2Footer";
 const _partySetVariants = getProductBySlug("party-set")!.variants;
 const _setPrice = (keyword: string): number =>
   _partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
+const _cakeProduct = getProductBySlug("party-layer-cake")!;
+const _twoTierCakeProduct = getProductBySlug("party-two-tier-cake")!;
 
 const SIZES = [
   {
-    id: "small",
-    label: "Small Set",
-    pcs: 36,
-    treatCount: 3,
-    price: _setPrice("small"),
-    badge: null as string | null,
-    badgeColor: "",
-    desc: "A sweet and simple option for small gatherings.",
-    subDesc: null as string | null,
-    previewImg: "/images/treat-boxes/mixed-treats.jpg",
-    previewLabel: "Small Set",
-  },
-  {
-    id: "medium",
-    label: "Medium Set",
+    id: "mini",
+    label: "Mini Dessert Table",
     pcs: 48,
     treatCount: 4,
-    price: _setPrice("medium"),
-    badge: "♥ Most loved",
-    badgeColor: "var(--cherry, #c05)",
-    desc: "Balanced, polished, and perfect for most events.",
-    subDesc: "Most customers choose this for the best balance of variety and presentation.",
+    price: _setPrice("mini"),
+    badge: null as string | null,
+    badgeColor: "",
+    desc: "A clean, minimal setup for smaller gatherings.",
+    subDesc: "Recommended for about 12-18 guests.",
     previewImg: "/images/brand-spread-new.png",
-    previewLabel: "Medium Set",
+    previewLabel: "Mini Dessert Table",
   },
   {
-    id: "large",
-    label: "Large Set",
+    id: "classic",
+    label: "Classic Dessert Table",
+    pcs: 60,
+    treatCount: 5,
+    price: _setPrice("classic"),
+    badge: "♥ Most recommended",
+    badgeColor: "var(--cherry, #c05)",
+    desc: "A nicely filled table that still feels simple and elegant.",
+    subDesc: "Recommended for about 18-25 guests.",
+    previewImg: "/images/brand-spread-new.png",
+    previewLabel: "Classic Dessert Table",
+  },
+  {
+    id: "signature",
+    label: "Signature Dessert Table",
     pcs: 96,
     treatCount: 5,
-    price: _setPrice("large"),
+    price: _setPrice("signature"),
     badge: "✦ Best value",
     badgeColor: "var(--pine)",
-    desc: "More variety and visual impact for larger celebrations.",
-    subDesc: null,
+    desc: "A full wow, so pretty dessert table look that photographs beautifully.",
+    subDesc: "Recommended for about 30-45 guests.",
     previewImg: "/images/treat-boxes/party-set-large.jpeg",
-    previewLabel: "Large Set",
+    previewLabel: "Signature Dessert Table",
+  },
+  {
+    id: "luxe",
+    label: "Luxe Dessert Table",
+    pcs: 120,
+    treatCount: 6,
+    price: _setPrice("luxe"),
+    badge: "Luxury style",
+    badgeColor: "var(--cherry, #c05)",
+    desc: "A fuller luxury style dessert table for larger celebrations.",
+    subDesc: "Recommended for about 45-60 guests.",
+    previewImg: "/images/treat-boxes/party-set-large.jpeg",
+    previewLabel: "Luxe Dessert Table",
   },
 ];
 
 const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
-  { id: "madeleines", label: "Madeleines", sizeIds: ["medium", "large"] },
+  { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
-  { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["medium", "large"] },
+  { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "gummi-candy-skewers", label: "Gummi Candy Skewers" },
 ];
 
 
 const DESIGN_TIERS = [
   { id: "classic", label: "Classic", desc: "Clean coating, drizzle, simple accents", priceLabel: "Included", priceAdd: 0, popular: false },
-  { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "", priceAddBySize: { small: 20, medium: 25, large: 35 }, popular: true },
-  { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "", priceAddBySize: { small: 35, medium: 45, large: 70 }, popular: false },
+  { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "", priceAddBySize: { mini: 25, classic: 30, signature: 35, luxe: 45 }, popular: true },
+  { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "", priceAddBySize: { mini: 45, classic: 55, signature: 70, luxe: 85 }, popular: false },
 ];
 
 const HAND_TIED_BOWS_ELIGIBLE_TREATS = new Set([
@@ -82,6 +97,21 @@ const PORTABLE_HOLDER_ELIGIBLE_TREATS = new Set(["cake-pops", "cakesicles"]);
 const PORTABLE_HOLDER_PRICE_PER_BOX = 3;
 const WRAPPING_PRICE_PER_DOZEN = 3;
 const BOXED_WRAPPING_PRICE_PER_DOZEN = 5;
+
+const CAKE_OPTIONS = [
+  { id: "none", label: "No cake", priceAdd: 0, desc: "Treats only" },
+  { id: "6-inch", label: "Add 6\" Cake", priceAdd: 75, desc: "Starting at +$75" },
+  { id: "8-inch", label: "Add 8\" Cake", priceAdd: 125, desc: "Starting at +$125" },
+  { id: "two-tier", label: "Add 6\"&4\" Two-Tier Cake", priceAdd: 185, desc: "Starting at +$185" },
+];
+
+const CAKE_ADDONS = _cakeProduct.addons ?? [];
+const TWO_TIER_DESIGN_TIERS = _twoTierCakeProduct.designTiers?.filter((tier) => tier.priceAdd > 0).map((tier) => ({
+  label: tier.name,
+  price: tier.priceLabel,
+  priceAdd: tier.priceAdd,
+})) ?? [];
+const PARTY_SET_CAKE_ADDONS = [...CAKE_ADDONS, ...TWO_TIER_DESIGN_TIERS];
 
 function getDesignPriceAdd(design: (typeof DESIGN_TIERS)[number] | undefined, sizeId: string): number {
   if (!design) return 0;
@@ -176,9 +206,9 @@ function Check({ active }: { active: boolean }) {
 }
 
 function getInitialSizeId(): string {
-  if (typeof window === "undefined") return "medium";
+  if (typeof window === "undefined") return "mini";
   const requested = new URLSearchParams(window.location.search).get("size");
-  return requested && SIZES.some((s) => s.id === requested) ? requested : "medium";
+  return requested && SIZES.some((s) => s.id === requested) ? requested : "mini";
 }
 
 export default function PartySetPage() {
@@ -188,6 +218,8 @@ export default function PartySetPage() {
   const [handTiedBows, setHandTiedBows] = useState(false);
   const [portableHolderBoxes, setPortableHolderBoxes] = useState(false);
   const [wrappingOption, setWrappingOption] = useState("");
+  const [cakeOptionId, setCakeOptionId] = useState("none");
+  const [selectedCakeAddons, setSelectedCakeAddons] = useState<Record<string, boolean>>({});
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -208,7 +240,11 @@ export default function PartySetPage() {
   const portableHolderPrice = portableHolderBoxesActive ? getPortableHolderPrice(treats) : 0;
   const wrappingPrice = getWrappingPrice(size, wrappingOption, treats);
   const wrappingLabel = wrappingOption === "wrapped" ? "Individually Wrapped" : wrappingOption === "boxed" ? "Individually Wrapped in Boxes" : "";
-  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice;
+  const cakeOption = CAKE_OPTIONS.find((option) => option.id === cakeOptionId) ?? CAKE_OPTIONS[0];
+  const selectedCakeAddonItems = PARTY_SET_CAKE_ADDONS.filter((addon) => selectedCakeAddons[addon.label]);
+  const cakeAddonPrice = selectedCakeAddonItems.reduce((sum, addon) => sum + (addon.priceAdd ?? 0), 0);
+  const cakePrice = cakeOption.priceAdd + (cakeOption.id === "none" ? 0 : cakeAddonPrice);
+  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -286,6 +322,12 @@ export default function PartySetPage() {
     if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${handTiedBowsPrice})`);
     if (portableHolderBoxesActive) parts.push(`Add-ons: Portable Cake Pop Holder Standing Boxes (${portableHolderBoxCount} box${portableHolderBoxCount === 1 ? "" : "es"}, +$${portableHolderPrice})`);
     if (wrappingOption) parts.push(`Packaging: ${wrappingLabel} (+$${wrappingPrice})`);
+    if (cakeOption.id !== "none") {
+      parts.push(`Cake: ${cakeOption.label} (+$${cakeOption.priceAdd})`);
+      if (selectedCakeAddonItems.length > 0) {
+        parts.push(`Cake add-ons: ${selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}`);
+      }
+    }
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
@@ -353,8 +395,11 @@ export default function PartySetPage() {
 
           <div style={stepHead}>
             <span style={stepLabel}>Step 1</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your set size</span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>6ft Dessert Table Guide</span>
           </div>
+          <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.6, lineHeight: 1.6 }}>
+            For a standard 6ft party table, choose the size that best matches your guest count and the look you want.
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
             {SIZES.map((s) => (
               <div
@@ -547,6 +592,68 @@ export default function PartySetPage() {
               );
             })}
           </div>
+
+          <div style={{ marginTop: "1rem" }}>
+            <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.55rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Cake centerpiece</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+              {CAKE_OPTIONS.map((option) => {
+                const active = cakeOptionId === option.id;
+                return (
+                  <div
+                    key={option.id}
+                    style={active ? cardActive : card}
+                    onClick={() => {
+                      setCakeOptionId(option.id);
+                      if (option.id === "none") setSelectedCakeAddons({});
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <Dot active={active} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{option.label}</div>
+                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc}</div>
+                      </div>
+                      {option.priceAdd > 0 && (
+                        <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                          +${option.priceAdd}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {cakeOption.id !== "none" && (
+              <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+                <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.55 }}>Cake add-ons</div>
+                {PARTY_SET_CAKE_ADDONS.map((addon) => {
+                  const active = Boolean(selectedCakeAddons[addon.label]);
+                  const priceAdd = addon.priceAdd ?? 0;
+                  return (
+                    <div
+                      key={addon.label}
+                      style={active ? cardActive : card}
+                      onClick={() => setSelectedCakeAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }))}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                        <Check active={active} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{addon.label}</div>
+                          <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{addon.price}</div>
+                        </div>
+                        {priceAdd > 0 && (
+                          <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                            +${priceAdd}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* STEP 5: Theme Notes */}
@@ -630,6 +737,10 @@ export default function PartySetPage() {
               {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${handTiedBowsPrice})</div>}
               {portableHolderBoxesActive && <div><strong>Add-on:</strong> Portable Cake Pop Holder Standing Boxes ({portableHolderBoxCount} box{portableHolderBoxCount === 1 ? "" : "es"}, +${portableHolderPrice})</div>}
               {wrappingOption && <div><strong>Packaging:</strong> {wrappingLabel} (+${wrappingPrice})</div>}
+              {cakeOption.id !== "none" && <div><strong>Cake:</strong> {cakeOption.label} (+${cakeOption.priceAdd})</div>}
+              {cakeOption.id !== "none" && selectedCakeAddonItems.length > 0 && (
+                <div><strong>Cake add-ons:</strong> {selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}</div>
+              )}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>
