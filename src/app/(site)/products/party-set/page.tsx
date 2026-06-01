@@ -71,8 +71,8 @@ const SIZES = [
 const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
-  { id: "cupcakes", label: "Cupcakes" },
-  { id: "dubai-chocolate-brownie-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups" },
+  { id: "cupcakes", label: "Cupcakes", sizeIds: ["classic", "signature", "luxe"] },
+  { id: "dubai-chocolate-brownie-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups", sizeIds: ["classic", "signature", "luxe"] },
   { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
