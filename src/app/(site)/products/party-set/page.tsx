@@ -107,7 +107,12 @@ const CAKE_OPTIONS = [
 ];
 
 const PARTY_FAVOR_OPTIONS = [
-  { id: "royal-icing-sugar-cookies", label: "3.5\" Royal Icing Sugar Cookies (1 Dozen)", priceAdd: 50, desc: "+$50" },
+  {
+    id: "royal-icing-sugar-cookies",
+    label: "3.5\" Royal Icing Sugar Cookies (1 Dozen)",
+    priceAdd: 50,
+    desc: "Starting at +$50 per dozen. Please attach inspiration photos for sugar cookie designs below.",
+  },
 ];
 
 const CAKE_ADDONS = _cakeProduct.addons ?? [];
@@ -682,7 +687,7 @@ export default function PartySetPage() {
                       <Check active={quantity > 0} />
                       <div style={{ flex: 1 }}>
                         <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{option.label}</div>
-                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc} per dozen</div>
+                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc}</div>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.45rem", flexShrink: 0 }}>
                         <button
