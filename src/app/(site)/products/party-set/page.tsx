@@ -71,14 +71,14 @@ const SIZES = [
 const TREAT_OPTIONS = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
-  { id: "cupcakes", label: "Cupcakes", sizeIds: ["classic", "signature", "luxe"] },
-  { id: "dubai-chocolate-brownie-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups", sizeIds: ["classic", "signature", "luxe"] },
+  { id: "cupcakes", label: "Cupcakes", sizeIds: ["luxe"] },
+  { id: "dubai-chocolate-brownie-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups", sizeIds: ["signature", "luxe"] },
   { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["mini", "classic", "signature", "luxe"] },
-  { id: "gummi-candy-skewers", label: "Gummi Candy Skewers" },
+  { id: "gummi-candy-skewers", label: "Candy Kebab" },
 ];
 
 
@@ -99,6 +99,7 @@ const PORTABLE_HOLDER_ELIGIBLE_TREATS = new Set(["cake-pops", "cakesicles"]);
 const PORTABLE_HOLDER_PRICE_PER_BOX = 3;
 const WRAPPING_PRICE_PER_DOZEN = 3;
 const BOXED_WRAPPING_PRICE_PER_DOZEN = 5;
+const PARTY_TRAY_RENTAL_SETUP_PRICE = 70;
 
 const CAKE_OPTIONS = [
   { id: "none", label: "No cake", priceAdd: 0, desc: "Treats only" },
@@ -231,6 +232,7 @@ export default function PartySetPage() {
   const [cakeOptionId, setCakeOptionId] = useState("none");
   const [selectedCakeAddons, setSelectedCakeAddons] = useState<Record<string, boolean>>({});
   const [partyFavorQuantities, setPartyFavorQuantities] = useState<Record<string, number>>({});
+  const [partyTrayRentalSetup, setPartyTrayRentalSetup] = useState(false);
   const [themeNote, setThemeNote] = useState("");
   const [inspirationImages, setInspirationImages] = useState<Array<{ name: string; type: string; size: number; dataUrl: string }>>([]);
   const inspirationInputRef = useRef<HTMLInputElement | null>(null);
@@ -259,7 +261,8 @@ export default function PartySetPage() {
     .map((option) => ({ ...option, quantity: partyFavorQuantities[option.label] ?? 0 }))
     .filter((option) => option.quantity > 0);
   const partyFavorPrice = selectedPartyFavorItems.reduce((sum, option) => sum + option.priceAdd * option.quantity, 0);
-  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice + partyFavorPrice;
+  const partyTrayRentalSetupPrice = partyTrayRentalSetup ? PARTY_TRAY_RENTAL_SETUP_PRICE : 0;
+  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice + partyFavorPrice + partyTrayRentalSetupPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -346,6 +349,7 @@ export default function PartySetPage() {
     if (selectedPartyFavorItems.length > 0) {
       parts.push(`Party favors: ${selectedPartyFavorItems.map((option) => `${option.label} ×${option.quantity} dozen (+$${option.priceAdd * option.quantity})`).join(", ")}`);
     }
+    if (partyTrayRentalSetup) parts.push(`Add-ons: Party tray rental & set up assistant (+$${PARTY_TRAY_RENTAL_SETUP_PRICE})`);
     if (themeNote.trim()) parts.push(`Theme/Notes: ${themeNote.trim()}`);
     if (inspirationImages.length > 0) parts.push(`Inspiration photos: ${inspirationImages.map((img) => img.name).join(", ")}`);
     return parts.join(" | ");
@@ -546,7 +550,7 @@ export default function PartySetPage() {
               <Check active={handTiedBows} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Hand Tied Bows</div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, Rice Krispies, or Gummi Candy Skewers</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, Rice Krispies, or Candy Kebab</div>
               </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
                 +${getHandTiedBowsPrice(treats)}
@@ -716,6 +720,22 @@ export default function PartySetPage() {
               })}
             </div>
           </div>
+
+          <div
+            style={{ ...(partyTrayRentalSetup ? cardActive : card), marginTop: "1rem" }}
+            onClick={() => setPartyTrayRentalSetup((selected) => !selected)}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <Check active={partyTrayRentalSetup} />
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Party tray rental & set up assistant</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>Rental trays and setup assistance for your dessert table</div>
+              </div>
+              <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
+                +${PARTY_TRAY_RENTAL_SETUP_PRICE}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* STEP 5: Theme Notes */}
@@ -804,6 +824,7 @@ export default function PartySetPage() {
                 <div><strong>Cake add-ons:</strong> {selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}</div>
               )}
               {selectedPartyFavorItems.length > 0 && <div><strong>Party favors:</strong> {selectedPartyFavorItems.map((option) => `${option.label} ×${option.quantity} dozen (+$${option.priceAdd * option.quantity})`).join(", ")}</div>}
+              {partyTrayRentalSetup && <div><strong>Add-on:</strong> Party tray rental & set up assistant (+${PARTY_TRAY_RENTAL_SETUP_PRICE})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}
               {inspirationImages.length > 0 && <div><strong>Inspiration photos:</strong> {inspirationImages.map((img) => img.name).join(", ")}</div>}
             </div>

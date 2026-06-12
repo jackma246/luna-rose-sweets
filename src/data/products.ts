@@ -383,7 +383,7 @@ export const products: Product[] = [
     category: "Chocolate Dipped Treats",
     subtitle: "Chocolate Dipped",
     description:
-      "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
+      "Chocolate-dipped madeleines for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
       "Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
@@ -395,7 +395,6 @@ export const products: Product[] = [
 
       { label: "Individually Wrapped", price: "+$3 per dozen", priceAddByVariant: [3] },
     ],
-    badge: "Baked from scratch",
     image: "/images/madeleines/new2.png",
   },
   {
@@ -620,7 +619,7 @@ export const products: Product[] = [
     category: "Bakes",
     subtitle: "Chocolate Dipped",
     description:
-      "Scratch-made madeleines dipped in chocolate for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
+      "Chocolate-dipped madeleines for a delicate, buttery, and elegant treat. Beautiful for dessert boxes, tea-style spreads, gifting, and special occasions.",
     details:
       "Made with Bay Area local acacia honey for a deeper, more delicate flavour and long-lasting moisture, so they stay soft throughout your party. Base price includes a partial chocolate dip with simple drizzle or finishing details. Semi Custom (expanded color palette, marbling, soft themed styling, decorative finishing upgrades) available for +$4–$6/dozen. Full Custom (refined decorative work, mixed design styles, premium presentation styling) available for +$8–$12/dozen. Best consumed within 5 days.",
     variants: [
