@@ -10,9 +10,11 @@ import type { Order, OrderSource, Prisma } from "@/generated/prisma";
 export const dynamic = "force-dynamic";
 
 function OrderCard({ order }: { order: Order }) {
+  const terminal = isTerminal(order.status);
   const days = daysUntil(order.neededDate);
-  const overdue = days !== null && days < 0 && !isTerminal(order.status);
-  const soon = days !== null && days >= 0 && days <= 3 && !isTerminal(order.status);
+  const overdue = days !== null && days < 0 && !terminal;
+  const soon = days !== null && days >= 0 && days <= 3 && !terminal;
+  const dateLabel = terminal ? STATUS_LABEL[order.status] : daysUntilLabel(days);
 
   return (
     <Link
@@ -50,7 +52,7 @@ function OrderCard({ order }: { order: Order }) {
               })
             : "No date"}
           <span className="mx-2 text-[var(--rule)]">·</span>
-          {daysUntilLabel(days)}
+          {dateLabel}
         </span>
         <span className="font-serif text-lg font-medium text-ink" style={{ fontFamily: "var(--font-fraunces)" }}>
           ${Number(order.totalPrice).toFixed(2)}
