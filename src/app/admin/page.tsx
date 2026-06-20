@@ -80,9 +80,13 @@ function Section({ title, orders, empty }: { title: string; orders: Order[]; emp
   );
 }
 
+const STATUS_FILTERS = ["active", "completed", "cancelled"] as const;
+type StatusFilter = (typeof STATUS_FILTERS)[number];
+
 interface SearchParams {
   month?: string;
   source?: string;
+  status?: string;
   q?: string;
 }
 
@@ -97,16 +101,22 @@ export default async function AdminOrdersPage({
     ? (sp.source as OrderSource)
     : null;
 
-  const filtersActive = Boolean(monthRange) || Boolean(sourceFilter);
+  const statusFilter = sp.status && STATUS_FILTERS.includes(sp.status as StatusFilter)
+    ? (sp.status as StatusFilter)
+    : null;
+
+  const filtersActive = Boolean(monthRange) || Boolean(sourceFilter) || Boolean(statusFilter);
 
   const where: Prisma.OrderWhereInput = {};
   if (monthRange) where.neededDate = { gte: monthRange.start, lt: monthRange.end };
   if (sourceFilter) where.source = sourceFilter;
+  if (statusFilter === "active") where.status = { notIn: ["completed", "cancelled"] };
+  if (statusFilter === "completed" || statusFilter === "cancelled") where.status = statusFilter;
 
   const orders = await prisma.order.findMany({
     where,
     orderBy: filtersActive
-      ? [{ neededDate: "desc" }, { createdAt: "desc" }]
+      ? [{ updatedAt: "desc" }, { neededDate: "desc" }, { createdAt: "desc" }]
       : [{ neededDate: "asc" }, { createdAt: "desc" }],
   });
 
@@ -121,7 +131,11 @@ export default async function AdminOrdersPage({
         (o) =>
           o.customerName.toLowerCase().includes(needle) ||
           o.customerEmail.toLowerCase().includes(needle) ||
-          formatOrderNumber(o.orderNumber).toLowerCase().includes(needle)
+          (o.customerPhone ?? "").toLowerCase().includes(needle) ||
+          (o.customerNotes ?? "").toLowerCase().includes(needle) ||
+          (o.internalNotes ?? "").toLowerCase().includes(needle) ||
+          formatOrderNumber(o.orderNumber).toLowerCase().includes(needle) ||
+          String(o.orderNumber).includes(needle)
       )
     : orders;
 
@@ -138,7 +152,17 @@ export default async function AdminOrdersPage({
   const activeTotal = active.reduce((sum, o) => sum + Number(o.totalPrice), 0);
   const dueThisWeek = active.filter((o) => o.neededDate && o.neededDate <= weekEnd);
   const later = active.filter((o) => !o.neededDate || o.neededDate > weekEnd);
-  const finished = orders.filter((o) => isTerminal(o.status)).slice(0, 20);
+  const finished = orders
+    .filter((o) => isTerminal(o.status))
+    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+    .slice(0, 20);
+
+  const statusChipOptions = [
+    { value: "all", label: "All statuses" },
+    { value: "active", label: "Active" },
+    { value: "completed", label: "Completed" },
+    { value: "cancelled", label: "Cancelled" },
+  ];
 
   const sourceChipOptions = [
     { value: "all", label: "All sources" },
@@ -162,6 +186,7 @@ export default async function AdminOrdersPage({
       <div className="admin-card-soft p-4 mb-6 space-y-3">
         <form action="/admin" method="get" className="flex items-center gap-2">
           {sp.source && <input type="hidden" name="source" value={sp.source} />}
+          {sp.status && <input type="hidden" name="status" value={sp.status} />}
           {sp.month && <input type="hidden" name="month" value={sp.month} />}
           <input
             type="search"
@@ -172,6 +197,7 @@ export default async function AdminOrdersPage({
           />
           <button type="submit" className="btn-ghost">Search</button>
         </form>
+        <FilterChips param="status" options={statusChipOptions} current={sp.status} variant="cherry" />
         <FilterChips param="source" options={sourceChipOptions} current={sp.source} />
         <div className="flex items-center gap-3 flex-wrap">
           <span className="kicker">Month</span>
