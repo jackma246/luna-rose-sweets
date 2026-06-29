@@ -73,11 +73,11 @@ const TREAT_OPTIONS = [
   { id: "cakesicles", label: "Cakesicles" },
   { id: "cupcakes", label: "Cupcakes", sizeIds: ["luxe"] },
   { id: "dubai-chocolate-brownie-shooter-cups", label: "Dubai Chocolate Brownie Shooter Cups", sizeIds: ["signature", "luxe"] },
-  { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "classic", "signature", "luxe"] },
+  { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "signature", "luxe"] },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
-  { id: "kitchen-sink-cookies", label: "Kitchen Sink Cookies", sizeIds: ["signature", "luxe"] },
+  { id: "kitchen-sink-cookies", label: "Kitchen Sink Cookies", sizeIds: ["classic", "signature", "luxe"] },
   { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "gummi-candy-skewers", label: "Candy Kebab" },
 ];
