@@ -77,6 +77,7 @@ const TREAT_OPTIONS = [
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
   { id: "twisted-pretzel", label: "Twisted Pretzel" },
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
+  { id: "kitchen-sink-cookies", label: "Kitchen Sink Cookies", sizeIds: ["signature", "luxe"] },
   { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["mini", "classic", "signature", "luxe"] },
   { id: "gummi-candy-skewers", label: "Candy Kebab" },
 ];
