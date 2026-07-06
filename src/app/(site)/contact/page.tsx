@@ -6,10 +6,43 @@ import V2Footer from "../components/V2Footer";
 
 export default function V2Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    setSubmitting(true);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          eventDate: data.get("date"),
+          guestCount: data.get("guests"),
+          message: data.get("message"),
+          source: "website_contact",
+        }),
+      });
+
+      const payload = (await res.json().catch(() => null)) as { error?: string } | null;
+      if (!res.ok) {
+        setError(payload?.error || "We could not send your inquiry. Please try again or email us directly.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("We could not send your inquiry. Please try again or email us directly.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -37,8 +70,8 @@ export default function V2Contact() {
               </div>
               <h4>Email us</h4>
               <p>
-                <a href="mailto:support.dipsprinkle@gmail.com">
-                  support.dipsprinkle@gmail.com
+                <a href="mailto:supportdipsprinkle@gmail.com">
+                  supportdipsprinkle@gmail.com
                 </a>
                 <br />
                 Reply within 48 hours.
@@ -80,7 +113,7 @@ export default function V2Contact() {
             {submitted ? (
               <>
                 <h3>
-                  Thanks — we got it.
+                  Thanks, we got it.
                 </h3>
                 <p
                   style={{
@@ -91,7 +124,7 @@ export default function V2Contact() {
                   }}
                 >
                   We&rsquo;ll reply within 48 hours with a sketch, flavour
-                  suggestion, and a firm quote. In the meantime — go treat
+                  suggestion, and a firm quote. In the meantime, go treat
                   yourself.
                 </p>
               </>
@@ -106,7 +139,7 @@ export default function V2Contact() {
                 <div className="field-row">
                   <div className="field">
                     <label htmlFor="name">Your name</label>
-                    <input id="name" name="name" required placeholder="Sam Rivera" />
+                    <input id="name" name="name" required maxLength={120} placeholder="Sam Rivera" />
                   </div>
                   <div className="field">
                     <label htmlFor="email">Email</label>
@@ -115,6 +148,7 @@ export default function V2Contact() {
                       name="email"
                       type="email"
                       required
+                      maxLength={254}
                       placeholder="sam@hello.com"
                     />
                   </div>
@@ -126,7 +160,7 @@ export default function V2Contact() {
                   </div>
                   <div className="field">
                     <label htmlFor="guests">Guest count</label>
-                    <input id="guests" name="guests" placeholder="e.g. 40" />
+                    <input id="guests" name="guests" maxLength={80} placeholder="e.g. 40" />
                   </div>
                 </div>
                 <div className="field">
@@ -134,11 +168,30 @@ export default function V2Contact() {
                   <textarea
                     id="message"
                     name="message"
+                    maxLength={4000}
                     placeholder="Theme, colors, flavors, anything you're picturing…"
                   />
                 </div>
-                <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }}>
-                  Send →
+                {error && (
+                  <p
+                    role="alert"
+                    style={{
+                      color: "var(--rose-deep)",
+                      fontSize: 14,
+                      lineHeight: 1.5,
+                      margin: "-4px 0 16px",
+                    }}
+                  >
+                    {error}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={submitting}
+                  style={{ width: "100%", justifyContent: "center", opacity: submitting ? 0.7 : 1 }}
+                >
+                  {submitting ? "Sending..." : "Send →"}
                 </button>
               </>
             )}

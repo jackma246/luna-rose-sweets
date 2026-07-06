@@ -92,6 +92,22 @@ model OrderImage {
   @@index([orderId])
 }
 
+model Inquiry {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+
+  name       String
+  email      String
+  eventDate  DateTime? @db.Date
+  guestCount String?
+  message    String?
+  source     String   @default("website_contact")
+
+  @@index([createdAt])
+  @@index([eventDate])
+  @@index([source])
+}
+
 model AvailabilityDate {
   id        String             @id @default(cuid())
   date      DateTime           @unique @db.Date
