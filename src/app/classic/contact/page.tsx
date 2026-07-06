@@ -4,11 +4,43 @@ import { useState, FormEvent } from "react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO: Hook up to an email service or API
-    setSubmitted(true);
+    setError("");
+    setSubmitting(true);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const subject = data.get("subject");
+    const message = data.get("message");
+
+    try {
+      const res = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          message: [subject, message].filter(Boolean).join("\n\n"),
+          source: "classic_contact",
+        }),
+      });
+
+      const payload = (await res.json().catch(() => null)) as { error?: string } | null;
+      if (!res.ok) {
+        setError(payload?.error || "We could not send your message. Please try again or email us directly.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("We could not send your message. Please try again or email us directly.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -58,10 +90,10 @@ export default function ContactPage() {
           <p className="text-foreground/70 mb-6 text-sm">
             Or email us directly at{" "}
             <a
-              href="mailto:support.dipsprinkle@gmail.com"
+              href="mailto:supportdipsprinkle@gmail.com"
               className="text-accent font-medium hover:underline"
             >
-              support.dipsprinkle@gmail.com
+              supportdipsprinkle@gmail.com
             </a>
           </p>
 
@@ -78,6 +110,7 @@ export default function ContactPage() {
                 id="name"
                 name="name"
                 required
+                maxLength={120}
                 className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
               />
             </div>
@@ -94,6 +127,7 @@ export default function ContactPage() {
                 id="email"
                 name="email"
                 required
+                maxLength={254}
                 className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
               />
             </div>
@@ -129,15 +163,23 @@ export default function ContactPage() {
                 name="message"
                 rows={5}
                 required
+                maxLength={4000}
                 className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 resize-vertical"
               />
             </div>
 
+            {error && (
+              <p role="alert" className="text-sm text-rose-deep">
+                {error}
+              </p>
+            )}
+
             <button
               type="submit"
+              disabled={submitting}
               className="w-full bg-mint text-white font-medium py-3 rounded-full hover:opacity-90 transition-opacity"
             >
-              Send Message
+              {submitting ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>
