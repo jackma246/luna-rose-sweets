@@ -34,3 +34,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Customer photo retention
+
+Inspiration photos belong to the customer and are only needed while an order is being made. They are deleted automatically.
+
+- **Finished orders**: photos deleted **7 days** after the order reaches a terminal status (`completed` / `cancelled`).
+- **Abandoned orders**: if an order never reaches a terminal status, photos are deleted **30 days** after its pickup date - so a forgotten order doesn't keep someone's photos forever.
+- Orders with no pickup date that were never completed are left alone deliberately; they need a human, not a timer.
+
+Both the database rows and the files on disk are removed (`purgeOrderImages`).
+
+Endpoint: `GET /api/cron/purge-images` (add `?dry=1` to report without deleting).
+Auth: `Authorization: Bearer $CRON_SECRET`, same as the reminders cron.
+Tuning: `PHOTO_RETENTION_DAYS` (default 7), `PHOTO_STALE_DAYS` (default 30).
+
+Schedule it on Railway as a cron service hitting the endpoint daily. Run it once with `?dry=1` first and read the `detail` array before letting it delete anything.
