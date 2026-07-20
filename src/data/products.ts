@@ -334,9 +334,9 @@ export const products: Product[] = [
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$30+", priceAdd: 30 },
     ],
     badge: "Baked from scratch",
-    image: "/images/cakesicles/5.png",
+    image: "/images/cakesicles/1.jpg",
     images: [
-      "/images/cakesicles/5.png",
+      "/images/cakesicles/1.jpg",
       "/images/cakesicles/cs0.jpeg",
       "/images/cakesicles/cs1.jpeg",
       "/images/cakesicles/cs2.jpeg",
@@ -680,7 +680,7 @@ export const products: Product[] = [
       { label: "Individually Wrapped in Boxes", price: "+$5 per dozen", priceAddByVariant: [5] },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/cakesicles/5.png",
+    image: "/images/cakesicles/1.jpg",
     hidden: true,
   },
   {
