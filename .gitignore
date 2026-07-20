@@ -52,3 +52,6 @@ next-env.d.ts
 
 # local bot/runtime state
 /runtime
+
+# image archive - originals and unreferenced files kept out of the deploy
+.image-archive/
