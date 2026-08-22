@@ -4,6 +4,7 @@ import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
 import { ORDERS_FROM, SUPPORT_TO } from "@/lib/orderEmails";
 import { inquirySupportEmail } from "@/lib/inquiryEmails";
+import { assertDateRequestable, dateKey } from "@/lib/availability";
 
 const MAX_NAME = 120;
 const MAX_EMAIL = 254;
@@ -128,6 +129,14 @@ export async function POST(req: NextRequest) {
   const parsed = normalizeInquiry(body);
   if (!parsed.ok) {
     return NextResponse.json({ ok: false, error: parsed.error }, { status: 400 });
+  }
+
+  if (parsed.data.eventDate) {
+    // Same rule as order requests: closed / fully booked days cannot be requested.
+    const check = await assertDateRequestable(dateKey(parsed.data.eventDate));
+    if (!check.ok) {
+      return NextResponse.json({ ok: false, error: check.reason }, { status: 400 });
+    }
   }
 
   let inquiry: PersistedInquiry;

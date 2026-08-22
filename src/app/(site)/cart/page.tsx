@@ -6,6 +6,7 @@ import { useState, FormEvent } from "react";
 import { useCart } from "@/context/CartContext";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
+import RequestDatePicker from "../components/RequestDatePicker";
 
 type Status = "idle" | "form" | "sending" | "sent" | "error";
 
@@ -17,11 +18,13 @@ export default function V2CartPage() {
   const [phone, setPhone] = useState("");
   const [neededDate, setNeededDate] = useState("");
   const [message, setMessage] = useState("");
-  const [minDate] = useState(() => new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  const [dateState, setDateState] = useState({ valid: true, loading: true });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function submitRequest(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
+    setErrorMessage(null);
     try {
       const res = await fetch("/api/request-order", {
         method: "POST",
@@ -38,7 +41,14 @@ export default function V2CartPage() {
           },
         }),
       });
-      if (!res.ok) throw new Error("send failed");
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        if (res.status === 400 && body?.error) {
+          setErrorMessage(body.error);
+          if (/date|day|notice|closed|booked/i.test(body.error)) setNeededDate("");
+        }
+        throw new Error("send failed");
+      }
       setStatus("sent");
     } catch {
       setStatus("error");
@@ -269,14 +279,15 @@ export default function V2CartPage() {
                 />
 
                 <label style={labelStyle}>When do you need it?</label>
-                <input
-                  type="date"
+                <RequestDatePicker
+                  id="needed-date"
                   value={neededDate}
-                  onChange={(e) => setNeededDate(e.target.value)}
-                  min={minDate}
+                  onChange={setNeededDate}
+                  onValidityChange={setDateState}
                   required
                   disabled={status === "sending"}
                   style={inputStyle}
+                  theme="site"
                 />
                 <p style={{ fontSize: "0.72rem", opacity: 0.55, margin: "-0.6rem 0 0.9rem" }}>
                   Minimum 3 days notice. Larger orders may need more — we&rsquo;ll confirm.
@@ -294,13 +305,13 @@ export default function V2CartPage() {
 
                 {status === "error" && (
                   <p style={{ color: "var(--cherry, #c05)", fontSize: "0.82rem", margin: "0 0 0.75rem" }}>
-                    Something went wrong — please try again or email supportdipsprinkle@gmail.com directly.
+                    {errorMessage ?? "Something went wrong — please try again or email supportdipsprinkle@gmail.com directly."}
                   </p>
                 )}
 
                 <button
                   type="submit"
-                  disabled={status === "sending"}
+                  disabled={status === "sending" || !dateState.valid || dateState.loading}
                   className="btn btn-primary"
                   style={{ width: "100%", justifyContent: "center", marginTop: "0.5rem" }}
                 >

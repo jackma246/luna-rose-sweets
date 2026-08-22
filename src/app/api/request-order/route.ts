@@ -15,6 +15,7 @@ import {
   type CustomerInfo,
 } from "@/lib/orderEmails";
 import { buildOrderInvite } from "@/lib/calendarInvite";
+import { assertDateRequestable } from "@/lib/availability";
 import { ALLOWED_MIME, MAX_IMAGE_BYTES, extensionFromMime, orderUploadDir } from "@/lib/imageStorage";
 
 function dataUrlToBuffer(dataUrl: string): Buffer | null {
@@ -65,6 +66,14 @@ export async function POST(req: NextRequest) {
   }
   if (!Array.isArray(items) || items.length === 0) {
     return NextResponse.json({ ok: false, error: "Cart is empty." }, { status: 400 });
+  }
+  if (customer.neededDate) {
+    // Authoritative check: blocked (closed / fully booked) days, past dates and short notice are rejected here
+    // regardless of what the client-side picker allowed.
+    const check = await assertDateRequestable(customer.neededDate);
+    if (!check.ok) {
+      return NextResponse.json({ ok: false, error: check.reason }, { status: 400 });
+    }
   }
 
   const apiKey = process.env.RESEND_API_KEY;

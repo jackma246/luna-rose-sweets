@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, FormEvent } from "react";
 import { useCart } from "@/context/CartContext";
+import RequestDatePicker from "@/app/(site)/components/RequestDatePicker";
 
 type Status = "idle" | "form" | "sending" | "sent" | "error";
 
@@ -15,11 +16,13 @@ export default function CartPage() {
   const [phone, setPhone] = useState("");
   const [neededDate, setNeededDate] = useState("");
   const [message, setMessage] = useState("");
-  const [minDate] = useState(() => new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  const [dateState, setDateState] = useState({ valid: true, loading: true });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function submitRequest(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
+    setErrorMessage(null);
     try {
       const res = await fetch("/api/request-order", {
         method: "POST",
@@ -36,7 +39,14 @@ export default function CartPage() {
           },
         }),
       });
-      if (!res.ok) throw new Error("send failed");
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        if (res.status === 400 && body?.error) {
+          setErrorMessage(body.error);
+          if (/date|day|notice|closed|booked/i.test(body.error)) setNeededDate("");
+        }
+        throw new Error("send failed");
+      }
       setStatus("sent");
     } catch {
       setStatus("error");
@@ -245,14 +255,15 @@ export default function CartPage() {
                   <label className="block text-sm font-medium text-heading mb-1.5">
                     When do you need it?
                   </label>
-                  <input
-                    type="date"
+                  <RequestDatePicker
+                    id="needed-date"
                     value={neededDate}
-                    onChange={(e) => setNeededDate(e.target.value)}
-                    min={minDate}
+                    onChange={setNeededDate}
+                    onValidityChange={setDateState}
                     required
                     disabled={status === "sending"}
                     className="w-full border border-accent/30 rounded-lg px-4 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-accent/50"
+                    theme="classic"
                   />
                   <p className="text-xs text-foreground/50 mt-1">Minimum 3 days notice.</p>
                 </div>
@@ -273,13 +284,13 @@ export default function CartPage() {
 
                 {status === "error" && (
                   <p className="text-red-600 text-sm">
-                    Something went wrong — please try again or email supportdipsprinkle@gmail.com directly.
+                    {errorMessage ?? "Something went wrong — please try again or email supportdipsprinkle@gmail.com directly."}
                   </p>
                 )}
 
                 <button
                   type="submit"
-                  disabled={status === "sending"}
+                  disabled={status === "sending" || !dateState.valid || dateState.loading}
                   className="w-full bg-accent text-nav-text font-bold py-3 rounded-full hover:opacity-90 transition-opacity disabled:opacity-60"
                 >
                   {status === "sending" ? "Sending…" : "Send request"}

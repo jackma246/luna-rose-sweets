@@ -3,11 +3,13 @@
 import { useState, FormEvent } from "react";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
+import RequestDatePicker from "../components/RequestDatePicker";
 
 export default function V2Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [eventDate, setEventDate] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -156,7 +158,7 @@ export default function V2Contact() {
                 <div className="field-row">
                   <div className="field">
                     <label htmlFor="date">Event date</label>
-                    <input id="date" name="date" type="date" />
+                    <RequestDatePicker id="date" name="date" value={eventDate} onChange={setEventDate} theme="contact" />
                   </div>
                   <div className="field">
                     <label htmlFor="guests">Guest count</label>
