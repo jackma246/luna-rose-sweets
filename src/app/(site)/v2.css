@@ -801,6 +801,16 @@
   .footer-col > summary::-webkit-details-marker { display: none; }
   .footer-col > summary::after { content: none; }
   .footer-col > summary h5 { margin: 0; }
+  /* Chrome 131+ puts closed <details> content behind ::details-content with
+     content-visibility: hidden, which made these always-open desktop columns
+     take up space but paint nothing. Only collapse them at the mobile
+     breakpoint, where the column really is a toggle. */
+  @media (min-width: 561px) {
+    .footer-col::details-content {
+      content-visibility: visible;
+      block-size: auto;
+    }
+  }
   .footer-bot {
     display: flex;
     justify-content: space-between;
@@ -1511,6 +1521,161 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px;
+  }
+
+  /* ---------- ingredient transparency page (QR sticker destination) ---------- */
+  .ing-hero {
+    background: var(--cocoa-deep);
+    padding: 26px 24px 38px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ing-hero::after {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(245, 215, 110, 0.14);
+    pointer-events: none;
+  }
+  .ing-hero > * { position: relative; z-index: 1; }
+  .ing-brand {
+    font-family: var(--font-fraunces), "Fraunces", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .ing-brand .amp {
+    font-family: var(--font-caveat), "Caveat", cursive;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 32px;
+    color: var(--butter);
+    display: inline-block;
+    transform: translateY(3px) rotate(-6deg);
+    margin: 0 1px;
+  }
+  .ing-crumb {
+    /* line the trail up with the body column below rather than the page edge */
+    width: 100%;
+    max-width: 632px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(251, 246, 238, 0.55);
+    margin-top: -6px;
+  }
+  .ing-crumb b { color: var(--butter); font-weight: 600; }
+  .ing-crumb .sep { opacity: 0.55; }
+  .ing-photo {
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.38);
+    background: var(--cocoa);
+  }
+  .ing-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .ing-title { text-align: center; }
+  .ing-kicker {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--butter);
+    margin-bottom: 10px;
+  }
+  .ing-title h1 {
+    margin: 0;
+    font-family: var(--font-fraunces), "Fraunces", serif;
+    font-weight: 400;
+    font-size: clamp(28px, 6vw, 40px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    text-wrap: balance;
+  }
+
+  .ing-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 30px 24px 64px;
+  }
+  .ing-lead {
+    margin: 0;
+    font-family: var(--font-fraunces), "Fraunces", serif;
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 300;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .ing-sec {
+    margin: 36px 0 14px;
+    padding-top: 18px;
+    border-top: 2px solid var(--butter);
+    font-family: var(--font-fraunces), "Fraunces", serif;
+    font-weight: 400;
+    font-size: 24px;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .ing-list {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+  .ing-contains {
+    margin: 20px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .ing-cottage {
+    margin-top: 28px;
+    background: var(--butter-soft);
+    border: 1px solid rgba(245, 215, 110, 0.9);
+    border-radius: 14px;
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--cocoa);
+  }
+  .ing-cottage b {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  .ing-cta {
+    margin-top: 32px;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 560px) {
+    .ing-hero { padding: 22px 18px 32px; gap: 16px; }
+    .ing-photo { width: 190px; height: 190px; }
+    .ing-body { padding: 26px 18px 56px; }
+    .ing-lead { font-size: 16px; }
+    .ing-sec { font-size: 21px; margin-top: 30px; }
   }
 
   /* ---------- responsive ---------- */
