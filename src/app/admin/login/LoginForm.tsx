@@ -50,6 +50,7 @@ export default function LoginForm() {
         <label className="kicker block mb-1.5">Password</label>
         <input
           type="password"
+          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
