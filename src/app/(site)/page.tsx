@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMetadata, SITE_NAME } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import V2Header from "./components/V2Header";
@@ -6,6 +8,13 @@ import AvailabilityCalendar from "./components/AvailabilityCalendar";
 import { getProductBySlug } from "@/data/products";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = pageMetadata({
+  title: `${SITE_NAME} · Cake Pops, Cakesicles & Party Dessert Tables in San Jose`,
+  description:
+    "Handmade cake pops, cakesicles, custom cakes and party dessert sets, made from scratch in San Jose for pickup across the Bay Area.",
+  path: "/",
+});
 
 const confetti = [
   { top: "12%", left: "5%", color: "var(--cherry)", rotate: "30deg" },
@@ -176,7 +185,7 @@ export default function HomePage() {
             Most popular <em>party sets.</em>
           </h2>
           <p style={{ margin: 0, fontSize: "0.85rem", opacity: 0.6 }}>
-            Most customers choose Medium or Large for the best experience.
+            Most customers choose our Classic or Signature table for the best experience.
           </p>
         </div>
 
@@ -269,7 +278,7 @@ export default function HomePage() {
             ))}
           </div>
           <p style={{ marginTop: "1.75rem", fontSize: "0.82rem", opacity: 0.55, fontStyle: "italic" }}>
-            Most customers choose Medium or Large for the best experience.
+            Most customers choose our Classic or Signature table for the best experience.
           </p>
         </div>
       </section>

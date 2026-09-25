@@ -13,21 +13,18 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ ok: false, error: "delta must be a non-zero number." }, { status: 400 });
   }
 
-  const current = await prisma.inventoryItem.findUnique({ where: { id } });
-  if (!current) {
-    return NextResponse.json({ ok: false, error: "Not found." }, { status: 404 });
-  }
-
-  const next = Number(current.quantity) + body.delta;
-  if (next < 0) {
-    return NextResponse.json({ ok: false, error: "Not enough on hand." }, { status: 400 });
-  }
-
-  const item = await prisma.$transaction(async (tx) => {
-    const updated = await tx.inventoryItem.update({
-      where: { id },
-      data: { quantity: next },
+  // Atomic read-modify-write: the increment happens in the database, guarded so stock can never go
+  // below zero even when two adjustments race (the old read-then-write could lose one of them).
+  const result = await prisma.$transaction(async (tx) => {
+    const applied = await tx.inventoryItem.updateMany({
+      where: { id, ...(body.delta < 0 ? { quantity: { gte: -body.delta } } : {}) },
+      data: { quantity: { increment: body.delta } },
     });
+    if (applied.count === 0) {
+      const exists = await tx.inventoryItem.findUnique({ where: { id }, select: { id: true } });
+      return exists ? ("insufficient" as const) : ("missing" as const);
+    }
+    const updated = await tx.inventoryItem.findUniqueOrThrow({ where: { id } });
 
     await logAdminWriteWithClient(tx, {
       actor,
@@ -37,12 +34,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       targetType: "inventory_item",
       targetId: id,
       requestJson: body,
-      responseJson: { id, previousQuantity: Number(current.quantity), quantity: next },
+      responseJson: { id, previousQuantity: Number(updated.quantity) - body.delta, quantity: Number(updated.quantity) },
       ok: true,
     });
 
     return updated;
   });
+
+  if (result === "missing") return NextResponse.json({ ok: false, error: "Not found." }, { status: 404 });
+  if (result === "insufficient") return NextResponse.json({ ok: false, error: "Not enough on hand." }, { status: 400 });
+  const item = result;
 
   return NextResponse.json({
     ok: true,
