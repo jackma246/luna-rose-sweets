@@ -1,62 +1,51 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
+import { ADMIN_SESSION_COOKIE, verifySessionToken } from "@/lib/adminSession";
+import { scopeAllowsMethod, sunjaeTokenScope } from "@/lib/adminTokens";
 
-const COOKIE_NAME = "admin_session";
+// Optimistic gate for /admin and /api/admin. Every admin page and route handler
+// also enforces auth on its own (requireAdminPage / requireAdmin), so this is
+// defense in depth, not the only check.
 
-function getSecret(): Uint8Array {
-  const raw = process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_PASSWORD || "";
-  return new TextEncoder().encode(raw);
-}
-
-function timingSafeEqualString(a: string, b: string) {
-  const aa = new TextEncoder().encode(a);
-  const bb = new TextEncoder().encode(b);
-  if (aa.length !== bb.length) return false;
-  let diff = 0;
-  for (let i = 0; i < aa.length; i += 1) diff |= aa[i] ^ bb[i];
-  return diff === 0;
-}
-
-function hasValidSunjaeToken(req: NextRequest) {
-  const expected = process.env.SUNJAE_ADMIN_API_TOKEN;
-  if (!expected) return false;
-  const auth = req.headers.get("authorization") || "";
-  const match = auth.match(/^Bearer\s+(.+)$/i);
-  if (!match) return false;
-  return timingSafeEqualString(match[1], expected);
+function loginRedirect(req: NextRequest) {
+  const url = new URL("/admin/login", req.url);
+  const { pathname, search } = req.nextUrl;
+  if (pathname !== "/admin") url.searchParams.set("next", pathname + search);
+  return NextResponse.redirect(url);
 }
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const isApi = pathname.startsWith("/api/admin/");
 
-  if (pathname === "/admin/login" || pathname.startsWith("/api/admin/login")) {
+  if (
+    pathname === "/admin/login" ||
+    pathname === "/api/admin/login" ||
+    // Signing out must work even with an expired or revoked session.
+    pathname === "/api/admin/logout"
+  ) {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith("/api/admin/") && hasValidSunjaeToken(req)) {
-    return NextResponse.next();
-  }
-
-  const token = req.cookies.get(COOKIE_NAME)?.value;
-  if (!token) {
-    if (pathname.startsWith("/api/admin/")) {
-      return NextResponse.json({ ok: false, error: "Unauthorized." }, { status: 401 });
+  if (isApi) {
+    const scope = sunjaeTokenScope(req.headers);
+    if (scope) {
+      if (!scopeAllowsMethod(scope, req.method)) {
+        return NextResponse.json({ ok: false, error: "This token is read-only." }, { status: 403 });
+      }
+      return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/admin/login", req.url));
   }
 
-  try {
-    await jwtVerify(token, getSecret());
-    return NextResponse.next();
-  } catch {
-    if (pathname.startsWith("/api/admin/")) {
-      return NextResponse.json({ ok: false, error: "Unauthorized." }, { status: 401 });
-    }
-    const res = NextResponse.redirect(new URL("/admin/login", req.url));
-    res.cookies.delete(COOKIE_NAME);
-    return res;
+  const token = req.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  if (await verifySessionToken(token)) return NextResponse.next();
+
+  if (isApi) {
+    return NextResponse.json({ ok: false, error: "Unauthorized." }, { status: 401 });
   }
+  const res = loginRedirect(req);
+  if (token) res.cookies.delete(ADMIN_SESSION_COOKIE);
+  return res;
 }
 
 export const config = {

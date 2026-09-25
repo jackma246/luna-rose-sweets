@@ -1,63 +1,42 @@
+import { createHash, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
-import { SignJWT, jwtVerify } from "jose";
+import {
+  ADMIN_SESSION_COOKIE,
+  SESSION_MAX_AGE_SECONDS,
+  isHttpsRequest,
+  signSessionToken,
+  verifySessionToken,
+} from "@/lib/adminSession";
 
-const COOKIE_NAME = "admin_session";
-const SESSION_DAYS = 14;
-
-function getSecret(): Uint8Array {
-  const raw = process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_PASSWORD;
-  if (!raw) throw new Error("ADMIN_SESSION_SECRET or ADMIN_PASSWORD must be set.");
-  return new TextEncoder().encode(raw);
-}
-
-export async function createSessionToken(): Promise<string> {
-  return await new SignJWT({ role: "admin" })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime(`${SESSION_DAYS}d`)
-    .sign(getSecret());
-}
-
-export async function verifySessionToken(token: string): Promise<boolean> {
-  try {
-    await jwtVerify(token, getSecret());
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export async function setSessionCookie() {
-  const token = await createSessionToken();
+export async function setSessionCookie(req: { headers: Headers; url: string }) {
+  const token = await signSessionToken();
   const store = await cookies();
-  store.set(COOKIE_NAME, token, {
+  store.set(ADMIN_SESSION_COOKIE, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production" || isHttpsRequest(req),
     sameSite: "lax",
     path: "/",
-    maxAge: SESSION_DAYS * 24 * 60 * 60,
+    maxAge: SESSION_MAX_AGE_SECONDS,
   });
 }
 
 export async function clearSessionCookie() {
   const store = await cookies();
-  store.delete(COOKIE_NAME);
+  store.delete(ADMIN_SESSION_COOKIE);
 }
 
 export async function isAuthenticated(): Promise<boolean> {
   const store = await cookies();
-  const token = store.get(COOKIE_NAME)?.value;
-  if (!token) return false;
-  return await verifySessionToken(token);
+  return await verifySessionToken(store.get(ADMIN_SESSION_COOKIE)?.value);
+}
+
+function sha256(value: string): Buffer {
+  return createHash("sha256").update(value, "utf8").digest();
 }
 
 export function checkPassword(input: string): boolean {
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected) return false;
-  if (input.length !== expected.length) return false;
-  let diff = 0;
-  for (let i = 0; i < input.length; i++) diff |= input.charCodeAt(i) ^ expected.charCodeAt(i);
-  return diff === 0;
+  // Hash both sides so the comparison is constant-time and does not leak the length.
+  return timingSafeEqual(sha256(input), sha256(expected));
 }
-
-export const SESSION_COOKIE_NAME = COOKIE_NAME;
