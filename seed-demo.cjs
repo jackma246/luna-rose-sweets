@@ -1,8 +1,38 @@
 /* Demo data for PII-free admin screenshots + workflow videos.
    All names are invented; all emails are @example.com. */
 require("dotenv").config();
-const { PrismaClient } = require("./src/generated/prisma");
-const prisma = new PrismaClient();
+
+// This script DELETES every order, expense, availability date and inventory
+// item before seeding. Refuse to point it at anything but a local database
+// unless the operator explicitly opts in.
+const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1", "[::1]"]);
+const OVERRIDE_FLAG = "--i-know-this-wipes-data";
+
+function databaseHost(databaseUrl) {
+  try {
+    return new URL(databaseUrl).hostname.toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+function checkSeedTarget(databaseUrl, argv) {
+  if (argv.includes(OVERRIDE_FLAG)) return { ok: true };
+  if (!databaseUrl) return { ok: false, reason: "DATABASE_URL is not set." };
+  const host = databaseHost(databaseUrl);
+  if (LOCAL_HOSTS.has(host)) return { ok: true };
+  return {
+    ok: false,
+    reason:
+      `Refusing to seed: DATABASE_URL host is "${host || "unparseable"}", not localhost/127.0.0.1. ` +
+      `This script wipes orders, expenses, availability and inventory. ` +
+      `Pass ${OVERRIDE_FLAG} if you really mean to wipe that database.`,
+  };
+}
+
+module.exports = { checkSeedTarget };
+
+let prisma;
 
 const D = (y, m, d) => new Date(Date.UTC(y, m - 1, d));
 const item = (name, quantity, price) => ({ name, quantity, price });
@@ -131,4 +161,13 @@ async function main() {
   console.log("seeded:", JSON.stringify(counts));
 }
 
-main().then(() => prisma.$disconnect()).catch((e) => { console.error(e); prisma.$disconnect(); process.exit(1); });
+if (require.main === module) {
+  const target = checkSeedTarget(process.env.DATABASE_URL, process.argv.slice(2));
+  if (!target.ok) {
+    console.error(target.reason);
+    process.exit(1);
+  }
+  const { PrismaClient } = require("./src/generated/prisma");
+  prisma = new PrismaClient();
+  main().then(() => prisma.$disconnect()).catch((e) => { console.error(e); prisma.$disconnect(); process.exit(1); });
+}
