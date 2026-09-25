@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { MIN_LEAD_DAYS, dateKey, isBlockedStatus, minRequestableDate, type AvailabilityStatus } from "@/lib/availabilityShared";
+import {
+  MIN_LEAD_DAYS,
+  formatFriendlyDateKey,
+  isBlockedStatus,
+  leadTimeMessage,
+  minRequestableDateKey,
+  type AvailabilityStatus,
+} from "@/lib/availabilityShared";
+import { addDaysToKey, formatDateKey, isDateKey, todayKey } from "@/lib/businessDate";
 
 type PublicRecord = { date: string; status: AvailabilityStatus };
 
@@ -14,13 +22,12 @@ const statusColors: Record<"limited" | "fully_booked" | "closed", { bg: string; 
 
 const statusLabels = { limited: "Limited", fully_booked: "Booked", closed: "Closed" } as const;
 
+// Dates are calendar days in the bakery's zone (America/Los_Angeles), whatever zone the browser is in.
 function shortDate(iso: string) {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return formatDateKey(iso, { month: "short", day: "numeric" });
 }
 
-function friendlyDate(iso: string) {
-  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
-}
+const friendlyDate = formatFriendlyDateKey;
 
 function blockedMessage(iso: string, status: AvailabilityStatus) {
   return status === "closed"
@@ -43,6 +50,8 @@ export type RequestDatePickerProps = {
   theme?: "site" | "contact" | "classic";
   /** Show the upcoming closed/booked days list under the input. Default true. */
   showUpcoming?: boolean;
+  /** Minimum notice in days (the longest lead time of the items being ordered). Default MIN_LEAD_DAYS. */
+  leadDays?: number;
 };
 
 export default function RequestDatePicker({
@@ -57,17 +66,24 @@ export default function RequestDatePicker({
   style,
   theme = "site",
   showUpcoming = true,
+  leadDays = MIN_LEAD_DAYS,
 }: RequestDatePickerProps) {
   const [records, setRecords] = useState<PublicRecord[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const today = useMemo(() => new Date(), []);
-  const minDate = useMemo(() => dateKey(minRequestableDate(today)), [today]);
+  const today = useMemo(() => todayKey(), []);
+  const minDate = useMemo(() => minRequestableDateKey(new Date(), leadDays), [leadDays]);
   const valueRef = useRef(value);
   const onChangeRef = useRef(onChange);
+  const minDateRef = useRef(minDate);
+  // A date typed below the minimum is cleared immediately; remember it so blur can explain why.
+  const rejectedShortRef = useRef(false);
+  const leadDaysRef = useRef(leadDays);
   useEffect(() => {
     valueRef.current = value;
     onChangeRef.current = onChange;
+    minDateRef.current = minDate;
+    leadDaysRef.current = leadDays;
   });
 
   useEffect(() => {
@@ -77,10 +93,21 @@ export default function RequestDatePicker({
       .then((json: { ok: boolean; dates: PublicRecord[] }) => {
         const dates = json.dates ?? [];
         setRecords(dates);
-        // If the user already picked a day before the calendar loaded, re-check it now.
+        // If a day was already set before the calendar loaded (picked quickly, or prefilled from a link),
+        // re-check it now.
         const current = valueRef.current;
+        if (!current) return;
+        if (!isDateKey(current)) {
+          onChangeRef.current("");
+          return;
+        }
+        if (current < minDateRef.current) {
+          setError(leadTimeMessage(leadDaysRef.current, minDateRef.current));
+          onChangeRef.current("");
+          return;
+        }
         const status = dates.find((r) => r.date === current)?.status;
-        if (current && isBlockedStatus(status)) {
+        if (isBlockedStatus(status)) {
           setError(blockedMessage(current, status));
           onChangeRef.current("");
         }
@@ -106,6 +133,7 @@ export default function RequestDatePicker({
 
   function handleChange(next: string) {
     setError(null);
+    rejectedShortRef.current = false;
     if (!next) {
       onChange("");
       return;
@@ -113,6 +141,7 @@ export default function RequestDatePicker({
     if (next < minDate) {
       // Native date inputs emit change events for partial years while typing ("0026"),
       // so do not shout yet - the blur handler reports short notice once the user is done.
+      rejectedShortRef.current = true;
       onChange("");
       return;
     }
@@ -127,15 +156,16 @@ export default function RequestDatePicker({
 
   function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
     const raw = e.target.value;
-    if (raw && raw < minDate) {
-      setError(`We need at least ${MIN_LEAD_DAYS} days notice - the earliest date is ${friendlyDate(minDate)}.`);
+    if ((raw && raw < minDate) || rejectedShortRef.current) {
+      rejectedShortRef.current = false;
+      setError(leadTimeMessage(leadDays, minDate));
     }
   }
 
   const upcoming = useMemo(() => {
     if (!records) return [];
-    const start = dateKey(today);
-    const end = dateKey(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 60));
+    const start = today;
+    const end = addDaysToKey(today, 60);
     return records
       .filter((r) => r.date >= start && r.date <= end && r.status !== "available")
       .sort((a, b) => a.date.localeCompare(b.date))

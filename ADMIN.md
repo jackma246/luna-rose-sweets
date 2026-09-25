@@ -105,9 +105,12 @@ Session lasts **7 days** before re-login required.
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/api/cron/reminders` | Sends email reminders for orders at D-3, D-2, D-1, D-0. Idempotent per-window. |
+| `GET` | `/api/cron/reminders` | Sends email reminders for orders due in 3 days (D-3), 2 days (D-2) and today (D-0). Idempotent per window. |
+| `GET` | `/api/cron/purge-images` | Deletes customer photos past the retention window. `?dry=1` reports without deleting. |
 
 **Auth header:** `Authorization: Bearer $CRON_SECRET`
+
+Both endpoints fail closed: if `CRON_SECRET` is not set on the web service they return `503` and do nothing.
 
 ---
 
@@ -180,13 +183,20 @@ Change by opening an order in `/admin/orders/[id]` and selecting from the status
 
 **When it runs:** daily at `0 16 * * *` UTC (9 AM PST / 8 AM PDT).
 
-**What it does:** Finds active (non-completed, non-cancelled) orders whose `neededDate` is 3, 2, 1, or 0 days away and whose reminder for that window hasn't fired yet. Sends a single digest email per window to support listing all matching orders. Marks each order's `remindersSent` so it doesn't double-fire.
+**What it does:** Finds active (non-completed, non-cancelled) orders whose `neededDate` is 3 days away (`d3`), 2 days away (`d2`) or today (`d0`) and whose reminder for that window hasn't fired yet.
+There is no D-1 window.
+"Today" is the bakery's date in Los Angeles, not the server's UTC date.
+Sends a single digest email per window to support listing all matching orders.
+Marks each order's `remindersSent` only after Resend accepts the email, so a failed send is retried on the next run.
+Changing an order's needed-by date in admin clears its `remindersSent`, so reminders fire again for the new date.
 
 **Manually trigger (from laptop):**
 ```bash
 curl -fsS -H "Authorization: Bearer <CRON_SECRET>" https://dipsprinkle.com/api/cron/reminders
 ```
-Response: `{"ok":true,"summary":{"d3":0,"d2":0,"d1":0,"d0":0}}` — numbers are orders matched per window.
+Response: `{"ok":true,"summary":{"d3":0,"d2":0,"d0":0},"force":false}` - numbers are orders reminded per window.
+If a window's email fails, the response has `"ok":false` and `"failed":["d2"]` (still HTTP 200), and those orders are retried next run.
+Add `?force=1` to send a `[TEST]` digest without marking anything sent.
 
 **Manually trigger (from Railway):** go to `cron-reminders` service → **Deploy Now**.
 
@@ -253,6 +263,7 @@ Opens a browser GUI at `localhost:5555` for editing rows by hand.
 | Order submission returns 500 | `RESEND_API_KEY` missing, or DB unreachable | Check Railway logs; verify env vars |
 | Order in DB but no email sent | Resend domain unverified, or rate-limited | Check Resend dashboard → Logs |
 | Cron returns 401 | Wrong `CRON_SECRET` or missing Authorization header | Confirm bearer value matches web service env |
+| Cron returns 503 | `CRON_SECRET` not set on the web service | Set it; the endpoints refuse to run without it |
 | Cron returns `{"ok":true}` but no email received | No orders in the D-3..D-0 windows (expected), OR already fired for today | Check `remindersSent` on an order in `/admin/orders/[id]` |
 | Build fails with "secret ID missing" | Malformed Railway env variable reference | Open **Raw Editor** on Variables tab, remove empty/broken entries |
 | Migration fails on deploy | Drift between schema and DB | `npx prisma migrate status` to diagnose; may need a manual migration |

@@ -4,6 +4,7 @@ import { STATUS_LABEL, STATUS_CHIP, daysUntil, daysUntilLabel, isTerminal } from
 import { ORDER_SOURCES, SOURCE_LABEL, SOURCE_CHIP } from "@/lib/orderSources";
 import { formatOrderNumber } from "@/lib/orderNumber";
 import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
+import { addDaysToKey, formatDbDate, toDbDate, todayKey } from "@/lib/businessDate";
 import { FilterChips, FilterSelect } from "./FilterChips";
 import type { Order, OrderSource, Prisma } from "@/generated/prisma";
 import { requireAdminPage } from "@/lib/adminPageAuth";
@@ -46,7 +47,7 @@ function OrderCard({ order }: { order: Order }) {
           }`}
         >
           {order.neededDate
-            ? new Date(order.neededDate).toLocaleDateString("en-US", {
+            ? formatDbDate(order.neededDate, {
                 weekday: "short",
                 month: "short",
                 day: "numeric",
@@ -148,14 +149,12 @@ export default async function AdminOrdersPage({
     .filter((o) => o.status !== "cancelled")
     .reduce((sum, o) => sum + Number(o.totalPrice), 0);
 
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  const weekEnd = new Date(now);
-  weekEnd.setDate(weekEnd.getDate() + 7);
+  // "This week" is the 7 business days starting today (today..today+6), plus anything overdue.
+  const weekEnd = toDbDate(addDaysToKey(todayKey(), 7)); // exclusive
   const active = orders.filter((o) => !isTerminal(o.status));
   const activeTotal = active.reduce((sum, o) => sum + Number(o.totalPrice), 0);
-  const dueThisWeek = active.filter((o) => o.neededDate && o.neededDate <= weekEnd);
-  const later = active.filter((o) => !o.neededDate || o.neededDate > weekEnd);
+  const dueThisWeek = active.filter((o) => o.neededDate && o.neededDate < weekEnd);
+  const later = active.filter((o) => !o.neededDate || o.neededDate >= weekEnd);
   const finished = orders
     .filter((o) => isTerminal(o.status))
     .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())

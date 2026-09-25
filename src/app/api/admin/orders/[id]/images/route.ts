@@ -6,11 +6,11 @@ import { prisma } from "@/lib/prisma";
 import { isAuthResponse, requireAdmin } from "@/lib/adminAuth";
 import { logAdminWriteWithClient } from "@/lib/adminAudit";
 import {
-  ALLOWED_MIME,
   MAX_IMAGES_PER_ORDER,
   MAX_IMAGE_BYTES,
-  extensionFromMime,
   orderUploadDir,
+  safeOriginalName,
+  sniffImageType,
 } from "@/lib/imageStorage";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -60,25 +60,39 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     );
   }
 
+  // Validate every file before writing any, so a bad file in a batch leaves nothing half-uploaded.
+  // The type and extension come from the file's bytes, not from the browser's claimed type or name.
+  const verified: Array<{ originalName: string; mimeType: string; ext: string; buf: Buffer }> = [];
+  for (const file of files) {
+    const originalName = safeOriginalName(file.name, "image");
+    if (file.size > MAX_IMAGE_BYTES) {
+      return NextResponse.json({ ok: false, error: `${originalName} is larger than 10 MB.` }, { status: 400 });
+    }
+    const buf = Buffer.from(await file.arrayBuffer());
+    const sniffed = sniffImageType(buf);
+    if (!sniffed) {
+      return NextResponse.json(
+        { ok: false, error: `${originalName} is not a supported image (JPEG, PNG, WebP, HEIC or GIF).` },
+        { status: 400 },
+      );
+    }
+    verified.push({ originalName, mimeType: sniffed.mime, ext: sniffed.ext, buf });
+  }
+
   const dir = orderUploadDir(id);
   await mkdir(dir, { recursive: true });
 
   const staged: Array<{ filename: string; originalName: string; mimeType: string; size: number; target: string }> = [];
-
-  for (const file of files) {
-    if (!ALLOWED_MIME.includes(file.type)) {
-      return NextResponse.json({ ok: false, error: `Unsupported type: ${file.type || "unknown"}` }, { status: 400 });
+  try {
+    for (const file of verified) {
+      const filename = `${randomUUID()}${file.ext}`;
+      const target = path.join(dir, filename);
+      await writeFile(target, file.buf);
+      staged.push({ filename, originalName: file.originalName, mimeType: file.mimeType, size: file.buf.byteLength, target });
     }
-    if (file.size > MAX_IMAGE_BYTES) {
-      return NextResponse.json({ ok: false, error: `${file.name} is larger than 10 MB.` }, { status: 400 });
-    }
-    const ext = extensionFromMime(file.type, file.name);
-    const filename = `${randomUUID()}${ext}`;
-    const target = path.join(dir, filename);
-    const buf = Buffer.from(await file.arrayBuffer());
-    await writeFile(target, buf);
-
-    staged.push({ filename, originalName: file.name, mimeType: file.type, size: file.size, target });
+  } catch (err) {
+    await Promise.allSettled(staged.map((file) => unlink(file.target)));
+    throw err;
   }
 
   try {
@@ -105,7 +119,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         action: "order_image.create",
         targetType: "order",
         targetId: id,
-        requestJson: { fileCount: files.length, files: files.map((f) => ({ name: f.name, type: f.type, size: f.size })) },
+        requestJson: { fileCount: staged.length, files: staged.map((f) => ({ name: f.originalName, type: f.mimeType, size: f.size })) },
         responseJson: { imageIds: rows.map((img) => img.id) },
         ok: true,
       });

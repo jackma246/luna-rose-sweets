@@ -1,15 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdminPage } from "@/lib/adminPageAuth";
+import { formatDbDate, formatInstant } from "@/lib/businessDate";
 
 export const dynamic = "force-dynamic";
 
+// eventDate is a calendar day (@db.Date, UTC midnight); createdAt is an instant shown in bakery time.
 function formatDate(date: Date | null): string {
   if (!date) return "No date";
-  return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  return formatDbDate(date, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
 }
 
 function formatDateTime(date: Date): string {
-  return date.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+  return formatInstant(date, { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
 }
 
 export default async function AdminInquiriesPage() {

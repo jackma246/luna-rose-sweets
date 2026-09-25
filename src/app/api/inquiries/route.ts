@@ -4,14 +4,20 @@ import { Resend } from "resend";
 import { prisma } from "@/lib/prisma";
 import { ORDERS_FROM, SUPPORT_TO } from "@/lib/orderEmails";
 import { inquirySupportEmail } from "@/lib/inquiryEmails";
-import { assertDateRequestable, dateKey } from "@/lib/availability";
+import { assertDateRequestable } from "@/lib/availability";
+import { dateKeyFromDbDate, parseDateKey } from "@/lib/businessDate";
+import { describeError } from "@/lib/logging";
+import { clientIp, inquiryLimiter, rateLimitMessage } from "@/lib/rateLimit";
+import { readJsonBody } from "@/lib/requestBody";
+import { isHoneypotTripped } from "@/lib/honeypot";
 
 const MAX_NAME = 120;
 const MAX_EMAIL = 254;
 const MAX_GUEST_COUNT = 80;
 const MAX_MESSAGE = 4000;
 const MAX_SOURCE = 80;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_RE = /^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[A-Za-z]{2,63}$/;
+const MAX_BODY_BYTES = 64 * 1024;
 
 interface InquiryData {
   name: string;
@@ -36,25 +42,11 @@ function readOptionalString(input: unknown, max: number): string | null {
   return value.length > 0 ? value : null;
 }
 
+/** YYYY-MM-DD as a UTC-midnight Date (the @db.Date representation), independent of the server zone. */
 function parseEventDate(input: unknown): Date | null | undefined {
   const value = readString(input, 20);
   if (!value) return null;
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  if (!match) return undefined;
-
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(`${value}T00:00:00`);
-  if (
-    Number.isNaN(date.getTime()) ||
-    date.getFullYear() !== year ||
-    date.getMonth() !== month - 1 ||
-    date.getDate() !== day
-  ) {
-    return undefined;
-  }
-  return date;
+  return parseDateKey(value) ?? undefined;
 }
 
 function normalizeInquiry(input: unknown): { ok: true; data: InquiryData } | { ok: false; error: string } {
@@ -111,19 +103,31 @@ async function notifySupport(inquiry: PersistedInquiry): Promise<void> {
     });
 
     if (result.error) {
-      console.error("Inquiry notification failed:", result.error);
+      console.error("Inquiry notification failed:", result.error.name, result.error.message);
     }
   } catch (err) {
-    console.error("Inquiry notification failed:", err);
+    console.error("Inquiry notification failed:", describeError(err));
   }
 }
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON." }, { status: 400 });
+  const ip = clientIp(req.headers);
+  const limit = inquiryLimiter.check(ip);
+  if (limit.limited) {
+    return NextResponse.json(
+      { ok: false, error: rateLimitMessage(limit) },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } },
+    );
+  }
+
+  const read = await readJsonBody(req, MAX_BODY_BYTES);
+  if (!read.ok) return NextResponse.json({ ok: false, error: read.error }, { status: read.status });
+  const body = read.body;
+
+  if (isHoneypotTripped(body)) {
+    // Pretend success so bots move on; store and send nothing.
+    inquiryLimiter.hit(ip);
+    return NextResponse.json({ ok: true });
   }
 
   const parsed = normalizeInquiry(body);
@@ -133,11 +137,13 @@ export async function POST(req: NextRequest) {
 
   if (parsed.data.eventDate) {
     // Same rule as order requests: closed / fully booked days cannot be requested.
-    const check = await assertDateRequestable(dateKey(parsed.data.eventDate));
+    const check = await assertDateRequestable(dateKeyFromDbDate(parsed.data.eventDate));
     if (!check.ok) {
       return NextResponse.json({ ok: false, error: check.reason }, { status: 400 });
     }
   }
+
+  inquiryLimiter.hit(ip);
 
   let inquiry: PersistedInquiry;
   try {
@@ -145,7 +151,7 @@ export async function POST(req: NextRequest) {
       data: parsed.data,
     });
   } catch (err) {
-    console.error("Failed to persist inquiry:", err);
+    console.error("Failed to persist inquiry:", describeError(err));
     return NextResponse.json({ ok: false, error: "Could not save your inquiry." }, { status: 500 });
   }
 

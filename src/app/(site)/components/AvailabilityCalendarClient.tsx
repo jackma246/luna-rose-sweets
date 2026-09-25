@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { MIN_LEAD_DAYS, minRequestableDateKey } from "@/lib/availabilityShared";
+import { addDaysToKey, addMonthsToMonthKey, formatDateKey, monthKeyOf, todayKey, weekdayOfKey } from "@/lib/businessDate";
 
 type AvailabilityStatus = "available" | "limited" | "fully_booked" | "closed";
 type AvailabilityRecord = { date: string; status: AvailabilityStatus; note?: string | null };
@@ -32,37 +34,36 @@ function getStatusColors(status: AvailabilityStatus | undefined) {
   return statusColors[status];
 }
 
-function dateKey(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-
-function buildMonthDays(month: Date) {
-  const first = new Date(month.getFullYear(), month.getMonth(), 1);
-  const last = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-  const days: Array<Date | null> = [];
-  for (let i = 0; i < first.getDay(); i += 1) days.push(null);
-  for (let day = 1; day <= last.getDate(); day += 1) days.push(new Date(month.getFullYear(), month.getMonth(), day));
+function buildMonthDays(monthKey: string): Array<string | null> {
+  const [y, m] = monthKey.split("-").map(Number);
+  const first = `${monthKey}-01`;
+  const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const days: Array<string | null> = [];
+  for (let i = 0; i < weekdayOfKey(first); i += 1) days.push(null);
+  for (let day = 0; day < daysInMonth; day += 1) days.push(addDaysToKey(first, day));
   while (days.length % 7 !== 0) days.push(null);
   return days;
 }
 
 export default function AvailabilityCalendarClient({ records }: { records: AvailabilityRecord[] }) {
-  const today = useMemo(() => new Date(), []);
-  const currentMonth = useMemo(() => new Date(today.getFullYear(), today.getMonth(), 1), [today]);
+  // "Today" is the bakery's day (Los Angeles), so the server render and every visitor agree on it.
+  const today = useMemo(() => todayKey(), []);
+  const currentMonth = monthKeyOf(today);
   const [monthOffset, setMonthOffset] = useState(0);
-  const calendarMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + monthOffset, 1);
+  const calendarMonth = addMonthsToMonthKey(currentMonth, monthOffset);
   const byDate = useMemo(() => new Map(records.map((r) => [r.date, r])), [records]);
 
-  // first non-booked, non-closed, non-past day — the soonest date worth requesting
+  // The soonest date worth requesting: at or after the minimum lead time, and not booked or closed.
+  const minDate = useMemo(() => minRequestableDateKey(), []);
   const nextOpen = useMemo(() => {
-    const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const start = minDate;
     for (let i = 0; i < 365; i += 1) {
-      const day = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-      const status = byDate.get(dateKey(day))?.status;
+      const day = addDaysToKey(start, i);
+      const status = byDate.get(day)?.status;
       if (status !== "fully_booked" && status !== "closed") return day;
     }
     return null;
-  }, [today, byDate]);
+  }, [byDate, minDate]);
 
   return (
     <section style={{ padding: "3rem 1.25rem", background: "#fffaf3", borderTop: "1px solid var(--border, #e8e4de)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
@@ -92,10 +93,10 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "0.85rem", marginBottom: "1.25rem", padding: "0.85rem 1.1rem", borderRadius: "0.9rem", background: "#fff", border: `1px solid ${OPEN_BORDER}` }}>
             <span style={{ fontSize: "0.92rem" }}>
               Next open date —{" "}
-              <strong>{nextOpen.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}</strong>
+              <strong>{formatDateKey(nextOpen, { weekday: "long", month: "short", day: "numeric" })}</strong>
             </span>
-            <Link href={`/contact?date=${dateKey(nextOpen)}`} className="btn btn-primary" style={{ fontSize: "0.82rem", padding: "0.6rem 1.25rem" }}>
-              Request {nextOpen.toLocaleDateString("en-US", { month: "short", day: "numeric" })} →
+            <Link href={`/contact?date=${nextOpen}`} className="btn btn-primary" style={{ fontSize: "0.82rem", padding: "0.6rem 1.25rem" }}>
+              Request {formatDateKey(nextOpen, { month: "short", day: "numeric" })} →
             </Link>
           </div>
         )}
@@ -112,7 +113,7 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
               ‹
             </button>
             <h3 style={{ margin: 0, textAlign: "center", fontFamily: "var(--font-fraunces)", fontSize: "1.55rem" }}>
-              {calendarMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+              {formatDateKey(`${calendarMonth}-01`, { month: "long", year: "numeric" })}
             </h3>
             <button
               type="button"
@@ -130,14 +131,17 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
           <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.35rem", marginTop: "0.45rem" }}>
             {buildMonthDays(calendarMonth).map((day, index) => {
               if (!day) return <div key={`blank-${index}`} style={{ aspectRatio: "1 / 1" }} />;
-              const record = byDate.get(dateKey(day));
+              const isPast = day < today;
+              // Days inside the minimum notice window cannot be requested either.
+              const tooSoon = !isPast && day < minDate;
+              // Past days are neutral: a day that has gone by is not "Booked" or "Limited" any more.
+              const record = isPast ? undefined : byDate.get(day);
               const colors = getStatusColors(record?.status);
-              const isPast = day < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-              const isOpen = !colors && !isPast;
+              const isOpen = !colors && !isPast && !tooSoon;
               return (
                 <div
-                  key={dateKey(day)}
-                  title={record?.note || (record ? statusLabels[record.status] : "Open — request to confirm")}
+                  key={day}
+                  title={isPast ? undefined : record?.note || (record ? statusLabels[record.status] : tooSoon ? `Needs ${MIN_LEAD_DAYS} days notice` : "Open - request to confirm")}
                   style={{
                     position: "relative",
                     aspectRatio: "1 / 1",
@@ -148,16 +152,16 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
                         ? `1.5px solid ${OPEN_BORDER}`
                         : "1px solid #eee8df",
                     background: colors?.bg || (isPast ? "#f4f0ea" : "#fff"),
-                    color: colors?.color || (isPast ? "#b5aaa0" : "inherit"),
+                    color: colors?.color || (isPast || tooSoon ? "#b5aaa0" : "inherit"),
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontSize: "0.8rem",
                     fontWeight: 800,
-                    opacity: isPast && !record ? 0.45 : 1,
+                    opacity: isPast ? 0.45 : 1,
                   }}
                 >
-                  {day.getDate()}
+                  {Number(day.slice(8))}
                   {isOpen && (
                     <span style={{ position: "absolute", bottom: 5, left: "50%", transform: "translateX(-50%)", width: 4, height: 4, borderRadius: 99, background: OPEN_DOT }} />
                   )}

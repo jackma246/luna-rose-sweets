@@ -3,20 +3,20 @@ import { prisma } from "@/lib/prisma";
 import { isAuthResponse, requireAdmin } from "@/lib/adminAuth";
 import { logAdminWriteWithClient } from "@/lib/adminAudit";
 import type { AvailabilityStatus } from "@/generated/prisma";
+import { addMonthsToMonthKey, dateKeyFromDbDate, isDateKey, isMonthKey, toDbDate } from "@/lib/businessDate";
 
 const STATUSES: AvailabilityStatus[] = ["available", "limited", "fully_booked", "closed"];
 
-function toDate(input: string) {
-  return new Date(`${input}T00:00:00`);
-}
+// AvailabilityDate.date is @db.Date: always build it as UTC midnight, whatever zone the server runs in.
+const toDate = toDbDate;
 
 export async function GET(req: NextRequest) {
   const actor = await requireAdmin(req);
   if (isAuthResponse(actor)) return actor;
 
   const month = req.nextUrl.searchParams.get("month");
-  const where = month?.match(/^\d{4}-\d{2}$/)
-    ? { date: { gte: toDate(`${month}-01`), lt: new Date(Number(month.slice(0, 4)), Number(month.slice(5, 7)), 1) } }
+  const where = isMonthKey(month)
+    ? { date: { gte: toDate(`${month}-01`), lt: toDate(`${addMonthsToMonthKey(month, 1)}-01`) } }
     : {};
 
   const dates = await prisma.availabilityDate.findMany({ where, orderBy: { date: "asc" } });
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
     ok: true,
     dates: dates.map((d) => ({
       id: d.id,
-      date: d.date.toISOString().slice(0, 10),
+      date: dateKeyFromDbDate(d.date),
       status: d.status,
       note: d.note,
     })),
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   if (isAuthResponse(actor)) return actor;
 
   const body = (await req.json()) as { date?: string; status?: AvailabilityStatus | "clear"; note?: string };
-  if (!body.date?.match(/^\d{4}-\d{2}-\d{2}$/)) {
+  if (!isDateKey(body.date)) {
     return NextResponse.json({ ok: false, error: "Valid date required." }, { status: 400 });
   }
 
@@ -62,9 +62,9 @@ export async function POST(req: NextRequest) {
     await logAdminWriteWithClient(tx, {
       actor, method: req.method, path: req.nextUrl.pathname, action: "availability.upsert",
       targetType: "availabilityDate", targetId: saved.id, requestJson: body,
-      responseJson: { id: saved.id, date: saved.date.toISOString().slice(0, 10), status: saved.status }, ok: true,
+      responseJson: { id: saved.id, date: dateKeyFromDbDate(saved.date), status: saved.status }, ok: true,
     });
-    return { id: saved.id, date: saved.date.toISOString().slice(0, 10), status: saved.status, note: saved.note };
+    return { id: saved.id, date: dateKeyFromDbDate(saved.date), status: saved.status, note: saved.note };
   });
 
   if (!result) return NextResponse.json({ ok: false, error: "Valid status required." }, { status: 400 });

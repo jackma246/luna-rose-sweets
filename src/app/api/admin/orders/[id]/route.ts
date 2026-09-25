@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { ORDER_STATUSES } from "@/lib/orderStatus";
 import { ORDER_SOURCES } from "@/lib/orderSources";
 import { orderUploadDir } from "@/lib/imageStorage";
+import { dateKeyFromDbDate, isDateKey, toDbDate } from "@/lib/businessDate";
+import { describeError } from "@/lib/logging";
 import type { OrderStatus, OrderSource, Prisma } from "@/generated/prisma";
 import { isAuthResponse, requireAdmin, requireSunjaeDeleteConfirmation } from "@/lib/adminAuth";
 import { logAdminWriteWithClient } from "@/lib/adminAudit";
@@ -23,7 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     order: {
       ...order,
       totalPrice: Number(order.totalPrice),
-      neededDate: order.neededDate ? order.neededDate.toISOString().slice(0, 10) : null,
+      neededDate: order.neededDate ? dateKeyFromDbDate(order.neededDate) : null,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
       images: order.images.map((image) => ({
@@ -68,7 +70,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.internalNotes !== undefined) data.internalNotes = body.internalNotes;
   if (body.customerNotes !== undefined) data.customerNotes = body.customerNotes;
   if (body.neededDate !== undefined) {
-    data.neededDate = body.neededDate ? new Date(body.neededDate + "T00:00:00") : null;
+    if (body.neededDate && !isDateKey(body.neededDate)) {
+      return NextResponse.json({ ok: false, error: "neededDate must be YYYY-MM-DD." }, { status: 400 });
+    }
+    data.neededDate = body.neededDate ? toDbDate(body.neededDate) : null;
   }
   if (body.customerName !== undefined) data.customerName = body.customerName;
   if (body.customerEmail !== undefined) data.customerEmail = body.customerEmail;
@@ -104,8 +109,15 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ ok: false, error: "Nothing to update." }, { status: 400 });
   }
 
-  const shouldPurgeImages = data.status === "completed";
+  // Photos of a completed order are kept for the retention window (PHOTO_RETENTION_DAYS) and then
+  // deleted by the purge-images cron, not here: the owner may still need them right after completing.
   const order = await prisma.$transaction(async (tx) => {
+    if (body.neededDate !== undefined) {
+      const current = await tx.order.findUnique({ where: { id }, select: { neededDate: true } });
+      const before = current?.neededDate ? dateKeyFromDbDate(current.neededDate) : null;
+      // A new date means new D-3/D-2/D-0 reminders: the ones already sent were for the old date.
+      if (before !== (body.neededDate || null)) data.remindersSent = [];
+    }
     const updated = await tx.order.update({ where: { id }, data });
     await logAdminWriteWithClient(tx, {
       actor,
@@ -118,33 +130,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       responseJson: { id },
       ok: true,
     });
-
-    if (shouldPurgeImages) {
-      const deleted = await tx.orderImage.deleteMany({ where: { orderId: id } });
-      await logAdminWriteWithClient(tx, {
-        actor,
-        method: req.method,
-        path: req.nextUrl.pathname,
-        action: "order_image.purge_completed_order",
-        targetType: "order",
-        targetId: id,
-        responseJson: { orderId: id, deletedImageRows: deleted.count },
-        ok: true,
-      });
-    }
-
     return updated;
   });
-
-  // Free up volume space once an order is finished. DB row deletion is audited in the transaction above.
-  if (shouldPurgeImages) {
-    try {
-      await rm(orderUploadDir(id), { recursive: true, force: true });
-    } catch (err) {
-      console.error("Failed to remove upload directory for completed order:", err);
-    }
-  }
-
 
   return NextResponse.json({ ok: true, order });
 }
@@ -172,7 +159,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   try {
     await rm(uploadDir, { recursive: true, force: true });
   } catch (err) {
-    console.error("Failed to remove upload directory for deleted order:", err);
+    console.error("Failed to remove upload directory for deleted order:", describeError(err));
   }
   return NextResponse.json({ ok: true });
 }

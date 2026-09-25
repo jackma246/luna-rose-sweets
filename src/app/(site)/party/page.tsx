@@ -1,8 +1,18 @@
+import type { Metadata } from "next";
+import { pageMetadata, SITE_NAME } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
 import { getProductBySlug } from "@/data/products";
+
+export const metadata: Metadata = pageMetadata({
+  title: `Party Dessert Tables · ${SITE_NAME}`,
+  description:
+    "Dessert table party sets for a standard 6ft table - coordinated cake pops, cakesicles and chocolate-dipped treats styled in your colours.",
+  path: "/party",
+  image: "/images/treat-boxes/party-set-large.jpeg",
+});
 
 const _partySetVariants = getProductBySlug("party-set")!.variants;
 const _setPrice = (keyword: string): number =>
@@ -234,7 +244,7 @@ export default function PartyLandingPage() {
             Most popular <em>party sets.</em>
           </h2>
           <p style={{ opacity: 0.65, maxWidth: 480, margin: "0 auto" }}>
-            Most customers choose Medium or Large for the best experience.
+            Most customers choose our Classic or Signature table for the best experience.
           </p>
         </div>
 
