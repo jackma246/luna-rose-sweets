@@ -50,10 +50,21 @@ def base_url() -> str:
     return os.environ.get("DIPSPRINKLE_ADMIN_BASE_URL", "https://dipsprinkle.com").rstrip("/")
 
 
-def token() -> str:
+def token(method: str) -> str:
+    """Pick the bearer token for a request.
+
+    Reads use SUNJAE_ADMIN_API_READ_TOKEN when it is set (the server only lets it GET),
+    otherwise the full SUNJAE_ADMIN_API_TOKEN. Writes always need the full token.
+    """
+    if method == "GET":
+        read_only = os.environ.get("SUNJAE_ADMIN_API_READ_TOKEN", "")
+        if read_only:
+            return read_only
     value = os.environ.get("SUNJAE_ADMIN_API_TOKEN", "")
     if not value:
-        die("SUNJAE_ADMIN_API_TOKEN is required for API execution")
+        if method == "GET":
+            die("SUNJAE_ADMIN_API_READ_TOKEN or SUNJAE_ADMIN_API_TOKEN is required for API reads")
+        die("SUNJAE_ADMIN_API_TOKEN is required for API writes")
     return value
 
 
@@ -121,7 +132,7 @@ def multipart_request(path: str, file_paths: list[str], execute: bool = False) -
 
     data, boundary = encode_multipart_files(files)
     headers = {
-        "Authorization": f"Bearer {token()}",
+        "Authorization": f"Bearer {token('POST')}",
         "Content-Type": f"multipart/form-data; boundary={boundary}",
         "Accept": "application/json",
     }
@@ -155,7 +166,7 @@ def request(
 
     data = None if payload is None else json.dumps(payload).encode("utf-8")
     headers = {
-        "Authorization": f"Bearer {token()}",
+        "Authorization": f"Bearer {token(method)}",
         "Content-Type": "application/json",
         "Accept": "application/json",
     }
