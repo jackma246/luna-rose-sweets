@@ -3,6 +3,7 @@ import { readFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { prisma } from "@/lib/prisma";
 import { orderUploadDir } from "@/lib/imageStorage";
+import { orderImageHeaders } from "@/lib/imageResponseHeaders";
 import { isAuthResponse, requireAdmin, requireSunjaeDeleteConfirmation } from "@/lib/adminAuth";
 import { logAdminWriteWithClient } from "@/lib/adminAudit";
 
@@ -27,11 +28,7 @@ export async function GET(
   }
   return new NextResponse(new Uint8Array(data), {
     status: 200,
-    headers: {
-      "Content-Type": image.mimeType || "application/octet-stream",
-      "Content-Length": String(data.byteLength),
-      "Cache-Control": "private, max-age=3600",
-    },
+    headers: orderImageHeaders(image, data.byteLength),
   });
 }
 
