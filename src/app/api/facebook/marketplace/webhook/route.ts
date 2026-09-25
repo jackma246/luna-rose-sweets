@@ -43,6 +43,9 @@ function telegramConfig(): { token: string; chatId: string } | null {
   return token && chatId ? { token, chatId } : null;
 }
 
+// Operational metadata only. Customer message text, sender identity, the
+// generated reply and the Korean escalation (which quotes the customer) are
+// deliberately left out so no customer content ends up in Railway logs.
 function safeLogPayload(decision: MarketplaceDecision): Record<string, unknown> {
   return {
     action: decision.action,
@@ -50,17 +53,17 @@ function safeLogPayload(decision: MarketplaceDecision): Record<string, unknown> 
     language: decision.language,
     source: decision.source,
     confidence: decision.confidence,
-    context: decision.context,
-    customerMessage: decision.customerMessage,
-    reply: decision.reply,
+    messageId: decision.context.messageId,
+    listingTitle: decision.context.listingTitle,
+    messageLength: decision.customerMessage.length,
     escalationId: decision.escalationId,
-    sunjaeMessageKo: decision.sunjaeMessageKo,
   };
 }
 
 function verifySignature(rawBody: string, signatureHeader: string | null): boolean {
   const secret = appSecret();
-  if (!secret) return true;
+  // Fail closed: without FB_APP_SECRET nothing can prove a POST came from Meta.
+  if (!secret) return false;
   if (!signatureHeader?.startsWith("sha256=")) return false;
   const expected = "sha256=" + crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
   const expectedBuffer = Buffer.from(expected);
@@ -68,12 +71,16 @@ function verifySignature(rawBody: string, signatureHeader: string | null): boole
   return expectedBuffer.length === actualBuffer.length && crypto.timingSafeEqual(expectedBuffer, actualBuffer);
 }
 
-async function sendFacebookMessage(recipientId: string, text: string): Promise<boolean> {
+async function sendFacebookMessage(pageId: string | undefined, recipientId: string, text: string): Promise<boolean> {
   const token = pageAccessToken();
   if (!token) return false;
-  const response = await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${encodeURIComponent(token)}`, {
+  // Token goes in the Authorization header, not the query string, so it never
+  // lands in URL logs. Address the Page by id (the webhook's recipient) as the
+  // Send API documents; "me" is only a fallback.
+  const page = pageId && /^\d+$/.test(pageId) ? pageId : "me";
+  const response = await fetch(`https://graph.facebook.com/v19.0/${page}/messages`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify({ recipient: { id: recipientId }, message: { text } }),
   });
   return response.ok;
@@ -102,7 +109,7 @@ async function processMessage(messaging: FacebookMessaging): Promise<ProcessedMe
   });
 
   if (decision.action === "auto_reply" && decision.reply) {
-    const delivered = await sendFacebookMessage(senderId, decision.reply);
+    const delivered = await sendFacebookMessage(messaging.recipient?.id, senderId, decision.reply);
     if (!delivered) console.log("facebook_marketplace_decision", JSON.stringify(safeLogPayload(decision)));
     return { senderId, messageId: messaging.message?.mid, action: decision.action, intent: decision.intent, delivered: delivered ? "facebook" : "local_only" };
   }
@@ -130,6 +137,10 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
+  if (!appSecret()) {
+    console.error("facebook_marketplace_webhook refused: FB_APP_SECRET is not set");
+    return NextResponse.json({ ok: false, error: "webhook_not_configured" }, { status: 403 });
+  }
   if (!verifySignature(rawBody, req.headers.get("x-hub-signature-256"))) {
     return NextResponse.json({ ok: false, error: "invalid_signature" }, { status: 403 });
   }
