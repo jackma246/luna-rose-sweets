@@ -46,8 +46,8 @@ export type RequestDatePickerProps = {
   disabled?: boolean;
   className?: string;
   style?: CSSProperties;
-  /** Helper text styling: "site" = cart modal (inputs carry bottom margin), "contact" = contact form, "classic" = Tailwind theme. */
-  theme?: "site" | "contact" | "classic";
+  /** Helper text styling: "site" = cart modal (inputs carry bottom margin), "contact" = contact form. */
+  theme?: "site" | "contact";
   /** Show the upcoming closed/booked days list under the input. Default true. */
   showUpcoming?: boolean;
   /** Minimum notice in days (the longest lead time of the items being ordered). Default MIN_LEAD_DAYS. */
@@ -175,10 +175,7 @@ export default function RequestDatePicker({
   const helpStyle: CSSProperties =
     theme === "site"
       ? { fontSize: "0.78rem", margin: "-0.5rem 0 0.9rem", lineHeight: 1.45 }
-      : theme === "contact"
-        ? { fontSize: "0.78rem", margin: "0.45rem 0 0", lineHeight: 1.45 }
-        : {};
-  const helpClass = theme === "classic" ? "text-xs mt-1" : undefined;
+      : { fontSize: "0.78rem", margin: "0.45rem 0 0", lineHeight: 1.45 };
 
   return (
     <div>
@@ -199,19 +196,19 @@ export default function RequestDatePicker({
       />
 
       {error && (
-        <p role="alert" className={helpClass} style={{ ...helpStyle, color: "#b0343c", fontWeight: 500 }}>
+        <p role="alert" style={{ ...helpStyle, color: "#b0343c", fontWeight: 500 }}>
           {error}
         </p>
       )}
 
       {!error && selectedStatus === "limited" && (
-        <p className={helpClass} style={{ ...helpStyle, color: statusColors.limited.color }}>
+        <p style={{ ...helpStyle, color: statusColors.limited.color }}>
           Limited availability on {friendlyDate(value)} - we&rsquo;ll confirm by email.
         </p>
       )}
 
       {showUpcoming && upcoming.length > 0 && (
-        <div id={id ? `${id}-help` : undefined} className={helpClass} style={{ ...helpStyle, display: "flex", flexWrap: "wrap", gap: "0.3rem", alignItems: "center" }}>
+        <div id={id ? `${id}-help` : undefined} style={{ ...helpStyle, display: "flex", flexWrap: "wrap", gap: "0.3rem", alignItems: "center" }}>
           <span style={{ opacity: 0.6, marginRight: "0.15rem" }}>Coming up:</span>
           {upcoming.map((r) => {
             const c = statusColors[r.status as keyof typeof statusColors];
@@ -237,7 +234,7 @@ export default function RequestDatePicker({
       )}
 
       {loadFailed && (
-        <p className={helpClass} style={{ ...helpStyle, opacity: 0.6 }}>
+        <p style={{ ...helpStyle, opacity: 0.6 }}>
           Couldn&rsquo;t load our calendar - we&rsquo;ll double-check the date when you send your request.
         </p>
       )}

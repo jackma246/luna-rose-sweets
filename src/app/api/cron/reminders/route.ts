@@ -325,5 +325,9 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: failed.length === 0, summary, force, ...(failed.length > 0 ? { failed } : {}) });
+  // 502 on any failed send so a scheduler that only checks the status code still alerts.
+  return NextResponse.json(
+    { ok: failed.length === 0, summary, force, ...(failed.length > 0 ? { failed } : {}) },
+    { status: failed.length > 0 ? 502 : 200 },
+  );
 }

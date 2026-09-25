@@ -8,7 +8,7 @@ Everything you need to run the site, manage orders, and track expenses.
 
 | Piece | What it does | Where it lives |
 |---|---|---|
-| Public site | Customer-facing storefront | `src/app/(site)/*`, `src/app/classic/*` |
+| Public site | Customer-facing storefront | `src/app/(site)/*` (old `/classic/*` URLs redirect here) |
 | Order request API | Writes orders to DB + sends 2 emails | `src/app/api/request-order/route.ts` |
 | Admin dashboard | Owner-only orders + expenses management | `src/app/admin/*` |
 | Admin APIs | CRUD for orders + expenses | `src/app/api/admin/*` |
@@ -260,7 +260,8 @@ Opens a browser GUI at `localhost:5555` for editing rows by hand.
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Admin login always says "incorrect password" | `ADMIN_PASSWORD` not set or mismatched between local/Railway | Check env var on both sides |
-| Order submission returns 500 | `RESEND_API_KEY` missing, or DB unreachable | Check Railway logs; verify env vars |
+| Order submission returns 500 | DB unreachable (the order was not saved and no email went out) | Check Railway logs and the database service |
+| Order saved but no emails arrived | `RESEND_API_KEY` missing or Resend rejected the send; the response carries `warnings` | Check Railway logs; verify `RESEND_API_KEY` and the Resend dashboard |
 | Order in DB but no email sent | Resend domain unverified, or rate-limited | Check Resend dashboard → Logs |
 | Cron returns 401 | Wrong `CRON_SECRET` or missing Authorization header | Confirm bearer value matches web service env |
 | Cron returns 503 | `CRON_SECRET` not set on the web service | Set it; the endpoints refuse to run without it |

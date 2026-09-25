@@ -52,7 +52,7 @@ Meta verification uses:
 FB_MARKETPLACE_VERIFY_TOKEN=***
 ```
 
-Optional request signature validation uses:
+Required: the webhook rejects every POST (403) unless request signatures can be validated with:
 
 ```text
 FB_APP_SECRET=***

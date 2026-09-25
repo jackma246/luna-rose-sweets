@@ -60,6 +60,7 @@ describe("GET /api/cron/reminders", () => {
   it("marks reminders sent only when Resend accepted the email", async () => {
     db.send.mockResolvedValue({ data: null, error: { name: "rate_limit_exceeded", message: "slow down" } });
     const res = await get();
+    expect(res.status).toBe(502);
     expect(await res.json()).toMatchObject({ ok: false, failed: ["d3"] });
     expect(db.update).not.toHaveBeenCalled();
 
