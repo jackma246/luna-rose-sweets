@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ function formatDateTime(date: Date): string {
 }
 
 export default async function AdminInquiriesPage() {
+  await requireAdminPage();
   const inquiries = await prisma.inquiry.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,

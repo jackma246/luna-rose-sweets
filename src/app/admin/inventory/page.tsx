@@ -7,6 +7,7 @@ import {
 import { FilterChips } from "../FilterChips";
 import type { InventoryCategory, Prisma } from "@/generated/prisma";
 import InventoryRow from "./InventoryRow";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function InventoryPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  await requireAdminPage();
   const sp = await searchParams;
   const categoryFilter =
     sp.category && INVENTORY_CATEGORIES.includes(sp.category as InventoryCategory)

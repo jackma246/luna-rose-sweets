@@ -6,6 +6,7 @@ import { formatOrderNumber } from "@/lib/orderNumber";
 import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
 import { FilterChips, FilterSelect } from "./FilterChips";
 import type { Order, OrderSource, Prisma } from "@/generated/prisma";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +98,7 @@ export default async function AdminOrdersPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  await requireAdminPage();
   const sp = await searchParams;
   const monthRange = parseMonth(sp.month);
   const sourceFilter = sp.source && ORDER_SOURCES.includes(sp.source as OrderSource)

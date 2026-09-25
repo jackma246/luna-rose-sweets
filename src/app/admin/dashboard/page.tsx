@@ -7,6 +7,7 @@ import type { DayOfWeekPoint, MonthlyPoint, SlicePoint } from "./Charts";
 import { isTerminal, daysUntil } from "@/lib/orderStatus";
 import { FilterChips } from "../FilterChips";
 import type { OrderSource, ExpenseCategory } from "@/generated/prisma";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -85,6 +86,7 @@ export default async function DashboardPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  await requireAdminPage();
   const sp = await searchParams;
   const range: Range = VALID_RANGES.includes(sp.range as Range) ? (sp.range as Range) : "12m";
   const { start, end } = rangeBounds(range);

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import InventoryEditor from "./InventoryEditor";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,7 @@ export default async function InventoryItemPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireAdminPage();
   const { id } = await params;
   const item = await prisma.inventoryItem.findUnique({ where: { id } });
   if (!item) notFound();

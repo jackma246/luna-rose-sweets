@@ -4,6 +4,7 @@ import { CATEGORY_LABEL, CATEGORY_CHIP, EXPENSE_CATEGORIES } from "@/lib/expense
 import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
 import { FilterChips, FilterSelect } from "../FilterChips";
 import type { ExpenseCategory, Prisma } from "@/generated/prisma";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function ExpensesPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  await requireAdminPage();
   const sp = await searchParams;
   const monthRange = parseMonth(sp.month);
   const categoryFilter = sp.category && EXPENSE_CATEGORIES.includes(sp.category as ExpenseCategory)
