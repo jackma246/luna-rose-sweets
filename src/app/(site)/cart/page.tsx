@@ -9,6 +9,7 @@ import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
 import RequestDatePicker from "../components/RequestDatePicker";
+import { BOTTOM_SHEET_STYLE } from "../components/bottomSheet";
 
 type Status = "idle" | "form" | "sending" | "sent" | "error";
 
@@ -110,12 +111,7 @@ export default function V2CartPage() {
       }}
       onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
     >
-      <div style={{
-        background: "#fff",
-        borderRadius: "1.25rem 1.25rem 0 0",
-        padding: "1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))",
-        width: "100%", maxWidth: 520, boxSizing: "border-box",
-      }}>
+      <div style={BOTTOM_SHEET_STYLE}>
         <div style={{ width: 40, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 1.5rem" }} />
 
         {status === "sent" ? (
