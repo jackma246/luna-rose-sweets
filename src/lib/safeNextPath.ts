@@ -12,7 +12,6 @@ export function safeNextPath(value: string | null | undefined): string {
   if (!value) return DEFAULT_ADMIN_PATH;
   if (!value.startsWith("/")) return DEFAULT_ADMIN_PATH;
   if (value[1] === "/" || value[1] === "\\") return DEFAULT_ADMIN_PATH;
-  // eslint-disable-next-line no-control-regex
   if (/[\u0000- \u007f-\u009f\\]/.test(value)) return DEFAULT_ADMIN_PATH;
   return value;
 }
