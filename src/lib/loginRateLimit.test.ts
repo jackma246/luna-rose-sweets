@@ -5,7 +5,6 @@ import {
   IP_MAX_FAILURES,
   IP_WINDOW_MS,
   LoginRateLimiter,
-  clientIp,
 } from "@/lib/loginRateLimit";
 
 function limiterAt(start = 1_000_000) {
@@ -59,14 +58,5 @@ describe("global backoff", () => {
     const capped = limiter.check("192.168.1.1");
     expect(capped.allowed).toBe(false);
     if (!capped.allowed) expect(capped.retryAfterMs).toBeLessThanOrEqual(GLOBAL_MAX_DELAY_MS);
-  });
-});
-
-describe("clientIp", () => {
-  it("uses the right-most X-Forwarded-For entry (the one the proxy appended)", () => {
-    expect(clientIp(new Headers({ "x-forwarded-for": "6.6.6.6, 203.0.113.9" }))).toBe("203.0.113.9");
-    expect(clientIp(new Headers({ "x-forwarded-for": "203.0.113.9" }))).toBe("203.0.113.9");
-    expect(clientIp(new Headers({ "x-real-ip": "198.51.100.2" }))).toBe("198.51.100.2");
-    expect(clientIp(new Headers())).toBe("unknown");
   });
 });

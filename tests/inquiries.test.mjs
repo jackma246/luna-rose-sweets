@@ -283,14 +283,14 @@ test("more than 5 accepted inquiries per hour from one IP are rate limited", asy
   });
   try {
     for (let i = 0; i < 5; i += 1) {
-      const res = await POST(requestJson({ name: "Sam", email: "sam@example.com" }, { "x-forwarded-for": "198.51.100.9, 10.0.0.1" }));
+      const res = await POST(requestJson({ name: "Sam", email: "sam@example.com" }, { "x-real-ip": "198.51.100.9", "x-forwarded-for": "6.6.6.6" }));
       assert.equal(res.status, 200);
     }
-    const limited = await POST(requestJson({ name: "Sam", email: "sam@example.com" }, { "x-forwarded-for": "198.51.100.9" }));
+    const limited = await POST(requestJson({ name: "Sam", email: "sam@example.com" }, { "x-real-ip": "198.51.100.9", "x-forwarded-for": "7.7.7.7" }));
     assert.equal(limited.status, 429);
     assert.equal(created, 5);
     // A different client is unaffected.
-    const other = await POST(requestJson({ name: "Alex", email: "alex@example.com" }, { "x-forwarded-for": "198.51.100.10" }));
+    const other = await POST(requestJson({ name: "Alex", email: "alex@example.com" }, { "x-real-ip": "198.51.100.10" }));
     assert.equal(other.status, 200);
   } finally {
     restoreEnv();

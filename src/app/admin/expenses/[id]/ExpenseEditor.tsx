@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { EXPENSE_CATEGORIES, CATEGORY_LABEL } from "@/lib/expenseCategories";
 import type { ExpenseCategory } from "@/generated/prisma";
 
@@ -17,6 +18,7 @@ interface SerializedExpense {
 }
 
 export default function ExpenseEditor({ expense }: { expense: SerializedExpense }) {
+  const router = useRouter();
   const [date, setDate] = useState(expense.date);
   const [amount, setAmount] = useState(String(expense.amount));
   const [vendor, setVendor] = useState(expense.vendor);
@@ -44,7 +46,8 @@ export default function ExpenseEditor({ expense }: { expense: SerializedExpense 
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      window.location.assign("/admin/expenses");
+      router.push("/admin/expenses");
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);
@@ -60,7 +63,8 @@ export default function ExpenseEditor({ expense }: { expense: SerializedExpense 
     try {
       const res = await fetch(`/api/admin/expenses/${expense.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      window.location.assign("/admin/expenses");
+      router.push("/admin/expenses");
+      router.refresh();
     } catch {
       setError("Couldn't delete.");
       setSaving(false);

@@ -5,6 +5,9 @@ export interface SniffedImage {
   ext: ".jpg" | ".png" | ".webp" | ".gif" | ".heic" | ".heif";
 }
 
+/** Every MIME type sniffImageType can return; the only types an uploaded image is ever served as. */
+export const SNIFFED_IMAGE_MIMES: readonly string[] = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/heic", "image/heif"];
+
 const HEIC_BRANDS = new Set(["heic", "heix", "hevc", "hevx", "heim", "heis", "hevm", "hevs"]);
 const HEIF_BRANDS = new Set(["mif1", "msf1", "heif"]);
 

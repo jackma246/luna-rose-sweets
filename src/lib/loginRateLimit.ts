@@ -94,21 +94,7 @@ export class LoginRateLimiter {
   }
 }
 
-/**
- * Client IP for rate limiting. With exactly one trusted reverse proxy in front
- * of the app (Railway's edge), the right-most X-Forwarded-For entry is the
- * address that proxy saw connecting, which a client cannot forge; anything to
- * its left is client-supplied. If another proxy/CDN is ever put in front of
- * Railway, this must be revisited or every visitor shares the CDN's bucket.
- */
-export function clientIp(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for");
-  if (forwarded) {
-    const parts = forwarded.split(",").map((p) => p.trim()).filter(Boolean);
-    if (parts.length > 0) return parts[parts.length - 1];
-  }
-  return headers.get("x-real-ip")?.trim() || "unknown";
-}
+export { clientIp } from "@/lib/clientIp";
 
 // One limiter per server process.
 const globalForLimiter = globalThis as unknown as { adminLoginLimiter?: LoginRateLimiter };

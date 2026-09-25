@@ -58,13 +58,7 @@ export function createRateLimiter({ limit, windowMs, maxKeys = 10_000 }: RateLim
   };
 }
 
-/** Client IP for rate limiting: the first hop of x-forwarded-for (set by Railway's edge), else x-real-ip. */
-export function clientIp(headers: Headers): string {
-  const forwarded = headers.get("x-forwarded-for");
-  const first = forwarded?.split(",")[0]?.trim();
-  const ip = first || headers.get("x-real-ip")?.trim() || "unknown";
-  return ip.slice(0, 100);
-}
+export { clientIp } from "@/lib/clientIp";
 
 const HOUR = 60 * 60 * 1000;
 

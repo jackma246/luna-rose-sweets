@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { clientIp, createRateLimiter } from "@/lib/rateLimit";
+import { createRateLimiter } from "@/lib/rateLimit";
 import { readJsonBody } from "@/lib/requestBody";
 import { describeError } from "@/lib/logging";
 import { decodeDataUrl, sniffImageType } from "@/lib/imageStorage";
@@ -23,12 +23,6 @@ describe("rate limiter", () => {
     rl.hit("c", 0);
     expect(rl.check("a", 1).limited).toBe(false);
     expect(rl.check("c", 1).limited).toBe(true);
-  });
-
-  it("keys by the first x-forwarded-for hop", () => {
-    expect(clientIp(new Headers({ "x-forwarded-for": " 203.0.113.1 , 10.0.0.2" }))).toBe("203.0.113.1");
-    expect(clientIp(new Headers({ "x-real-ip": "198.51.100.3" }))).toBe("198.51.100.3");
-    expect(clientIp(new Headers())).toBe("unknown");
   });
 });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   INVENTORY_CATEGORIES,
@@ -9,6 +10,7 @@ import {
 import type { InventoryCategory } from "@/generated/prisma";
 
 export default function NewInventoryItemPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
@@ -38,7 +40,8 @@ export default function NewInventoryItemPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      window.location.assign("/admin/inventory");
+      router.push("/admin/inventory");
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);

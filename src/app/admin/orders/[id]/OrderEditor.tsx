@@ -361,7 +361,8 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
     try {
       const res = await fetch(`/api/admin/orders/${order.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      window.location.assign("/admin");
+      router.push("/admin");
+      router.refresh();
     } catch {
       alert("Couldn't delete — try again.");
       setSaving(false);

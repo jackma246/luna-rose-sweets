@@ -41,6 +41,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  experimental: {
+    // The proxy buffers bodies of the routes it matches (/admin, /api/admin) and
+    // truncates at 10MB by default, which would cut off multi-photo admin
+    // uploads. 60MB covers a batch of phone photos while bounding what an
+    // unauthenticated request can make the proxy hold in memory.
+    proxyClientMaxBodySize: "60mb",
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

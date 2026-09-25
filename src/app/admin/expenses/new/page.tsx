@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { EXPENSE_CATEGORIES, CATEGORY_LABEL } from "@/lib/expenseCategories";
 import type { ExpenseCategory } from "@/generated/prisma";
 import { todayKey } from "@/lib/businessDate";
 
 export default function NewExpensePage() {
+  const router = useRouter();
   // Default to today in Los Angeles (toISOString would give the UTC date, a day ahead in the evening).
   const today = todayKey();
   const [date, setDate] = useState(today);
@@ -35,7 +37,8 @@ export default function NewExpensePage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      window.location.assign("/admin/expenses");
+      router.push("/admin/expenses");
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);

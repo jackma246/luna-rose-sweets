@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import {
   INVENTORY_CATEGORIES,
   INVENTORY_CATEGORY_LABEL,
@@ -18,6 +19,7 @@ interface SerializedItem {
 }
 
 export default function InventoryEditor({ item }: { item: SerializedItem }) {
+  const router = useRouter();
   const [name, setName] = useState(item.name);
   const [quantity, setQuantity] = useState(String(item.quantity));
   const [unit, setUnit] = useState(item.unit || "");
@@ -50,7 +52,8 @@ export default function InventoryEditor({ item }: { item: SerializedItem }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      window.location.assign("/admin/inventory");
+      router.push("/admin/inventory");
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);
@@ -66,7 +69,8 @@ export default function InventoryEditor({ item }: { item: SerializedItem }) {
     try {
       const res = await fetch(`/api/admin/inventory/${item.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      window.location.assign("/admin/inventory");
+      router.push("/admin/inventory");
+      router.refresh();
     } catch {
       setError("Couldn't delete.");
       setSaving(false);

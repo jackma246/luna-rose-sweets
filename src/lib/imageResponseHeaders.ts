@@ -1,4 +1,4 @@
-import { ALLOWED_MIME } from "@/lib/imageStorage";
+import { SNIFFED_IMAGE_MIMES } from "@/lib/imageSniff";
 
 /** ASCII-only, header-safe version of a user-supplied file name. */
 export function safeDownloadName(originalName: string | null | undefined, fallback: string): string {
@@ -24,7 +24,7 @@ export function orderImageHeaders(image: {
   originalName: string | null;
   mimeType: string | null;
 }, byteLength: number): Record<string, string> {
-  const mime = image.mimeType && ALLOWED_MIME.includes(image.mimeType) ? image.mimeType : "application/octet-stream";
+  const mime = image.mimeType && SNIFFED_IMAGE_MIMES.includes(image.mimeType) ? image.mimeType : "application/octet-stream";
   const disposition = mime === "application/octet-stream" ? "attachment" : "inline";
   const filename = safeDownloadName(image.originalName, `image-${image.id}`);
   return {
