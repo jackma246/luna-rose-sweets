@@ -3,7 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, FormEvent } from "react";
-import { useCart } from "@/context/CartContext";
+import { MAX_LINE_QUANTITY, useCart } from "@/context/CartContext";
+import { cartLeadDays } from "@/data/products";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
 import RequestDatePicker from "../components/RequestDatePicker";
@@ -11,7 +13,7 @@ import RequestDatePicker from "../components/RequestDatePicker";
 type Status = "idle" | "form" | "sending" | "sent" | "error";
 
 export default function V2CartPage() {
-  const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart } = useCart();
+  const { items, hydrated, removeItem, updateQuantity, totalPrice, totalItems, clearCart } = useCart();
   const [status, setStatus] = useState<Status>("idle");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,6 +22,10 @@ export default function V2CartPage() {
   const [message, setMessage] = useState("");
   const [dateState, setDateState] = useState({ valid: true, loading: true });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
+  // Honeypot: hidden from people, filled in by form bots. The server silently drops requests that set it.
+  const [website, setWebsite] = useState("");
+  const leadDays = cartLeadDays(items.map((item) => item.productSlug));
 
   async function submitRequest(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,8 +36,19 @@ export default function V2CartPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items,
+          items: items.map((item) => ({
+            productSlug: item.productSlug,
+            variantLabel: item.variantLabel,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            flavour: item.flavour,
+            note: item.note,
+            selection: item.selection,
+            inspirationImages: item.inspirationImages,
+          })),
           totalPrice,
+          [HONEYPOT_FIELD]: website,
           customer: {
             name,
             email,
@@ -41,14 +58,18 @@ export default function V2CartPage() {
           },
         }),
       });
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
-        if (res.status === 400 && body?.error) {
+      const body = (await res.json().catch(() => null)) as { ok?: boolean; error?: string; orderNumber?: string } | null;
+      if (!res.ok || !body?.ok) {
+        if (body?.error) {
           setErrorMessage(body.error);
-          if (/date|day|notice|closed|booked/i.test(body.error)) setNeededDate("");
+          if (res.status === 400 && /date|day|notice|closed|booked/i.test(body.error)) setNeededDate("");
         }
         throw new Error("send failed");
       }
+      // The order is saved (the server answers ok even if an email failed), so empty the cart now:
+      // a refresh or a second tap can no longer submit it twice.
+      setOrderNumber(body.orderNumber ?? null);
+      clearCart();
       setStatus("sent");
     } catch {
       setStatus("error");
@@ -57,7 +78,6 @@ export default function V2CartPage() {
 
   function closeModal() {
     if (status === "sending") return;
-    if (status === "sent") clearCart();
     setStatus("idle");
   }
 
@@ -81,7 +101,152 @@ export default function V2CartPage() {
     letterSpacing: "0.02em",
   };
 
-  if (items.length === 0 && status !== "sent") {
+  const modal = status === "form" || status === "sending" || status === "sent" || status === "error" ? (
+    <div
+      style={{
+        position: "fixed", inset: 0, zIndex: 600,
+        background: "rgba(0,0,0,0.5)",
+        display: "flex", alignItems: "flex-end", justifyContent: "center",
+      }}
+      onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+    >
+      <div style={{
+        background: "#fff",
+        borderRadius: "1.25rem 1.25rem 0 0",
+        padding: "1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))",
+        width: "100%", maxWidth: 520, boxSizing: "border-box",
+      }}>
+        <div style={{ width: 40, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 1.5rem" }} />
+
+        {status === "sent" ? (
+          <div style={{ textAlign: "center", padding: "0.5rem 0 1rem" }}>
+            <h3 style={{ margin: "0 0 0.6rem", fontSize: "1.25rem" }}>Thanks — we&rsquo;ve got it.</h3>
+            <p style={{ margin: "0 0 1.5rem", fontSize: "0.9rem", opacity: 0.7, lineHeight: 1.55 }}>
+              {orderNumber ? <>Your request number is <strong>{orderNumber}</strong>. </> : null}
+              We&rsquo;ll email you back within 24 hours to confirm availability and payment.
+            </p>
+            <Link href="/products" className="btn btn-primary" onClick={closeModal}>
+              Keep browsing →
+            </Link>
+          </div>
+        ) : (
+          <form onSubmit={submitRequest}>
+            <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.1rem" }}>Request your order</h3>
+            <p style={{ margin: "0 0 1.1rem", fontSize: "0.83rem", opacity: 0.6, lineHeight: 1.55 }}>
+              Drop your details — we&rsquo;ll email you back to confirm and take payment manually.
+            </p>
+
+            <label style={labelStyle}>Name</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              disabled={status === "sending"}
+              placeholder="Sam Rivera"
+              style={inputStyle}
+            />
+
+            <label style={labelStyle}>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={status === "sending"}
+              placeholder="sam@hello.com"
+              style={inputStyle}
+            />
+
+            <label style={labelStyle}>Phone <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span></label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              disabled={status === "sending"}
+              placeholder="(408) 555-0100"
+              style={inputStyle}
+            />
+
+            <label style={labelStyle}>When do you need it?</label>
+            <RequestDatePicker
+              id="needed-date"
+              value={neededDate}
+              onChange={setNeededDate}
+              onValidityChange={setDateState}
+              leadDays={leadDays}
+              required
+              disabled={status === "sending"}
+              style={inputStyle}
+              theme="site"
+            />
+            <p style={{ fontSize: "0.72rem", opacity: 0.55, margin: "-0.6rem 0 0.9rem" }}>
+              Minimum {leadDays} days notice for this order. Larger orders may need more - we&rsquo;ll confirm.
+            </p>
+
+            <label style={labelStyle}>Notes <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span></label>
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              disabled={status === "sending"}
+              placeholder="Pickup date, theme, anything else…"
+              rows={3}
+              style={{ ...inputStyle, resize: "vertical", minHeight: 70 }}
+            />
+
+            <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+              <label>
+                Website
+                <input
+                  name={HONEYPOT_FIELD}
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
+            </div>
+
+            {status === "error" && (
+              <p style={{ color: "var(--cherry, #c05)", fontSize: "0.82rem", margin: "0 0 0.75rem" }}>
+                {errorMessage ?? "Something went wrong — please try again or email supportdipsprinkle@gmail.com directly."}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={status === "sending" || !dateState.valid || dateState.loading}
+              className="btn btn-primary"
+              style={{ width: "100%", justifyContent: "center", marginTop: "0.5rem" }}
+            >
+              {status === "sending" ? "Sending…" : "Send request →"}
+            </button>
+            <button
+              type="button"
+              onClick={closeModal}
+              disabled={status === "sending"}
+              style={{ width: "100%", background: "none", border: "none", fontSize: "0.82rem", opacity: 0.45, cursor: "pointer", marginTop: "0.65rem" }}
+            >
+              Cancel
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  ) : null;
+
+  if (!hydrated) {
+    // The saved basket is read from this browser after the first render; show the page frame until then
+    // instead of flashing the empty-basket message.
+    return (
+      <>
+        <V2Header />
+        <section className="cart-wrap" aria-busy="true" />
+        <V2Footer />
+      </>
+    );
+  }
+
+  if (items.length === 0) {
     return (
       <>
         <V2Header />
@@ -94,6 +259,7 @@ export default function V2CartPage() {
             Browse the collection →
           </Link>
         </section>
+        {modal}
         <V2Footer />
       </>
     );
@@ -112,7 +278,7 @@ export default function V2CartPage() {
           <div className="cart-items">
             {items.map((item) => (
               <article
-                key={`${item.productSlug}-${item.variantLabel}`}
+                key={item.lineId}
                 className="cart-item"
               >
                 <div className="thumb-img">
@@ -131,39 +297,34 @@ export default function V2CartPage() {
                   {item.flavour && (
                     <div className="opt" style={{ opacity: 0.75 }}>Flavour: {item.flavour}</div>
                   )}
+                  {item.note && (
+                    <div className="opt" style={{ opacity: 0.75 }}>{item.note}</div>
+                  )}
+                  {item.droppedImageCount ? (
+                    <div className="opt" style={{ color: "var(--cherry, #c05)" }}>
+                      {item.droppedImageCount} inspiration photo{item.droppedImageCount === 1 ? "" : "s"} could not be kept after reloading - please re-add this item with the photos, or reply to our confirmation email with them.
+                    </div>
+                  ) : null}
                   <div className="row">
                     <div className="qty">
                       <button
                         aria-label="Decrease"
-                        onClick={() =>
-                          updateQuantity(
-                            item.productSlug,
-                            item.variantLabel,
-                            item.quantity - 1
-                          )
-                        }
+                        onClick={() => updateQuantity(item.lineId, item.quantity - 1)}
                       >
                         −
                       </button>
                       <span>{item.quantity}</span>
                       <button
                         aria-label="Increase"
-                        onClick={() =>
-                          updateQuantity(
-                            item.productSlug,
-                            item.variantLabel,
-                            item.quantity + 1
-                          )
-                        }
+                        disabled={item.quantity >= MAX_LINE_QUANTITY}
+                        onClick={() => updateQuantity(item.lineId, item.quantity + 1)}
                       >
                         +
                       </button>
                     </div>
                     <button
                       className="remove"
-                      onClick={() =>
-                        removeItem(item.productSlug, item.variantLabel)
-                      }
+                      onClick={() => removeItem(item.lineId)}
                     >
                       Remove
                     </button>
@@ -213,123 +374,7 @@ export default function V2CartPage() {
         </div>
       </section>
 
-      {(status === "form" || status === "sending" || status === "sent" || status === "error") && (
-        <div
-          style={{
-            position: "fixed", inset: 0, zIndex: 600,
-            background: "rgba(0,0,0,0.5)",
-            display: "flex", alignItems: "flex-end", justifyContent: "center",
-          }}
-          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
-        >
-          <div style={{
-            background: "#fff",
-            borderRadius: "1.25rem 1.25rem 0 0",
-            padding: "1.75rem 1.5rem calc(1.75rem + env(safe-area-inset-bottom))",
-            width: "100%", maxWidth: 520, boxSizing: "border-box",
-          }}>
-            <div style={{ width: 40, height: 4, borderRadius: 2, background: "#ddd", margin: "0 auto 1.5rem" }} />
-
-            {status === "sent" ? (
-              <div style={{ textAlign: "center", padding: "0.5rem 0 1rem" }}>
-                <h3 style={{ margin: "0 0 0.6rem", fontSize: "1.25rem" }}>Thanks — we&rsquo;ve got it.</h3>
-                <p style={{ margin: "0 0 1.5rem", fontSize: "0.9rem", opacity: 0.7, lineHeight: 1.55 }}>
-                  We&rsquo;ll email you back within 24 hours to confirm availability and payment.
-                </p>
-                <Link href="/products" className="btn btn-primary" onClick={closeModal}>
-                  Keep browsing →
-                </Link>
-              </div>
-            ) : (
-              <form onSubmit={submitRequest}>
-                <h3 style={{ margin: "0 0 0.35rem", fontSize: "1.1rem" }}>Request your order</h3>
-                <p style={{ margin: "0 0 1.1rem", fontSize: "0.83rem", opacity: 0.6, lineHeight: 1.55 }}>
-                  Drop your details — we&rsquo;ll email you back to confirm and take payment manually.
-                </p>
-
-                <label style={labelStyle}>Name</label>
-                <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  disabled={status === "sending"}
-                  placeholder="Sam Rivera"
-                  style={inputStyle}
-                />
-
-                <label style={labelStyle}>Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  disabled={status === "sending"}
-                  placeholder="sam@hello.com"
-                  style={inputStyle}
-                />
-
-                <label style={labelStyle}>Phone <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span></label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  disabled={status === "sending"}
-                  placeholder="(408) 555-0100"
-                  style={inputStyle}
-                />
-
-                <label style={labelStyle}>When do you need it?</label>
-                <RequestDatePicker
-                  id="needed-date"
-                  value={neededDate}
-                  onChange={setNeededDate}
-                  onValidityChange={setDateState}
-                  required
-                  disabled={status === "sending"}
-                  style={inputStyle}
-                  theme="site"
-                />
-                <p style={{ fontSize: "0.72rem", opacity: 0.55, margin: "-0.6rem 0 0.9rem" }}>
-                  Minimum 3 days notice. Larger orders may need more — we&rsquo;ll confirm.
-                </p>
-
-                <label style={labelStyle}>Notes <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span></label>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  disabled={status === "sending"}
-                  placeholder="Pickup date, theme, anything else…"
-                  rows={3}
-                  style={{ ...inputStyle, resize: "vertical", minHeight: 70 }}
-                />
-
-                {status === "error" && (
-                  <p style={{ color: "var(--cherry, #c05)", fontSize: "0.82rem", margin: "0 0 0.75rem" }}>
-                    {errorMessage ?? "Something went wrong — please try again or email supportdipsprinkle@gmail.com directly."}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={status === "sending" || !dateState.valid || dateState.loading}
-                  className="btn btn-primary"
-                  style={{ width: "100%", justifyContent: "center", marginTop: "0.5rem" }}
-                >
-                  {status === "sending" ? "Sending…" : "Send request →"}
-                </button>
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  disabled={status === "sending"}
-                  style={{ width: "100%", background: "none", border: "none", fontSize: "0.82rem", opacity: 0.45, cursor: "pointer", marginTop: "0.65rem" }}
-                >
-                  Cancel
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+      {modal}
 
       <V2Footer />
     </>
