@@ -2,18 +2,19 @@
 
 import { useState, FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
+import { safeNextPath } from "@/lib/safeNextPath";
 
 export default function LoginForm() {
   const params = useSearchParams();
-  const next = params.get("next") || "/admin";
+  const next = safeNextPath(params.get("next"));
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
-    setError(false);
+    setError(null);
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
@@ -21,13 +22,19 @@ export default function LoginForm() {
         body: JSON.stringify({ password }),
       });
       if (!res.ok) {
-        setError(true);
+        setError(
+          res.status === 429
+            ? "Too many attempts. Please wait a few minutes and try again."
+            : res.status === 401
+              ? "Incorrect password."
+              : "Sign-in is unavailable right now.",
+        );
         setLoading(false);
         return;
       }
       window.location.assign(next);
     } catch {
-      setError(true);
+      setError("Sign-in is unavailable right now.");
       setLoading(false);
     }
   }
@@ -50,7 +57,7 @@ export default function LoginForm() {
           disabled={loading}
           className="field"
         />
-        {error && <p className="text-sm text-[#b91c1c] mt-2">Incorrect password.</p>}
+        {error && <p className="text-sm text-[#b91c1c] mt-2">{error}</p>}
 
         <button type="submit" disabled={loading} className="btn-cherry w-full justify-center mt-6 disabled:opacity-60">
           {loading ? "Signing in…" : "Sign in"}
