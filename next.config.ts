@@ -53,6 +53,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    // The classic storefront was retired; send old links to the current site.
+    // "/classic" is listed separately: with zero segments "/:path*" would
+    // produce an empty Location header.
+    return [
+      { source: "/classic", destination: "/", permanent: true },
+      { source: "/classic/:path*", destination: "/:path*", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

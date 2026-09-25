@@ -35,3 +35,14 @@ describe("next.config security headers", () => {
     expect(valueFor(rules[imageIndex], "Content-Security-Policy")).toMatch(/^sandbox(;|$)/);
   });
 });
+
+describe("next.config redirects", () => {
+  it("permanently redirects the retired /classic tree, including the bare /classic path", async () => {
+    const redirects = await nextConfig.redirects!();
+    expect(redirects).toContainEqual({ source: "/classic", destination: "/", permanent: true });
+    expect(redirects).toContainEqual({ source: "/classic/:path*", destination: "/:path*", permanent: true });
+    expect(redirects.findIndex((r) => r.source === "/classic")).toBeLessThan(
+      redirects.findIndex((r) => r.source === "/classic/:path*"),
+    );
+  });
+});
