@@ -27,7 +27,7 @@ function hasValidSunjaeToken(req: NextRequest) {
   return timingSafeEqualString(match[1], expected);
 }
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname === "/admin/login" || pathname.startsWith("/api/admin/login")) {
