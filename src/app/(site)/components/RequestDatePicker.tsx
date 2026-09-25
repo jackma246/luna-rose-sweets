@@ -76,6 +76,8 @@ export default function RequestDatePicker({
   const valueRef = useRef(value);
   const onChangeRef = useRef(onChange);
   const minDateRef = useRef(minDate);
+  // A date typed below the minimum is cleared immediately; remember it so blur can explain why.
+  const rejectedShortRef = useRef(false);
   const leadDaysRef = useRef(leadDays);
   useEffect(() => {
     valueRef.current = value;
@@ -131,6 +133,7 @@ export default function RequestDatePicker({
 
   function handleChange(next: string) {
     setError(null);
+    rejectedShortRef.current = false;
     if (!next) {
       onChange("");
       return;
@@ -138,6 +141,7 @@ export default function RequestDatePicker({
     if (next < minDate) {
       // Native date inputs emit change events for partial years while typing ("0026"),
       // so do not shout yet - the blur handler reports short notice once the user is done.
+      rejectedShortRef.current = true;
       onChange("");
       return;
     }
@@ -152,7 +156,8 @@ export default function RequestDatePicker({
 
   function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
     const raw = e.target.value;
-    if (raw && raw < minDate) {
+    if ((raw && raw < minDate) || rejectedShortRef.current) {
+      rejectedShortRef.current = false;
       setError(leadTimeMessage(leadDays, minDate));
     }
   }

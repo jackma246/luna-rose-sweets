@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { minRequestableDateKey } from "@/lib/availabilityShared";
+import { MIN_LEAD_DAYS, minRequestableDateKey } from "@/lib/availabilityShared";
 import { addDaysToKey, addMonthsToMonthKey, formatDateKey, monthKeyOf, todayKey, weekdayOfKey } from "@/lib/businessDate";
 
 type AvailabilityStatus = "available" | "limited" | "fully_booked" | "closed";
@@ -54,15 +54,16 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
   const byDate = useMemo(() => new Map(records.map((r) => [r.date, r])), [records]);
 
   // The soonest date worth requesting: at or after the minimum lead time, and not booked or closed.
+  const minDate = useMemo(() => minRequestableDateKey(), []);
   const nextOpen = useMemo(() => {
-    const start = minRequestableDateKey();
+    const start = minDate;
     for (let i = 0; i < 365; i += 1) {
       const day = addDaysToKey(start, i);
       const status = byDate.get(day)?.status;
       if (status !== "fully_booked" && status !== "closed") return day;
     }
     return null;
-  }, [byDate]);
+  }, [byDate, minDate]);
 
   return (
     <section style={{ padding: "3rem 1.25rem", background: "#fffaf3", borderTop: "1px solid var(--border, #e8e4de)", borderBottom: "1px solid var(--border, #e8e4de)" }}>
@@ -131,14 +132,16 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
             {buildMonthDays(calendarMonth).map((day, index) => {
               if (!day) return <div key={`blank-${index}`} style={{ aspectRatio: "1 / 1" }} />;
               const isPast = day < today;
+              // Days inside the minimum notice window cannot be requested either.
+              const tooSoon = !isPast && day < minDate;
               // Past days are neutral: a day that has gone by is not "Booked" or "Limited" any more.
               const record = isPast ? undefined : byDate.get(day);
               const colors = getStatusColors(record?.status);
-              const isOpen = !colors && !isPast;
+              const isOpen = !colors && !isPast && !tooSoon;
               return (
                 <div
                   key={day}
-                  title={isPast ? undefined : record?.note || (record ? statusLabels[record.status] : "Open — request to confirm")}
+                  title={isPast ? undefined : record?.note || (record ? statusLabels[record.status] : tooSoon ? `Needs ${MIN_LEAD_DAYS} days notice` : "Open - request to confirm")}
                   style={{
                     position: "relative",
                     aspectRatio: "1 / 1",
@@ -149,7 +152,7 @@ export default function AvailabilityCalendarClient({ records }: { records: Avail
                         ? `1.5px solid ${OPEN_BORDER}`
                         : "1px solid #eee8df",
                     background: colors?.bg || (isPast ? "#f4f0ea" : "#fff"),
-                    color: colors?.color || (isPast ? "#b5aaa0" : "inherit"),
+                    color: colors?.color || (isPast || tooSoon ? "#b5aaa0" : "inherit"),
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

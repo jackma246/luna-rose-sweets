@@ -122,7 +122,7 @@ export default function V2CartPage() {
           <div style={{ textAlign: "center", padding: "0.5rem 0 1rem" }}>
             <h3 style={{ margin: "0 0 0.6rem", fontSize: "1.25rem" }}>Thanks — we&rsquo;ve got it.</h3>
             <p style={{ margin: "0 0 1.5rem", fontSize: "0.9rem", opacity: 0.7, lineHeight: 1.55 }}>
-              {orderNumber ? <>Your request number is <strong>{orderNumber}</strong>. </> : null}
+              {orderNumber ? <>Your request number is <strong>{orderNumber}</strong>.{" "}</> : null}
               We&rsquo;ll email you back within 24 hours to confirm availability and payment.
             </p>
             <Link href="/products" className="btn btn-primary" onClick={closeModal}>
@@ -180,7 +180,7 @@ export default function V2CartPage() {
               theme="site"
             />
             <p style={{ fontSize: "0.72rem", opacity: 0.55, margin: "-0.6rem 0 0.9rem" }}>
-              Minimum {leadDays} days notice for this order. Larger orders may need more - we&rsquo;ll confirm.
+              {`Minimum ${leadDays} days notice for this order. Larger orders may need more - we’ll confirm.`}
             </p>
 
             <label style={labelStyle}>Notes <span style={{ opacity: 0.5, fontWeight: 400 }}>(optional)</span></label>
@@ -302,7 +302,7 @@ export default function V2CartPage() {
                   )}
                   {item.droppedImageCount ? (
                     <div className="opt" style={{ color: "var(--cherry, #c05)" }}>
-                      {item.droppedImageCount} inspiration photo{item.droppedImageCount === 1 ? "" : "s"} could not be kept after reloading - please re-add this item with the photos, or reply to our confirmation email with them.
+                      {`${item.droppedImageCount} inspiration photo${item.droppedImageCount === 1 ? "" : "s"} could not be kept after reloading - please re-add this item with the photos, or reply to our confirmation email with them.`}
                     </div>
                   ) : null}
                   <div className="row">
