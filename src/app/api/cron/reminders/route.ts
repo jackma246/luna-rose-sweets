@@ -4,6 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { STATUS_LABEL, isTerminal } from "@/lib/orderStatus";
 import { formatOrderNumber } from "@/lib/orderNumber";
 import type { Order } from "@/generated/prisma";
+import { addDaysToKey, formatDateKey, formatDbDate, toDbDate, todayKey } from "@/lib/businessDate";
+import { cronAuthFailure } from "@/lib/cronAuth";
+import { describeError } from "@/lib/logging";
+import { escapeHtml, money, num } from "@/lib/orderEmails";
 
 type ReminderKey = "d3" | "d2" | "d0";
 
@@ -31,22 +35,12 @@ const WINDOWS: WindowDef[] = [
   { key: "d0", daysAway: 0, headline: "Today",     subjectLabel: "Today",     accent: "#B94A64", layout: "cards" },
 ];
 
-function dateAtMidnight(daysFromNow: number): { start: Date; end: Date } {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  start.setDate(start.getDate() + daysFromNow);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 1);
-  return { start, end };
-}
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+/**
+ * The due date (neededDate) for a window, `daysAway` business days from today. "Today" is the
+ * bakery's day in Los Angeles; the server runs in UTC, where the date flips at 5pm PT.
+ */
+export function windowDueDateKey(daysAway: number, now: Date = new Date()): string {
+  return addDaysToKey(todayKey(now), daysAway);
 }
 
 function getItems(o: Order): CartItem[] {
@@ -56,7 +50,7 @@ function getItems(o: Order): CartItem[] {
 function itemsSummary(items: CartItem[]): string {
   if (items.length === 0) return "no items";
   const parts = items.slice(0, 2).map((it) => {
-    const qty = it.quantity > 1 ? `${it.quantity}× ` : "";
+    const qty = num(it.quantity) > 1 ? `${num(it.quantity)}× ` : "";
     return `${qty}${it.name}`;
   });
   if (items.length > 2) parts.push(`+${items.length - 2} more`);
@@ -103,8 +97,8 @@ function itemsBlock(items: CartItem[], totalPrice: number): string {
             ${variant}${flavour}${note}
           </td>
           <td style="padding:8px 0;vertical-align:top;text-align:right;border-bottom:1px solid rgba(58,31,24,0.06);white-space:nowrap;">
-            <div style="font-size:12px;color:#6B4A3A;">×${it.quantity}</div>
-            <div style="font-size:14px;color:#3A1F18;font-weight:600;font-family:Georgia,serif;">$${(it.price * it.quantity).toFixed(2)}</div>
+            <div style="font-size:12px;color:#6B4A3A;">×${num(it.quantity)}</div>
+            <div style="font-size:14px;color:#3A1F18;font-weight:600;font-family:Georgia,serif;">$${money(num(it.price) * num(it.quantity))}</div>
           </td>
         </tr>`;
     })
@@ -117,7 +111,7 @@ function itemsBlock(items: CartItem[], totalPrice: number): string {
       <table role="presentation" style="width:100%;border-collapse:collapse;margin-top:10px;">
         <tr>
           <td style="font-size:12px;color:#6B4A3A;letter-spacing:0.1em;text-transform:uppercase;">Total</td>
-          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;font-weight:600;color:#B94A64;">$${Number(totalPrice).toFixed(2)}</td>
+          <td style="text-align:right;font-family:Georgia,serif;font-size:18px;font-weight:600;color:#B94A64;">$${money(totalPrice)}</td>
         </tr>
       </table>
     </div>
@@ -160,11 +154,11 @@ function orderCard(o: Order, baseUrl: string): string {
       <table role="presentation" style="width:100%;border-collapse:collapse;margin-bottom:14px;">
         <tr>
           <td style="vertical-align:top;">
-            <div style="${kickerStyle()};margin-bottom:6px;">${formatOrderNumber(o.orderNumber)}</div>
+            <div style="${kickerStyle()};margin-bottom:6px;">${escapeHtml(formatOrderNumber(o.orderNumber))}</div>
             <div style="font-family:Georgia,serif;font-style:italic;font-size:24px;color:#3A1F18;line-height:1.1;">${escapeHtml(o.customerName)}</div>
           </td>
           <td style="vertical-align:top;text-align:right;white-space:nowrap;">
-            <span style="${pillStyle()}">${STATUS_LABEL[o.status]}</span>
+            <span style="${pillStyle()}">${escapeHtml(STATUS_LABEL[o.status])}</span>
           </td>
         </tr>
       </table>
@@ -176,7 +170,7 @@ function orderCard(o: Order, baseUrl: string): string {
       ${internalNotesBlock(o.internalNotes)}
 
       <div style="margin-top:16px;">
-        <a href="${baseUrl}/admin/orders/${o.id}" style="display:inline-block;background:#B94A64;color:#FFFFFF;padding:11px 22px;border-radius:999px;text-decoration:none;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;">
+        <a href="${escapeHtml(`${baseUrl}/admin/orders/${o.id}`)}" style="display:inline-block;background:#B94A64;color:#FFFFFF;padding:11px 22px;border-radius:999px;text-decoration:none;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;">
           Open in admin →
         </a>
       </div>
@@ -189,15 +183,16 @@ function orderListRow(o: Order, baseUrl: string): string {
   const phone = o.customerPhone
     ? `<a href="tel:${escapeHtml(formatPhoneHref(o.customerPhone))}" style="color:#B94A64;text-decoration:none;">${escapeHtml(o.customerPhone)}</a><span style="color:rgba(58,31,24,0.25);margin:0 6px;">·</span>`
     : "";
+  // neededDate is a calendar day (@db.Date): format in UTC so it never shifts.
   const dueDate = o.neededDate
-    ? new Date(o.neededDate).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
+    ? formatDbDate(o.neededDate, { weekday: "short", month: "short", day: "numeric" })
     : "No date";
 
   return `
     <table role="presentation" style="width:100%;border-collapse:collapse;border-bottom:1px solid rgba(58,31,24,0.08);">
       <tr>
         <td style="padding:14px 0;vertical-align:top;">
-          <div style="${kickerStyle()};margin-bottom:4px;">${formatOrderNumber(o.orderNumber)} · ${dueDate}</div>
+          <div style="${kickerStyle()};margin-bottom:4px;">${escapeHtml(formatOrderNumber(o.orderNumber))} · ${escapeHtml(dueDate)}</div>
           <div style="font-family:Georgia,serif;font-style:italic;font-size:18px;color:#3A1F18;line-height:1.2;margin-bottom:4px;">${escapeHtml(o.customerName)}</div>
           <div style="font-size:13px;color:#6B4A3A;line-height:1.4;">
             ${phone}${escapeHtml(itemsSummary(items))}
@@ -205,28 +200,23 @@ function orderListRow(o: Order, baseUrl: string): string {
           ${o.customerNotes ? `<div style="font-size:12px;color:#8F3550;margin-top:4px;font-style:italic;">"${escapeHtml(o.customerNotes.slice(0, 120))}${o.customerNotes.length > 120 ? "…" : ""}"</div>` : ""}
         </td>
         <td style="padding:14px 0;vertical-align:top;text-align:right;white-space:nowrap;">
-          <div style="margin-bottom:8px;"><span style="${pillStyle()}">${STATUS_LABEL[o.status]}</span></div>
-          <a href="${baseUrl}/admin/orders/${o.id}" style="color:#B94A64;text-decoration:none;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;">Open →</a>
+          <div style="margin-bottom:8px;"><span style="${pillStyle()}">${escapeHtml(STATUS_LABEL[o.status])}</span></div>
+          <a href="${escapeHtml(`${baseUrl}/admin/orders/${o.id}`)}" style="color:#B94A64;text-decoration:none;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;">Open →</a>
         </td>
       </tr>
     </table>
   `;
 }
 
-function reminderHtml(orders: Order[], window: WindowDef, baseUrl: string): string {
-  const dateStr = (() => {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + window.daysAway);
-    return d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
-  })();
+function reminderHtml(orders: Order[], window: WindowDef, baseUrl: string, dueKey: string): string {
+  const dateStr = formatDateKey(dueKey, { weekday: "long", month: "long", day: "numeric" });
 
   const body =
     window.layout === "cards"
       ? orders.map((o) => orderCard(o, baseUrl)).join("")
       : orders.map((o) => orderListRow(o, baseUrl)).join("");
 
-  const totalDollars = orders.reduce((sum, o) => sum + Number(o.totalPrice), 0);
+  const totalDollars = orders.reduce((sum, o) => sum + num(Number(o.totalPrice)), 0);
 
   return `<!DOCTYPE html>
 <html>
@@ -237,7 +227,7 @@ function reminderHtml(orders: Order[], window: WindowDef, baseUrl: string): stri
 </head>
 <body style="margin:0;padding:0;background:#FBF6EE;">
   <div style="display:none;max-height:0;overflow:hidden;color:transparent;">
-    ${orders.length} order${orders.length === 1 ? "" : "s"} · ${escapeHtml(dateStr)} · $${totalDollars.toFixed(2)}
+    ${orders.length} order${orders.length === 1 ? "" : "s"} · ${escapeHtml(dateStr)} · $${money(totalDollars)}
   </div>
   <table role="presentation" style="width:100%;border-collapse:collapse;background:#FBF6EE;">
     <tr><td style="padding:32px 16px;">
@@ -249,7 +239,7 @@ function reminderHtml(orders: Order[], window: WindowDef, baseUrl: string): stri
               ${window.headline}
             </h1>
             <p style="margin:10px 0 0;font-size:14px;opacity:0.95;color:#FFFFFF;">
-              ${escapeHtml(dateStr)} · ${orders.length} order${orders.length === 1 ? "" : "s"}${totalDollars > 0 ? ` · <span style="font-family:Georgia,serif;font-weight:600;">$${totalDollars.toFixed(2)}</span>` : ""}
+              ${escapeHtml(dateStr)} · ${orders.length} order${orders.length === 1 ? "" : "s"}${totalDollars > 0 ? ` · <span style="font-family:Georgia,serif;font-weight:600;">$${money(totalDollars)}</span>` : ""}
             </p>
           </td>
         </tr>
@@ -260,7 +250,7 @@ function reminderHtml(orders: Order[], window: WindowDef, baseUrl: string): stri
         </tr>
         <tr>
           <td style="padding:18px 30px;background:#F4EAD7;border-top:1px solid rgba(58,31,24,0.08);text-align:center;font-size:12px;color:#6B4A3A;">
-            Daily reminder &middot; <a href="${baseUrl}/admin" style="color:#B94A64;text-decoration:none;font-weight:700;">Open admin →</a>
+            Daily reminder &middot; <a href="${escapeHtml(`${baseUrl}/admin`)}" style="color:#B94A64;text-decoration:none;font-weight:700;">Open admin →</a>
           </td>
         </tr>
       </table>
@@ -271,14 +261,9 @@ function reminderHtml(orders: Order[], window: WindowDef, baseUrl: string): stri
 }
 
 export async function GET(req: NextRequest) {
-  // Simple bearer-token auth so anyone hitting this from the internet can't trigger emails.
-  const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const auth = req.headers.get("authorization") || "";
-    if (auth !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ ok: false, error: "Unauthorized." }, { status: 401 });
-    }
-  }
+  // Bearer-token auth so nobody on the internet can trigger emails. Fails closed without CRON_SECRET.
+  const denied = cronAuthFailure(req.headers.get("authorization"));
+  if (denied) return denied;
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -293,11 +278,13 @@ export async function GET(req: NextRequest) {
 
   const summary: Record<ReminderKey, number> = { d3: 0, d2: 0, d0: 0 };
 
+  const now = new Date();
+  const failed: ReminderKey[] = [];
   for (const w of WINDOWS) {
-    const { start, end } = dateAtMidnight(w.daysAway);
+    const dueKey = windowDueDateKey(w.daysAway, now);
     const orders = await prisma.order.findMany({
       where: {
-        neededDate: { gte: start, lt: end },
+        neededDate: toDbDate(dueKey),
         status: { notIn: ["completed", "cancelled"] },
         ...(force ? {} : { NOT: { remindersSent: { has: w.key } } }),
       },
@@ -308,12 +295,19 @@ export async function GET(req: NextRequest) {
     if (actionable.length === 0) continue;
 
     try {
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from,
         to: "supportdipsprinkle@gmail.com",
         subject: `${force ? "[TEST] " : ""}${buildSubject(actionable, w)}`,
-        html: reminderHtml(actionable, w, baseUrl),
+        html: reminderHtml(actionable, w, baseUrl, dueKey),
       });
+      // Resend reports failures in { error } without throwing. Only a delivered reminder is marked
+      // sent; otherwise the next run tries again.
+      if (result.error) {
+        console.error(`Reminder send failed for ${w.key}:`, result.error.name, result.error.message);
+        failed.push(w.key);
+        continue;
+      }
       if (!force) {
         await Promise.all(
           actionable.map((o) =>
@@ -326,9 +320,10 @@ export async function GET(req: NextRequest) {
       }
       summary[w.key] = actionable.length;
     } catch (err) {
-      console.error(`Reminder send failed for ${w.key}:`, err);
+      console.error(`Reminder send failed for ${w.key}:`, describeError(err));
+      failed.push(w.key);
     }
   }
 
-  return NextResponse.json({ ok: true, summary, force });
+  return NextResponse.json({ ok: failed.length === 0, summary, force, ...(failed.length > 0 ? { failed } : {}) });
 }
