@@ -101,7 +101,11 @@ async function main() {
         customerName: name,
         customerEmail: emailFor(name),
         customerPhone: null,
-        items,
+        // Product tuples are [name, quantity, line total]; store them in the
+        // {name, quantity, price} shape the admin order editor reads.
+        items: items.map(([itemName, quantity, lineTotal]) =>
+          item(itemName, quantity, Math.round((lineTotal / quantity) * 100) / 100),
+        ),
         totalPrice: total,
         neededDate,
         customerNotes: notes || null,
