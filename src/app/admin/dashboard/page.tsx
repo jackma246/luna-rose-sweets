@@ -5,12 +5,23 @@ import { CATEGORY_LABEL } from "@/lib/expenseCategories";
 import { DayOfWeekBars, MonthlyBars, NetBars, OrdersBars, SlicePie } from "./Charts";
 import type { DayOfWeekPoint, MonthlyPoint, SlicePoint } from "./Charts";
 import { isTerminal, daysUntil } from "@/lib/orderStatus";
+import {
+  addDaysToKey,
+  businessDateKey,
+  dateKeyFromDbDate,
+  formatDbDate,
+  monthKeyOf,
+  startOfBusinessDay,
+  toDbDate,
+  todayKey,
+  weekdayOfKey,
+} from "@/lib/businessDate";
+import { buildMonthlyBuckets, monthLabel, rangeKeys, type Range } from "@/lib/reportRanges";
 import { FilterChips } from "../FilterChips";
 import type { OrderSource, ExpenseCategory } from "@/generated/prisma";
 
 export const dynamic = "force-dynamic";
 
-type Range = "30d" | "this_month" | "last_month" | "ytd" | "12m";
 const VALID_RANGES: Range[] = ["30d", "this_month", "last_month", "ytd", "12m"];
 const RANGE_LABEL: Record<Range, string> = {
   "30d": "Last 30 days",
@@ -19,54 +30,6 @@ const RANGE_LABEL: Record<Range, string> = {
   ytd: "Year to date",
   "12m": "Last 12 months",
 };
-
-function rangeBounds(range: Range): { start: Date; end: Date } {
-  const now = new Date();
-  const end = new Date(now);
-  end.setHours(0, 0, 0, 0);
-  end.setDate(end.getDate() + 1);
-
-  if (range === "30d") {
-    const start = new Date(end);
-    start.setDate(start.getDate() - 30);
-    return { start, end };
-  }
-  if (range === "this_month") {
-    const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    return { start, end };
-  }
-  if (range === "last_month") {
-    const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const e = new Date(now.getFullYear(), now.getMonth(), 1);
-    return { start, end: e };
-  }
-  if (range === "ytd") {
-    const start = new Date(now.getFullYear(), 0, 1);
-    return { start, end };
-  }
-  const start = new Date(now.getFullYear(), now.getMonth() - 11, 1);
-  return { start, end };
-}
-
-function monthKey(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-}
-
-function monthLabel(key: string): string {
-  const [y, m] = key.split("-").map(Number);
-  return new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "short", year: "2-digit" });
-}
-
-function buildMonthlyBuckets(start: Date, end: Date): string[] {
-  const out: string[] = [];
-  const cursor = new Date(start.getFullYear(), start.getMonth(), 1);
-  const last = new Date(end.getFullYear(), end.getMonth(), 1);
-  while (cursor <= last) {
-    out.push(monthKey(cursor));
-    cursor.setMonth(cursor.getMonth() + 1);
-  }
-  return out;
-}
 
 function itemSummary(items: unknown): string {
   if (!Array.isArray(items) || items.length === 0) return "";
@@ -87,34 +50,34 @@ export default async function DashboardPage({
 }) {
   const sp = await searchParams;
   const range: Range = VALID_RANGES.includes(sp.range as Range) ? (sp.range as Range) : "12m";
-  const { start, end } = rangeBounds(range);
+  const { startKey, endKey } = rangeKeys(range);
 
   const [orders, expenses] = await Promise.all([
     prisma.order.findMany({
       where: {
-        createdAt: { gte: start, lt: end },
+        createdAt: { gte: startOfBusinessDay(startKey), lt: startOfBusinessDay(endKey) },
         status: { not: "cancelled" },
       },
     }),
     prisma.expense.findMany({
-      where: { date: { gte: start, lt: end } },
+      where: { date: { gte: toDbDate(startKey), lt: toDbDate(endKey) } },
     }),
   ]);
 
-  const buckets = buildMonthlyBuckets(start, new Date(end.getTime() - 1));
+  const buckets = buildMonthlyBuckets(startKey, addDaysToKey(endKey, -1));
   const revenueByMonth: Record<string, number> = Object.fromEntries(buckets.map((k) => [k, 0]));
   const expensesByMonth: Record<string, number> = Object.fromEntries(buckets.map((k) => [k, 0]));
   const ordersByMonth: Record<string, number> = Object.fromEntries(buckets.map((k) => [k, 0]));
 
   for (const o of orders) {
-    const k = monthKey(new Date(o.createdAt));
+    const k = monthKeyOf(businessDateKey(o.createdAt));
     if (k in revenueByMonth) {
       revenueByMonth[k] += Number(o.totalPrice);
       ordersByMonth[k] += 1;
     }
   }
   for (const e of expenses) {
-    const k = monthKey(new Date(e.date));
+    const k = monthKeyOf(dateKeyFromDbDate(e.date));
     if (k in expensesByMonth) expensesByMonth[k] += Number(e.amount);
   }
 
@@ -130,8 +93,8 @@ export default async function DashboardPage({
   const placedByDow = [0, 0, 0, 0, 0, 0, 0];
   const neededByDow = [0, 0, 0, 0, 0, 0, 0];
   for (const o of orders) {
-    placedByDow[new Date(o.createdAt).getDay()] += 1;
-    if (o.neededDate) neededByDow[new Date(o.neededDate).getUTCDay()] += 1;
+    placedByDow[weekdayOfKey(businessDateKey(o.createdAt))] += 1;
+    if (o.neededDate) neededByDow[weekdayOfKey(dateKeyFromDbDate(o.neededDate))] += 1;
   }
   const dayOfWeek: DayOfWeekPoint[] = DAY_LABELS.map((day, i) => ({
     day,
@@ -166,13 +129,10 @@ export default async function DashboardPage({
   const allOrders = await prisma.order.findMany({ select: { status: true } });
   const activeCount = allOrders.filter((o) => !isTerminal(o.status)).length;
 
-  // "Coming up this week" — active, dated orders due within 7 days (incl. overdue)
-  const weekStart = new Date();
-  weekStart.setHours(0, 0, 0, 0);
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekEnd.getDate() + 7);
+  // "Coming up this week": active, dated orders due in the 7 days today..today+6 (plus overdue).
+  const weekEnd = toDbDate(addDaysToKey(todayKey(), 7)); // exclusive
   const weekOrders = await prisma.order.findMany({
-    where: { neededDate: { lte: weekEnd }, status: { not: "cancelled" } },
+    where: { neededDate: { lt: weekEnd }, status: { not: "cancelled" } },
     orderBy: [{ neededDate: "asc" }],
   });
   const upcoming = weekOrders.filter((o) => !isTerminal(o.status));
@@ -227,7 +187,7 @@ export default async function DashboardPage({
                     style={chip}
                   >
                     {o.neededDate
-                      ? new Date(o.neededDate).toLocaleDateString("en-US", { weekday: "short" })
+                      ? formatDbDate(o.neededDate, { weekday: "short" })
                       : "—"}
                   </span>
                   <div className="min-w-0 flex-1">

@@ -1,4 +1,5 @@
 import { escapeHtml, formatLongDate } from "@/lib/orderEmails";
+import { formatDbDate, formatInstant } from "@/lib/businessDate";
 
 export interface InquiryEmailInput {
   name: string;
@@ -13,7 +14,8 @@ export interface InquiryEmailInput {
 function formatEventDate(value: Date | string | null | undefined): string | undefined {
   if (!value) return undefined;
   if (value instanceof Date) {
-    return value.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    // eventDate is a calendar day (@db.Date, UTC midnight): format in UTC so it never shifts a day.
+    return formatDbDate(value, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
   }
   return formatLongDate(value);
 }
@@ -37,7 +39,7 @@ export function inquirySupportEmail(inquiry: InquiryEmailInput): string {
   if (inquiry.guestCount) rows.push(detailRow("Guest count", escapeHtml(inquiry.guestCount)));
   if (inquiry.message) rows.push(detailRow("Message", escapeHtml(inquiry.message)));
   rows.push(detailRow("Source", escapeHtml(inquiry.source)));
-  rows.push(detailRow("Submitted", escapeHtml(inquiry.createdAt.toLocaleString("en-US"))));
+  rows.push(detailRow("Submitted", escapeHtml(`${formatInstant(inquiry.createdAt, { dateStyle: "medium", timeStyle: "short" })} PT`)));
 
   return `
     <div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#2a1a14;">

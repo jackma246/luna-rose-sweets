@@ -1,65 +1,61 @@
 import { prisma } from "@/lib/prisma";
+import { dateKeyFromDbDate, isDateKey, toDbDate, todayKey } from "@/lib/businessDate";
 import {
-  formatFriendlyDate,
-  minRequestableDate,
-  parseIsoDate,
-  startOfToday,
+  formatFriendlyDateKey,
+  leadTimeMessage,
+  minRequestableDateKey,
   MIN_LEAD_DAYS,
   type AvailabilityStatus,
 } from "@/lib/availabilityShared";
 
 export * from "@/lib/availabilityShared";
 
+/** Availability rows for [fromKey, toKey), keyed by YYYY-MM-DD. */
 export async function getAvailabilityMap(
-  fromISO: string,
-  toISO: string,
+  fromKey: string,
+  toKey: string,
 ): Promise<Record<string, { status: AvailabilityStatus; note: string | null }>> {
-  const from = parseIsoDate(fromISO);
-  const to = parseIsoDate(toISO);
-  if (!from || !to) return {};
+  if (!isDateKey(fromKey) || !isDateKey(toKey)) return {};
   const rows = await prisma.availabilityDate.findMany({
-    where: { date: { gte: from, lt: to } },
+    where: { date: { gte: toDbDate(fromKey), lt: toDbDate(toKey) } },
     orderBy: { date: "asc" },
   });
   const map: Record<string, { status: AvailabilityStatus; note: string | null }> = {};
   for (const row of rows) {
-    map[row.date.toISOString().slice(0, 10)] = { status: row.status, note: row.note };
+    map[dateKeyFromDbDate(row.date)] = { status: row.status, note: row.note };
   }
   return map;
 }
 
-export async function getAvailabilityStatus(iso: string): Promise<AvailabilityStatus | null> {
-  const d = parseIsoDate(iso);
-  if (!d) return null;
-  const row = await prisma.availabilityDate.findUnique({ where: { date: d } });
+export async function getAvailabilityStatus(key: string): Promise<AvailabilityStatus | null> {
+  if (!isDateKey(key)) return null;
+  const row = await prisma.availabilityDate.findUnique({ where: { date: toDbDate(key) } });
   return row?.status ?? null;
 }
 
 export type DateCheck = { ok: true; status: AvailabilityStatus | null } | { ok: false; reason: string };
 
 /**
- * Authoritative check used by the order request API.
+ * Authoritative check used by the order request and inquiry APIs.
  * Rejects malformed dates, past dates, dates under the lead time, and blocked days.
+ * "Today" is the business (Los Angeles) day, whatever zone the server runs in.
  */
-export async function assertDateRequestable(iso: string, now: Date = new Date()): Promise<DateCheck> {
-  const d = parseIsoDate(iso);
-  if (!d) return { ok: false, reason: "Please enter a valid date." };
+export async function assertDateRequestable(
+  key: string,
+  { now = new Date(), leadDays = MIN_LEAD_DAYS }: { now?: Date; leadDays?: number } = {},
+): Promise<DateCheck> {
+  if (!isDateKey(key)) return { ok: false, reason: "Please enter a valid date." };
 
-  const min = minRequestableDate(now);
-  if (d < startOfToday(now)) return { ok: false, reason: "That date has already passed - please pick another day." };
-  if (d < min) {
-    return {
-      ok: false,
-      reason: `We need at least ${MIN_LEAD_DAYS} days notice - the earliest date we can take is ${formatFriendlyDate(min)}.`,
-    };
-  }
+  if (key < todayKey(now)) return { ok: false, reason: "That date has already passed - please pick another day." };
+  const min = minRequestableDateKey(now, leadDays);
+  if (key < min) return { ok: false, reason: leadTimeMessage(leadDays, min) };
 
-  const status = await getAvailabilityStatus(iso);
+  const status = await getAvailabilityStatus(key);
   if (status === "closed") {
-    return { ok: false, reason: `We're closed on ${formatFriendlyDate(d)} - please pick another day.` };
+    return { ok: false, reason: `We're closed on ${formatFriendlyDateKey(key)} - please pick another day.` };
   }
   if (status === "fully_booked") {
-    return { ok: false, reason: `${formatFriendlyDate(d)} is fully booked - please pick another day.` };
+    return { ok: false, reason: `${formatFriendlyDateKey(key)} is fully booked - please pick another day.` };
   }
   return { ok: true, status };
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isDateKey, toDbDate } from "@/lib/businessDate";
 import { EXPENSE_CATEGORIES } from "@/lib/expenseCategories";
 import type { ExpenseCategory } from "@/generated/prisma";
 import { isAuthResponse, requireAdmin } from "@/lib/adminAuth";
@@ -38,6 +39,9 @@ export async function POST(req: NextRequest) {
   if (!body.date || !body.vendor || body.amount === undefined || body.amount === null) {
     return NextResponse.json({ ok: false, error: "Date, vendor, amount required." }, { status: 400 });
   }
+  if (!isDateKey(body.date)) {
+    return NextResponse.json({ ok: false, error: "date must be YYYY-MM-DD." }, { status: 400 });
+  }
   if (!EXPENSE_CATEGORIES.includes(body.category)) {
     return NextResponse.json({ ok: false, error: "Invalid category." }, { status: 400 });
   }
@@ -45,7 +49,7 @@ export async function POST(req: NextRequest) {
   const expense = await prisma.$transaction(async (tx) => {
     const created = await tx.expense.create({
       data: {
-        date: new Date(body.date + "T00:00:00"),
+        date: toDbDate(body.date),
         amount: body.amount,
         vendor: body.vendor,
         category: body.category,
