@@ -80,16 +80,15 @@ describe("facebook marketplace webhook POST", () => {
     expect(decideMarketplaceReply).not.toHaveBeenCalled();
   });
 
-  it("sends the page token in the Authorization header, not the URL", async () => {
+  it("sends the reply through the Send API with the page token", async () => {
     fetchMock.mockResolvedValue(new Response("{}", { status: 200 }));
     const body = payload();
     const res = await POST(post(body, signed(body)));
     expect(res.status).toBe(200);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0];
-    expect(url).toBe("https://graph.facebook.com/v19.0/1234567890/messages");
-    expect(String(url)).not.toContain("page-token-xyz");
-    expect(init.headers.Authorization).toBe("Bearer page-token-xyz");
+    expect(url).toBe("https://graph.facebook.com/v19.0/me/messages?access_token=page-token-xyz");
+    expect(init.method).toBe("POST");
   });
 
   it("does not log customer message text when delivery fails", async () => {

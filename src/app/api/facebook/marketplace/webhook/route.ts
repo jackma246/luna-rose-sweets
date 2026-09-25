@@ -71,16 +71,15 @@ function verifySignature(rawBody: string, signatureHeader: string | null): boole
   return expectedBuffer.length === actualBuffer.length && crypto.timingSafeEqual(expectedBuffer, actualBuffer);
 }
 
-async function sendFacebookMessage(pageId: string | undefined, recipientId: string, text: string): Promise<boolean> {
+async function sendFacebookMessage(recipientId: string, text: string): Promise<boolean> {
   const token = pageAccessToken();
   if (!token) return false;
-  // Token goes in the Authorization header, not the query string, so it never
-  // lands in URL logs. Address the Page by id (the webhook's recipient) as the
-  // Send API documents; "me" is only a fallback.
-  const page = pageId && /^\d+$/.test(pageId) ? pageId : "me";
-  const response = await fetch(`https://graph.facebook.com/v19.0/${page}/messages`, {
+  // The Send API is documented with access_token as a query parameter, and Bearer
+  // header auth is reported to be rejected on /me/messages. Keep the proven
+  // transport; this is a server-to-server HTTPS call, not a logged browser URL.
+  const response = await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${encodeURIComponent(token)}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ recipient: { id: recipientId }, message: { text } }),
   });
   return response.ok;
@@ -109,7 +108,7 @@ async function processMessage(messaging: FacebookMessaging): Promise<ProcessedMe
   });
 
   if (decision.action === "auto_reply" && decision.reply) {
-    const delivered = await sendFacebookMessage(messaging.recipient?.id, senderId, decision.reply);
+    const delivered = await sendFacebookMessage(senderId, decision.reply);
     if (!delivered) console.log("facebook_marketplace_decision", JSON.stringify(safeLogPayload(decision)));
     return { senderId, messageId: messaging.message?.mid, action: decision.action, intent: decision.intent, delivered: delivered ? "facebook" : "local_only" };
   }
