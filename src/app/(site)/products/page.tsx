@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { pageMetadata, SITE_NAME } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { visibleProducts as products, categories, type Product } from "@/data/products";
@@ -5,6 +7,13 @@ import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
 import SortSelect from "./SortSelect";
 import MobileFilters from "./MobileFilters";
+
+export const metadata: Metadata = pageMetadata({
+  title: `Shop All Treats · ${SITE_NAME}`,
+  description:
+    "Browse every treat we make: cake pops, cakesicles, custom cakes, gift bouquets, chocolate-dipped treats and dessert towers. All made to order.",
+  path: "/products",
+});
 
 type SearchParams = Promise<{
   category?: string;

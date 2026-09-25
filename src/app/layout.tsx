@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, DM_Sans, Caveat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -23,9 +24,16 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Dip & Sprinkle",
-  description:
-    "Handmade cake pops, cakesicles & little bakes — crafted in small batches for birthdays, weddings, and every celebration in between.",
+  // Resolves relative canonical and Open Graph URLs set by pages.
+  metadataBase: new URL(SITE_URL),
+  title: SITE_NAME,
+  description: DEFAULT_DESCRIPTION,
+  openGraph: {
+    siteName: SITE_NAME,
+    type: "website",
+    locale: "en_US",
+    images: [{ url: DEFAULT_OG_IMAGE, alt: SITE_NAME }],
+  },
 };
 
 export default function RootLayout({

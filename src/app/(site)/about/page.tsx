@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
+import { pageMetadata, SITE_NAME } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import V2Header from "../components/V2Header";
 import V2Footer from "../components/V2Footer";
+
+export const metadata: Metadata = pageMetadata({
+  title: `Our Story · ${SITE_NAME}`,
+  description:
+    "From professional cake decorating in South Korea to a small-batch home bakery in San Jose - the story behind Dip & Sprinkle.",
+  path: "/about",
+});
 
 export default function V2About() {
   return (
