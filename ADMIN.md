@@ -27,7 +27,11 @@ All live on Railway → web service → **Variables** tab. Local dev copies go i
 | `DATABASE_URL` | Postgres connection | Reference `${{Postgres.DATABASE_URL}}` on Railway |
 | `RESEND_API_KEY` | Email sending | `re_...` from resend.com |
 | `ADMIN_PASSWORD` | Admin dashboard login | Any strong password |
-| `ADMIN_SESSION_SECRET` | Signs login cookies (optional) | Random string; falls back to `ADMIN_PASSWORD` if unset |
+| `ADMIN_SESSION_SECRET` | Signs login cookies (**required**) | Random string, at least 32 characters. There is no fallback: if it is missing or too short, admin login returns 503 and every session is rejected |
+| `ADMIN_SESSION_VERSION` | Session revocation switch (optional) | Defaults to `1`. Change it (e.g. to `2`) to sign out every admin session at once |
+| `SUNJAE_ADMIN_API_TOKEN` | Sunjae's full admin API token (optional) | See `docs/SUNJAE_ADMIN_API.md` |
+| `SUNJAE_ADMIN_API_READ_TOKEN` | Sunjae's read-only admin API token (optional) | GET only; writes with it get 403 |
+| `FB_APP_SECRET` | Verifies Facebook webhook signatures | Required for the Marketplace webhook: without it every webhook POST is refused with 403 |
 | `CRON_SECRET` | Bearer token for cron endpoint | Random string |
 | `NEXT_PUBLIC_URL` | Base URL in emails | `https://dipsprinkle.com` |
 | `TZ` | Timezone for dates in emails (optional) | `America/Los_Angeles` |
@@ -48,7 +52,16 @@ All under `https://dipsprinkle.com`. Gated by `ADMIN_PASSWORD` login.
 | `/admin/expenses/new` | Log a new expense (ingredient / supply / packaging / other) |
 | `/admin/expenses/[id]` | Edit or delete an expense |
 
-Session lasts **14 days** before re-login required.
+Session lasts **7 days** before re-login required.
+
+### Admin security model
+
+- Every admin page and every `/api/admin/*` route checks the session itself; `src/proxy.ts` is only a first, optimistic gate.
+- Login is rate limited in memory: 5 failed attempts per IP lock that IP out for 15 minutes, and once 20 failures (from any IPs) land within 15 minutes every attempt must wait an exponentially growing delay (1s, 2s, 4s, ... capped at 5 minutes) after the latest failure. The counters reset on redeploy. This assumes a single Railway instance; if the service is ever scaled out, move the counters to Postgres or Redis.
+- The client IP is the right-most `X-Forwarded-For` entry (the one Railway's proxy adds). If a CDN is ever put in front of Railway, revisit `src/lib/loginRateLimit.ts`.
+- The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` in production and on any https request.
+- Every admin write (browser or Sunjae token) is recorded in `AdminAuditLog`, with customer names, emails, phones, notes and image data redacted.
+- Security headers (CSP, HSTS, `X-Frame-Options: DENY`, `nosniff`, referrer and permissions policy) are set in `next.config.ts`.
 
 ---
 
@@ -146,8 +159,12 @@ Change by opening an order in `/admin/orders/[id]` and selecting from the status
 
 ### Rotating the admin password
 1. Change `ADMIN_PASSWORD` on Railway
-2. If `ADMIN_SESSION_SECRET` isn't set separately, this also invalidates existing sessions (you'll need to log back in)
+2. Changing the password does **not** sign out existing sessions. To do that too, bump `ADMIN_SESSION_VERSION` (or rotate `ADMIN_SESSION_SECRET`)
 3. Redeploy triggers automatically on env change
+
+### Signing out every admin session
+1. Change `ADMIN_SESSION_VERSION` on Railway (e.g. `1` -> `2`), or rotate `ADMIN_SESSION_SECRET` to a new random value of at least 32 characters
+2. After the automatic redeploy, every existing admin cookie is rejected and everyone has to log in again
 
 ### Rotating the Resend API key
 1. Resend dashboard → API Keys → revoke old, generate new
