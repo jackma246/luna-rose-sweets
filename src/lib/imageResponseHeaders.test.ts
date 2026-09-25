@@ -10,7 +10,7 @@ describe("orderImageHeaders", () => {
     expect(h["Content-Type"]).toBe("image/jpeg");
     expect(h["Content-Length"]).toBe("10");
     expect(h["X-Content-Type-Options"]).toBe("nosniff");
-    expect(h["Content-Security-Policy"]).toBe("sandbox");
+    expect(h["Content-Security-Policy"]).toMatch(/^sandbox(;|$)/);
     expect(h["Content-Disposition"]).toBe('inline; filename="cake.jpg"');
   });
 

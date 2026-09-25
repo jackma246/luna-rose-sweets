@@ -32,7 +32,8 @@ export function orderImageHeaders(image: {
     "Content-Length": String(byteLength),
     "Content-Disposition": `${disposition}; filename="${filename}"`,
     "X-Content-Type-Options": "nosniff",
-    "Content-Security-Policy": "sandbox",
+    // Mirrors the CSP next.config.ts sets for this route (config headers win).
+    "Content-Security-Policy": "sandbox; frame-ancestors 'none'",
     "Cache-Control": "private, max-age=3600",
   };
 }
