@@ -8,6 +8,7 @@ import { addDaysToKey, formatDateKey, formatDbDate, toDbDate, todayKey } from "@
 import { cronAuthFailure } from "@/lib/cronAuth";
 import { describeError } from "@/lib/logging";
 import { escapeHtml, money, num } from "@/lib/orderEmails";
+import { SITE_URL } from "@/lib/seo";
 
 type ReminderKey = "d3" | "d2" | "d0";
 
@@ -273,7 +274,7 @@ export async function GET(req: NextRequest) {
   const force = req.nextUrl.searchParams.get("force") === "1";
 
   const resend = new Resend(apiKey);
-  const baseUrl = process.env.NEXT_PUBLIC_URL || process.env.APP_URL || "https://dipsprinkle.com";
+  const baseUrl = SITE_URL;
   const from = "Dip & Sprinkle <orders@dipsprinkle.com>";
 
   const summary: Record<ReminderKey, number> = { d3: 0, d2: 0, d0: 0 };

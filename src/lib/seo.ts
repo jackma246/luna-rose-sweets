@@ -1,7 +1,27 @@
 import type { Metadata } from "next";
 
 export const SITE_NAME = "Dip & Sprinkle";
-export const SITE_URL = (process.env.NEXT_PUBLIC_URL || process.env.APP_URL || "https://dipsprinkle.com").replace(/\/+$/, "");
+const DEFAULT_SITE_URL = "https://dipsprinkle.com";
+
+/**
+ * Absolute site origin from an env value. Accepts a bare host ("dipsprinkle.com",
+ * which is how production has it configured) by assuming https, and falls back to
+ * the default rather than crashing the build on anything unparseable.
+ */
+export function normalizeSiteUrl(raw: string | undefined | null): string {
+  const value = (raw ?? "").trim();
+  if (!value) return DEFAULT_SITE_URL;
+  const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(value) ? value : `https://${value}`;
+  try {
+    const url = new URL(withScheme);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return DEFAULT_SITE_URL;
+    return url.origin;
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
+
+export const SITE_URL = normalizeSiteUrl(process.env.NEXT_PUBLIC_URL || process.env.APP_URL);
 export const DEFAULT_OG_IMAGE = "/images/brand-spread.jpg";
 export const DEFAULT_DESCRIPTION =
   "Handmade cake pops, cakesicles & little bakes - crafted in small batches in San Jose for birthdays, weddings, and every celebration in between.";
