@@ -43,6 +43,9 @@ function telegramConfig(): { token: string; chatId: string } | null {
   return token && chatId ? { token, chatId } : null;
 }
 
+// Operational metadata only. Customer message text, sender identity, the
+// generated reply and the Korean escalation (which quotes the customer) are
+// deliberately left out so no customer content ends up in Railway logs.
 function safeLogPayload(decision: MarketplaceDecision): Record<string, unknown> {
   return {
     action: decision.action,
@@ -50,17 +53,17 @@ function safeLogPayload(decision: MarketplaceDecision): Record<string, unknown> 
     language: decision.language,
     source: decision.source,
     confidence: decision.confidence,
-    context: decision.context,
-    customerMessage: decision.customerMessage,
-    reply: decision.reply,
+    messageId: decision.context.messageId,
+    listingTitle: decision.context.listingTitle,
+    messageLength: decision.customerMessage.length,
     escalationId: decision.escalationId,
-    sunjaeMessageKo: decision.sunjaeMessageKo,
   };
 }
 
 function verifySignature(rawBody: string, signatureHeader: string | null): boolean {
   const secret = appSecret();
-  if (!secret) return true;
+  // Fail closed: without FB_APP_SECRET nothing can prove a POST came from Meta.
+  if (!secret) return false;
   if (!signatureHeader?.startsWith("sha256=")) return false;
   const expected = "sha256=" + crypto.createHmac("sha256", secret).update(rawBody).digest("hex");
   const expectedBuffer = Buffer.from(expected);
@@ -71,6 +74,9 @@ function verifySignature(rawBody: string, signatureHeader: string | null): boole
 async function sendFacebookMessage(recipientId: string, text: string): Promise<boolean> {
   const token = pageAccessToken();
   if (!token) return false;
+  // The Send API is documented with access_token as a query parameter, and Bearer
+  // header auth is reported to be rejected on /me/messages. Keep the proven
+  // transport; this is a server-to-server HTTPS call, not a logged browser URL.
   const response = await fetch(`https://graph.facebook.com/v19.0/me/messages?access_token=${encodeURIComponent(token)}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -130,6 +136,10 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
+  if (!appSecret()) {
+    console.error("facebook_marketplace_webhook refused: FB_APP_SECRET is not set");
+    return NextResponse.json({ ok: false, error: "webhook_not_configured" }, { status: 403 });
+  }
   if (!verifySignature(rawBody, req.headers.get("x-hub-signature-256"))) {
     return NextResponse.json({ ok: false, error: "invalid_signature" }, { status: 403 });
   }

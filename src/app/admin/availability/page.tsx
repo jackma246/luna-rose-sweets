@@ -1,6 +1,8 @@
 import AvailabilityManager from "./AvailabilityManager";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
-export default function AvailabilityPage() {
+export default async function AvailabilityPage() {
+  await requireAdminPage();
   return (
     <div className="space-y-6">
       <div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ORDER_STATUSES, STATUS_LABEL } from "@/lib/orderStatus";
 import { ORDER_SOURCES, SOURCE_LABEL } from "@/lib/orderSources";
@@ -30,6 +31,7 @@ const blankItem = (): RowItem => ({
 });
 
 export default function NewOrderPage() {
+  const router = useRouter();
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
@@ -112,7 +114,8 @@ export default function NewOrderPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "save failed");
-      window.location.assign(`/admin/orders/${data.id}`);
+      router.push(`/admin/orders/${data.id}`);
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Couldn't save.");
       setSaving(false);

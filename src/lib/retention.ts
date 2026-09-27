@@ -8,21 +8,32 @@
  * Two rules, because orders do not always get marked completed:
  *   1. FINISHED  - order is in a terminal status (completed / cancelled) and the
  *                  order was last touched more than RETENTION_DAYS ago.
- *   2. ABANDONED - the pickup date passed more than STALE_DAYS ago and the order
- *                  never reached a terminal status. Without this, a forgotten
- *                  order keeps a customer's photos forever.
+ *   2. ABANDONED - the order never reached a terminal status and either its
+ *                  pickup date passed more than STALE_DAYS ago, or it has no
+ *                  pickup date and was placed more than STALE_DAYS ago. Without
+ *                  this, a forgotten order keeps a customer's photos forever.
+ *
+ * Completing an order does not delete its photos immediately; this job does,
+ * RETENTION_DAYS later.
  */
 import { prisma } from "@/lib/prisma";
 import { purgeOrderImages } from "@/lib/imageStorage";
 import { isTerminal } from "@/lib/orderStatus";
 
-export const RETENTION_DAYS = Number(process.env.PHOTO_RETENTION_DAYS ?? 7);
-export const STALE_DAYS = Number(process.env.PHOTO_STALE_DAYS ?? 30);
+/** Positive whole number of days from an env var, or the default when unset or invalid. */
+export function daysFromEnv(value: string | undefined, fallback: number): number {
+  if (value === undefined || value.trim() === "") return fallback;
+  const n = Number(value);
+  return Number.isInteger(n) && n > 0 ? n : fallback;
+}
+
+export const RETENTION_DAYS = daysFromEnv(process.env.PHOTO_RETENTION_DAYS, 7);
+export const STALE_DAYS = daysFromEnv(process.env.PHOTO_STALE_DAYS, 30);
 
 export interface PurgeCandidate {
   orderId: string;
   orderNumber: number;
-  reason: "finished" | "abandoned";
+  reason: "finished" | "abandoned" | "undated";
   imageCount: number;
   bytes: number;
   ageDays: number;
@@ -51,6 +62,7 @@ export async function findPurgeCandidates(now = Date.now()): Promise<PurgeCandid
       orderNumber: true,
       status: true,
       updatedAt: true,
+      createdAt: true,
       neededDate: true,
       images: { select: { size: true } },
     },
@@ -62,6 +74,7 @@ export async function findPurgeCandidates(now = Date.now()): Promise<PurgeCandid
     const terminal = isTerminal(o.status);
     const sinceTouched = daysSince(o.updatedAt, now);
     const sincePickup = daysSince(o.neededDate, now);
+    const sinceCreated = daysSince(o.createdAt, now);
 
     if (terminal && sinceTouched >= RETENTION_DAYS) {
       out.push({
@@ -72,6 +85,11 @@ export async function findPurgeCandidates(now = Date.now()): Promise<PurgeCandid
       out.push({
         orderId: o.id, orderNumber: o.orderNumber, reason: "abandoned",
         imageCount: o.images.length, bytes, ageDays: sincePickup,
+      });
+    } else if (!terminal && !o.neededDate && sinceCreated >= STALE_DAYS) {
+      out.push({
+        orderId: o.id, orderNumber: o.orderNumber, reason: "undated",
+        imageCount: o.images.length, bytes, ageDays: sinceCreated,
       });
     }
   }

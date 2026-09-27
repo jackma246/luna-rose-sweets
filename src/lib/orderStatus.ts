@@ -1,4 +1,5 @@
 import type { OrderStatus } from "@/generated/prisma";
+import { dateKeyFromDbDate, daysBetweenKeys, todayKey } from "@/lib/businessDate";
 
 export const ORDER_STATUSES: OrderStatus[] = [
   "pending",
@@ -41,13 +42,10 @@ export function isTerminal(status: OrderStatus): boolean {
   return status === "completed" || status === "cancelled";
 }
 
-export function daysUntil(date: Date | null | undefined): number | null {
+/** Days from today (business zone) until a @db.Date value such as neededDate. Negative when overdue. */
+export function daysUntil(date: Date | null | undefined, now: Date = new Date()): number | null {
   if (!date) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const target = new Date(date);
-  target.setHours(0, 0, 0, 0);
-  return Math.round((target.getTime() - today.getTime()) / (24 * 60 * 60 * 1000));
+  return daysBetweenKeys(todayKey(now), dateKeyFromDbDate(date));
 }
 
 export function daysUntilLabel(days: number | null): string {

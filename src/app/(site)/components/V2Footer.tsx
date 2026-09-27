@@ -19,10 +19,10 @@ export default function V2Footer() {
             <summary><h5>Shop</h5></summary>
             <ul>
               <li>
-                <Link href="/products?category=Treats">Cake Pops</Link>
+                <Link href="/products/cakepops">Cake Pops</Link>
               </li>
               <li>
-                <Link href="/products?category=Treats">Cakesicles</Link>
+                <Link href="/products/cakesicles">Cakesicles</Link>
               </li>
               <li>
                 <Link href="/products?category=Gift">Bouquets</Link>

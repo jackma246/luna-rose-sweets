@@ -1,3 +1,5 @@
+import { MIN_LEAD_DAYS } from "@/lib/availabilityShared";
+
 export interface ProductVariant {
   label: string;
   price: number;
@@ -51,6 +53,8 @@ export interface Product {
   image?: string;
   images?: string[];
   hidden?: boolean;
+  /** Minimum notice in days for this product (defaults to MIN_LEAD_DAYS). Enforced on the client picker and the server. */
+  leadDays?: number;
 }
 
 export const CAKE_FLAVOURS: ProductFlavour[] = [
@@ -71,6 +75,10 @@ export const CAKE_FLAVOURS: ProductFlavour[] = [
     description: "Made with 100% freeze-dried strawberry powder — never artificial flavouring. Inspired by strawberry milk, with extra toasted milk powder for an authentic, non-artificial taste.",
   },
 ];
+
+/** Every cake-based product offers the same flavour list, so copy is derived from it rather than hard-coded. */
+export const FLAVOUR_COUNT = CAKE_FLAVOURS.length;
+export const FLAVOURS_LABEL = `${FLAVOUR_COUNT} Flavours`;
 
 export const products: Product[] = [
   // ── Party Sets ──────────────────────────────────────────
@@ -93,7 +101,7 @@ export const products: Product[] = [
     slug: "party-layer-cake",
     name: "Custom Cake (6\"/8\")",
     category: "Party Sets",
-    subtitle: "Starting Prices · 100% Real Buttercream · 6 Flavours",
+    subtitle: "Starting Prices · 100% Real Buttercream · " + FLAVOURS_LABEL,
     description:
       "A custom buttercream cake made from scratch with 100% real buttercream. Choose your cake size, flavour, filling, and design details to match your celebration.",
     details:
@@ -123,16 +131,17 @@ export const products: Product[] = [
       "/images/cake/narae2.jpeg",
       "/images/cake/narae3.jpeg",
     ],
+    leadDays: 5,
   },
   {
     slug: "party-two-tier-cake",
     name: "Two-Tier Tall Cake (6\"&4\")",
     category: "Party Sets",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with your choice of fruit jam or nut butter filling, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with your choice of fruit jam or nut butter filling and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with your choice of fruit jam or nut butter filling and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from " + FLAVOUR_COUNT + " flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Tall Cake (6\"&4\") — serves 15–18", price: 185, image: "/images/cake/two-tier-new.png" }],
     flavours: CAKE_FLAVOURS,
     designTiers: [
@@ -141,16 +150,17 @@ export const products: Product[] = [
     ],
     badge: "Baked from scratch",
     image: "/images/cake/two-tier-new.png",
+    leadDays: 7,
   },
   {
     slug: "party-tray-bakes",
     name: "Tray Cake",
     category: "Party Sets",
-    subtitle: "100% Real Buttercream · 2 Sizes · 6 Flavours",
+    subtitle: "100% Real Buttercream · 2 Sizes · " + FLAVOURS_LABEL,
     description:
       "Made with 100% real buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
     details:
-      "Made with 100% real buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
+      "Made with 100% real buttercream — rich, smooth, and never artificial. Choose from " + FLAVOUR_COUNT + " flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
       { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/tray.png" },
       { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/tray.png" },
@@ -277,11 +287,11 @@ export const products: Product[] = [
     slug: "gift-cupcakes",
     name: "Cupcakes (1 Dozen)",
     category: "Gift",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "Scratch-made cupcakes finished with buttercream and decorative details, designed for celebrations, dessert tables, gifting, and themed events.",
     details:
-      "Choose from 6 flavours. Base price includes up to 2 colors with a simple buttercream finish and minimal decorative accents. Semi Custom (3-4 colors, themed color palettes, textured piping, floral-inspired styling) available for +$6–$10/dozen. Full Custom (hand-piped floral work, detailed buttercream textures, mixed decorative styles) available for +$12–$24/dozen. Baked fresh to order. Best consumed within 3 days.",
+      "Choose from " + FLAVOUR_COUNT + " flavours. Base price includes up to 2 colors with a simple buttercream finish and minimal decorative accents. Semi Custom (3-4 colors, themed color palettes, textured piping, floral-inspired styling) available for +$6–$10/dozen. Full Custom (hand-piped floral work, detailed buttercream textures, mixed decorative styles) available for +$12–$24/dozen. Baked fresh to order. Best consumed within 3 days.",
     variants: [
       { label: "1 Dozen (12 pcs)", price: 48, image: "/images/cupcakes/2.jpg" },
     ],
@@ -310,7 +320,7 @@ export const products: Product[] = [
     slug: "cakesicles",
     name: "Cakesicles",
     category: "Chocolate Dipped Treats",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "Our cakesicles combine a smooth chocolate shell with a soft cake interior, creating a rich and satisfying bite.\n\nDesigned with clean finishes and elegant details, they serve as a standout centerpiece on any dessert table.\n\nPerfect for adding a premium touch to your event.",
     details:
@@ -350,7 +360,7 @@ export const products: Product[] = [
     slug: "cakepops",
     name: "Cake Pops",
     category: "Chocolate Dipped Treats",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "Our cake pops are made from scratch using our signature vanilla cake base, creating a soft and rich interior with a smooth chocolate coating.\n\nEach piece is carefully hand-dipped and decorated to match your selected color palette, making them perfect for dessert tables, parties, and special events.\n\nA classic and versatile option that pairs beautifully with any theme.",
     details:
@@ -492,6 +502,8 @@ export const products: Product[] = [
     ],
     image: "/images/placeholders/under-construction.svg",
     badge: "New",
+    // Placeholder listing (no photos or final pricing yet): hidden until it is ready to sell.
+    hidden: true,
   },
   {
     slug: "custom-design-macarons",
@@ -508,6 +520,8 @@ export const products: Product[] = [
     image: "/images/placeholders/under-construction.svg",
     enquireOnly: true,
     badge: "Coming soon",
+    // Placeholder listing (no photos or final pricing yet): hidden until it is ready to sell.
+    hidden: true,
   },
   {
     slug: "muffins",
@@ -531,11 +545,11 @@ export const products: Product[] = [
     slug: "bakes-cupcakes",
     name: "Cupcakes (1/2 Dozen)",
     category: "Bakes",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "Scratch-made cupcakes finished with buttercream and decorative details, designed for celebrations, dessert tables, gifting, and themed events.",
     details:
-      "Choose from 6 flavours. Base price includes up to 2 colors with a simple buttercream finish and minimal decorative accents. Semi Custom (3-4 colors, themed color palettes, textured piping, floral-inspired styling) available for +$6–$10/dozen. Full Custom (hand-piped floral work, detailed buttercream textures, mixed decorative styles) available for +$12–$24/dozen. Baked fresh to order. Best consumed within 3 days.",
+      "Choose from " + FLAVOUR_COUNT + " flavours. Base price includes up to 2 colors with a simple buttercream finish and minimal decorative accents. Semi Custom (3-4 colors, themed color palettes, textured piping, floral-inspired styling) available for +$6–$10/dozen. Full Custom (hand-piped floral work, detailed buttercream textures, mixed decorative styles) available for +$12–$24/dozen. Baked fresh to order. Best consumed within 3 days.",
     variants: [
       { label: "1/2 Dozen (6 pcs)", price: 28, image: "/images/cupcakes/2.jpg" },
       { label: "1 Dozen (12 pcs)", price: 48, image: "/images/cupcakes/2.jpg" },
@@ -552,11 +566,11 @@ export const products: Product[] = [
     slug: "tray-bakes",
     name: "Tray Cake",
     category: "Bakes",
-    subtitle: "100% Real Buttercream · 2 Sizes · 6 Flavours",
+    subtitle: "100% Real Buttercream · 2 Sizes · " + FLAVOURS_LABEL,
     description:
       "Made with 100% real buttercream, our Tray Cakes are the perfect party dessert. Easy to serve, beautifully presented, and fully customisable in design, colour, and flavour.",
     details:
-      "Made with 100% real buttercream — rich, smooth, and never artificial. Choose from 6 flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
+      "Made with 100% real buttercream — rich, smooth, and never artificial. Choose from " + FLAVOUR_COUNT + " flavours. Perfect for parties and events. Easy to slice and serve. Custom designs and colour palettes available. Best consumed within 5 days of collection.",
     variants: [
       { label: "Medium — 15×11\" (20–30 servings)", price: 85, image: "/images/tray-bakes/tray.png" },
       { label: "Large — 17×12\" deep (30–45 servings)", price: 125, image: "/images/tray-bakes/tray.png" },
@@ -574,7 +588,7 @@ export const products: Product[] = [
     slug: "bakes-layer-cake",
     name: "Custom Cake (6\"/8\")",
     category: "Bakes",
-    subtitle: "Starting Prices · 100% Real Buttercream · 6 Flavours",
+    subtitle: "Starting Prices · 100% Real Buttercream · " + FLAVOURS_LABEL,
     description:
       "A custom buttercream cake made from scratch with 100% real buttercream. Choose your cake size, flavour, filling, and design details to match your celebration.",
     details:
@@ -594,16 +608,17 @@ export const products: Product[] = [
     flavours: CAKE_FLAVOURS,
     image: "/images/cake/7.jpg",
     hidden: true,
+    leadDays: 5,
   },
   {
     slug: "bakes-two-tier-cake",
     name: "Two-Tier Tall Cake (6\"&4\")",
     category: "Bakes",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "A show-stopping two-tier cake featuring a 6 inch base and 4 inch top tier. Filled with your choice of fruit jam or nut butter filling, layered with rich chocolate buttercream, and finished with edible chocolate work, sugar art, and edible sparkle. The perfect centrepiece for weddings, milestone birthdays, and special events.",
     details:
-      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with your choice of fruit jam or nut butter filling and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from 6 flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
+      "Serves approximately 15-18, or up to 22 when sliced smaller for weddings and parties. Filled with your choice of fruit jam or nut butter filling and finished with chocolate buttercream. Decorated entirely with edible art — chocolate, sugar work, and edible sparkle. Choose from " + FLAVOUR_COUNT + " flavours — mix and match per tier. Please allow at least 1 week notice. For custom designs, please share your design ideas and we will be in touch.",
     variants: [{ label: "Two-Tier Tall Cake (6\"&4\") — serves 15–18", price: 185, image: "/images/cake/two-tier-new.png" }],
     addons: [
       { label: "Floral Decoration", price: "Additional cost" },
@@ -612,6 +627,7 @@ export const products: Product[] = [
     flavours: CAKE_FLAVOURS,
     image: "/images/cake/two-tier-new.png",
     hidden: true,
+    leadDays: 7,
   },
   {
     slug: "bakes-madeleines",
@@ -664,11 +680,11 @@ export const products: Product[] = [
     slug: "bakes-cakesicles",
     name: "Cakesicles (1 Dozen)",
     category: "Bakes",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "Scratch-made cakesicles with a smooth chocolate shell and elegant decorative details. Perfect for dessert tables, gift boxes, party favors, and themed events.",
     details:
-      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$6–$10/dozen. Full Custom (names, initials, logo-inspired details, hand-piped details, multiple mixed designs) available for +$12–$20/dozen. Best consumed within 2 weeks.",
+      "Choose from " + FLAVOUR_COUNT + " flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$6–$10/dozen. Full Custom (names, initials, logo-inspired details, hand-piped details, multiple mixed designs) available for +$12–$20/dozen. Best consumed within 2 weeks.",
     variants: [{ label: "1 Dozen (Base Design)", price: 54, image: "/images/cakesicles/1.jpg" }],
     addons: [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$6–$10/dozen" },
@@ -687,11 +703,11 @@ export const products: Product[] = [
     slug: "bakes-cake-pops",
     name: "Cake Pops (1 Dozen)",
     category: "Bakes",
-    subtitle: "6 Flavours",
+    subtitle: FLAVOURS_LABEL,
     description:
       "Scratch-made cake pops with a smooth chocolate coating and elegant hand-finished details. Perfect for dessert tables, gift boxes, party favors, and special events.",
     details:
-      "Choose from 6 flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
+      "Choose from " + FLAVOUR_COUNT + " flavours. Base price includes up to 2 colors with simple drizzle or sprinkles. Semi Custom (3-4 colors, marbling, two-tone finishes, simple themed styling) available for +$5–$8/dozen. Full Custom (names, initials, logo-inspired work, multiple design styles, detailed decorative finishing) available for +$10–$18/dozen.",
     variants: [{ label: "1 Dozen (Base Design)", price: 40, image: "/images/cake-pops/new.jpeg" }],
     addons: [
       { label: "Semi Custom Design (3-4 colors, marbling, themed styling)", price: "+$5–$8/dozen" },
@@ -811,6 +827,7 @@ export const products: Product[] = [
       "Each madeleine is hand-dipped and decorated. Tower height: 11.9 inches. The tower can be customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Madeleine Tower", price: 195, image: "/images/towers/mt.png" }],
     image: "/images/towers/mt.png",
+    leadDays: 5,
   },
   {
     slug: "macaron-tower",
@@ -822,6 +839,7 @@ export const products: Product[] = [
       "Available in a variety of flavours including Vanilla, Pistachio, Raspberry, Chocolate, Salted Caramel, and more. Tower height: 11.9 inches. Towers can be colour-matched to your event. Please allow 5-7 days notice.",
     variants: [{ label: "Macaron Tower", price: 320, image: "/images/towers/mat.png" }],
     image: "/images/towers/mat.png",
+    leadDays: 5,
   },
   {
     slug: "chocolate-tower",
@@ -833,6 +851,7 @@ export const products: Product[] = [
       "Tower height: 11.9 inches. The tower can be fully customised with colours and toppings to match your theme. Please allow 5 days notice.",
     variants: [{ label: "Chocolate Tower", price: 200, image: "/images/towers/cht.png" }],
     image: "/images/towers/cht.png",
+    leadDays: 5,
   },
   {
     slug: "croissant-tower",
@@ -861,3 +880,15 @@ export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
 }
 
+
+/** Minimum notice (days) for one product; products without their own lead time use the default. */
+export function productLeadDays(slug: string): number {
+  return getProductBySlug(slug)?.leadDays ?? MIN_LEAD_DAYS;
+}
+
+/** A cart can only be made once its slowest item is ready, so its lead time is the maximum over its lines. */
+export function cartLeadDays(slugs: Iterable<string>): number {
+  let lead = MIN_LEAD_DAYS;
+  for (const slug of slugs) lead = Math.max(lead, productLeadDays(slug));
+  return lead;
+}

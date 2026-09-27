@@ -8,7 +8,7 @@ Everything you need to run the site, manage orders, and track expenses.
 
 | Piece | What it does | Where it lives |
 |---|---|---|
-| Public site | Customer-facing storefront | `src/app/(site)/*`, `src/app/classic/*` |
+| Public site | Customer-facing storefront | `src/app/(site)/*` (old `/classic/*` URLs redirect here) |
 | Order request API | Writes orders to DB + sends 2 emails | `src/app/api/request-order/route.ts` |
 | Admin dashboard | Owner-only orders + expenses management | `src/app/admin/*` |
 | Admin APIs | CRUD for orders + expenses | `src/app/api/admin/*` |
@@ -27,7 +27,11 @@ All live on Railway → web service → **Variables** tab. Local dev copies go i
 | `DATABASE_URL` | Postgres connection | Reference `${{Postgres.DATABASE_URL}}` on Railway |
 | `RESEND_API_KEY` | Email sending | `re_...` from resend.com |
 | `ADMIN_PASSWORD` | Admin dashboard login | Any strong password |
-| `ADMIN_SESSION_SECRET` | Signs login cookies (optional) | Random string; falls back to `ADMIN_PASSWORD` if unset |
+| `ADMIN_SESSION_SECRET` | Signs login cookies (**required**) | Random string, at least 32 characters. There is no fallback: if it is missing or too short, admin login returns 503 and every session is rejected |
+| `ADMIN_SESSION_VERSION` | Session revocation switch (optional) | Defaults to `1`. Change it (e.g. to `2`) to sign out every admin session at once |
+| `SUNJAE_ADMIN_API_TOKEN` | Sunjae's full admin API token (optional) | See `docs/SUNJAE_ADMIN_API.md` |
+| `SUNJAE_ADMIN_API_READ_TOKEN` | Sunjae's read-only admin API token (optional) | GET only; writes with it get 403 |
+| `FB_APP_SECRET` | Verifies Facebook webhook signatures | Required for the Marketplace webhook: without it every webhook POST is refused with 403 |
 | `CRON_SECRET` | Bearer token for cron endpoint | Random string |
 | `NEXT_PUBLIC_URL` | Base URL in emails | `https://dipsprinkle.com` |
 | `TZ` | Timezone for dates in emails (optional) | `America/Los_Angeles` |
@@ -48,7 +52,16 @@ All under `https://dipsprinkle.com`. Gated by `ADMIN_PASSWORD` login.
 | `/admin/expenses/new` | Log a new expense (ingredient / supply / packaging / other) |
 | `/admin/expenses/[id]` | Edit or delete an expense |
 
-Session lasts **14 days** before re-login required.
+Session lasts **7 days** before re-login required.
+
+### Admin security model
+
+- Every admin page and every `/api/admin/*` route checks the session itself; `src/proxy.ts` is only a first, optimistic gate.
+- Login is rate limited in memory: 5 failed attempts per IP lock that IP out for 15 minutes, and once 20 failures (from any IPs) land within 15 minutes every attempt must wait an exponentially growing delay (1s, 2s, 4s, ... capped at 5 minutes) after the latest failure. The counters reset on redeploy. This assumes a single Railway instance; if the service is ever scaled out, move the counters to Postgres or Redis.
+- The client IP is the right-most `X-Forwarded-For` entry (the one Railway's proxy adds). If a CDN is ever put in front of Railway, revisit `src/lib/loginRateLimit.ts`.
+- The session cookie is `HttpOnly`, `SameSite=Lax`, and `Secure` in production and on any https request.
+- Every admin write (browser or Sunjae token) is recorded in `AdminAuditLog`, with customer names, emails, phones, notes and image data redacted.
+- Security headers (CSP, HSTS, `X-Frame-Options: DENY`, `nosniff`, referrer and permissions policy) are set in `next.config.ts`.
 
 ---
 
@@ -92,9 +105,12 @@ Session lasts **14 days** before re-login required.
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/api/cron/reminders` | Sends email reminders for orders at D-3, D-2, D-1, D-0. Idempotent per-window. |
+| `GET` | `/api/cron/reminders` | Sends email reminders for orders due in 3 days (D-3), 2 days (D-2) and today (D-0). Idempotent per window. |
+| `GET` | `/api/cron/purge-images` | Deletes customer photos past the retention window. `?dry=1` reports without deleting. |
 
 **Auth header:** `Authorization: Bearer $CRON_SECRET`
+
+Both endpoints fail closed: if `CRON_SECRET` is not set on the web service they return `503` and do nothing.
 
 ---
 
@@ -146,8 +162,12 @@ Change by opening an order in `/admin/orders/[id]` and selecting from the status
 
 ### Rotating the admin password
 1. Change `ADMIN_PASSWORD` on Railway
-2. If `ADMIN_SESSION_SECRET` isn't set separately, this also invalidates existing sessions (you'll need to log back in)
+2. Changing the password does **not** sign out existing sessions. To do that too, bump `ADMIN_SESSION_VERSION` (or rotate `ADMIN_SESSION_SECRET`)
 3. Redeploy triggers automatically on env change
+
+### Signing out every admin session
+1. Change `ADMIN_SESSION_VERSION` on Railway (e.g. `1` -> `2`), or rotate `ADMIN_SESSION_SECRET` to a new random value of at least 32 characters
+2. After the automatic redeploy, every existing admin cookie is rejected and everyone has to log in again
 
 ### Rotating the Resend API key
 1. Resend dashboard → API Keys → revoke old, generate new
@@ -163,13 +183,20 @@ Change by opening an order in `/admin/orders/[id]` and selecting from the status
 
 **When it runs:** daily at `0 16 * * *` UTC (9 AM PST / 8 AM PDT).
 
-**What it does:** Finds active (non-completed, non-cancelled) orders whose `neededDate` is 3, 2, 1, or 0 days away and whose reminder for that window hasn't fired yet. Sends a single digest email per window to support listing all matching orders. Marks each order's `remindersSent` so it doesn't double-fire.
+**What it does:** Finds active (non-completed, non-cancelled) orders whose `neededDate` is 3 days away (`d3`), 2 days away (`d2`) or today (`d0`) and whose reminder for that window hasn't fired yet.
+There is no D-1 window.
+"Today" is the bakery's date in Los Angeles, not the server's UTC date.
+Sends a single digest email per window to support listing all matching orders.
+Marks each order's `remindersSent` only after Resend accepts the email, so a failed send is retried on the next run.
+Changing an order's needed-by date in admin clears its `remindersSent`, so reminders fire again for the new date.
 
 **Manually trigger (from laptop):**
 ```bash
 curl -fsS -H "Authorization: Bearer <CRON_SECRET>" https://dipsprinkle.com/api/cron/reminders
 ```
-Response: `{"ok":true,"summary":{"d3":0,"d2":0,"d1":0,"d0":0}}` — numbers are orders matched per window.
+Response: `{"ok":true,"summary":{"d3":0,"d2":0,"d0":0},"force":false}` - numbers are orders reminded per window.
+If a window's email fails, the response has `"ok":false` and `"failed":["d2"]` (still HTTP 200), and those orders are retried next run.
+Add `?force=1` to send a `[TEST]` digest without marking anything sent.
 
 **Manually trigger (from Railway):** go to `cron-reminders` service → **Deploy Now**.
 
@@ -233,9 +260,11 @@ Opens a browser GUI at `localhost:5555` for editing rows by hand.
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Admin login always says "incorrect password" | `ADMIN_PASSWORD` not set or mismatched between local/Railway | Check env var on both sides |
-| Order submission returns 500 | `RESEND_API_KEY` missing, or DB unreachable | Check Railway logs; verify env vars |
+| Order submission returns 500 | DB unreachable (the order was not saved and no email went out) | Check Railway logs and the database service |
+| Order saved but no emails arrived | `RESEND_API_KEY` missing or Resend rejected the send; the response carries `warnings` | Check Railway logs; verify `RESEND_API_KEY` and the Resend dashboard |
 | Order in DB but no email sent | Resend domain unverified, or rate-limited | Check Resend dashboard → Logs |
 | Cron returns 401 | Wrong `CRON_SECRET` or missing Authorization header | Confirm bearer value matches web service env |
+| Cron returns 503 | `CRON_SECRET` not set on the web service | Set it; the endpoints refuse to run without it |
 | Cron returns `{"ok":true}` but no email received | No orders in the D-3..D-0 windows (expected), OR already fired for today | Check `remindersSent` on an order in `/admin/orders/[id]` |
 | Build fails with "secret ID missing" | Malformed Railway env variable reference | Open **Raw Editor** on Variables tab, remove empty/broken entries |
 | Migration fails on deploy | Drift between schema and DB | `npx prisma migrate status` to diagnose; may need a manual migration |

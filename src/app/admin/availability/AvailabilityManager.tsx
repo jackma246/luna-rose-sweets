@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { addDaysToKey, addMonthsToMonthKey, formatDateKey, monthKeyOf, todayKey, weekdayOfKey } from "@/lib/businessDate";
 
 type AvailabilityStatus = "available" | "limited" | "fully_booked" | "closed";
 type SavedDate = { id?: string; date: string; status: AvailabilityStatus; note?: string | null };
@@ -19,46 +20,50 @@ const statusClasses: Record<AvailabilityStatus, string> = {
   closed: "bg-stone-200 text-stone-700 border-stone-300",
 };
 
-function monthKey(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+function monthLabel(monthKey: string) {
+  return formatDateKey(`${monthKey}-01`, { month: "long", year: "numeric" });
 }
 
-function dateKey(date: Date) {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-
-function monthLabel(date: Date) {
-  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-}
-
-function buildMonthDays(month: Date) {
-  const first = new Date(month.getFullYear(), month.getMonth(), 1);
-  const last = new Date(month.getFullYear(), month.getMonth() + 1, 0);
-  const days: Array<Date | null> = [];
-  for (let i = 0; i < first.getDay(); i += 1) days.push(null);
-  for (let day = 1; day <= last.getDate(); day += 1) days.push(new Date(month.getFullYear(), month.getMonth(), day));
+function buildMonthDays(monthKey: string): Array<string | null> {
+  const [y, m] = monthKey.split("-").map(Number);
+  const first = `${monthKey}-01`;
+  const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const days: Array<string | null> = [];
+  for (let i = 0; i < weekdayOfKey(first); i += 1) days.push(null);
+  for (let day = 0; day < daysInMonth; day += 1) days.push(addDaysToKey(first, day));
   while (days.length % 7 !== 0) days.push(null);
   return days;
 }
 
 export default function AvailabilityManager() {
-  const [month, setMonth] = useState(() => new Date());
+  // Calendar days are business (Los Angeles) dates, matching what customers see.
+  const [month, setMonth] = useState(() => monthKeyOf(todayKey()));
   const [dates, setDates] = useState<Record<string, SavedDate>>({});
-  const [selectedDate, setSelectedDate] = useState<string>(dateKey(new Date()));
+  const [selectedDate, setSelectedDate] = useState<string>(() => todayKey());
   const [status, setStatus] = useState<AvailabilityStatus>("available");
   const [note, setNote] = useState("");
   const [message, setMessage] = useState("");
   const days = useMemo(() => buildMonthDays(month), [month]);
+  const selectedDateRef = useRef(selectedDate);
+  useEffect(() => {
+    selectedDateRef.current = selectedDate;
+  });
 
   useEffect(() => {
     let active = true;
-    fetch(`/api/admin/availability?month=${monthKey(month)}`)
+    fetch(`/api/admin/availability?month=${month}`)
       .then((res) => res.json())
       .then((data: { dates?: SavedDate[] }) => {
         if (!active) return;
         const next: Record<string, SavedDate> = {};
         for (const item of data.dates ?? []) next[item.date] = item;
         setDates(next);
+        // The selected day's saved status arrives with the month: show it instead of the "available" default.
+        const saved = next[selectedDateRef.current];
+        if (saved) {
+          setStatus(saved.status);
+          setNote(saved.note ?? "");
+        }
       })
       .catch(() => setMessage("Could not load availability."));
     return () => {
@@ -66,8 +71,7 @@ export default function AvailabilityManager() {
     };
   }, [month]);
 
-  function selectDay(day: Date) {
-    const key = dateKey(day);
+  function selectDay(key: string) {
     const saved = dates[key];
     setSelectedDate(key);
     setStatus(saved?.status ?? "available");
@@ -100,9 +104,9 @@ export default function AvailabilityManager() {
     <div className="grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
       <section className="rounded-3xl border border-[var(--rule)] bg-white p-4 shadow-sm">
         <div className="mb-4 flex items-center justify-between gap-3">
-          <button className="rounded-full border px-3 py-2 text-sm" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))}>←</button>
+          <button className="rounded-full border px-3 py-2 text-sm" onClick={() => setMonth(addMonthsToMonthKey(month, -1))}>←</button>
           <h2 className="font-serif text-2xl">{monthLabel(month)}</h2>
-          <button className="rounded-full border px-3 py-2 text-sm" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))}>→</button>
+          <button className="rounded-full border px-3 py-2 text-sm" onClick={() => setMonth(addMonthsToMonthKey(month, 1))}>→</button>
         </div>
         <div className="grid grid-cols-7 gap-2 text-center text-[11px] uppercase tracking-[0.16em] text-ink-soft">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => <div key={d}>{d}</div>)}
@@ -110,16 +114,16 @@ export default function AvailabilityManager() {
         <div className="mt-2 grid grid-cols-7 gap-2">
           {days.map((day, index) => {
             if (!day) return <div key={`blank-${index}`} className="aspect-square" />;
-            const key = dateKey(day);
+            const key = day;
             const saved = dates[key];
             const active = key === selectedDate;
             return (
               <button
                 key={key}
-                onClick={() => selectDay(day)}
+                onClick={() => selectDay(key)}
                 className={`aspect-square rounded-2xl border p-1 text-left transition ${active ? "ring-2 ring-cherry" : "hover:border-cherry"} ${saved ? statusClasses[saved.status] : "border-[var(--rule)] bg-cream/40"}`}
               >
-                <div className="text-sm font-semibold">{day.getDate()}</div>
+                <div className="text-sm font-semibold">{Number(key.slice(8))}</div>
                 {saved && <div className="mt-1 hidden text-[10px] font-semibold sm:block">{statusLabels[saved.status]}</div>}
               </button>
             );

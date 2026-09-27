@@ -1,4 +1,4 @@
-import type { CartItem } from "./orderEmails";
+import { money, num, type CartItem } from "./orderEmails";
 
 export interface OrderInviteInput {
   orderId: string;
@@ -11,8 +11,13 @@ export interface OrderInviteInput {
   customerNotes?: string | null;
 }
 
+/**
+ * Shape accepted by Resend's `attachments`. Resend's API treats a string `content` as base64, so the
+ * calendar text must be base64-encoded here - passing the raw ICS text would be decoded into garbage.
+ */
 export interface IcsAttachment {
   filename: string;
+  /** Base64 of the UTF-8 ICS document. */
   content: string;
   contentType: string;
 }
@@ -48,22 +53,35 @@ function escapeText(value: string): string {
     .replace(/;/g, "\\;");
 }
 
-// RFC 5545 §3.1 — fold lines longer than 75 octets with CRLF + space
-function foldLine(line: string): string {
-  if (line.length <= 75) return line;
+const MAX_LINE_OCTETS = 75;
+const utf8 = new TextEncoder();
+
+// RFC 5545 section 3.1: content lines are folded at 75 octets (not characters) with CRLF + one space,
+// never splitting a multi-byte UTF-8 character. Continuation lines carry the leading space, so they hold
+// at most 74 octets of content.
+export function foldLine(line: string): string {
+  if (utf8.encode(line).length <= MAX_LINE_OCTETS) return line;
   const out: string[] = [];
-  let remaining = line;
-  out.push(remaining.slice(0, 75));
-  remaining = remaining.slice(75);
-  while (remaining.length > 0) {
-    out.push(" " + remaining.slice(0, 74));
-    remaining = remaining.slice(74);
+  let current = "";
+  let currentOctets = 0;
+  let limit = MAX_LINE_OCTETS;
+  for (const ch of line) {
+    const size = utf8.encode(ch).length;
+    if (currentOctets + size > limit) {
+      out.push(current);
+      current = "";
+      currentOctets = 0;
+      limit = MAX_LINE_OCTETS - 1;
+    }
+    current += ch;
+    currentOctets += size;
   }
-  return out.join("\r\n");
+  out.push(current);
+  return out.join("\r\n ");
 }
 
-function joinLines(lines: string[]): string {
-  return lines.map(foldLine).join("\r\n");
+function buildIcs(lines: string[]): string {
+  return lines.map(foldLine).join("\r\n") + "\r\n";
 }
 
 function buildDescription(input: OrderInviteInput): string {
@@ -76,7 +94,7 @@ function buildDescription(input: OrderInviteInput): string {
   lines.push("Items:");
   for (const it of input.items) {
     const variant = it.variantLabel ? ` (${it.variantLabel})` : "";
-    lines.push(`• ${it.quantity}× ${it.name}${variant} — $${(it.price * it.quantity).toFixed(2)}`);
+    lines.push(`• ${num(it.quantity)}× ${it.name}${variant} — $${money(num(it.price) * num(it.quantity))}`);
     if (it.flavour) lines.push(`    Flavour: ${it.flavour}`);
     if (it.note) lines.push(`    Note: ${it.note}`);
   }
@@ -118,7 +136,7 @@ export function buildOrderInvite(input: OrderInviteInput): IcsAttachment {
 
   return {
     filename,
-    content: joinLines(lines) + "\r\n",
+    content: Buffer.from(buildIcs(lines), "utf8").toString("base64"),
     contentType: "text/calendar; method=REQUEST; charset=utf-8",
   };
 }

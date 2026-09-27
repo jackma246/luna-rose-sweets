@@ -1,9 +1,12 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import LoginForm from "./LoginForm";
+import { isAuthenticated } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminLoginPage() {
+export default async function AdminLoginPage() {
+  if (await isAuthenticated()) redirect("/admin");
   return (
     <Suspense
       fallback={

@@ -8,7 +8,9 @@ This is intended to replace brittle browser automation for admin work while pres
 - writes require operator confirmation
 - deletes require exact strong confirmation
 - no admin passwords or browser cookies are stored
-- token-backed writes are audit logged in `AdminAuditLog`
+- every admin write is audit logged in `AdminAuditLog`, from Sunjae's token and from the owner's browser session alike (`actorType` `sunjae_agent` or `browser_admin`)
+- audit rows never store customer PII: names, emails, phones, notes/messages and image data are replaced with `[redacted]` before the request/response body is saved
+- an optional read-only token can be issued for day-to-day lookups, so the write-capable token does not need to be on hand
 
 ## Environment variables
 
@@ -16,14 +18,29 @@ Production/Railway:
 
 ```text
 SUNJAE_ADMIN_API_TOKEN=[REDACTED]
+# optional, read-only (GET only; any write with it gets HTTP 403)
+SUNJAE_ADMIN_API_READ_TOKEN=[REDACTED]
 ```
 
 Local Sunjae shell/profile environment:
 
 ```text
 DIPSPRINKLE_ADMIN_BASE_URL=https://dipsprinkle.com
+SUNJAE_ADMIN_API_READ_TOKEN=[REDACTED]
+# only when writes are needed
 SUNJAE_ADMIN_API_TOKEN=[REDACTED]
 ```
+
+Token scopes:
+
+| Token | Allowed methods | Audit `actorId` |
+|---|---|---|
+| `SUNJAE_ADMIN_API_TOKEN` | all (reads, writes, deletes with confirmation) | `sunjae` |
+| `SUNJAE_ADMIN_API_READ_TOKEN` | `GET` / `HEAD` only | `sunjae-read` |
+
+The client uses the read-only token for reads whenever it is set and falls back to the full token.
+Writes always use `SUNJAE_ADMIN_API_TOKEN`, so a shell that only has the read-only token cannot write.
+Both tokens must be different, long random values.
 
 Do not commit token values.
 
@@ -144,12 +161,13 @@ print(secrets.token_urlsafe(48))
 PY
 ```
 
-4. Set `SUNJAE_ADMIN_API_TOKEN` in Railway.
-5. Put the same token only into Sunjae's private env, not repo/vault/chat.
+4. Set `SUNJAE_ADMIN_API_TOKEN` (and optionally `SUNJAE_ADMIN_API_READ_TOKEN`, generated separately) in Railway.
+5. Put the same token(s) only into Sunjae's private env, not repo/vault/chat.
 6. Deploy after approval.
 7. Run read-only smoke tests first.
 8. Run one controlled write after approval.
 
 ## Revocation
 
-Rotate or remove `SUNJAE_ADMIN_API_TOKEN` in Railway.
+Rotate or remove `SUNJAE_ADMIN_API_TOKEN` and/or `SUNJAE_ADMIN_API_READ_TOKEN` in Railway.
+Each token can be revoked independently.

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { dateKeyFromDbDate, isDateKey, toDbDate } from "@/lib/businessDate";
+import { describeError } from "@/lib/logging";
 import { prisma } from "@/lib/prisma";
 import { ORDER_STATUSES } from "@/lib/orderStatus";
 import { ORDER_SOURCES } from "@/lib/orderSources";
@@ -53,7 +55,7 @@ export async function GET(req: NextRequest) {
     orders: orders.map((order) => ({
       ...order,
       totalPrice: Number(order.totalPrice),
-      neededDate: order.neededDate ? order.neededDate.toISOString().slice(0, 10) : null,
+      neededDate: order.neededDate ? dateKeyFromDbDate(order.neededDate) : null,
       createdAt: order.createdAt.toISOString(),
       updatedAt: order.updatedAt.toISOString(),
     })),
@@ -84,6 +86,9 @@ export async function POST(req: NextRequest) {
   if (!Array.isArray(body.items) || body.items.length === 0) {
     return NextResponse.json({ ok: false, error: "At least one item required." }, { status: 400 });
   }
+  if (body.neededDate && !isDateKey(body.neededDate)) {
+    return NextResponse.json({ ok: false, error: "neededDate must be YYYY-MM-DD." }, { status: 400 });
+  }
   const status: OrderStatus = body.status && ORDER_STATUSES.includes(body.status) ? body.status : "pending";
   const source: OrderSource = body.source && ORDER_SOURCES.includes(body.source) ? body.source : "website";
   const adjustments = sanitizeAdjustments(body.adjustments);
@@ -97,7 +102,7 @@ export async function POST(req: NextRequest) {
         items: body.items as unknown as object[],
         adjustments: adjustments as unknown as object[],
         totalPrice: body.totalPrice,
-        neededDate: body.neededDate ? new Date(body.neededDate + "T00:00:00") : null,
+        neededDate: body.neededDate ? toDbDate(body.neededDate) : null,
         customerNotes: body.customerNotes || null,
         internalNotes: body.internalNotes || null,
         status,
@@ -150,7 +155,7 @@ export async function POST(req: NextRequest) {
       : undefined;
     try {
       const resend = new Resend(apiKey);
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from: ORDERS_FROM,
         to: SUPPORT_TO,
         replyTo: body.customerEmail,
@@ -158,8 +163,9 @@ export async function POST(req: NextRequest) {
         html: supportEmail(customer, items, adjustments, body.totalPrice, orderNumberLabel, neededDateLabel, "Admin-Created Order"),
         attachments,
       });
+      if (result.error) console.error("Admin order support email failed:", result.error.name, result.error.message);
     } catch (err) {
-      console.error("Admin order support email failed:", err);
+      console.error("Admin order support email failed:", describeError(err));
     }
   }
 

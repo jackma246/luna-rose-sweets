@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ORDER_STATUSES, STATUS_LABEL, STATUS_CHIP } from "@/lib/orderStatus";
 import { ORDER_SOURCES, SOURCE_LABEL, SOURCE_CHIP } from "@/lib/orderSources";
 import { formatOrderNumber } from "@/lib/orderNumber";
+import { formatInstant } from "@/lib/businessDate";
 import type { OrderStatus, OrderSource } from "@/generated/prisma";
 
 interface CartItem {
@@ -360,7 +361,8 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
     try {
       const res = await fetch(`/api/admin/orders/${order.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
-      window.location.assign("/admin");
+      router.push("/admin");
+      router.refresh();
     } catch {
       alert("Couldn't delete — try again.");
       setSaving(false);
@@ -407,7 +409,7 @@ export default function OrderEditor({ order }: { order: SerializedOrder }) {
             className="text-sm text-ink-soft bg-transparent border-b border-transparent focus:border-cherry/40 focus:outline-none w-full px-0 py-0.5"
           />
         </div>
-        <div className="text-xs text-ink-soft mt-3">Received {new Date(order.createdAt).toLocaleString()}</div>
+        <div className="text-xs text-ink-soft mt-3">Received {formatInstant(new Date(order.createdAt), { dateStyle: "medium", timeStyle: "short" })} PT</div>
       </header>
 
       <section className="admin-card p-5">

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { CATEGORY_LABEL, CATEGORY_CHIP, EXPENSE_CATEGORIES } from "@/lib/expenseCategories";
 import { lastNMonthOptions, parseMonth } from "@/lib/monthFilter";
+import { formatDbDate, monthKeyOf, todayKey } from "@/lib/businessDate";
 import { FilterChips, FilterSelect } from "../FilterChips";
 import type { ExpenseCategory, Prisma } from "@/generated/prisma";
+import { requireAdminPage } from "@/lib/adminPageAuth";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +19,7 @@ export default async function ExpensesPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
+  await requireAdminPage();
   const sp = await searchParams;
   const monthRange = parseMonth(sp.month);
   const categoryFilter = sp.category && EXPENSE_CATEGORIES.includes(sp.category as ExpenseCategory)
@@ -35,12 +38,10 @@ export default async function ExpensesPage({
     take: filtersActive ? 1000 : 200,
   });
 
-  const summaryRange = monthRange ?? (() => {
-    const now = new Date();
-    return { start: new Date(now.getFullYear(), now.getMonth(), 1), end: new Date(now.getFullYear(), now.getMonth() + 1, 1) };
-  })();
+  // Default summary: the current business month (Los Angeles), bounded in UTC like the @db.Date column.
+  const summaryRange = monthRange ?? parseMonth(monthKeyOf(todayKey()))!;
   const summaryLabel = monthRange
-    ? new Date(summaryRange.start).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    ? formatDbDate(summaryRange.start, { month: "long", year: "numeric" })
     : "This month";
 
   const summaryExpenses = await prisma.expense.findMany({
@@ -123,7 +124,7 @@ export default async function ExpensesPage({
                 <div className="min-w-0">
                   <div className="text-[15px] font-semibold text-ink truncate">{e.vendor}</div>
                   <div className="text-xs text-ink-soft">
-                    {new Date(e.date).toLocaleDateString("en-US", {
+                    {formatDbDate(e.date, {
                       month: "short",
                       day: "numeric",
                       year: "numeric",

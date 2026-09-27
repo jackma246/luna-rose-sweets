@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { purgeExpiredOrderImages, RETENTION_DAYS, STALE_DAYS } from "@/lib/retention";
+import { cronAuthFailure } from "@/lib/cronAuth";
+import { describeError } from "@/lib/logging";
 
 /**
  * Scheduled deletion of customer inspiration photos.
- * Same auth contract as /api/cron/reminders: Bearer CRON_SECRET.
+ * Same auth contract as /api/cron/reminders: Bearer CRON_SECRET (503 when unset).
  *
  *   GET  ?dry=1   report what would be deleted, delete nothing
  *   GET           delete
  */
 export async function GET(req: NextRequest) {
-  const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const auth = req.headers.get("authorization") || "";
-    if (auth !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-    }
-  }
+  const denied = cronAuthFailure(req.headers.get("authorization"));
+  if (denied) return denied;
 
   const dryRun = req.nextUrl.searchParams.get("dry") === "1";
 
@@ -36,8 +33,7 @@ export async function GET(req: NextRequest) {
       })),
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "purge failed";
-    console.error("purge-images cron failed:", message);
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    console.error("purge-images cron failed:", describeError(error));
+    return NextResponse.json({ ok: false, error: "purge failed" }, { status: 500 });
   }
 }

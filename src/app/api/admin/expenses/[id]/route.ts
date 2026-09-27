@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isDateKey, toDbDate } from "@/lib/businessDate";
 import { EXPENSE_CATEGORIES } from "@/lib/expenseCategories";
 import type { ExpenseCategory } from "@/generated/prisma";
 import { isAuthResponse, requireAdmin, requireSunjaeDeleteConfirmation } from "@/lib/adminAuth";
@@ -38,7 +39,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   };
 
   const data: Record<string, unknown> = {};
-  if (body.date !== undefined) data.date = new Date(body.date + "T00:00:00");
+  if (body.date !== undefined) {
+    if (!isDateKey(body.date)) {
+      return NextResponse.json({ ok: false, error: "date must be YYYY-MM-DD." }, { status: 400 });
+    }
+    data.date = toDbDate(body.date);
+  }
   if (body.amount !== undefined) data.amount = body.amount;
   if (body.vendor !== undefined) data.vendor = body.vendor;
   if (body.category !== undefined) {

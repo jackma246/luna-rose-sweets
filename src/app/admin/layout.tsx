@@ -1,8 +1,17 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import AdminNav from "./AdminNav";
+import { isAuthenticated } from "@/lib/auth";
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  // Signed out, the only reachable admin page is /admin/login (every other page
+  // redirects there via requireAdminPage), so render it without the admin chrome:
+  // no nav links to protected pages and no "Sign out" button.
+  // This is presentation only; auth is enforced per page and per API route.
+  if (!(await isAuthenticated())) {
+    return <div className="admin-scope min-h-dvh bg-paper text-ink">{children}</div>;
+  }
+
   return (
     <div className="admin-scope min-h-dvh bg-paper text-ink">
       <header className="sticky top-0 z-40 bg-paper/85 backdrop-blur border-b border-[var(--rule)]">

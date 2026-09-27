@@ -1,65 +1,21 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import Module from "node:module";
 import path from "node:path";
 import test from "node:test";
-import { fileURLToPath } from "node:url";
-import ts from "typescript";
-import { createRequire } from "node:module";
-
-const nativeRequire = createRequire(import.meta.url);
+import { loadTsModule, root } from "./helpers/loadTs.mjs";
 
 // A date comfortably beyond today's 3-day lead time so the availability gate lets it through.
 const FUTURE_DATE = (() => {
-  const d = new Date();
-  d.setDate(d.getDate() + 30);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const d = new Date(Date.now() + 30 * 86_400_000);
+  return d.toISOString().slice(0, 10);
 })();
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-
-function resolveAlias(request) {
-  if (!request.startsWith("@/")) return null;
-  const base = path.join(root, "src", request.slice(2));
-  for (const candidate of [`${base}.ts`, `${base}.tsx`, path.join(base, "index.ts")]) {
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return null;
-}
-
-function loadTsModule(filename, mocks, cache = new Map()) {
-  if (cache.has(filename)) return cache.get(filename).exports;
-
-  const source = fs.readFileSync(filename, "utf8");
-  const output = ts.transpileModule(source, {
-    compilerOptions: {
-      esModuleInterop: true,
-      jsx: ts.JsxEmit.ReactJSX,
-      module: ts.ModuleKind.CommonJS,
-      target: ts.ScriptTarget.ES2020,
-    },
-    fileName: filename,
-  }).outputText;
-
-  const mod = new Module(filename);
-  cache.set(filename, mod);
-  mod.filename = filename;
-  mod.paths = Module._nodeModulePaths(path.dirname(filename));
-  mod.require = (request) => {
-    if (Object.prototype.hasOwnProperty.call(mocks, request)) return mocks[request];
-    const aliased = resolveAlias(request);
-    if (aliased) return loadTsModule(aliased, mocks, cache);
-    return nativeRequire(request);
-  };
-  mod._compile(output, filename);
-  return mod.exports;
-}
 
 function loadInquiryRoute({ create, send, apiKey = "test_resend_key", availability = null }) {
   const previousApiKey = process.env.RESEND_API_KEY;
   if (apiKey) process.env.RESEND_API_KEY = apiKey;
   else delete process.env.RESEND_API_KEY;
 
-  const route = loadTsModule(path.join(root, "src/app/api/inquiries/route.ts"), {
+  const route = loadTsModule("src/app/api/inquiries/route.ts", {
     "@/lib/prisma": {
       prisma: {
         inquiry: {
@@ -78,6 +34,7 @@ function loadInquiryRoute({ create, send, apiKey = "test_resend_key", availabili
           return {
             body,
             status: init.status || 200,
+            headers: new Headers(init.headers),
             async json() {
               return body;
             },
@@ -104,12 +61,12 @@ function loadInquiryRoute({ create, send, apiKey = "test_resend_key", availabili
   };
 }
 
-function requestJson(body) {
-  return {
-    async json() {
-      return body;
-    },
-  };
+function requestJson(body, headers = {}) {
+  return new Request("http://localhost/api/inquiries", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-forwarded-for": "203.0.113.7", ...headers },
+    body: JSON.stringify(body),
+  });
 }
 
 test("valid inquiry submit persists and returns 200", async () => {
@@ -212,7 +169,7 @@ test("email failure still persists and returns 200", async () => {
 
 test("wrong support email spelling is absent from tracked text files", () => {
   const wrong = ["support", "dipsprinkle@gmail.com"].join(".");
-  const skipDirs = new Set([".git", ".next", "node_modules", "src/generated"]);
+  const skipDirs = new Set([".git", ".next", "node_modules", "src/generated", ".localdb"]);
   const textExts = new Set([
     ".cjs",
     ".css",
@@ -269,6 +226,98 @@ test("inquiry for a closed day returns 400 and does not persist", async () => {
     assert.equal(res.status, 400);
     assert.match(res.body.error, /closed/i);
     assert.equal(creates.length, 0);
+  } finally {
+    restoreEnv();
+  }
+});
+
+test("inquiry event date is stored as the same calendar day in every server time zone", async () => {
+  const creates = [];
+  const { POST, restoreEnv } = loadInquiryRoute({
+    create: async ({ data }) => {
+      creates.push(data);
+      return { id: "inq_tz", createdAt: new Date(), ...data };
+    },
+    send: async () => ({ data: { id: "email_tz" }, error: null }),
+  });
+  try {
+    const res = await POST(requestJson({ name: "Sam", email: "sam@example.com", eventDate: FUTURE_DATE }));
+    assert.equal(res.status, 200);
+    // UTC midnight of that day - what Prisma stores for a @db.Date - regardless of process TZ.
+    assert.equal(creates[0].eventDate.toISOString(), `${FUTURE_DATE}T00:00:00.000Z`);
+  } finally {
+    restoreEnv();
+  }
+});
+
+test("honeypot submissions look successful but are dropped", async () => {
+  let createCalled = false;
+  let sendCalled = false;
+  const { POST, restoreEnv } = loadInquiryRoute({
+    create: async () => {
+      createCalled = true;
+    },
+    send: async () => {
+      sendCalled = true;
+    },
+  });
+  try {
+    const res = await POST(requestJson({ name: "Bot", email: "bot@example.com", website: "http://spam.example" }));
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body, { ok: true });
+    assert.equal(createCalled, false);
+    assert.equal(sendCalled, false);
+  } finally {
+    restoreEnv();
+  }
+});
+
+test("more than 5 accepted inquiries per hour from one IP are rate limited", async () => {
+  let created = 0;
+  const { POST, restoreEnv } = loadInquiryRoute({
+    create: async ({ data }) => {
+      created += 1;
+      return { id: `inq_${created}`, createdAt: new Date(), ...data };
+    },
+    send: async () => ({ data: { id: "e" }, error: null }),
+  });
+  try {
+    for (let i = 0; i < 5; i += 1) {
+      const res = await POST(requestJson({ name: "Sam", email: "sam@example.com" }, { "x-real-ip": "198.51.100.9", "x-forwarded-for": "6.6.6.6" }));
+      assert.equal(res.status, 200);
+    }
+    const limited = await POST(requestJson({ name: "Sam", email: "sam@example.com" }, { "x-real-ip": "198.51.100.9", "x-forwarded-for": "7.7.7.7" }));
+    assert.equal(limited.status, 429);
+    assert.equal(created, 5);
+    // A different client is unaffected.
+    const other = await POST(requestJson({ name: "Alex", email: "alex@example.com" }, { "x-real-ip": "198.51.100.10" }));
+    assert.equal(other.status, 200);
+  } finally {
+    restoreEnv();
+  }
+});
+
+test("oversized inquiry bodies are rejected before parsing", async () => {
+  const { POST, restoreEnv } = loadInquiryRoute({
+    create: async () => assert.fail("must not persist"),
+    send: async () => assert.fail("must not send"),
+  });
+  try {
+    const res = await POST(requestJson({ name: "Sam", email: "sam@example.com", message: "x".repeat(70_000) }));
+    assert.equal(res.status, 413);
+  } finally {
+    restoreEnv();
+  }
+});
+
+test("email addresses need a real top-level domain", async () => {
+  const { POST, restoreEnv } = loadInquiryRoute({
+    create: async () => assert.fail("must not persist"),
+    send: async () => assert.fail("must not send"),
+  });
+  try {
+    const res = await POST(requestJson({ name: "Sam", email: "sam@localhost" }));
+    assert.equal(res.status, 400);
   } finally {
     restoreEnv();
   }
