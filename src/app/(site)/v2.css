@@ -157,6 +157,9 @@
   }
   .nav-toggle:hover { color: var(--cherry); }
 
+  /* category shortcuts shown directly below the logo on mobile */
+  .mobile-quick-nav { display: none; }
+
   /* mobile drawer — entirely hidden on desktop */
   .mobile-drawer {
     display: none;
@@ -1801,6 +1804,27 @@
     }
     .logo-placeholder .amp { font-size: 28px; }
     .icons { justify-content: flex-end; }
+    .mobile-quick-nav {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-top: 1px solid var(--rule);
+    }
+    .mobile-quick-nav a {
+      padding: 11px 12px;
+      color: var(--ink);
+      font: 600 11px/1 var(--font-dm-sans), "DM Sans", sans-serif;
+      letter-spacing: 0.16em;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s, background 0.2s;
+    }
+    .mobile-quick-nav a + a { border-left: 1px solid var(--rule); }
+    .mobile-quick-nav a:hover,
+    .mobile-quick-nav a:focus-visible {
+      color: var(--cherry);
+      background: rgba(185, 74, 100, 0.06);
+    }
 
     .section-head { margin-bottom: 40px; }
     .section-head h2 { font-size: 38px; }

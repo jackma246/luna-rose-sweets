@@ -80,6 +80,11 @@ export default function V2Header({ current }: { current?: string }) {
             </Link>
           </div>
         </div>
+
+        <nav className="mobile-quick-nav" aria-label="Shop categories">
+          <Link href="/products/party-set">Party Sets</Link>
+          <Link href="/products?category=Treats">Treats</Link>
+        </nav>
       </header>
 
       {/* Mobile drawer */}
