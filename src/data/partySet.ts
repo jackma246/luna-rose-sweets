@@ -78,7 +78,6 @@ export function isPartySetSizeId(value: unknown): value is string {
 export const TREAT_OPTIONS: Array<{ id: string; label: string; sizeIds?: string[] }> = [
   { id: "cake-pops", label: "Cake Pops" },
   { id: "cakesicles", label: "Cakesicles" },
-  { id: "cupcakes", label: "Cupcakes", sizeIds: ["luxe"] },
   { id: "dubai-chocolate-brownie-shooter-cups", label: "Cupcake Shooter Cups", sizeIds: ["signature", "luxe"] },
   { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "signature", "luxe"] },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
@@ -86,7 +85,6 @@ export const TREAT_OPTIONS: Array<{ id: string; label: string; sizeIds?: string[
   { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
   { id: "kitchen-sink-cookies", label: "Kitchen Sink Cookies", sizeIds: ["classic", "signature", "luxe"] },
   { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["mini", "classic", "signature", "luxe"] },
-  { id: "gummi-candy-skewers", label: "Candy Kebab" },
 ];
 
 export function treatOptionsForSize(sizeId: string) {

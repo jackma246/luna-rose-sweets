@@ -40,6 +40,13 @@ function matchesQuery(p: Product, q: string): boolean {
   return hay.includes(q.toLowerCase());
 }
 
+function matchesCategory(p: Product, category: string): boolean {
+  if (category === "Treats") {
+    return p.category === "Treats" || p.slug === "party-layer-cake";
+  }
+  return p.category === category;
+}
+
 export default async function ShopPage({
   searchParams,
 }: {
@@ -54,13 +61,13 @@ export default async function ShopPage({
   const categoryCounts = new Map<string, number>();
   for (const cat of categories) {
     if (cat === "All") categoryCounts.set(cat, uniqueProducts.length);
-    else categoryCounts.set(cat, products.filter((p) => p.category === cat).length);
+    else categoryCounts.set(cat, products.filter((p) => matchesCategory(p, cat)).length);
   }
 
   let filtered =
     category === "All"
       ? [...uniqueProducts]
-      : products.filter((p) => p.category === category);
+      : products.filter((p) => matchesCategory(p, category));
 
   if (q.trim()) filtered = filtered.filter((p) => matchesQuery(p, q.trim()));
 
