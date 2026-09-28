@@ -27,6 +27,7 @@ function minPrice(p: Product): number {
 }
 
 function priceLabel(p: Product): string {
+  if (p.comingSoon) return "Coming Soon";
   if (p.enquireOnly) return "Enquire";
   if (p.variants.length === 0) return "";
   const min = minPrice(p);
@@ -146,12 +147,8 @@ export default async function ShopPage({
             )}
             {filtered.map((product) => {
               const img = product.image ?? product.variants[0]?.image;
-              return (
-                <Link
-                  key={product.slug}
-                  href={`/products/${product.slug}`}
-                  className="product"
-                >
+              const cardContent = (
+                <>
                   {product.badge && (
                     <div className="ribbon-tag cocoa">
                       {product.badge.split(" ").slice(0, 1).join(" ")}
@@ -177,6 +174,15 @@ export default async function ShopPage({
                     <div className="caption">{product.category}</div>
                     <div className="price">{priceLabel(product)}</div>
                   </div>
+                </>
+              );
+              return product.comingSoon ? (
+                <div key={product.slug} className="product coming-soon-card" aria-disabled="true">
+                  {cardContent}
+                </div>
+              ) : (
+                <Link key={product.slug} href={`/products/${product.slug}`} className="product">
+                  {cardContent}
                 </Link>
               );
             })}

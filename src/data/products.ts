@@ -53,6 +53,7 @@ export interface Product {
   image?: string;
   images?: string[];
   hidden?: boolean;
+  comingSoon?: boolean;
   /** Minimum notice in days for this product (defaults to MIN_LEAD_DAYS). Enforced on the client picker and the server. */
   leadDays?: number;
 }
@@ -721,6 +722,78 @@ export const products: Product[] = [
     flavours: CAKE_FLAVOURS,
     image: "/images/cake-pops/new.jpeg",
     hidden: true,
+  },
+
+  // ── Coming Soon Treats ───────────────────────────────────
+  {
+    slug: "halloween-cookie-diy-set",
+    name: "Halloween Cookie DIY Set",
+    category: "Treats",
+    description: "A festive Halloween cookie decorating set for a fun, creative activity at home or at a party.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
+  },
+  {
+    slug: "baby-shower-cookie-set",
+    name: "Baby Shower Cookie Set",
+    category: "Treats",
+    description: "Custom baby shower cookies designed to coordinate with your celebration theme and colors.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
+  },
+  {
+    slug: "wedding-cookie-set",
+    name: "Wedding Cookie Set",
+    category: "Treats",
+    description: "Elegant custom cookies created to complement your wedding palette and details.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
+  },
+  {
+    slug: "custom-image-kitchen-sink-cookie-box",
+    name: "Custom Image Kitchen Sink Cookie Box (1 Dozen)",
+    category: "Treats",
+    description: "A dozen kitchen sink cookies finished with custom edible images for a personalized gift or celebration box.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
+  },
+  {
+    slug: "random-cake-pop-box",
+    name: "Random Cake Pop Box",
+    category: "Treats",
+    description: "A surprise assortment of handcrafted cake pops in a playful mix of flavors and designs.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
+  },
+  {
+    slug: "custom-character-macarons",
+    name: "Custom Character Macarons",
+    category: "Treats",
+    description: "Handcrafted macarons customized with character-inspired colors and decorative details.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
+  },
+  {
+    slug: "custom-character-cookies",
+    name: "Custom Character Cookies",
+    category: "Treats",
+    description: "Custom character cookies designed to match your party theme and special occasion.",
+    variants: [],
+    badge: "Coming Soon",
+    image: "/images/coming-soon-treats.svg",
+    comingSoon: true,
   },
 
   // ── Favours ─────────────────────────────────────────────

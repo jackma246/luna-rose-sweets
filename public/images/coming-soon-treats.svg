@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#FBF6EE"/>
+  <circle cx="600" cy="530" r="320" fill="#E8C9B4" stroke="#B94A64" stroke-width="10"/>
+  <circle cx="600" cy="530" r="260" fill="#D9A77F"/>
+  <g fill="#6A4335">
+    <circle cx="455" cy="410" r="18"/><circle cx="650" cy="365" r="18"/>
+    <circle cx="740" cy="525" r="18"/><circle cx="520" cy="625" r="18"/>
+    <circle cx="645" cy="690" r="18"/><circle cx="405" cy="550" r="18"/>
+  </g>
+  <text x="600" y="965" text-anchor="middle" fill="#3A1F18" font-family="Georgia, serif" font-size="78">PHOTO COMING SOON</text>
+  <text x="600" y="1045" text-anchor="middle" fill="#B94A64" font-family="Arial, sans-serif" font-size="28" letter-spacing="8">DIP &amp; SPRINKLE</text>
+</svg>
