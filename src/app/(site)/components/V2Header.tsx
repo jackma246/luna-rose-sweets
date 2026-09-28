@@ -94,7 +94,7 @@ export default function V2Header({ current }: { current?: string }) {
       >
         <div className="mobile-drawer-panel" onClick={(e) => e.stopPropagation()}>
           <nav>
-            {navLinks.map((link) => (
+            {navLinks.filter((link) => link.key !== "products").map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
