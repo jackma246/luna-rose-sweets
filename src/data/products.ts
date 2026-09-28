@@ -120,7 +120,6 @@ export const products: Product[] = [
       { label: "Detailed custom designs, specialty flavours, florals, metallics, characters, or extra decorations", price: "Additional charge" },
     ],
     flavours: CAKE_FLAVOURS,
-    badge: "Baked from scratch",
     image: "/images/cake/cake00.jpeg",
     images: [
       "/images/cake/cake00.jpeg",
@@ -149,7 +148,6 @@ export const products: Product[] = [
       { name: "Classic", description: "Decoration similar to the photo", priceLabel: "Included", priceAdd: 0 },
       { name: "Full Custom", description: "Full custom design · edible image · elaborate decoration", priceLabel: "+$80", priceAdd: 80 },
     ],
-    badge: "Baked from scratch",
     image: "/images/cake/two-tier-new.png",
     leadDays: 7,
   },
@@ -172,7 +170,6 @@ export const products: Product[] = [
       { label: "Color Customization", price: "+$10" },
     ],
     flavours: CAKE_FLAVOURS,
-    badge: "Baked from scratch",
     image: "/images/tray-bakes/tray.png",
   },
   {
@@ -226,7 +223,6 @@ export const products: Product[] = [
     variants: [
       { label: "Bouquet (8 pops)", price: 42, image: "/images/popsicle-bouquet/1.jpg" },
     ],
-    badge: "Baked from scratch",
     image: "/images/popsicle-bouquet/1.jpg",
   },
   {
@@ -238,7 +234,6 @@ export const products: Product[] = [
     details:
       "The Heart Surprise Box can be themed and personalised to your requirements. Contents can include cakesicles, chocolates, strawberries, and more. Perfect for Valentine's Day, anniversaries, and special occasions.",
     variants: [{ label: "2-tier Heart Surprise Box", price: 65, image: "/images/heart-box/1.jpeg" }],
-    badge: "Baked from scratch",
     image: "/images/heart-box/1.jpeg",
     images: [
       "/images/heart-box/1.jpeg",
@@ -257,7 +252,6 @@ export const products: Product[] = [
     details:
       "The Cakepop & Rose Bouquet includes a selection of seasonal roses alongside our signature cake pops. Can be personalised with a message card. Please allow 3-5 days notice.",
     variants: [{ label: "Cakepop & Rose Bouquet", price: 95, image: "/images/rose-bouquet/1.jpeg" }],
-    badge: "Baked from scratch",
     image: "/images/rose-bouquet/1.jpeg",
     images: [
       "/images/rose-bouquet/1.jpeg",
@@ -276,7 +270,6 @@ export const products: Product[] = [
     details:
       "Each box is hand-arranged with freshly baked cake pops and seasonal flowers. Can be themed and personalised with colours and a message card. Please allow 3-5 days notice.",
     variants: [{ label: "Cakepops & Flower Box", price: 55, image: "/images/gift-box/2.png" }],
-    badge: "Baked from scratch",
     image: "/images/gift-box/2.png",
     images: [
       "/images/gift-box/2.png",
@@ -344,7 +337,6 @@ export const products: Product[] = [
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$15", priceAdd: 15, popular: true },
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$30+", priceAdd: 30 },
     ],
-    badge: "Baked from scratch",
     image: "/images/cakesicles/1.jpg",
     images: [
       "/images/cakesicles/1.jpg",
@@ -384,7 +376,6 @@ export const products: Product[] = [
       { name: "Enhanced", description: "Layered drizzle, coordinated colors, premium sprinkles", priceLabel: "+$12", priceAdd: 12, popular: true },
       { name: "Signature Custom", description: "Detailed themes and elevated finishes", priceLabel: "+$24+", priceAdd: 24 },
     ],
-    badge: "Baked from scratch",
     video: "/videos/cakepops.mov",
     image: "/images/cake-pops/new.jpeg",
   },
