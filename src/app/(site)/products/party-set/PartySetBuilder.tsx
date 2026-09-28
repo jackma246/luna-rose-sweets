@@ -431,7 +431,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
               <Check active={handTiedBows} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Hand Tied Bows</div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, Rice Krispies, or Candy Kebab</div>
+                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, or Rice Krispies</div>
               </div>
               <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
                 +${getHandTiedBowsPrice(treats)}
