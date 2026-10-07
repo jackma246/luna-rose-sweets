@@ -37,23 +37,6 @@ const _partySetVariants = getProductBySlug("party-set")!.variants;
 const _setPrice = (keyword: string): number =>
   _partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
 
-// pulls the shop's own image / category / price for a treat so the home cards
-// carry the exact same info the shop grid shows
-const _treat = (slug: string, name: string, badge?: string) => {
-  const p = getProductBySlug(slug);
-  const prices = p?.variants.map((v) => v.price) ?? [];
-  const min = prices.length ? Math.min(...prices) : 0;
-  const max = prices.length ? Math.max(...prices) : 0;
-  return {
-    slug,
-    name,
-    badge: badge ?? null,
-    img: p?.image ?? "",
-    category: p?.category ?? "",
-    price: prices.length ? (min === max ? `$${min}` : `from $${min}`) : "",
-  };
-};
-
 const SETS = [
   {
     id: "mini",
@@ -99,13 +82,6 @@ const SETS = [
     featured: false,
     desc: "A generous, statement-making spread for larger celebrations and a luxurious, abundant table.",
   },
-];
-
-const TREATS = [
-  _treat("cakepops", "Cake Pops", "Best seller"),
-  _treat("cakesicles", "Cakesicles", "Best seller"),
-  _treat("choc-dipped-caramel-pretzel-rods", "Pretzel Rods"),
-  _treat("choc-covered-oreos", "Chocolate Sandwich Cookies (Oreos®️)"),
 ];
 
 // shared desktop container — stops marketing sections pinching at 520px
@@ -294,52 +270,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── SECTION 6: INDIVIDUAL TREATS ── */}
-      <section style={{ padding: "0 1.25rem 3rem", borderTop: "1px solid var(--border, #e8e4de)", paddingTop: "2.5rem" }}>
-        <div style={_container}>
-          <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
-            <div className="kicker">Individual Treats</div>
-            <h2 style={{ margin: "0.25rem 0 0.4rem" }}>
-              Browse <em>individual treats.</em>
-            </h2>
-            <p style={{ margin: 0, fontSize: "0.85rem", opacity: 0.6 }}>
-              Prefer to mix and match? Order by the dozen.
-            </p>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: "2rem 1.5rem" }}>
-            {TREATS.map((t) => (
-              <Link key={t.slug} href={`/products/${t.slug}`} className="product">
-                {t.badge && (
-                  <div className="ribbon-tag cocoa">
-                    {t.badge.split(" ").slice(0, 1).join(" ")}
-                    <br />
-                    {t.badge.split(" ").slice(1).join(" ")}
-                  </div>
-                )}
-                <div className="thumb">
-                  {t.img && (
-                    <Image src={t.img} alt={t.name} width={600} height={600} />
-                  )}
-                </div>
-                <div className="info">
-                  <h3>{t.name}</h3>
-                  <div className="caption">{t.category}</div>
-                  <div className="price">{t.price}</div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <Link href="/products" className="btn btn-ghost">
-              See all treats →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SECTION 7: FINAL CTA ── */}
+      {/* ── FINAL CTA ── */}
       <section style={{
         padding: "3.5rem 1.5rem 4rem",
         background: "linear-gradient(135deg, #fff5f5 0%, #fff9f2 100%)",
