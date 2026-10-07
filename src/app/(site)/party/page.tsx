@@ -36,6 +36,7 @@ const _treat = (slug: string, name: string, badge?: string) => {
 
 const SETS = [
   {
+    id: "mini",
     label: "Mini Dessert Table",
     pcs: "48 pcs",
     price: _setPrice("mini"),
@@ -43,19 +44,21 @@ const SETS = [
     mark: "",
     badgeBg: "",
     featured: false,
-    desc: "A clean, minimal setup for smaller gatherings.",
+    desc: "A thoughtfully curated spread for intimate celebrations or an elegant display.",
   },
   {
+    id: "classic",
     label: "Classic Dessert Table",
     pcs: "60 pcs",
     price: _setPrice("classic"),
-    badge: "Most loved" as string | null,
+    badge: "Most Recommended" as string | null,
     mark: "♥",
     badgeBg: "var(--cherry)",
     featured: true,
-    desc: "A nicely filled table that still feels simple and elegant.",
+    desc: "A beautifully balanced dessert table with enough variety to create a full, polished look without going overboard.",
   },
   {
+    id: "signature",
     label: "Signature Dessert Table",
     pcs: "96 pcs",
     price: _setPrice("signature"),
@@ -63,7 +66,18 @@ const SETS = [
     mark: "✦",
     badgeBg: "var(--pine)",
     featured: false,
-    desc: "A full wow, so pretty dessert table look that photographs beautifully.",
+    desc: "A fuller dessert-table experience with premium options, recommended for approximately 30–45 guests depending on desserts per guest.",
+  },
+  {
+    id: "luxe",
+    label: "Luxe Dessert Table",
+    pcs: "120 pcs",
+    price: _setPrice("luxe"),
+    badge: "Luxury Style" as string | null,
+    mark: "❖",
+    badgeBg: "var(--cherry)",
+    featured: false,
+    desc: "A generous, statement-making spread for larger celebrations and a luxurious, abundant table.",
   },
 ];
 
@@ -252,7 +266,7 @@ export default function PartyLandingPage() {
           {SETS.map((s) => (
             <Link
               key={s.label}
-              href="/products/party-set"
+              href={`/products/party-set?size=${s.id}`}
               style={{
                 position: "relative",
                 display: "flex",
