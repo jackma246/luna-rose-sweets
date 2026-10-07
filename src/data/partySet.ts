@@ -18,10 +18,11 @@ export const PARTY_SET_SIZES = [
     label: "Mini Dessert Table",
     pcs: 48,
     treatCount: 4,
+    premiumTreatLimit: 1,
     price: setPrice("mini"),
     badge: null as string | null,
     badgeColor: "",
-    desc: "A clean, minimal setup for smaller gatherings.",
+    desc: "A thoughtfully curated dessert spread for intimate celebrations or a simple, elegant display.",
     subDesc: "Recommended for about 12-18 guests.",
     previewImg: "/images/brand-spread-new.png",
     previewLabel: "Mini Dessert Table",
@@ -31,10 +32,11 @@ export const PARTY_SET_SIZES = [
     label: "Classic Dessert Table",
     pcs: 60,
     treatCount: 5,
+    premiumTreatLimit: 1,
     price: setPrice("classic"),
-    badge: "♥ Most recommended",
+    badge: "♥ Most Recommended",
     badgeColor: "var(--cherry, #c05)",
-    desc: "A nicely filled table that still feels simple and elegant.",
+    desc: "A beautifully balanced dessert table with enough variety to create a full, polished look without going overboard.",
     subDesc: "Recommended for about 18-25 guests.",
     previewImg: "/images/brand-spread-new.png",
     previewLabel: "Classic Dessert Table",
@@ -44,11 +46,12 @@ export const PARTY_SET_SIZES = [
     label: "Signature Dessert Table",
     pcs: 96,
     treatCount: 6,
+    premiumTreatLimit: 2,
     price: setPrice("signature"),
-    badge: "✦ Best value",
+    badge: "✦ Best Value",
     badgeColor: "var(--pine)",
-    desc: "A full wow, so pretty dessert table look that photographs beautifully.",
-    subDesc: "Recommended for about 30-45 guests.",
+    desc: "A fuller dessert-table experience with more variety, premium treat options, and a beautiful photo-ready presentation.",
+    subDesc: "Recommended for approximately 30–45 guests depending on how many desserts you’d like per guest.",
     previewImg: "/images/treat-boxes/party-set-large.jpeg",
     previewLabel: "Signature Dessert Table",
   },
@@ -57,10 +60,11 @@ export const PARTY_SET_SIZES = [
     label: "Luxe Dessert Table",
     pcs: 120,
     treatCount: 7,
+    premiumTreatLimit: 3,
     price: setPrice("luxe"),
-    badge: "Luxury style",
+    badge: "Luxury Style",
     badgeColor: "var(--cherry, #c05)",
-    desc: "A fuller luxury style dessert table for larger celebrations.",
+    desc: "A generous, statement-making dessert spread designed for larger celebrations and a luxurious, abundant table.",
     subDesc: "Recommended for about 45-60 guests.",
     previewImg: "/images/treat-boxes/party-set-large.jpeg",
     previewLabel: "Luxe Dessert Table",
@@ -75,26 +79,32 @@ export function isPartySetSizeId(value: unknown): value is string {
   return typeof value === "string" && PARTY_SET_SIZES.some((s) => s.id === value);
 }
 
-export const TREAT_OPTIONS: Array<{ id: string; label: string; sizeIds?: string[] }> = [
-  { id: "cake-pops", label: "Cake Pops" },
-  { id: "cakesicles", label: "Cakesicles" },
-  { id: "dubai-chocolate-brownie-shooter-cups", label: "Cupcake Shooter Cups", sizeIds: ["signature", "luxe"] },
-  { id: "madeleines", label: "Madeleines", sizeIds: ["mini", "signature", "luxe"] },
-  { id: "caramel-pretzel-rods", label: "Pretzel Rods" },
-  { id: "twisted-pretzel", label: "Twisted Pretzel" },
-  { id: "oreos", label: "Chocolate sandwich cookies (Oreos®️)" },
-  { id: "kitchen-sink-cookies", label: "Kitchen Sink Cookies", sizeIds: ["classic", "signature", "luxe"] },
-  { id: "rice-krispies", label: "Rice Krispies", sizeIds: ["mini", "classic", "signature", "luxe"] },
+export type PartySetTreatCategory = "classic" | "premium";
+
+export const TREAT_OPTIONS: Array<{ id: string; label: string; category: PartySetTreatCategory; note?: string; sizeIds?: string[] }> = [
+  { id: "cake-pops", label: "Cake Pops", category: "classic" },
+  { id: "cakesicles", label: "Cakesicles", category: "classic" },
+  { id: "madeleines", label: "Madeleines", category: "classic" },
+  { id: "caramel-pretzel-rods", label: "Pretzel Rods", category: "classic" },
+  { id: "twisted-pretzel", label: "Twisted Pretzels", category: "classic" },
+  { id: "oreos", label: "Chocolate Covered Oreos", category: "classic" },
+  { id: "rice-krispies", label: "Rice Krispies Treats", category: "classic" },
+  { id: "gummi-candy-skewers", label: "Candy Kabobs", category: "classic" },
+  { id: "macarons", label: "Macarons", category: "premium", note: "Basic round macarons with event color matching included" },
+  { id: "bakery-cookies", label: "3 oz Bakery Cookies", category: "premium", note: "Large bakery-style cookies; flavors may rotate based on availability" },
 ];
 
 export function treatOptionsForSize(sizeId: string) {
   return TREAT_OPTIONS.filter((t) => !t.sizeIds || t.sizeIds.includes(sizeId));
 }
 
+export function getPremiumTreatCount(selectedTreats: string[]): number {
+  return selectedTreats.filter((id) => TREAT_OPTIONS.find((t) => t.id === id)?.category === "premium").length;
+}
+
 export const DESIGN_TIERS = [
-  { id: "classic", label: "Classic", desc: "Clean coating, drizzle, simple accents", priceLabel: "Included", priceAdd: 0, popular: false },
-  { id: "enhanced", label: "Enhanced", desc: "Layered drizzle, coordinated colors, premium details", priceLabel: "", priceAddBySize: { mini: 25, classic: 30, signature: 35, luxe: 45 }, popular: true },
-  { id: "signature", label: "Signature", desc: "Full custom — sculpted cake pop shapes (e.g. martini glass, s'more, cappuccino, pineapple, Pinocchio, teddy bear), piped decorations, or engraved monograms/initials.", priceLabel: "", priceAddBySize: { mini: 45, classic: 55, signature: 70, luxe: 85 }, popular: false },
+  { id: "custom", label: "Custom Design Included", desc: "Event color matching, coordinated sprinkles and drizzle, simple piping, chocolate decorations, pearls, sparkle, small accents, and simple themed details", priceLabel: "Included", priceAdd: 0, popular: true },
+  { id: "premium", label: "Premium Customization", desc: "For detailed characters, sculpted elements, intricate piping, detailed florals, monograms, edible images, multiple handmade chocolate elements, custom macaron shapes, or highly detailed themed designs", priceLabel: "", priceAddBySize: { mini: 15, classic: 20, signature: 25, luxe: 30 }, popular: false },
 ];
 
 export type PartySetDesignTier = (typeof DESIGN_TIERS)[number];
@@ -116,9 +126,9 @@ export const CAKE_OPTIONS = [
 export const PARTY_FAVOR_OPTIONS = [
   {
     id: "royal-icing-sugar-cookies",
-    label: "3.5\" Royal Icing Sugar Cookies (1 Dozen)",
+    label: "Royal Icing Sugar Cookies — starting at $50/dozen",
     priceAdd: 50,
-    desc: "Starting at +$50 per dozen. Please attach inspiration photos for sugar cookie designs below.",
+    desc: "Party favor add-on. Basic designs start at $50 per dozen; detailed custom designs may cost more. Please attach inspiration photos below.",
   },
 ];
 
@@ -201,9 +211,12 @@ export function pricePartySet(sel: PartySetSelection): PartySetPrice {
   if (treats.length !== size.treatCount) {
     return { ok: false, error: `The ${size.label} needs exactly ${size.treatCount} treat types.` };
   }
+  if (getPremiumTreatCount(treats) > size.premiumTreatLimit) {
+    return { ok: false, error: `The ${size.label} includes up to ${size.premiumTreatLimit} Premium Bake selection${size.premiumTreatLimit === 1 ? "" : "s"}.` };
+  }
 
   const design = DESIGN_TIERS.find((d) => d.id === sel.designTier);
-  if (!design) return { ok: false, error: "Choose a design style for the party set." };
+  if (!design) return { ok: false, error: "Choose a customization option for the party set." };
 
   const holderBoxCount = getPortableHolderBoxCount(treats);
   if (sel.wrapping !== "" && sel.wrapping !== "wrapped" && sel.wrapping !== "boxed") {

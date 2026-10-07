@@ -84,10 +84,27 @@ describe("pricing", () => {
       );
       const r = pricePartySet({
         kind: "party-set", sizeId: size.id, treats: size.id === "classic" ? [...treats.slice(0, 4), "rice-krispies"] : treats,
-        designTier: "classic", handTiedBows: false, portableHolderBoxes: false, wrapping: "", cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false,
+        designTier: "custom", handTiedBows: false, portableHolderBoxes: false, wrapping: "", cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false,
       });
       expect(r).toMatchObject({ ok: true, unitPrice: size.price });
     }
+  });
+
+  it("prices Premium Customization by Party Set size", () => {
+    const expectedAdds: Record<string, number> = { mini: 15, classic: 20, signature: 25, luxe: 30 };
+    for (const size of PARTY_SET_SIZES) {
+      const treats = ["cake-pops", "cakesicles", "oreos", "twisted-pretzel", "caramel-pretzel-rods", "gummi-candy-skewers", "madeleines"].slice(0, size.treatCount);
+      const r = pricePartySet({
+        kind: "party-set", sizeId: size.id, treats, designTier: "premium", handTiedBows: false, portableHolderBoxes: false, wrapping: "", cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false,
+      });
+      expect(r).toMatchObject({ ok: true, unitPrice: size.price + expectedAdds[size.id] });
+    }
+  });
+
+  it("enforces each Party Set Premium Bake selection limit", () => {
+    const base = { kind: "party-set" as const, designTier: "custom", handTiedBows: false, portableHolderBoxes: false, wrapping: "" as const, cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false };
+    expect(pricePartySet({ ...base, sizeId: "mini", treats: ["macarons", "bakery-cookies", "cake-pops", "cakesicles"] })).toMatchObject({ ok: false });
+    expect(pricePartySet({ ...base, sizeId: "signature", treats: ["macarons", "bakery-cookies", "cake-pops", "cakesicles", "oreos", "madeleines"] })).toMatchObject({ ok: true });
   });
 });
 

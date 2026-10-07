@@ -64,18 +64,18 @@ const SETS = [
     badgeBg: "",
     mark: "",
     featured: false,
-    desc: "A clean, minimal setup for smaller gatherings.",
+    desc: "A thoughtfully curated spread for intimate celebrations or an elegant display.",
   },
   {
     id: "classic",
     label: "Classic Dessert Table",
     pcs: "60 pcs",
     price: _setPrice("classic"),
-    badge: "Most loved" as string | null,
+    badge: "Most Recommended" as string | null,
     badgeBg: "var(--cherry)",
     mark: "♥",
     featured: true,
-    desc: "A nicely filled table that still feels simple and elegant.",
+    desc: "A beautifully balanced dessert table with enough variety to create a full, polished look without going overboard.",
   },
   {
     id: "signature",
@@ -86,7 +86,18 @@ const SETS = [
     badgeBg: "var(--pine)",
     mark: "✦",
     featured: false,
-    desc: "A full wow, so pretty dessert table look that photographs beautifully.",
+    desc: "A fuller dessert-table experience with premium options, recommended for approximately 30–45 guests depending on desserts per guest.",
+  },
+  {
+    id: "luxe",
+    label: "Luxe Dessert Table",
+    pcs: "120 pcs",
+    price: _setPrice("luxe"),
+    badge: "Luxury Style" as string | null,
+    badgeBg: "var(--cherry)",
+    mark: "❖",
+    featured: false,
+    desc: "A generous, statement-making spread for larger celebrations and a luxurious, abundant table.",
   },
 ];
 
@@ -134,7 +145,7 @@ export default function HomePage() {
               Beautiful dessert sets for your special moments.
             </p>
             <p style={{ margin: "0 0 1.25rem", fontSize: "0.95rem", fontWeight: 700, color: "var(--cherry, #c05)" }}>
-              Party sets starting at $175
+              Party sets starting at $215
             </p>
             <div className="ctas">
               <Link href="/products/party-set" className="btn btn-primary">

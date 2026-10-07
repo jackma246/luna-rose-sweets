@@ -157,7 +157,7 @@ describe("validateOrderRequest - items", () => {
             kind: "party-set",
             sizeId: "classic",
             treats: ["cake-pops", "cakesicles", "oreos", "rice-krispies", "twisted-pretzel"],
-            designTier: "enhanced",
+            designTier: "premium",
             handTiedBows: true,
             portableHolderBoxes: true,
             wrapping: "boxed",
@@ -171,15 +171,15 @@ describe("validateOrderRequest - items", () => {
     });
     expect(r.ok).toBe(true);
     if (!r.ok) return;
-    // 215 set + 30 enhanced + 30 bows (3 eligible) + 6 holders + 10 boxed + 75 cake + 8 filling + 80 full custom + 100 favors + 70 rental
-    expect(r.order.serverTotal).toBe(624);
+    // 265 set + 20 premium customization + 30 bows (3 eligible) + 6 holders + 10 boxed + 75 cake + 8 filling + 80 full custom + 100 favors + 70 rental
+    expect(r.order.serverTotal).toBe(664);
     expect(r.order.items[0].stored).toMatchObject({ name: "Party Set — Classic Dessert Table", variantLabel: "Classic Dessert Table" });
   });
 
   it("rejects a party set with the wrong number of treats", () => {
     const r = validateOrderRequest({
       customer,
-      items: [{ productSlug: "party-set", variantLabel: "Mini Dessert Table", quantity: 1, price: 175, selection: { kind: "party-set", sizeId: "mini", treats: ["cake-pops"], designTier: "classic", cakeOptionId: "none", cakeAddons: [], partyFavors: [], wrapping: "" } }],
+      items: [{ productSlug: "party-set", variantLabel: "Mini Dessert Table", quantity: 1, price: 215, selection: { kind: "party-set", sizeId: "mini", treats: ["cake-pops"], designTier: "custom", cakeOptionId: "none", cakeAddons: [], partyFavors: [], wrapping: "" } }],
     });
     expect(r.ok).toBe(false);
   });

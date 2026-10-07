@@ -16,6 +16,7 @@ import {
   getDesignPriceAdd,
   getHandTiedBowsPrice,
   getPartySetDozens,
+  getPremiumTreatCount,
   getPortableHolderBoxCount,
   getPortableHolderPrice,
   getWrappingPrice,
@@ -95,7 +96,7 @@ function Check({ active }: { active: boolean }) {
 export default function PartySetBuilder({ initialSizeId }: { initialSizeId: string }) {
   const [sizeId, setSizeId] = useState(initialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
-  const [designTier, setDesignTier] = useState("");
+  const [designTier, setDesignTier] = useState("custom");
   const [handTiedBows, setHandTiedBows] = useState(false);
   const [portableHolderBoxes, setPortableHolderBoxes] = useState(false);
   const [wrappingOption, setWrappingOption] = useState<WrappingOption>("");
@@ -115,6 +116,9 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
   const size = SIZES.find((s) => s.id === sizeId)!;
   const requiredTreats = size.treatCount;
   const availableTreatOptions = TREAT_OPTIONS.filter((t) => !t.sizeIds || t.sizeIds.includes(sizeId));
+  const classicTreatOptions = availableTreatOptions.filter((t) => t.category === "classic");
+  const premiumTreatOptions = availableTreatOptions.filter((t) => t.category === "premium");
+  const premiumTreatCount = getPremiumTreatCount(treats);
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
   const designPriceAdd = getDesignPriceAdd(design, sizeId);
   const designPriceLabel = designPriceAdd > 0 ? `+$${designPriceAdd}` : "Included";
@@ -146,21 +150,26 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
     setSizeId(nextSizeId);
     setTreats((prev) => {
       const validTreats = prev.filter((t) => nextAvailableTreatIds.has(t));
-      const nextTreats = validTreats.length > nextSize.treatCount ? validTreats.slice(0, nextSize.treatCount) : validTreats;
+      let keptPremiumTreats = 0;
+      const treatsWithinPremiumLimit = validTreats.filter((id) => {
+        const isPremium = TREAT_OPTIONS.find((t) => t.id === id)?.category === "premium";
+        if (!isPremium) return true;
+        keptPremiumTreats += 1;
+        return keptPremiumTreats <= nextSize.premiumTreatLimit;
+      });
+      const nextTreats = treatsWithinPremiumLimit.length > nextSize.treatCount ? treatsWithinPremiumLimit.slice(0, nextSize.treatCount) : treatsWithinPremiumLimit;
       if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
       if (getPortableHolderBoxCount(nextTreats) === 0) setWrappingOption((current) => current === "boxed" ? "" : current);
       return nextTreats;
     });
   }
 
-  const isComplete =
-    treats.length >= requiredTreats &&
-    designTier !== "";
+  const isComplete = treats.length >= requiredTreats;
 
   function scrollToMissing() {
     let id = "";
     if (treats.length < requiredTreats) id = "step-treats";
-    else if (!designTier) id = "step-design";
+
     if (id) document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
@@ -169,12 +178,14 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
       const need = requiredTreats - treats.length;
       return `Select ${need} more treat ${need === 1 ? "type" : "types"}`;
     }
-    if (!designTier) return "Choose a design style";
+
     return "";
   }
 
   function toggleTreat(id: string) {
     setTreats((prev) => {
+      const option = TREAT_OPTIONS.find((t) => t.id === id);
+      if (!prev.includes(id) && option?.category === "premium" && getPremiumTreatCount(prev) >= size.premiumTreatLimit) return prev;
       const nextTreats = prev.includes(id)
         ? prev.filter((t) => t !== id)
         : prev.length >= requiredTreats
@@ -271,7 +282,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             Build your dessert set
           </h1>
           <p style={{ margin: 0, opacity: 0.6, fontSize: "0.9rem" }}>
-            Chocolate-covered treats styled in your color palette.
+            Curated treats with custom color matching &amp; coordinated design included.
           </p>
         </div>
 
@@ -298,7 +309,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
 
           <div style={stepHead}>
             <span style={stepLabel}>Step 1</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>6ft Dessert Table Guide</span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your Dessert Table size</span>
           </div>
           <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.6, lineHeight: 1.6 }}>
             For a standard 6ft party table, choose the size that best matches your guest count and the look you want.
@@ -340,33 +351,51 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
         <div id="step-treats" style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 2</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your treat mix — pick {requiredTreats}</span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose your treats — pick {requiredTreats}</span>
           </div>
           <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.6 }}>
             Select {requiredTreats} types for your {size.label}. We&apos;ll balance the quantity to create a full and beautiful set.
           </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-            {availableTreatOptions.map((t) => {
-              const active = treats.includes(t.id);
-              const disabled = !active && treats.length >= requiredTreats;
-              return (
-                <div
-                  key={t.id}
-                  style={{
-                    ...(active ? cardActive : card),
-                    opacity: disabled ? 0.45 : 1,
-                    cursor: disabled ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => !disabled && toggleTreat(t.id)}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    <Check active={active} />
-                    <span style={{ fontWeight: 600, fontSize: "0.92rem" }}>{t.label}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {[
+            { title: "Classic Treats", subtitle: "Choose freely from these dessert-table favorites", options: classicTreatOptions },
+            { title: "Premium Bakes", subtitle: `Choose up to ${size.premiumTreatLimit} for this package`, options: premiumTreatOptions },
+          ].map((group, groupIndex) => (
+            <div key={group.title} style={{ marginTop: groupIndex === 0 ? 0 : "1.2rem" }}>
+              <div style={{ marginBottom: "0.55rem" }}>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, letterSpacing: "0.07em", textTransform: "uppercase", color: groupIndex === 1 ? "var(--cherry, #c05)" : "inherit" }}>{group.title}</div>
+                <div style={{ fontSize: "0.76rem", opacity: 0.55, marginTop: "0.15rem" }}>{group.subtitle}</div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+                {group.options.map((t) => {
+                  const active = treats.includes(t.id);
+                  const premiumLimitReached = t.category === "premium" && premiumTreatCount >= size.premiumTreatLimit;
+                  const disabled = !active && (treats.length >= requiredTreats || premiumLimitReached);
+                  return (
+                    <div
+                      key={t.id}
+                      style={{
+                        ...(active ? cardActive : card),
+                        opacity: disabled ? 0.45 : 1,
+                        cursor: disabled ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => !disabled && toggleTreat(t.id)}
+                    >
+                      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
+                        <Check active={active} />
+                        <div>
+                          <div style={{ fontWeight: 600, fontSize: "0.92rem" }}>{t.label}</div>
+                          {t.note && <div style={{ fontSize: "0.76rem", opacity: 0.55, marginTop: "0.15rem", lineHeight: 1.45 }}>{t.note}</div>}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          <p style={{ margin: "0.65rem 0 0", fontSize: "0.76rem", opacity: 0.6, lineHeight: 1.5 }}>
+            Premium Bakes are included within the package limit. Additional premium selections may require a custom quote.
+          </p>
           {treats.length < requiredTreats ? (
             <p style={{ margin: "0.5rem 0 0", fontSize: "0.78rem", color: "var(--cherry, #c05)" }}>
               Please select {requiredTreats - treats.length} more {requiredTreats - treats.length === 1 ? "type" : "types"} to continue.
@@ -378,12 +407,15 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
           )}
         </div>
 
-        {/* STEP 3: Design Style */}
+        {/* STEP 3: Customization */}
         <div id="step-design" style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 3</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Design style</span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose colors &amp; customization</span>
           </div>
+          <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.55 }}>
+            Custom color matching &amp; coordinated design included. Select Premium Customization only when your requested design requires significantly more detailed, labor-intensive work.
+          </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {DESIGN_TIERS.map((d) => {
               const priceAdd = getDesignPriceAdd(d, sizeId);
@@ -401,7 +433,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
                       <span style={{ fontWeight: 700, fontSize: "0.92rem" }}>{d.label}</span>
                       {d.popular && (
                         <span style={{ fontSize: "0.65rem", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "999px", background: "var(--cherry, #c05)", color: "#fff" }}>
-                          ♥ Most loved
+                          Included
                         </span>
                       )}
                     </div>
@@ -421,7 +453,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
         <div style={sectionStyle}>
           <div style={stepHead}>
             <span style={stepLabel}>Step 4</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Add-ons <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Optional upgrades &amp; add-ons</span>
           </div>
           <div
             style={handTiedBows ? cardActive : card}
@@ -496,7 +528,11 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             })}
           </div>
 
-          <div style={{ marginTop: "1rem" }}>
+          <div style={{ marginTop: "1.5rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border, #e8e4de)" }}>
+            <div style={stepHead}>
+              <span style={stepLabel}>Step 5</span>
+              <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Cake centerpiece &amp; party favors <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
+            </div>
             <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.55rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Cake centerpiece</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
               {CAKE_OPTIONS.map((option) => {
@@ -529,6 +565,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
 
             {cakeOption.id !== "none" && (
               <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+                <div style={{ fontSize: "0.78rem", opacity: 0.6, lineHeight: 1.5 }}>Cake prices are starting prices. Final pricing may vary based on design complexity.</div>
                 <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.55 }}>Cake add-ons</div>
                 {PARTY_SET_CAKE_ADDONS.map((addon) => {
                   const active = Boolean(selectedCakeAddons[addon.label]);
@@ -619,14 +656,13 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
           </div>
         </div>
 
-        {/* STEP 5: Theme Notes */}
+        {/* Design Notes */}
         <div style={sectionStyle}>
           <div style={stepHead}>
-            <span style={stepLabel}>Step 5</span>
-            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Theme &amp; inspiration <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
+            <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Colors, flavors &amp; inspiration <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
           </div>
           <p style={{ margin: "0 0 0.75rem", fontSize: "0.82rem", opacity: 0.6 }}>
-            Tell us your theme, colors, or overall vibe
+            Tell us your theme, colors, flavor preferences, or overall vibe
           </p>
           <textarea
             placeholder="e.g. soft pink + ivory, bows, minimal, elegant"
@@ -673,12 +709,13 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
           )}
         </div>
 
-        {/* STEP 6: Important Notes */}
+        {/* Important Notes */}
         <div style={{ ...sectionStyle, background: "var(--surface, #faf9f7)", borderRadius: "0.65rem", padding: "1rem 1.15rem", border: "1px solid var(--border, #e8e4de)" }}>
           <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Good to know</div>
           <ul style={{ margin: 0, padding: "0 0 0 1rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.7 }}>
-            <li>Designs are semi-custom based on your selected palette</li>
-            <li>Detailed character or logo designs require custom approval</li>
+            <li>Custom color matching and coordinated design are included in every Party Set</li>
+            <li>Premium Customization is only for labor-intensive details such as characters, sculpted elements, intricate piping, detailed florals, monograms, edible images, or custom shapes</li>
+            <li>Final pricing for highly detailed custom work depends on the requested design</li>
             <li>Please allow 3–7 days notice depending on set size</li>
           </ul>
         </div>
@@ -741,7 +778,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             transition: "background 0.2s",
           }}
         >
-          {added ? "Added to cart ✓" : isComplete ? "Add to Cart" : getMissingLabel()}
+          {added ? "Added to cart ✓" : isComplete ? `Add to Cart · $${effectivePrice}` : getMissingLabel()}
         </button>
       </div>
 
