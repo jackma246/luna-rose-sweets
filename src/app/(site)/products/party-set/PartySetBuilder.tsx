@@ -398,7 +398,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Choose colors &amp; customization</span>
           </div>
           <p style={{ margin: "0 0 0.85rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.55 }}>
-            Custom color matching &amp; coordinated design included. Select Premium Customization only when your requested design requires significantly more detailed, labor-intensive work.
+            Custom Design includes standard decorations such as edible images, piping, matching themes and colors, and chocolate decorations. Choose Premium Design only when the level of detail, complexity, and time required is significantly higher.
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {DESIGN_TIERS.map((d) => {
@@ -613,7 +613,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
           <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Good to know</div>
           <ul style={{ margin: 0, padding: "0 0 0 1rem", fontSize: "0.82rem", opacity: 0.65, lineHeight: 1.7 }}>
             <li>Custom color matching and coordinated design are included in every Party Set</li>
-            <li>Premium Customization is only for labor-intensive details such as characters, sculpted elements, intricate piping, detailed florals, monograms, edible images, or custom shapes</li>
+            <li>Premium Design is reserved for highly detailed, labor-intensive work such as intricate floral or vintage-style piping, elaborate chocolate flower or bouquet arrangements, detailed sculpted character cake pops, or intricate hand-painting</li>
             <li>Final pricing for highly detailed custom work depends on the requested design</li>
             <li>Please allow 3–7 days notice depending on set size</li>
           </ul>

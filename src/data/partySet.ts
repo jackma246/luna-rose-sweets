@@ -101,8 +101,8 @@ export function getPremiumTreatCount(selectedTreats: string[]): number {
 }
 
 export const DESIGN_TIERS = [
-  { id: "custom", label: "Custom Design Included", desc: "Event color matching, coordinated sprinkles and drizzle, simple piping, chocolate decorations, pearls, sparkle, small accents, and simple themed details", priceLabel: "Included", priceAdd: 0, popular: true },
-  { id: "premium", label: "Premium Customization", desc: "For detailed characters, sculpted elements, intricate piping, detailed florals, monograms, edible images, multiple handmade chocolate elements, custom macaron shapes, or highly detailed themed designs", priceLabel: "", priceAddBySize: { mini: 15, classic: 20, signature: 25, luxe: 30 }, popular: false },
+  { id: "custom", label: "Custom Design (Included)", desc: "Includes edible images, standard piping, matching themes and colors, coordinated sprinkles and drizzle, and standard chocolate decorations", priceLabel: "Included", priceAdd: 0, popular: true },
+  { id: "premium", label: "Premium Design", desc: "For highly detailed, labor-intensive work such as intricate floral or vintage-style piping, elaborate chocolate flower or bouquet arrangements, detailed sculpted character cake pops, or intricate hand-painted designs", priceLabel: "", priceAddBySize: { mini: 15, classic: 20, signature: 25, luxe: 30 }, popular: false },
 ];
 
 export type PartySetDesignTier = (typeof DESIGN_TIERS)[number];

@@ -92,7 +92,7 @@ describe("pricing", () => {
     }
   });
 
-  it("prices Premium Customization by Party Set size", () => {
+  it("prices Premium Design by Party Set size", () => {
     const expectedAdds: Record<string, number> = { mini: 15, classic: 20, signature: 25, luxe: 30 };
     for (const size of PARTY_SET_SIZES) {
       const available = treatOptionsForSize(size.id);

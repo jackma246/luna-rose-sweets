@@ -6,7 +6,7 @@ import PartySetBuilder from "./PartySetBuilder";
 export const metadata: Metadata = pageMetadata({
   title: `Build a Party Dessert Set · ${SITE_NAME}`,
   description:
-    "Build a curated dessert table package with custom color matching included. Choose Classic Treats, limited Premium Bakes, and optional premium customization.",
+    "Build a curated dessert table package with custom color matching included. Choose Classic Treats, limited Premium Bakes, and optional Premium Design.",
   path: "/products/party-set",
   image: "/images/treat-boxes/party-set-large.jpeg",
 });
