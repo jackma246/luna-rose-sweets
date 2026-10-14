@@ -9,8 +9,7 @@ import { getProductBySlug } from "@/data/products";
 const partySetVariants = getProductBySlug("party-set")!.variants;
 const setPrice = (keyword: string): number =>
   partySetVariants.find((v) => v.label.toLowerCase().startsWith(keyword))?.price ?? 0;
-const cakeProduct = getProductBySlug("party-layer-cake")!;
-const twoTierCakeProduct = getProductBySlug("party-two-tier-cake")!;
+
 
 export const PARTY_SET_SIZES = [
   {
@@ -82,14 +81,13 @@ export function isPartySetSizeId(value: unknown): value is string {
 export type PartySetTreatCategory = "classic" | "premium";
 
 export const TREAT_OPTIONS: Array<{ id: string; label: string; category: PartySetTreatCategory; note?: string; sizeIds?: string[] }> = [
-  { id: "cake-pops", label: "Cake Pops", category: "classic" },
-  { id: "cakesicles", label: "Cakesicles", category: "classic" },
+  { id: "cake-pops", label: "Cake Pops", category: "premium" },
+  { id: "cakesicles", label: "Cakesicles", category: "premium" },
   { id: "madeleines", label: "Madeleines", category: "classic" },
   { id: "caramel-pretzel-rods", label: "Pretzel Rods", category: "classic" },
   { id: "twisted-pretzel", label: "Twisted Pretzels", category: "classic" },
   { id: "oreos", label: "Chocolate Covered Oreos", category: "classic" },
   { id: "rice-krispies", label: "Rice Krispies Treats", category: "classic" },
-  { id: "gummi-candy-skewers", label: "Candy Kabobs", category: "classic" },
   { id: "macarons", label: "Macarons", category: "premium", note: "Basic round macarons with event color matching included" },
   { id: "bakery-cookies", label: "3 oz Bakery Cookies", category: "premium", note: "Large bakery-style cookies; flavors may rotate based on availability" },
 ];
@@ -109,19 +107,10 @@ export const DESIGN_TIERS = [
 
 export type PartySetDesignTier = (typeof DESIGN_TIERS)[number];
 
-const HAND_TIED_BOWS_ELIGIBLE_TREATS = new Set(["cakesicles", "cake-pops", "rice-krispies", "gummi-candy-skewers"]);
-export const HAND_TIED_BOWS_PRICE_PER_DOZEN = 10;
 const PORTABLE_HOLDER_ELIGIBLE_TREATS = new Set(["cake-pops", "cakesicles"]);
 export const PORTABLE_HOLDER_PRICE_PER_BOX = 3;
 export const WRAPPING_PRICE_PER_DOZEN = 3;
-export const BOXED_WRAPPING_PRICE_PER_DOZEN = 5;
 export const PARTY_TRAY_RENTAL_SETUP_PRICE = 70;
-
-export const CAKE_OPTIONS = [
-  { id: "none", label: "No cake", priceAdd: 0, desc: "Treats only" },
-  { id: "6-inch", label: "Add 6\" Cake", priceAdd: 75, desc: "Starting at +$75" },
-  { id: "8-inch", label: "Add 8\" Cake", priceAdd: 125, desc: "Starting at +$125" },
-];
 
 export const PARTY_FAVOR_OPTIONS = [
   {
@@ -132,16 +121,7 @@ export const PARTY_FAVOR_OPTIONS = [
   },
 ];
 
-const TWO_TIER_DESIGN_TIERS = twoTierCakeProduct.designTiers?.filter((tier) => tier.priceAdd > 0).map((tier) => ({
-  label: tier.name,
-  price: tier.priceLabel,
-  priceAdd: tier.priceAdd as number | undefined,
-})) ?? [];
 
-export const PARTY_SET_CAKE_ADDONS: Array<{ label: string; price: string; priceAdd?: number }> = [
-  ...(cakeProduct.addons ?? []),
-  ...TWO_TIER_DESIGN_TIERS,
-];
 
 export function getDesignPriceAdd(design: PartySetDesignTier | undefined, sizeId: string): number {
   if (!design) return 0;
@@ -151,9 +131,6 @@ export function getDesignPriceAdd(design: PartySetDesignTier | undefined, sizeId
   return "priceAdd" in design ? design.priceAdd : 0;
 }
 
-export function getHandTiedBowsPrice(selectedTreats: string[]): number {
-  return selectedTreats.filter((id) => HAND_TIED_BOWS_ELIGIBLE_TREATS.has(id)).length * HAND_TIED_BOWS_PRICE_PER_DOZEN;
-}
 
 export function getPortableHolderBoxCount(selectedTreats: string[]): number {
   return selectedTreats.filter((id) => PORTABLE_HOLDER_ELIGIBLE_TREATS.has(id)).length;
@@ -167,12 +144,11 @@ export function getPartySetDozens(size: PartySetSize): number {
   return size.pcs / 12;
 }
 
-export type WrappingOption = "" | "wrapped" | "boxed";
+export type WrappingOption = "" | "wrapped";
 
-export function getWrappingPrice(size: PartySetSize, wrapping: string, selectedTreats: string[]): number {
+export function getWrappingPrice(size: PartySetSize, wrapping: string): number {
   const dozens = getPartySetDozens(size);
   if (wrapping === "wrapped") return dozens * WRAPPING_PRICE_PER_DOZEN;
-  if (wrapping === "boxed") return getPortableHolderBoxCount(selectedTreats) * BOXED_WRAPPING_PRICE_PER_DOZEN;
   return 0;
 }
 
@@ -219,25 +195,13 @@ export function pricePartySet(sel: PartySetSelection): PartySetPrice {
   if (!design) return { ok: false, error: "Choose a customization option for the party set." };
 
   const holderBoxCount = getPortableHolderBoxCount(treats);
-  if (sel.wrapping !== "" && sel.wrapping !== "wrapped" && sel.wrapping !== "boxed") {
+  if (sel.wrapping !== "" && sel.wrapping !== "wrapped") {
     return { ok: false, error: "Invalid packaging option." };
   }
-  if (sel.wrapping === "boxed" && holderBoxCount === 0) {
-    return { ok: false, error: "Boxed wrapping needs Cake Pops or Cakesicles in the set." };
+  if (sel.handTiedBows) return { ok: false, error: "Hand Tied Bows are no longer available for Party Sets." };
+  if (sel.cakeOptionId !== "none" || sel.cakeAddons.length > 0) {
+    return { ok: false, error: "Cake add-ons are no longer available for Party Sets." };
   }
-
-  const cakeOption = CAKE_OPTIONS.find((c) => c.id === sel.cakeOptionId);
-  if (!cakeOption) return { ok: false, error: "Invalid cake option." };
-  const cakeAddonLabels = new Set(PARTY_SET_CAKE_ADDONS.map((a) => a.label));
-  if (new Set(sel.cakeAddons).size !== sel.cakeAddons.length || sel.cakeAddons.some((l) => !cakeAddonLabels.has(l))) {
-    return { ok: false, error: "Invalid cake add-on." };
-  }
-  if (cakeOption.id === "none" && sel.cakeAddons.length > 0) {
-    return { ok: false, error: "Cake add-ons need a cake." };
-  }
-  const cakeAddonPrice = PARTY_SET_CAKE_ADDONS
-    .filter((a) => sel.cakeAddons.includes(a.label))
-    .reduce((sum, a) => sum + (a.priceAdd ?? 0), 0);
 
   let favorPrice = 0;
   for (const favor of sel.partyFavors) {
@@ -251,11 +215,8 @@ export function pricePartySet(sel: PartySetSelection): PartySetPrice {
   const unitPrice =
     size.price +
     getDesignPriceAdd(design, size.id) +
-    (sel.handTiedBows ? getHandTiedBowsPrice(treats) : 0) +
     (sel.portableHolderBoxes && holderBoxCount > 0 ? getPortableHolderPrice(treats) : 0) +
-    getWrappingPrice(size, sel.wrapping, treats) +
-    cakeOption.priceAdd +
-    (cakeOption.id === "none" ? 0 : cakeAddonPrice) +
+    getWrappingPrice(size, sel.wrapping) +
     favorPrice +
     (sel.trayRentalSetup ? PARTY_TRAY_RENTAL_SETUP_PRICE : 0);
 

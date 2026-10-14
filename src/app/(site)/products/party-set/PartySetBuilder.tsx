@@ -4,17 +4,15 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import {
-  BOXED_WRAPPING_PRICE_PER_DOZEN,
-  CAKE_OPTIONS,
   DESIGN_TIERS,
   PARTY_FAVOR_OPTIONS,
-  PARTY_SET_CAKE_ADDONS,
+
   PARTY_SET_SIZES as SIZES,
   PARTY_TRAY_RENTAL_SETUP_PRICE,
   TREAT_OPTIONS,
   WRAPPING_PRICE_PER_DOZEN,
   getDesignPriceAdd,
-  getHandTiedBowsPrice,
+
   getPartySetDozens,
   getPremiumTreatCount,
   getPortableHolderBoxCount,
@@ -97,11 +95,8 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
   const [sizeId, setSizeId] = useState(initialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("custom");
-  const [handTiedBows, setHandTiedBows] = useState(false);
   const [portableHolderBoxes, setPortableHolderBoxes] = useState(false);
   const [wrappingOption, setWrappingOption] = useState<WrappingOption>("");
-  const [cakeOptionId, setCakeOptionId] = useState("none");
-  const [selectedCakeAddons, setSelectedCakeAddons] = useState<Record<string, boolean>>({});
   const [partyFavorQuantities, setPartyFavorQuantities] = useState<Record<string, number>>({});
   const [partyTrayRentalSetup, setPartyTrayRentalSetup] = useState(false);
   const [themeNote, setThemeNote] = useState("");
@@ -122,22 +117,18 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
   const design = DESIGN_TIERS.find((d) => d.id === designTier);
   const designPriceAdd = getDesignPriceAdd(design, sizeId);
   const designPriceLabel = designPriceAdd > 0 ? `+$${designPriceAdd}` : "Included";
-  const handTiedBowsPrice = handTiedBows ? getHandTiedBowsPrice(treats) : 0;
+
   const portableHolderBoxCount = getPortableHolderBoxCount(treats);
   const portableHolderBoxesActive = portableHolderBoxes && portableHolderBoxCount > 0;
   const portableHolderPrice = portableHolderBoxesActive ? getPortableHolderPrice(treats) : 0;
-  const wrappingPrice = getWrappingPrice(size, wrappingOption, treats);
-  const wrappingLabel = wrappingOption === "wrapped" ? "Individually Wrapped" : wrappingOption === "boxed" ? "Individually Wrapped in Boxes" : "";
-  const cakeOption = CAKE_OPTIONS.find((option) => option.id === cakeOptionId) ?? CAKE_OPTIONS[0];
-  const selectedCakeAddonItems = PARTY_SET_CAKE_ADDONS.filter((addon) => selectedCakeAddons[addon.label]);
-  const cakeAddonPrice = selectedCakeAddonItems.reduce((sum, addon) => sum + (addon.priceAdd ?? 0), 0);
-  const cakePrice = cakeOption.priceAdd + (cakeOption.id === "none" ? 0 : cakeAddonPrice);
+  const wrappingPrice = getWrappingPrice(size, wrappingOption);
+  const wrappingLabel = wrappingOption === "wrapped" ? "Individually Wrapped" : "";
   const selectedPartyFavorItems = PARTY_FAVOR_OPTIONS
     .map((option) => ({ ...option, quantity: partyFavorQuantities[option.label] ?? 0 }))
     .filter((option) => option.quantity > 0);
   const partyFavorPrice = selectedPartyFavorItems.reduce((sum, option) => sum + option.priceAdd * option.quantity, 0);
   const partyTrayRentalSetupPrice = partyTrayRentalSetup ? PARTY_TRAY_RENTAL_SETUP_PRICE : 0;
-  const effectivePrice = size.price + designPriceAdd + handTiedBowsPrice + portableHolderPrice + wrappingPrice + cakePrice + partyFavorPrice + partyTrayRentalSetupPrice;
+  const effectivePrice = size.price + designPriceAdd + portableHolderPrice + wrappingPrice + partyFavorPrice + partyTrayRentalSetupPrice;
 
   function handleSizeChange(nextSizeId: string) {
     const nextSize = SIZES.find((s) => s.id === nextSizeId)!;
@@ -159,7 +150,6 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
       });
       const nextTreats = treatsWithinPremiumLimit.length > nextSize.treatCount ? treatsWithinPremiumLimit.slice(0, nextSize.treatCount) : treatsWithinPremiumLimit;
       if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
-      if (getPortableHolderBoxCount(nextTreats) === 0) setWrappingOption((current) => current === "boxed" ? "" : current);
       return nextTreats;
     });
   }
@@ -192,7 +182,6 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
           ? prev
           : [...prev, id];
       if (getPortableHolderBoxCount(nextTreats) === 0) setPortableHolderBoxes(false);
-      if (getPortableHolderBoxCount(nextTreats) === 0) setWrappingOption((current) => current === "boxed" ? "" : current);
       return nextTreats;
     });
   }
@@ -209,15 +198,10 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
     parts.push(`Size: ${size.label}`);
     parts.push(`Treats: ${treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}`);
     parts.push(`Design: ${design?.label ?? ""}${designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}`);
-    if (handTiedBows) parts.push(`Add-ons: Hand Tied Bows (+$${handTiedBowsPrice})`);
+
     if (portableHolderBoxesActive) parts.push(`Add-ons: Portable Cake Pop Holder Standing Boxes (${portableHolderBoxCount} box${portableHolderBoxCount === 1 ? "" : "es"}, +$${portableHolderPrice})`);
     if (wrappingOption) parts.push(`Packaging: ${wrappingLabel} (+$${wrappingPrice})`);
-    if (cakeOption.id !== "none") {
-      parts.push(`Cake: ${cakeOption.label} (+$${cakeOption.priceAdd})`);
-      if (selectedCakeAddonItems.length > 0) {
-        parts.push(`Cake add-ons: ${selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}`);
-      }
-    }
+
     if (selectedPartyFavorItems.length > 0) {
       parts.push(`Party favors: ${selectedPartyFavorItems.map((option) => `${option.label} ×${option.quantity} dozen (+$${option.priceAdd * option.quantity})`).join(", ")}`);
     }
@@ -233,11 +217,11 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
       sizeId,
       treats,
       designTier,
-      handTiedBows,
+      handTiedBows: false,
       portableHolderBoxes: portableHolderBoxesActive,
       wrapping: wrappingOption,
-      cakeOptionId: cakeOption.id,
-      cakeAddons: cakeOption.id === "none" ? [] : selectedCakeAddonItems.map((addon) => addon.label),
+      cakeOptionId: "none",
+      cakeAddons: [],
       partyFavors: selectedPartyFavorItems.map((option) => ({ id: option.id, quantity: option.quantity })),
       trayRentalSetup: partyTrayRentalSetup,
     };
@@ -357,12 +341,12 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             Select {requiredTreats} types for your {size.label}. We&apos;ll balance the quantity to create a full and beautiful set.
           </p>
           {[
-            { title: "Classic Treats", subtitle: "Choose freely from these dessert-table favorites", options: classicTreatOptions },
             { title: "Premium Bakes", subtitle: `Choose up to ${size.premiumTreatLimit} for this package`, options: premiumTreatOptions },
+            { title: "Classic Treats", subtitle: "Choose freely from these dessert-table favorites", options: classicTreatOptions },
           ].map((group, groupIndex) => (
             <div key={group.title} style={{ marginTop: groupIndex === 0 ? 0 : "1.2rem" }}>
               <div style={{ marginBottom: "0.55rem" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 800, letterSpacing: "0.07em", textTransform: "uppercase", color: groupIndex === 1 ? "var(--cherry, #c05)" : "inherit" }}>{group.title}</div>
+                <div style={{ fontSize: "0.75rem", fontWeight: 800, letterSpacing: "0.07em", textTransform: "uppercase", color: groupIndex === 0 ? "var(--cherry, #c05)" : "inherit" }}>{group.title}</div>
                 <div style={{ fontSize: "0.76rem", opacity: 0.55, marginTop: "0.15rem" }}>{group.subtitle}</div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
@@ -456,26 +440,10 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Optional upgrades &amp; add-ons</span>
           </div>
           <div
-            style={handTiedBows ? cardActive : card}
-            onClick={() => setHandTiedBows((selected) => !selected)}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <Check active={handTiedBows} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>Hand Tied Bows</div>
-                <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>+$10 per dozen for Cakesicles, Cake Pops, or Rice Krispies</div>
-              </div>
-              <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
-                +${getHandTiedBowsPrice(treats)}
-              </div>
-            </div>
-          </div>
-          <div
             style={{
               ...(portableHolderBoxesActive ? cardActive : card),
               opacity: portableHolderBoxCount > 0 ? 1 : 0.5,
               cursor: portableHolderBoxCount > 0 ? "pointer" : "not-allowed",
-              marginTop: "0.65rem",
             }}
             onClick={() => {
               if (portableHolderBoxCount === 0) return;
@@ -496,20 +464,16 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
           <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem", marginTop: "0.65rem" }}>
             {[
               { id: "wrapped" as const, label: "Individually Wrapped", desc: "+$3 per dozen", price: getPartySetDozens(size) * WRAPPING_PRICE_PER_DOZEN },
-              { id: "boxed" as const, label: "Individually Wrapped in Boxes", desc: "+$5 per box for Cake Pops or Cakesicles only", price: getPortableHolderBoxCount(treats) * BOXED_WRAPPING_PRICE_PER_DOZEN, requiresEligibleTreat: true },
             ].map((option) => {
               const active = wrappingOption === option.id;
-              const disabled = Boolean(option.requiresEligibleTreat && portableHolderBoxCount === 0);
               return (
                 <div
                   key={option.id}
                   style={{
                     ...(active ? cardActive : card),
-                    opacity: disabled ? 0.5 : 1,
-                    cursor: disabled ? "not-allowed" : "pointer",
+                    cursor: "pointer",
                   }}
                   onClick={() => {
-                    if (disabled) return;
                     setWrappingOption((current) => current === option.id ? "" : option.id);
                   }}
                 >
@@ -528,72 +492,7 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
             })}
           </div>
 
-          <div style={{ marginTop: "1.5rem", paddingTop: "1.5rem", borderTop: "1px solid var(--border, #e8e4de)" }}>
-            <div style={stepHead}>
-              <span style={stepLabel}>Step 5</span>
-              <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>Cake centerpiece &amp; party favors <span style={{ fontWeight: 400, opacity: 0.45, fontSize: "0.82rem" }}>(optional)</span></span>
-            </div>
-            <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.55rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Cake centerpiece</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-              {CAKE_OPTIONS.map((option) => {
-                const active = cakeOptionId === option.id;
-                return (
-                  <div
-                    key={option.id}
-                    style={active ? cardActive : card}
-                    onClick={() => {
-                      setCakeOptionId(option.id);
-                      if (option.id === "none") setSelectedCakeAddons({});
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                      <Dot active={active} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{option.label}</div>
-                        <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{option.desc}</div>
-                      </div>
-                      {option.priceAdd > 0 && (
-                        <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
-                          +${option.priceAdd}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
 
-            {cakeOption.id !== "none" && (
-              <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-                <div style={{ fontSize: "0.78rem", opacity: 0.6, lineHeight: 1.5 }}>Cake prices are starting prices. Final pricing may vary based on design complexity.</div>
-                <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.55 }}>Cake add-ons</div>
-                {PARTY_SET_CAKE_ADDONS.map((addon) => {
-                  const active = Boolean(selectedCakeAddons[addon.label]);
-                  const priceAdd = addon.priceAdd ?? 0;
-                  return (
-                    <div
-                      key={addon.label}
-                      style={active ? cardActive : card}
-                      onClick={() => setSelectedCakeAddons((prev) => ({ ...prev, [addon.label]: !prev[addon.label] }))}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                        <Check active={active} />
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: 700, fontSize: "0.92rem" }}>{addon.label}</div>
-                          <div style={{ fontSize: "0.78rem", opacity: 0.55 }}>{addon.price}</div>
-                        </div>
-                        {priceAdd > 0 && (
-                          <div style={{ fontWeight: 700, fontSize: "0.9rem", flexShrink: 0, color: "var(--cherry, #c05)" }}>
-                            +${priceAdd}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
 
           <div style={{ marginTop: "1rem" }}>
             <div style={{ fontSize: "0.78rem", fontWeight: 700, opacity: 0.5, marginBottom: "0.55rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>Party favors</div>
@@ -739,13 +638,10 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
               <div><strong>Set:</strong> {size.label} ({size.pcs} pcs)</div>
               <div><strong>Treats:</strong> {treats.map((id) => TREAT_OPTIONS.find((t) => t.id === id)!.label).join(", ")}</div>
               <div><strong>Design:</strong> {design?.label}{designPriceAdd > 0 ? ` (${designPriceLabel})` : ""}</div>
-              {handTiedBows && <div><strong>Add-on:</strong> Hand Tied Bows (+${handTiedBowsPrice})</div>}
+
               {portableHolderBoxesActive && <div><strong>Add-on:</strong> Portable Cake Pop Holder Standing Boxes ({portableHolderBoxCount} box{portableHolderBoxCount === 1 ? "" : "es"}, +${portableHolderPrice})</div>}
               {wrappingOption && <div><strong>Packaging:</strong> {wrappingLabel} (+${wrappingPrice})</div>}
-              {cakeOption.id !== "none" && <div><strong>Cake:</strong> {cakeOption.label} (+${cakeOption.priceAdd})</div>}
-              {cakeOption.id !== "none" && selectedCakeAddonItems.length > 0 && (
-                <div><strong>Cake add-ons:</strong> {selectedCakeAddonItems.map((addon) => `${addon.label}${addon.priceAdd ? ` (+$${addon.priceAdd})` : ""}`).join(", ")}</div>
-              )}
+
               {selectedPartyFavorItems.length > 0 && <div><strong>Party favors:</strong> {selectedPartyFavorItems.map((option) => `${option.label} ×${option.quantity} dozen (+$${option.priceAdd * option.quantity})`).join(", ")}</div>}
               {partyTrayRentalSetup && <div><strong>Add-on:</strong> Party tray rental & set up assistant (+${PARTY_TRAY_RENTAL_SETUP_PRICE})</div>}
               {themeNote && <div><strong>Theme:</strong> {themeNote}</div>}

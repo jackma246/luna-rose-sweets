@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { CAKE_FLAVOURS, cartLeadDays, getProductBySlug, productLeadDays, products, visibleProducts } from "@/data/products";
-import { PARTY_SET_SIZES, pricePartySet } from "@/data/partySet";
+import { PARTY_SET_SIZES, pricePartySet, treatOptionsForSize } from "@/data/partySet";
 import { isQuoteAddon, priceProductLine } from "@/lib/pricing";
 import sitemap from "@/app/sitemap";
 
@@ -79,11 +79,13 @@ describe("pricing", () => {
     const variants = getProductBySlug("party-set")!.variants;
     for (const size of PARTY_SET_SIZES) {
       expect(variants.some((v) => v.label.startsWith(size.label) && v.price === size.price)).toBe(true);
-      const treats = ["cake-pops", "cakesicles", "oreos", "twisted-pretzel", "caramel-pretzel-rods", "gummi-candy-skewers", "madeleines"].filter(
-        (_, i) => i < size.treatCount,
-      );
+      const available = treatOptionsForSize(size.id);
+      const treats = [
+        ...available.filter((t) => t.category === "classic"),
+        ...available.filter((t) => t.category === "premium").slice(0, size.premiumTreatLimit),
+      ].slice(0, size.treatCount).map((t) => t.id);
       const r = pricePartySet({
-        kind: "party-set", sizeId: size.id, treats: size.id === "classic" ? [...treats.slice(0, 4), "rice-krispies"] : treats,
+        kind: "party-set", sizeId: size.id, treats,
         designTier: "custom", handTiedBows: false, portableHolderBoxes: false, wrapping: "", cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false,
       });
       expect(r).toMatchObject({ ok: true, unitPrice: size.price });
@@ -93,7 +95,11 @@ describe("pricing", () => {
   it("prices Premium Customization by Party Set size", () => {
     const expectedAdds: Record<string, number> = { mini: 15, classic: 20, signature: 25, luxe: 30 };
     for (const size of PARTY_SET_SIZES) {
-      const treats = ["cake-pops", "cakesicles", "oreos", "twisted-pretzel", "caramel-pretzel-rods", "gummi-candy-skewers", "madeleines"].slice(0, size.treatCount);
+      const available = treatOptionsForSize(size.id);
+      const treats = [
+        ...available.filter((t) => t.category === "classic"),
+        ...available.filter((t) => t.category === "premium").slice(0, size.premiumTreatLimit),
+      ].slice(0, size.treatCount).map((t) => t.id);
       const r = pricePartySet({
         kind: "party-set", sizeId: size.id, treats, designTier: "premium", handTiedBows: false, portableHolderBoxes: false, wrapping: "", cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false,
       });
@@ -104,7 +110,7 @@ describe("pricing", () => {
   it("enforces each Party Set Premium Bake selection limit", () => {
     const base = { kind: "party-set" as const, designTier: "custom", handTiedBows: false, portableHolderBoxes: false, wrapping: "" as const, cakeOptionId: "none", cakeAddons: [], partyFavors: [], trayRentalSetup: false };
     expect(pricePartySet({ ...base, sizeId: "mini", treats: ["macarons", "bakery-cookies", "cake-pops", "cakesicles"] })).toMatchObject({ ok: false });
-    expect(pricePartySet({ ...base, sizeId: "signature", treats: ["macarons", "bakery-cookies", "cake-pops", "cakesicles", "oreos", "madeleines"] })).toMatchObject({ ok: true });
+    expect(pricePartySet({ ...base, sizeId: "signature", treats: ["macarons", "bakery-cookies", "oreos", "madeleines", "rice-krispies", "twisted-pretzel"] })).toMatchObject({ ok: true });
   });
 });
 

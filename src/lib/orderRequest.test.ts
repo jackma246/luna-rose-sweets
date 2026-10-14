@@ -156,13 +156,13 @@ describe("validateOrderRequest - items", () => {
           selection: {
             kind: "party-set",
             sizeId: "classic",
-            treats: ["cake-pops", "cakesicles", "oreos", "rice-krispies", "twisted-pretzel"],
+            treats: ["cake-pops", "madeleines", "oreos", "rice-krispies", "twisted-pretzel"],
             designTier: "premium",
-            handTiedBows: true,
+            handTiedBows: false,
             portableHolderBoxes: true,
-            wrapping: "boxed",
-            cakeOptionId: "6-inch",
-            cakeAddons: ["Filling", "Full Custom"],
+            wrapping: "",
+            cakeOptionId: "none",
+            cakeAddons: [],
             partyFavors: [{ id: "royal-icing-sugar-cookies", quantity: 2 }],
             trayRentalSetup: true,
           },
@@ -171,8 +171,8 @@ describe("validateOrderRequest - items", () => {
     });
     expect(r.ok).toBe(true);
     if (!r.ok) return;
-    // 265 set + 20 premium customization + 30 bows (3 eligible) + 6 holders + 10 boxed + 75 cake + 8 filling + 80 full custom + 100 favors + 70 rental
-    expect(r.order.serverTotal).toBe(664);
+    // 265 set + 20 premium customization + 3 holder + 100 favors + 70 rental
+    expect(r.order.serverTotal).toBe(458);
     expect(r.order.items[0].stored).toMatchObject({ name: "Party Set — Classic Dessert Table", variantLabel: "Classic Dessert Table" });
   });
 
