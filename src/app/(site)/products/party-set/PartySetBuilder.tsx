@@ -63,6 +63,17 @@ const stepHead: React.CSSProperties = {
   marginBottom: "0.75rem",
 };
 
+const PARTY_SET_GALLERY = [
+  {
+    src: "/images/party-set/pokemon-signature-table.jpg",
+    alt: "Pokemon-themed Signature Dessert Table with coordinated custom treats",
+  },
+  {
+    src: "/images/party-set/pokemon-signature-standing-boxes.jpg",
+    alt: "Pokemon-themed Signature Dessert Table with cake pop standing boxes",
+  },
+];
+
 function Dot({ active }: { active: boolean }) {
   return (
     <div style={{
@@ -92,6 +103,7 @@ function Check({ active }: { active: boolean }) {
  * client render agree (reading window.location during render caused a hydration mismatch).
  */
 export default function PartySetBuilder({ initialSizeId }: { initialSizeId: string }) {
+  const [galleryIndex, setGalleryIndex] = useState(0);
   const [sizeId, setSizeId] = useState(initialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("custom");
@@ -107,6 +119,16 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
   const [added, setAdded] = useState(false);
 
   const { addItem } = useCart();
+
+  const galleryImage = PARTY_SET_GALLERY[galleryIndex];
+
+  function showPreviousGalleryImage() {
+    setGalleryIndex((current: number) => (current - 1 + PARTY_SET_GALLERY.length) % PARTY_SET_GALLERY.length);
+  }
+
+  function showNextGalleryImage() {
+    setGalleryIndex((current: number) => (current + 1) % PARTY_SET_GALLERY.length);
+  }
 
   const size = SIZES.find((s) => s.id === sizeId)!;
   const requiredTreats = size.treatCount;
@@ -272,22 +294,75 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
 
         {/* STEP 1: Set Size */}
         <div style={sectionStyle}>
-          {/* Preview image */}
-          <div style={{ position: "relative", borderRadius: "0.75rem", overflow: "hidden", marginBottom: "1rem", aspectRatio: "16/9" }}>
+          {/* Preview image gallery */}
+          <div style={{ position: "relative", borderRadius: "0.75rem", overflow: "hidden", marginBottom: "1rem", aspectRatio: "719/1000", background: "#eee" }}>
             <Image
-              src={SIZES.find((s) => s.id === sizeId)!.previewImg}
-              alt={SIZES.find((s) => s.id === sizeId)!.previewLabel}
+              src={galleryImage.src}
+              alt={galleryImage.alt}
               fill
               style={{ objectFit: "cover" }}
+              priority
             />
             <div style={{
               position: "absolute", inset: 0,
               background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)",
-              display: "flex", alignItems: "flex-end", padding: "1rem 1.15rem",
+              pointerEvents: "none",
+            }} />
+            <span style={{
+              position: "absolute", left: "1.15rem", bottom: "2.25rem",
+              color: "#fff", fontWeight: 700, fontSize: "1.05rem", letterSpacing: "0.01em",
+              textShadow: "0 1px 4px rgba(0,0,0,0.45)",
             }}>
-              <span style={{ color: "#fff", fontWeight: 700, fontSize: "1.05rem", letterSpacing: "0.01em" }}>
-                {SIZES.find((s) => s.id === sizeId)!.previewLabel}
-              </span>
+              {SIZES.find((s) => s.id === sizeId)!.previewLabel}
+            </span>
+            <button
+              type="button"
+              onClick={showPreviousGalleryImage}
+              aria-label="Previous party set photo"
+              style={{
+                position: "absolute", left: "0.35rem", top: "50%", transform: "translateY(-50%)",
+                width: 38, height: 48, border: 0, padding: 0, background: "rgba(0,0,0,0.14)",
+                color: "#fff", cursor: "pointer", fontSize: "1rem", borderRadius: "0.35rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+              }}
+            >
+              ◀
+            </button>
+            <button
+              type="button"
+              onClick={showNextGalleryImage}
+              aria-label="Next party set photo"
+              style={{
+                position: "absolute", right: "0.35rem", top: "50%", transform: "translateY(-50%)",
+                width: 38, height: 48, border: 0, padding: 0, background: "rgba(0,0,0,0.14)",
+                color: "#fff", cursor: "pointer", fontSize: "1rem", borderRadius: "0.35rem",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+              }}
+            >
+              ▶
+            </button>
+            <div style={{
+              position: "absolute", left: "50%", bottom: "0.8rem", transform: "translateX(-50%)",
+              display: "flex", gap: "0.45rem", alignItems: "center",
+            }}>
+              {PARTY_SET_GALLERY.map((image, index) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  onClick={() => setGalleryIndex(index)}
+                  aria-label={`Show party set photo ${index + 1}`}
+                  aria-current={index === galleryIndex ? "true" : undefined}
+                  style={{
+                    width: 10, height: 10, borderRadius: "50%", padding: 0,
+                    border: "1.5px solid #fff",
+                    background: index === galleryIndex ? "#fff" : "transparent",
+                    cursor: "pointer",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.35)",
+                  }}
+                />
+              ))}
             </div>
           </div>
 
