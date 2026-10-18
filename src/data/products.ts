@@ -120,8 +120,9 @@ export const products: Product[] = [
       { label: "Detailed custom designs, specialty flavours, florals, metallics, characters, or extra decorations", price: "Additional charge" },
     ],
     flavours: CAKE_FLAVOURS,
-    image: "/images/cake/cake00.jpeg",
+    image: "/images/cake/custom-cake-ornate.jpg",
     images: [
+      "/images/cake/custom-cake-ornate.jpg",
       "/images/cake/cake00.jpeg",
       "/images/cake/cake0.jpeg",
       "/images/cake/cake2.jpeg",
