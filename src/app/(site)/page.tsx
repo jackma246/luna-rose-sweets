@@ -249,8 +249,8 @@ export default function HomePage() {
       {/* ── SECTION 3: VISUAL ── */}
       <section style={{ position: "relative", overflow: "hidden" }}>
         <Image
-          src="/images/brand-spread-new.png"
-          alt="Coordinated dessert table"
+          src="/images/landing-showcase-grid.jpg"
+          alt="A colorful collection of Dip & Sprinkle custom desserts"
           width={1200}
           height={700}
           style={{ width: "100%", height: "auto", display: "block", maxHeight: 420, objectFit: "cover" }}
