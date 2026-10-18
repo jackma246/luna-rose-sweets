@@ -160,7 +160,7 @@ export default function HomePage() {
             <div className="plate" aria-hidden="true" />
             <div className="photo">
               <Image
-                src="/images/main-hero.jpg"
+                src="/images/main-hero-princess.jpg"
                 alt="Handcrafted treats beautifully decorated"
                 width={800}
                 height={800}
