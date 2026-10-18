@@ -251,9 +251,9 @@ export default function HomePage() {
         <Image
           src="/images/landing-showcase-grid.jpg"
           alt="A colorful collection of Dip & Sprinkle custom desserts"
-          width={1200}
-          height={700}
-          style={{ width: "100%", height: "auto", display: "block", maxHeight: 420, objectFit: "cover" }}
+          width={728}
+          height={1280}
+          style={{ width: "100%", height: "auto", display: "block" }}
         />
         <div style={{
           position: "absolute", bottom: 0, left: 0, right: 0,
