@@ -104,6 +104,8 @@ function Check({ active }: { active: boolean }) {
  */
 export default function PartySetBuilder({ initialSizeId }: { initialSizeId: string }) {
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const galleryTouchStartX = useRef<number | null>(null);
+  const galleryTouchStartY = useRef<number | null>(null);
   const [sizeId, setSizeId] = useState(initialSizeId);
   const [treats, setTreats] = useState<string[]>([]);
   const [designTier, setDesignTier] = useState("custom");
@@ -128,6 +130,26 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
 
   function showNextGalleryImage() {
     setGalleryIndex((current: number) => (current + 1) % PARTY_SET_GALLERY.length);
+  }
+
+  function handleGalleryTouchStart(event: React.TouchEvent<HTMLDivElement>) {
+    galleryTouchStartX.current = event.touches[0]?.clientX ?? null;
+    galleryTouchStartY.current = event.touches[0]?.clientY ?? null;
+  }
+
+  function handleGalleryTouchEnd(event: React.TouchEvent<HTMLDivElement>) {
+    if (galleryTouchStartX.current === null || galleryTouchStartY.current === null) return;
+    const touch = event.changedTouches[0];
+    if (!touch) return;
+
+    const deltaX = touch.clientX - galleryTouchStartX.current;
+    const deltaY = touch.clientY - galleryTouchStartY.current;
+    galleryTouchStartX.current = null;
+    galleryTouchStartY.current = null;
+
+    if (Math.abs(deltaX) < 45 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    if (deltaX < 0) showNextGalleryImage();
+    else showPreviousGalleryImage();
   }
 
   const size = SIZES.find((s) => s.id === sizeId)!;
@@ -295,7 +317,11 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
         {/* STEP 1: Set Size */}
         <div style={sectionStyle}>
           {/* Preview image gallery */}
-          <div style={{ position: "relative", borderRadius: "0.75rem", overflow: "hidden", marginBottom: "1rem", aspectRatio: "719/1000", background: "#eee" }}>
+          <div
+            onTouchStart={handleGalleryTouchStart}
+            onTouchEnd={handleGalleryTouchEnd}
+            style={{ position: "relative", borderRadius: "0.75rem", overflow: "hidden", marginBottom: "1rem", aspectRatio: "719/1000", background: "#eee", touchAction: "pan-y" }}
+          >
             <Image
               src={galleryImage.src}
               alt={galleryImage.alt}
@@ -321,13 +347,18 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
               aria-label="Previous party set photo"
               style={{
                 position: "absolute", left: "0.35rem", top: "50%", transform: "translateY(-50%)",
-                width: 38, height: 48, border: 0, padding: 0, background: "rgba(0,0,0,0.14)",
-                color: "#fff", cursor: "pointer", fontSize: "1rem", borderRadius: "0.35rem",
+                width: 44, height: 52, border: 0, padding: 0, background: "transparent",
+                cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
               }}
             >
-              ◀
+              <span aria-hidden="true" style={{
+                width: 0, height: 0,
+                borderTop: "7px solid transparent",
+                borderBottom: "7px solid transparent",
+                borderRight: "10px solid #fff",
+                filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.45))",
+              }} />
             </button>
             <button
               type="button"
@@ -335,13 +366,18 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
               aria-label="Next party set photo"
               style={{
                 position: "absolute", right: "0.35rem", top: "50%", transform: "translateY(-50%)",
-                width: 38, height: 48, border: 0, padding: 0, background: "rgba(0,0,0,0.14)",
-                color: "#fff", cursor: "pointer", fontSize: "1rem", borderRadius: "0.35rem",
+                width: 44, height: 52, border: 0, padding: 0, background: "transparent",
+                cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
               }}
             >
-              ▶
+              <span aria-hidden="true" style={{
+                width: 0, height: 0,
+                borderTop: "7px solid transparent",
+                borderBottom: "7px solid transparent",
+                borderLeft: "10px solid #fff",
+                filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.45))",
+              }} />
             </button>
             <div style={{
               position: "absolute", left: "50%", bottom: "0.8rem", transform: "translateX(-50%)",
