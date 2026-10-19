@@ -334,13 +334,6 @@ export default function PartySetBuilder({ initialSizeId }: { initialSizeId: stri
               background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%)",
               pointerEvents: "none",
             }} />
-            <span style={{
-              position: "absolute", left: "1.15rem", bottom: "2.25rem",
-              color: "#fff", fontWeight: 700, fontSize: "1.05rem", letterSpacing: "0.01em",
-              textShadow: "0 1px 4px rgba(0,0,0,0.45)",
-            }}>
-              {SIZES.find((s) => s.id === sizeId)!.previewLabel}
-            </span>
             <button
               type="button"
               onClick={showPreviousGalleryImage}
