@@ -50,6 +50,7 @@ export interface Product {
   enquireOnly?: boolean;
   badge?: string;
   video?: string;
+  videos?: string[];
   image?: string;
   images?: string[];
   hidden?: boolean;
@@ -754,7 +755,15 @@ export const products: Product[] = [
     description: "A dozen kitchen sink cookies finished with custom edible images for a personalized gift or celebration box.",
     variants: [],
     badge: "Coming Soon",
-    image: "/images/coming-soon-treats.svg",
+    image: "/images/kitchen-sink-cookie-box/custom-image-cookies.jpg",
+    images: [
+      "/images/kitchen-sink-cookie-box/custom-image-cookies.jpg",
+      "/images/kitchen-sink-cookie-box/cookies-and-dipped-treats.jpg",
+    ],
+    videos: [
+      "/videos/kitchen-sink-cookie-box/cookie-closeup.mp4",
+      "/videos/kitchen-sink-cookie-box/full-dessert-boxes.mp4",
+    ],
     comingSoon: true,
   },
   {

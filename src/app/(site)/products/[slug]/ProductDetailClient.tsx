@@ -40,6 +40,19 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
     return list;
   }, [product]);
 
+  const videos = useMemo(
+    () => product.videos ?? (product.video ? [product.video] : []),
+    [product]
+  );
+
+  const mediaSlides = useMemo(
+    () => [
+      ...images.map((src) => ({ type: "image" as const, src })),
+      ...videos.map((src) => ({ type: "video" as const, src })),
+    ],
+    [images, videos]
+  );
+
   const [mainImgIdx, setMainImgIdx] = useState(0);
 
   const variant = product.variants[variantIdx];
@@ -195,32 +208,27 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
 
         <div className="pd-grid">
           <div className="pd-gallery">
-            {(images.length > 1 || product.video) ? (
+            {mediaSlides.length > 1 ? (
               <div style={{ gridColumn: "1 / -1" }}>
                 {/* Gallery with prev/next navigation */}
                 {(() => {
-                  const slides = [
-                    ...(product.video ? ["__video__"] : []),
-                    ...images,
-                  ];
-                  const total = slides.length;
-                  const displayIdx = product.video ? mainImgIdx + 1 : mainImgIdx;
-                  const isVideo = product.video && displayIdx === 0;
-                  const imgSrc = !isVideo ? images[product.video ? displayIdx - 1 : displayIdx] : null;
+                  const total = mediaSlides.length;
+                  const slide = mediaSlides[mainImgIdx];
                   return (
                     <>
                       <div style={{ position: "relative", borderRadius: "0.75rem", overflow: "hidden", aspectRatio: "4/5", background: "var(--blush-soft, #faf5f0)" }}>
-                        {isVideo ? (
+                        {slide?.type === "video" ? (
                           <video
-                            src={product.video!}
+                            key={slide.src}
+                            src={slide.src}
                             autoPlay muted loop playsInline
                             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                           />
-                        ) : imgSrc ? (
+                        ) : slide?.type === "image" ? (
                           <Image
-                            key={imgSrc}
-                            src={imgSrc}
-                            alt={`${product.name} ${displayIdx + 1}`}
+                            key={slide.src}
+                            src={slide.src}
+                            alt={`${product.name} ${mainImgIdx + 1}`}
                             fill
                             sizes="(max-width: 768px) 100vw, 50vw"
                             style={{ objectFit: "cover" }}
@@ -228,7 +236,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                           />
                         ) : null}
                         {/* Prev button */}
-                        {!(product.video ? displayIdx === 0 : mainImgIdx === 0) && (
+                        {mainImgIdx > 0 && (
                           <button onClick={() => setMainImgIdx(mainImgIdx - 1)} style={{
                             position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)",
                             width: 36, height: 36, borderRadius: "50%", border: "none",
@@ -238,7 +246,7 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                           }}>‹</button>
                         )}
                         {/* Next button */}
-                        {!(product.video ? displayIdx === total - 1 : mainImgIdx === images.length - 1) && (
+                        {mainImgIdx < total - 1 && (
                           <button onClick={() => setMainImgIdx(mainImgIdx + 1)} style={{
                             position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
                             width: 36, height: 36, borderRadius: "50%", border: "none",
@@ -250,12 +258,12 @@ export default function ProductDetailClient({ slug }: { slug: string }) {
                       </div>
                       {/* Dot indicators */}
                       <div style={{ display: "flex", justifyContent: "center", gap: "0.4rem", marginTop: "0.75rem" }}>
-                        {slides.map((_, i) => {
-                          const active = product.video ? displayIdx === i : mainImgIdx === i;
+                        {mediaSlides.map((media, i) => {
+                          const active = mainImgIdx === i;
                           return (
                             <button
-                              key={i}
-                              onClick={() => setMainImgIdx(product.video ? i - 1 : i)}
+                              key={`${media.type}-${media.src}`}
+                              onClick={() => setMainImgIdx(i)}
                               style={{
                                 width: 7, height: 7, borderRadius: "50%", border: "none", padding: 0,
                                 background: active ? "var(--cherry, #c05)" : "#ccc",
