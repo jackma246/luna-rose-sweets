@@ -183,12 +183,8 @@ export default async function ShopPage({
                   </div>
                 </>
               );
-              return product.comingSoon ? (
-                <div key={product.slug} className="product coming-soon-card" aria-disabled="true">
-                  {cardContent}
-                </div>
-              ) : (
-                <Link key={product.slug} href={`/products/${product.slug}`} className="product">
+              return (
+                <Link key={product.slug} href={`/products/${product.slug}`} className={`product${product.comingSoon ? " coming-soon-card" : ""}`}>
                   {cardContent}
                 </Link>
               );
