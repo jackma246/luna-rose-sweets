@@ -127,9 +127,6 @@ export default function HomePage() {
               <Link href="/products/party-set" className="btn btn-primary">
                 Shop Party Sets →
               </Link>
-              <Link href="/products" className="btn btn-ghost">
-                Browse treats
-              </Link>
             </div>
           </div>
           <div className="hero-visual">

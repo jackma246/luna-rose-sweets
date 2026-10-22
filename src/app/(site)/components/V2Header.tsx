@@ -83,7 +83,7 @@ export default function V2Header({ current }: { current?: string }) {
 
         <nav className="mobile-quick-nav" aria-label="Shop categories">
           <Link href="/products/party-set">Party Sets</Link>
-          <Link href="/products?category=Treats">Treats</Link>
+          <Link href="/cookies">Cookies</Link>
         </nav>
       </header>
 
