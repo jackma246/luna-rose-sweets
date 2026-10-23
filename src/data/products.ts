@@ -722,11 +722,23 @@ export const products: Product[] = [
     slug: "halloween-cookie-diy-set",
     name: "Halloween Cookie DIY Set",
     category: "Treats",
-    description: "A festive Halloween cookie decorating set for a fun, creative activity at home or at a party.",
-    variants: [],
-    badge: "Coming Soon",
-    image: "/images/coming-soon-treats.svg",
-    comingSoon: true,
+    subtitle: "Freshly Baked · Ready to Decorate",
+    description:
+      "A festive, hands-on Halloween activity for kids, families, classroom parties, playdates, and holiday gatherings. Each handmade kit is beautifully packaged with freshly baked sugar cookies and everything you need to decorate them.",
+    details:
+      "What’s included\n\nSmall Kit — $16\n• 6 pre-baked sugar cookies\n• 3 colors of homemade royal icing\n• 1 bag of sprinkles\n• Step-by-step decorating guide\n• Minimum order: 2 Small Kits\n\nMedium Kit — $30\n• 12 pre-baked sugar cookies\n• 3 colors of homemade royal icing\n• 2 bags of sprinkles\n• Step-by-step decorating guide\n\nOrdering information\n• Please order at least 5–7 days in advance\n• A 50% non-refundable deposit is required to reserve your date\n• Local pickup in San Jose, CA near Berryessa Creek Park\n• Shipping is available within California for an additional fee\n\nCustom colors, cookie shapes, themes, large orders, and party favors are welcome.\n\nAllergen information: Contains wheat, milk, and eggs. Please ask about other allergens.",
+    variants: [
+      { label: "Small Kit — 6 Cookies (2-kit minimum)", price: 16, image: "/images/halloween-cookie-diy/boxed-kit.jpg" },
+      { label: "Medium Kit — 12 Cookies", price: 30, image: "/images/halloween-cookie-diy/open-kit.jpg" },
+    ],
+    badge: "Halloween Favorite",
+    image: "/images/halloween-cookie-diy/boxed-kit.jpg",
+    images: [
+      "/images/halloween-cookie-diy/boxed-kit.jpg",
+      "/images/halloween-cookie-diy/open-kit.jpg",
+    ],
+    video: "/images/halloween-cookie-diy/kit-preview.mp4",
+    leadDays: 5,
   },
   {
     slug: "baby-shower-cookie-set",
