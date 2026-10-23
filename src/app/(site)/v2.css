@@ -1806,14 +1806,14 @@
     .icons { justify-content: flex-end; }
     .mobile-quick-nav {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       border-top: 1px solid var(--rule);
     }
     .mobile-quick-nav a {
-      padding: 11px 12px;
+      padding: 11px 4px;
       color: var(--ink);
-      font: 600 11px/1 var(--font-dm-sans), "DM Sans", sans-serif;
-      letter-spacing: 0.16em;
+      font: 600 9px/1.15 var(--font-dm-sans), "DM Sans", sans-serif;
+      letter-spacing: 0.1em;
       text-align: center;
       text-decoration: none;
       text-transform: uppercase;
